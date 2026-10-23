@@ -106,23 +106,30 @@ export function invest(
   return { ok: true, state: next }
 }
 
-function activeMuls(effects: Effect[], now: number) {
+function effectFactors(effects: Effect[], now: number) {
   let outputMul = 1
   let priceMul = 1
   let inflationMul = 1
+  let revenueMul = 1
+  let costMul = 1
+  let cashPerYear = 0
   for (const effect of effects) {
-    if (effect.endsAt <= now) continue
+    if (effect.defer) continue
+    if ((effect.yearsLeft ?? 0) <= 0 && effect.endsAt <= now) continue
     outputMul *= effect.outputMul
     priceMul *= effect.priceMul
     inflationMul *= effect.inflationMul
+    revenueMul *= effect.revenueMul ?? 1
+    costMul *= effect.costMul ?? 1
+    cashPerYear += effect.cashPerYear ?? 0
   }
-  return { outputMul, priceMul, inflationMul }
+  return { outputMul, priceMul, inflationMul, revenueMul, costMul, cashPerYear }
 }
 
 export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: number, balance: Balance): TeamState {
   const s: TeamState = {
     ...state,
-    effects: state.effects.filter((effect) => effect.endsAt > now),
+    effects: state.effects.filter((effect) => effect.defer || (effect.yearsLeft ?? 0) > 0 || effect.endsAt > now),
     log: state.log.slice(),
     seenQuestions: state.seenQuestions.slice(),
     seenEvents: state.seenEvents.slice(),
@@ -133,7 +140,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   const idle = Math.max(0, s.machines - operating)
   const noise = balance.outputNoiseMin + rng.next() * (balance.outputNoiseMax - balance.outputNoiseMin)
   const priceNoise = balance.priceNoiseMin + rng.next() * (balance.priceNoiseMax - balance.priceNoiseMin)
-  const { outputMul, priceMul, inflationMul } = activeMuls(s.effects, now)
+  const { outputMul, priceMul, inflationMul, revenueMul, costMul, cashPerYear } = effectFactors(s.effects, now)
   s.tech += operating * balance.techPerOperating + s.engineers * balance.techPerEngineer
   const techFactor = 1 + s.tech * theme.coefs.tech
   const supFactor = 1 + s.support * theme.coefs.support
@@ -152,16 +159,16 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
     noise *
     outputMul
   const price = theme.coefs.basePrice * priceNoise * priceMul * pollFactor
-  const revenue = Math.max(0, output * price)
-  const opex = operating * theme.coefs.opex + idle * theme.coefs.idleCost
+  const revenue = Math.max(0, output * price * revenueMul)
+  const opex = (operating * theme.coefs.opex + idle * theme.coefs.idleCost) * costMul
   const net = revenue - opex
   const inflRate =
     balance.inflationBase * inflationMul * (balance.inflationNoiseMin + rng.next() * (balance.inflationNoiseMax - balance.inflationNoiseMin))
   const infl = s.cash * inflRate
-  s.cash = Math.max(0, s.cash - infl + net)
+  s.cash = Math.max(0, s.cash - infl + net + cashPerYear)
   s.cumulativeOutput += output
   s.cumulativeRevenue += revenue
-  s.lastIncome = net - infl
+  s.lastIncome = net - infl + cashPerYear
   s.lastOutput = output
   s.cycles += 1
   s.condition *= balance.conditionDecay
@@ -174,7 +181,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
     idle: idle.toFixed(1),
     output: Math.round(output).toLocaleString('vi-VN'),
     unit: theme.unit,
-    income: Math.round(net - infl).toLocaleString('vi-VN'),
+    income: Math.round(net - infl + cashPerYear).toLocaleString('vi-VN'),
   })
   s.log = [line, ...s.log].slice(0, balance.logLimit)
   s.rng = rng.getState()
@@ -278,7 +285,22 @@ export function applyPatch(
   next.support = Math.max(0, next.support + support)
   next.pollution = clamp(next.pollution + pollution, 0, 100)
   next.dependency = Math.max(0, next.dependency + dependency)
+  const assetsPct = patch.assetsPct ? roll(rng, patch.assetsPct, 0) : 0
+  if (assetsPct) {
+    const factor = 1 + assetsPct / 100
+    next.cash = Math.max(0, next.cash * factor)
+    next.engineers = Math.max(0, next.engineers * factor)
+    next.machines = Math.max(0, next.machines * factor)
+    next.support = Math.max(0, next.support * factor)
+    next.infra = Math.max(0, next.infra * factor)
+    next.green = Math.max(0, next.green * factor)
+  }
+  const revenuePct = patch.revenuePct ? roll(rng, patch.revenuePct, 0) : 0
+  const costPct = patch.costPct ? roll(rng, patch.costPct, 0) : 0
+  const perYear = patch.cashPerYear ? roll(rng, patch.cashPerYear, 0) : 0
+  const yearSpan = Math.max(0, Math.round(patch.yearSpan ?? 0))
   const duration = Math.round(roll(rng, patch.durationSec, 60))
+  const shownFor = Math.max(duration, yearSpan * 180)
   const effect: Effect = {
     id,
     visual: patch.visual,
@@ -286,18 +308,28 @@ export function applyPatch(
     body: patch.body,
     severity: 1,
     startedAt: now,
-    endsAt: now + duration * 1000,
+    endsAt: now + shownFor * 1000,
     outputMul: scaleMul(roll(rng, patch.outputMul, 1), exposure, balance),
     priceMul: scaleMul(roll(rng, patch.priceMul, 1), exposure, balance),
     inflationMul: scaleMul(roll(rng, patch.inflationMul, 1), exposure, balance),
+    revenueMul: 1 + revenuePct / 100,
+    costMul: 1 + costPct / 100,
+    cashPerYear: perYear,
+    yearsLeft: yearSpan,
+    defer: yearSpan > 0,
+    bornAt: now,
   }
-  next.effects = [...next.effects, effect].slice(-8)
+  next.effects = [effect, ...next.effects].slice(0, 12)
   const bits = [fillText(balance.logs.event, { title: patch.title })]
   if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
   if (Math.abs(engineersPct) > 0.01) bits.push(`kỹ sư ${Math.round(engineersPct * 100)}%`)
   if (Math.abs(machinesAdd) > 0.05) bits.push(`dây chuyền ${machinesAdd > 0 ? '+' : ''}${machinesAdd.toFixed(1)}`)
   if (Math.abs(machinesPct) > 0.01) bits.push(`dây chuyền ${Math.round(machinesPct * 100)}%`)
   if (Math.abs(cash) > 20) bits.push(`vốn ${Math.round(cash).toLocaleString('vi-VN')} tỷ`)
+  if (revenuePct) bits.push(`doanh thu ${Math.round(revenuePct)}%`)
+  if (costPct) bits.push(`chi phí ${Math.round(costPct)}%`)
+  if (assetsPct) bits.push(`tài sản ${Math.round(assetsPct)}%`)
+  if (perYear) bits.push(`mỗi năm ${Math.round(perYear).toLocaleString('vi-VN')} tỷ`)
   next.log = [bits.join(' · '), ...next.log].slice(0, balance.logLimit)
   next.rng = rng.getState()
   return next
@@ -315,6 +347,11 @@ export function patchFromEvent(event: EventDef, title: string, body: string): Ef
     inflationMul: event.inflationMul,
     cash: event.cash,
     cashPct: event.cashPct,
+    revenuePct: event.revenuePct,
+    costPct: event.costPct,
+    assetsPct: event.assetsPct,
+    cashPerYear: event.cashPerYear,
+    yearSpan: event.yearSpan,
     engineersAdd: event.engineersAdd,
     engineersPct: event.engineersPct,
     machinesAdd: event.machinesAdd,
@@ -324,6 +361,31 @@ export function patchFromEvent(event: EventDef, title: string, body: string): Ef
     pollution: event.pollution,
     dependency: event.dependency,
   }
+}
+
+/** Effects drawn earlier become due. Effects drawn at `now` stay on screen until a later advance. */
+export function openYearEffects(state: TeamState, now: number): TeamState {
+  let changed = false
+  const effects = state.effects.map((effect) => {
+    if (!effect.defer || (effect.bornAt ?? 0) >= now) return effect
+    changed = true
+    return { ...effect, defer: false }
+  })
+  return changed ? { ...state, effects } : state
+}
+
+/** One settlement consumed. Deferred effects stay at full length. Wall-clock effects stay until they expire. */
+export function closeYearEffects(state: TeamState, now: number): TeamState {
+  const effects = state.effects.flatMap((effect) => {
+    if (effect.defer) return [effect]
+    const left = effect.yearsLeft ?? 0
+    if (left > 0) {
+      const next = left - 1
+      return next > 0 ? [{ ...effect, yearsLeft: next }] : []
+    }
+    return effect.endsAt > now ? [effect] : []
+  })
+  return { ...state, effects }
 }
 
 export function fillText(template: string, vars: Record<string, string>) {

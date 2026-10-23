@@ -1,3 +1,14 @@
+import type { AuthoredEffect } from './event-file'
+
+export function authoredEffectDocument(effect: AuthoredEffect) {
+  const doc: Record<string, number> = { years: effect.years }
+  if (effect.revenuePct != null) doc.revenuePct = effect.revenuePct
+  if (effect.costPct != null) doc.costPct = effect.costPct
+  if (effect.assetsPct != null) doc.assetsPct = effect.assetsPct
+  if (effect.cashPerYear != null) doc.cashPerYear = effect.cashPerYear
+  return doc
+}
+
 export const EFFECT_CODES = [
   'storm',
   'rain',
@@ -101,5 +112,5 @@ export function effectPayload(code: EffectCode, severity: 1 | 2 | 3) {
   if (base.pollution) payload.pollution = [amount(base.pollution), amount(base.pollution)]
   if (base.machinesPct) payload.machinesPct = [soften(1 + base.machinesPct) - 1, soften(1 + base.machinesPct) - 1]
   if (base.machinesAdd) payload.machinesAdd = [Math.round(base.machinesAdd * gain * 100) / 100, Math.round(base.machinesAdd * gain * 100) / 100]
-  return payload
+  return { ...payload, years: 1 }
 }

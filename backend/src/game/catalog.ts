@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '../prisma'
+import { effectSchema, readStoredEffect } from './stored-effect'
 import { normalizeAnchors } from './anchors'
 import { eventApplies, type EventTags } from './event-pool'
 import { fillText } from './engine'
@@ -21,24 +22,7 @@ import type {
 import type { Rng } from './rng'
 import { LINES } from './engine'
 
-const range = z.tuple([z.number(), z.number()])
 const exposureSchema = z.enum(['machines', 'engineers', 'cash', 'pollution', 'any'])
-const effectSchema = z.object({
-  durationSec: range,
-  outputMul: range,
-  priceMul: range,
-  inflationMul: range,
-  cash: range.optional(),
-  cashPct: range.optional(),
-  engineersAdd: range.optional(),
-  engineersPct: range.optional(),
-  machinesAdd: range.optional(),
-  machinesPct: range.optional(),
-  tech: range.optional(),
-  support: range.optional(),
-  pollution: range.optional(),
-  dependency: range.optional(),
-})
 const choicePatchSchema = effectSchema.extend({
   visual: z.string().min(1),
   title: z.string().min(1),
@@ -375,8 +359,7 @@ export async function loadCatalog(): Promise<Catalog> {
   }))
 
   const eventDefs: EventDef[] = events.map((row) => {
-    const effect = effectSchema.safeParse(row.effect)
-    if (!effect.success) throw new Error(`Sự kiện ${row.id} có effect không hợp lệ`)
+    const effect = readStoredEffect(row.effect, row.id)
     const exposure = exposureSchema.safeParse(row.exposure)
     if (!exposure.success) throw new Error(`Sự kiện ${row.id} có exposure không hợp lệ`)
     const variants: Record<string, { title: string; body: string }> = {}
@@ -409,7 +392,7 @@ export async function loadCatalog(): Promise<Catalog> {
       })),
       variants: Object.keys(variants).length ? variants : undefined,
       exposure: exposure.data,
-      ...effect.data,
+      ...effect,
       choice,
     }
   })

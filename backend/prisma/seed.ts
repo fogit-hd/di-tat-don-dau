@@ -1,12 +1,20 @@
-import type { Prisma } from '@prisma/client'
+import { PrismaClient, type Prisma } from '@prisma/client'
 import { ensureDatabaseSchema } from '../src/db/ensure-schema'
-import { prisma } from '../src/prisma'
+import { prepareDatabaseEnv } from '../src/db/postgres-url'
+import { loadEnv } from '../src/load-env'
 import { balance } from './seed/balance'
 import { seedOfficial } from './seed/official'
 import { seedEventTypes } from './seed/event-types'
 import { seedSuccession } from './seed/succession'
 import { QUESTIONS } from './seed/pack'
 import { ENDINGS, LINES, QUESTION_TYPES, TEMPLATES } from './seed/rules'
+
+loadEnv()
+prepareDatabaseEnv()
+
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DIRECT_URL || process.env.DATABASE_URL,
+})
 
 async function main() {
   await ensureDatabaseSchema()

@@ -1,9 +1,9 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import type { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, type PrismaClient } from '@prisma/client'
 import { normalizeAnchors } from '../../src/game/anchors'
 import { balance } from './balance'
-import { effectPayload } from './effects'
+import { authoredEffectDocument, effectPayload } from './effects'
 import { normalizeIndustryEvent } from './event-file'
 
 type OfficialIndustry = {
@@ -90,76 +90,72 @@ function loadAnchorMap(): Record<string, Prisma.InputJsonValue> {
 export async function seedOfficial(prisma: PrismaClient) {
   const source = loadOfficialFile()
   const anchors = loadAnchorMap()
-  await prisma.eventChoice.deleteMany()
-  await prisma.eventVariant.deleteMany()
-  await prisma.gameEvent.deleteMany()
-  await prisma.scenario.deleteMany()
-  await prisma.industryDirection.deleteMany()
-  await prisma.industryNamePattern.deleteMany()
-  await prisma.industry.deleteMany()
-  await prisma.region.deleteMany()
-  await prisma.scale.deleteMany()
-  await prisma.context.deleteMany()
-  await prisma.factoryNamePart.deleteMany()
 
-  for (const [index, name] of source.regions.entries()) {
-    const id = slugify(name)
-    await prisma.region.create({ data: { id, name, sort: index + 1, active: true } })
-  }
-  for (const [index, scale] of source.scales.entries()) {
-    await prisma.scale.create({
-      data: {
-        id: scale.key,
-        name: scale.label,
-        sort: index + 1,
-        roleTemplate: '{{role}}',
-        capitalFactor: scale.capitalFactor,
-        active: true,
-      },
-    })
-  }
-  for (const [index, text] of source.contexts.entries()) {
-    const start = contextStart(text)
-    await prisma.context.create({
-      data: {
-        id: slugify(text),
-        name: text,
-        line: text,
-        sort: index + 1,
-        active: true,
-        ...start,
-      },
-    })
-  }
-  for (const [index, name] of source.factoryNameParts.entries()) {
-    await prisma.factoryNamePart.create({ data: { id: slugify(name), name, sort: index + 1 } })
-  }
+  await eachBatch(
+    source.regions.map((name, index) => ({ name, index })),
+    8,
+    async ({ name, index }) => {
+      const id = slugify(name)
+      const data = { name, sort: index + 1, active: true }
+      await prisma.region.upsert({ where: { id }, create: { id, ...data }, update: data })
+    },
+  )
+  await eachBatch(source.scales.map((scale, index) => ({ scale, index })), 8, async ({ scale, index }) => {
+    const data = {
+      name: scale.label,
+      sort: index + 1,
+      roleTemplate: '{{role}}',
+      capitalFactor: scale.capitalFactor,
+      active: true,
+    }
+    await prisma.scale.upsert({ where: { id: scale.key }, create: { id: scale.key, ...data }, update: data })
+  })
+  await eachBatch(
+    source.contexts.map((text, index) => ({ text, index })),
+    8,
+    async ({ text, index }) => {
+      const id = slugify(text)
+      const data = { name: text, line: text, sort: index + 1, active: true, ...contextStart(text) }
+      await prisma.context.upsert({ where: { id }, create: { id, ...data }, update: data })
+    },
+  )
+  await eachBatch(
+    source.factoryNameParts.map((name, index) => ({ name, index })),
+    8,
+    async ({ name, index }) => {
+      const id = slugify(name)
+      const data = { name, sort: index + 1 }
+      await prisma.factoryNamePart.upsert({ where: { id }, create: { id, ...data }, update: data })
+    },
+  )
 
   const shared = { epl: 1400, tech: 0.12, support: 0.08, infra: 0.08, emission: 1, baseOutput: 10 }
   const price = priceFor(shared.epl, shared.baseOutput)
-  for (const [index, industry] of source.industries.entries()) {
-    await prisma.industry.create({
-      data: {
-        id: industry.slug,
-        name: industry.name,
-        unit: 'sản phẩm',
-        art: industry.slug,
-        sort: index + 1,
-        active: true,
-        role: industry.role,
-        mission: industry.startingSituations[0] ?? industry.name,
-        worker: 'người làm',
-        product: industry.name,
-        leap: industry.name,
-        weak: industry.groupName,
-        ...shared,
-        basePrice: price.basePrice,
-        opex: price.opex,
-        idleCost: price.idleCost,
-        group: industry.group,
-        groupName: industry.groupName,
-        anchors: anchors[industry.slug] ?? undefined,
-      },
+  await eachBatch(source.industries.map((industry, index) => ({ industry, index })), 4, async ({ industry, index }) => {
+    const industryData = {
+      name: industry.name,
+      unit: 'sản phẩm',
+      art: industry.slug,
+      sort: index + 1,
+      active: true,
+      role: industry.role,
+      mission: industry.startingSituations[0] ?? industry.name,
+      worker: 'người làm',
+      product: industry.name,
+      leap: industry.name,
+      weak: industry.groupName,
+      ...shared,
+      basePrice: price.basePrice,
+      opex: price.opex,
+      idleCost: price.idleCost,
+      group: industry.group,
+      groupName: industry.groupName,
+      anchors: anchors[industry.slug] ?? Prisma.DbNull,
+    }
+    await prisma.industry.upsert({
+      where: { id: industry.slug },
+      create: { id: industry.slug, ...industryData },
+      update: industryData,
     })
     const labels = [
       ['eng', industry.investLabels.nhanLuc],
@@ -168,41 +164,40 @@ export async function seedOfficial(prisma: PrismaClient) {
       ['inf', industry.investLabels.haTang],
     ] as const
     for (const [sort, [line, label]] of labels.entries()) {
-      await prisma.industryDirection.create({ data: { industryId: industry.slug, line, label, sort } })
+      const direction = { label, sort }
+      await prisma.industryDirection.upsert({
+        where: { industryId_line: { industryId: industry.slug, line } },
+        create: { industryId: industry.slug, line, ...direction },
+        update: direction,
+      })
     }
     for (const [sort, body] of industry.startingSituations.entries()) {
-      await prisma.scenario.create({
-        data: {
-          id: `${industry.slug}.s${sort + 1}`,
-          industryId: industry.slug,
-          role: industry.role,
-          mission: body,
-          body,
-        },
-      })
+      const id = `${industry.slug}.s${sort + 1}`
+      const scenario = { industryId: industry.slug, role: industry.role, mission: body, body, active: true }
+      await prisma.scenario.upsert({ where: { id }, create: { id, ...scenario }, update: scenario })
     }
     for (const [sort, raw] of industry.events.entries()) {
       const event = normalizeIndustryEvent(raw, sort)
-      await prisma.gameEvent.create({
-        data: {
-          id: event.id ?? `${industry.slug}.e${sort + 1}`,
-          industryId: industry.slug,
-          scope: 'team',
-          weight: 1,
-          visual: event.visual,
-          title: event.title,
-          body: event.body,
-          exposure: 'any',
-          effect: effectPayload(event.visual, event.severity),
-          effectCode: event.visual,
-          severity: event.severity,
-          good: event.good,
-          sort,
-          active: true,
-        },
-      })
+      const id = event.id ?? `${industry.slug}.e${sort + 1}`
+      const data = {
+        industryId: industry.slug,
+        scope: 'team',
+        weight: 1,
+        visual: event.visual,
+        title: event.title,
+        body: event.body,
+        exposure: 'any',
+        effect: (event.effect ? authoredEffectDocument(event.effect) : effectPayload(event.visual, event.severity)) as Prisma.InputJsonValue,
+        effectCode: event.visual,
+        severity: event.severity,
+        good: event.good,
+        group: '',
+        sort,
+        active: true,
+      }
+      await prisma.gameEvent.upsert({ where: { id }, create: { id, ...data }, update: data })
     }
-  }
+  })
 
   return {
     industries: source.industries.length,
@@ -218,5 +213,11 @@ export async function seedOfficial(prisma: PrismaClient) {
       source.contexts.length *
       4 *
       source.factoryNameParts.length,
+  }
+}
+
+async function eachBatch<T>(items: T[], size: number, fn: (item: T) => Promise<void>) {
+  for (let i = 0; i < items.length; i += size) {
+    await Promise.all(items.slice(i, i + size).map((item) => fn(item)))
   }
 }

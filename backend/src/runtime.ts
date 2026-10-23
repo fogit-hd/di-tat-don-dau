@@ -7,6 +7,7 @@ import {
   computeEnding,
   computeValue,
   createState,
+  closeYearEffects,
   drawEvent,
   drawQuestion,
   drawYearEvents,
@@ -14,6 +15,7 @@ import {
   fillText,
   invest,
   jitterMs,
+  openYearEffects,
   patchFromEvent,
   presentQuestion,
   publicPending,
@@ -576,11 +578,15 @@ export function noteDisconnect(code: string, teamId: string, gen: number) {
     const room = getRoom(code)
     const team = room?.teams.find((item) => item.id === teamId)
     if (!room || !team || team.connectGen !== gen) return
-    if (room.status === 'lobby') room.teams = room.teams.filter((item) => item.id !== teamId)
-    else team.connected = false
+    team.connected = false
     await persist(room)
     push(room.code)
   })
+}
+
+export function notifyRoom(code: string) {
+  const room = getRoom(code)
+  if (room) push(room.code)
 }
 
 export function touchTeam(code: string, teamId: string) {
@@ -651,8 +657,9 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   if (!team.state || !team.theme) return
   const balance = rules().balance
   const rng = teamRngOf(team)
-  team.state.effects = []
+  team.state = openYearEffects(team.state, now)
   team.state = runCycle(team.state, team.theme, rng, now, balance)
+  team.state = closeYearEffects(team.state, now)
   const drawn = drawYearEvents(team.state.eventBag ?? [], team.theme.eventIds, rng, balance)
   team.state.eventBag = drawn.bag
   for (const id of drawn.ids) {
@@ -728,9 +735,8 @@ function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof make
   if (!team.state || !team.theme || team.state.finished) return
   const copy = eventCopy(event, team.theme)
   team.state = applyPatch(team.state, patchFromEvent(event, copy.title, copy.body), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
-  const latest = team.state.effects[team.state.effects.length - 1]
+  const latest = team.state.effects[0]
   if (latest) latest.severity = event.severity || 1
-  team.state.effects = team.state.effects.slice(-3)
 }
 
 function finish(room: LiveRoom, now: number) {

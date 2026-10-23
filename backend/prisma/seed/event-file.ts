@@ -4,6 +4,14 @@ import { EFFECT_CODES, classifyEvent, type EffectCode } from './effects'
 
 const GOOD_VISUALS = new Set<EffectCode>(['boom', 'expansion'])
 
+export type AuthoredEffect = {
+  revenuePct?: number
+  costPct?: number
+  assetsPct?: number
+  cashPerYear?: number
+  years: number
+}
+
 export type SeedVisualEvent = {
   id?: string
   title: string
@@ -11,6 +19,7 @@ export type SeedVisualEvent = {
   visual: EffectCode
   severity: 1 | 2 | 3
   good: boolean
+  effect?: AuthoredEffect
 }
 
 export type SeedNarration = {
@@ -90,7 +99,31 @@ function readVisualEvent(row: Record<string, unknown>, label: string): SeedVisua
     visual: visual as EffectCode,
     severity,
     good: readGood(row, label),
+    effect: readAuthoredEffect(row.effect, label),
   }
+}
+
+const AUTHORED_KEYS = ['revenuePct', 'costPct', 'assetsPct', 'cashPerYear'] as const
+
+function readAuthoredEffect(raw: unknown, label: string): AuthoredEffect | undefined {
+  if (raw == null) return undefined
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error(`${label} có effect không hợp lệ`)
+  const row = raw as Record<string, unknown>
+  const years = row.years
+  if (typeof years !== 'number' || !Number.isInteger(years) || years < 1 || years > 30) {
+    throw new Error(`${label} cần effect.years từ 1 đến 30`)
+  }
+  const effect: AuthoredEffect = { years }
+  let any = false
+  for (const key of AUTHORED_KEYS) {
+    if (!(key in row) || row[key] == null) continue
+    const value = row[key]
+    if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error(`${label} có effect.${key} không hợp lệ`)
+    effect[key] = value
+    any = true
+  }
+  if (!any) throw new Error(`${label} có effect trống`)
+  return effect
 }
 
 /** `tone` good/bad is the illustrator flag. Older rows use a boolean `good`. `icon` is accepted and ignored. */

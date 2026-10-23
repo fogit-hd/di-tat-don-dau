@@ -80,6 +80,20 @@ export type Effect = {
   outputMul: number
   priceMul: number
   inflationMul: number
+  /** 1 + revenuePct/100. Missing means 1. */
+  revenueMul?: number
+  /** 1 + costPct/100. Missing means 1. */
+  costMul?: number
+  /** Cash added on each year this effect is settled. */
+  cashPerYear?: number
+  /** Game years still to settle. 0 means a wall-clock effect. */
+  yearsLeft?: number
+  /**
+   * Drawn at a year boundary and shown immediately, but settled on a later advance.
+   * `bornAt` is the clock of the advance that drew it, so the same tick does not settle it.
+   */
+  defer?: boolean
+  bornAt?: number
 }
 
 export type Pending = {
@@ -174,6 +188,13 @@ export type EffectPatch = {
   support?: Range
   pollution?: Range
   dependency?: Range
+  /** Exact percent points from the seed file, not exposure-scaled. */
+  revenuePct?: Range
+  costPct?: Range
+  assetsPct?: Range
+  cashPerYear?: Range
+  /** How many future year settlements this patch covers. 0 settles only by the wall clock. */
+  yearSpan?: number
 }
 
 export type EndingRule = {
@@ -318,6 +339,12 @@ export type EventDef = {
   support?: Range
   pollution?: Range
   dependency?: Range
+  revenuePct?: Range
+  costPct?: Range
+  assetsPct?: Range
+  cashPerYear?: Range
+  /** Game years the authored effect stays in force. Engine-shaped rows default to 1 when loaded. */
+  yearSpan?: number
   choice?: { timeoutIndex: number; options: EventChoice[] }
 }
 
