@@ -3,12 +3,14 @@ import { balance } from '../../prisma/seed/balance'
 import { ENDINGS, LINES } from '../../prisma/seed/rules'
 import {
   applyPatch,
+  closeYearEffects,
   computeEnding,
   computeValue,
   createState,
   drawQuestion,
   eventCopy,
   invest,
+  openYearEffects,
   patchFromEvent,
   runCycle,
 } from './engine'
@@ -195,5 +197,75 @@ describe('economy', () => {
     const low = applyPatch(bare, patch, makeRng(1), 50_000, 'a', balance)
     const high = applyPatch(busy, patch, makeRng(1), 50_000, 'b', balance)
     expect(busy.machines - high.machines).toBeGreaterThan(bare.machines - low.machines)
+  })
+
+  it('settles an authored revenue cut on the next year, not the year it is drawn', () => {
+    const base = () => {
+      const state = fresh()
+      state.machines = 2
+      state.engineers = 4000
+      state.cash = 10000
+      return state
+    }
+    const calm = runCycle(base(), theme, makeRng(5), 10_000, balance)
+    const drawn = applyPatch(
+      base(),
+      {
+        visual: 'market_crash',
+        title: 'Cấm xuất',
+        body: 'Doanh thu giảm',
+        exposure: 'any',
+        durationSec: [180, 180],
+        outputMul: [1, 1],
+        priceMul: [1, 1],
+        inflationMul: [1, 1],
+        revenuePct: [-50, -50],
+        yearSpan: 2,
+      },
+      makeRng(1),
+      10_000,
+      'ban',
+      balance,
+    )
+    const sameYear = runCycle(drawn, theme, makeRng(5), 10_000, balance)
+    expect(sameYear.cumulativeRevenue).toBeCloseTo(calm.cumulativeRevenue, 5)
+    expect(drawn.cash).toBeCloseTo(10000, 5)
+    const opened = openYearEffects(sameYear, 20_000)
+    const hit = runCycle(opened, theme, makeRng(5), 20_000, balance)
+    const calmSecond = runCycle(calm, theme, makeRng(5), 20_000, balance)
+    const hitDelta = hit.cumulativeRevenue - sameYear.cumulativeRevenue
+    const calmDelta = calmSecond.cumulativeRevenue - calm.cumulativeRevenue
+    expect(hitDelta).toBeLessThan(calmDelta * 0.6)
+    const still = closeYearEffects(hit, 20_000)
+    expect(still.effects[0]?.yearsLeft).toBe(1)
+    const again = runCycle(openYearEffects(still, 30_000), theme, makeRng(5), 30_000, balance)
+    expect(closeYearEffects(again, 30_000).effects).toHaveLength(0)
+  })
+
+  it('cuts assets once when the event is drawn', () => {
+    const state = fresh()
+    state.cash = 10000
+    state.engineers = 200
+    const next = applyPatch(
+      state,
+      {
+        visual: 'flood',
+        title: 'Lụt',
+        body: 'Kho ngập',
+        exposure: 'any',
+        durationSec: [180, 180],
+        outputMul: [1, 1],
+        priceMul: [1, 1],
+        inflationMul: [1, 1],
+        assetsPct: [-20, -20],
+        yearSpan: 1,
+      },
+      makeRng(2),
+      10_000,
+      'flood',
+      balance,
+    )
+    expect(next.cash).toBeCloseTo(8000, 5)
+    expect(next.engineers).toBeCloseTo(160, 5)
   })
 })

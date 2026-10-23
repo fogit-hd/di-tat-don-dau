@@ -80,15 +80,38 @@ const HEIRS = [
 
 export async function seedSuccession(prisma: PrismaClient) {
   const source = loadOfficialFile()
-  await prisma.heirHealthWeight.deleteMany()
-  await prisma.successionGauge.deleteMany()
-  await prisma.successionReason.deleteMany()
-  await prisma.heirOutcome.deleteMany()
-  await prisma.successionOdds.deleteMany()
 
-  await prisma.successionOdds.createMany({ data: ODDS })
-  await prisma.successionGauge.create({ data: GAUGE })
-  await prisma.heirHealthWeight.createMany({ data: HEALTH })
+  for (const row of ODDS) {
+    await prisma.successionOdds.upsert({
+      where: { minYear: row.minYear },
+      create: row,
+      update: { chance: row.chance },
+    })
+  }
+  await prisma.successionGauge.upsert({
+    where: { id: GAUGE.id },
+    create: GAUGE,
+    update: {
+      debtDependencyWeight: GAUGE.debtDependencyWeight,
+      debtLeverageWeight: GAUGE.debtLeverageWeight,
+      debtCap: GAUGE.debtCap,
+      valueFloor: GAUGE.valueFloor,
+    },
+  })
+  for (const row of HEALTH) {
+    await prisma.heirHealthWeight.upsert({
+      where: { id: row.id },
+      create: row,
+      update: {
+        outcome: row.outcome,
+        minReserveRatio: row.minReserveRatio ?? null,
+        maxReserveRatio: null,
+        minDebtRatio: row.minDebtRatio ?? null,
+        maxDebtRatio: row.maxDebtRatio ?? null,
+        weightAdd: row.weightAdd,
+      },
+    })
+  }
 
   const reasons: { id: string; industryId: string | null; contextId: string | null; text: string; weight: number; sort: number }[] = [
     { id: 'accident', industryId: null, contextId: null, text: 'Tai nạn tại hiện trường', weight: 1, sort: 1 },
@@ -119,7 +142,19 @@ export async function seedSuccession(prisma: PrismaClient) {
       sort: 200 + index,
     })
   })
-  await prisma.successionReason.createMany({ data: reasons })
+  for (const row of reasons) {
+    await prisma.successionReason.upsert({
+      where: { id: row.id },
+      create: row,
+      update: {
+        industryId: row.industryId,
+        contextId: row.contextId,
+        text: row.text,
+        weight: row.weight,
+        sort: row.sort,
+      },
+    })
+  }
 
   const heirs: {
     id: string
@@ -173,6 +208,21 @@ export async function seedSuccession(prisma: PrismaClient) {
       sort: HEIRS.find((row) => row.outcomeType === hit.outcomeType)?.sort ?? 1,
     })
   })
-  await prisma.heirOutcome.createMany({ data: heirs })
+  for (const row of heirs) {
+    await prisma.heirOutcome.upsert({
+      where: { id: row.id },
+      create: row,
+      update: {
+        outcomeType: row.outcomeType,
+        industryId: row.industryId,
+        contextId: row.contextId,
+        label: row.label,
+        detail: row.detail,
+        weight: row.weight,
+        multiplier: row.multiplier,
+        sort: row.sort,
+      },
+    })
+  }
   return { odds: ODDS.length, reasons: reasons.length, heirs: heirs.length, health: HEALTH.length }
 }

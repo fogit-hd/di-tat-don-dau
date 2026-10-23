@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@prisma/client'
+import type { Prisma, PrismaClient } from '@prisma/client'
 import { EFFECT_CODES, effectPayload } from './effects'
 import { loadGeneralEvents, type GeneralEventSeed } from './event-file'
 import { loadOfficialFile, slugify } from './official'
@@ -42,31 +42,52 @@ export async function seedEventTypes(prisma: PrismaClient) {
     const industryIds = source.industries.filter((industry) => event.groups.includes(industry.group)).map((industry) => industry.slug)
     if (!industryIds.length) throw new Error(`${event.id} không khớp ngành nào`)
     const contextIds = matchContexts(event.contexts, contexts, event.id)
-    const narrations = event.variants.flatMap((variant) => narrationsFor(variant, regions, contexts, event.id))
-    await prisma.gameEvent.create({
-      data: {
-        id: event.id,
-        industryId: null,
-        scope: 'team',
-        weight: 1,
-        visual: event.visual,
-        title: event.title,
-        body: event.body,
-        exposure: 'any',
-        effect: effectPayload(event.visual, event.severity),
-        effectCode: event.visual,
-        severity: event.severity,
-        good: event.good,
-        group: event.group,
-        sort: 1000,
-        active: true,
-        industryTags: { create: industryIds.map((industryId) => ({ industryId })) },
-        contextTags: { create: contextIds.map((contextId) => ({ contextId })) },
-        narrations: { create: narrations },
-      },
+    const narrations = dedupeNarrations(event.variants.flatMap((variant) => narrationsFor(variant, regions, contexts, event.id)))
+    const data = {
+      industryId: null,
+      scope: 'team',
+      weight: 1,
+      visual: event.visual,
+      title: event.title,
+      body: event.body,
+      exposure: 'any',
+      effect: effectPayload(event.visual, event.severity) as Prisma.InputJsonValue,
+      effectCode: event.visual,
+      severity: event.severity,
+      good: event.good,
+      group: event.group,
+      sort: 1000,
+      active: true,
+    }
+    await prisma.gameEvent.upsert({
+      where: { id: event.id },
+      create: { id: event.id, ...data },
+      update: data,
     })
+    await prisma.eventIndustryTag.deleteMany({ where: { eventId: event.id } })
+    await prisma.eventContextTag.deleteMany({ where: { eventId: event.id } })
+    await prisma.eventNarration.deleteMany({ where: { eventId: event.id } })
+    if (industryIds.length) {
+      await prisma.eventIndustryTag.createMany({ data: industryIds.map((industryId) => ({ eventId: event.id, industryId })) })
+    }
+    if (contextIds.length) {
+      await prisma.eventContextTag.createMany({ data: contextIds.map((contextId) => ({ eventId: event.id, contextId })) })
+    }
+    if (narrations.length) {
+      await prisma.eventNarration.createMany({ data: narrations.map((row) => ({ eventId: event.id, ...row })) })
+    }
   }
   return events.length
+}
+
+function dedupeNarrations<T extends { regionId: string; contextId: string }>(rows: T[]) {
+  const seen = new Set<string>()
+  return rows.filter((row) => {
+    const key = `${row.regionId}\0${row.contextId}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 
 function matchContexts(needles: string[], contexts: { id: string; name: string }[], label: string) {

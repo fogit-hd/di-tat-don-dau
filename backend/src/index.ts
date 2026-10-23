@@ -20,6 +20,7 @@ import {
   listThemes,
   lobbyView,
   noteDisconnect,
+  notifyRoom,
   pauseRoom,
   resumeRoom,
   setEmitter,
@@ -304,6 +305,7 @@ io.on('connection', (socket) => {
       socket.data.code = code
       socket.join(`room:${code}`)
       socket.emit('snapshot', buildSnapshot(room, socket.data.view as Viewer))
+      notifyRoom(code)
     })
   })
 

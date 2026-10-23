@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { loadGeneralEvents, loadIndustriesFile, normalizeIndustryEvent } from '../../prisma/seed/event-file'
 import { assertEventTypes, EVENT_GROUPS } from '../../prisma/seed/event-types'
-import { classifyEvent, EFFECT_CODES } from '../../prisma/seed/effects'
+import { authoredEffectDocument, classifyEvent, EFFECT_CODES } from '../../prisma/seed/effects'
+import { readStoredEffect } from './stored-effect'
 import { eventCopy } from './engine'
 import { eventApplies } from './event-pool'
 import type { EventDef, ThemeDef } from './types'
@@ -56,6 +57,11 @@ describe('normalizeIndustryEvent', () => {
     expect(event.body).toBe('Nước ngoài ban hành lệnh hạn chế xuất khẩu máy quang khắc.')
     expect(event.good).toBe(false)
     expect(event.visual).toBe('market_crash')
+    expect(event.effect).toEqual({ revenuePct: -24, years: 3 })
+    const stored = readStoredEffect(authoredEffectDocument(event.effect!), event.id!)
+    expect(stored.yearSpan).toBe(3)
+    expect(stored.revenuePct).toEqual([-24, -24])
+    expect(stored.outputMul).toEqual([1, 1])
   })
 
   it('loads 20 described events for every industry', () => {
@@ -63,7 +69,7 @@ describe('normalizeIndustryEvent', () => {
     expect(file.industries).toHaveLength(64)
     const events = file.industries.flatMap((industry) => industry.events.map((raw, index) => normalizeIndustryEvent(raw, index)))
     expect(events).toHaveLength(1280)
-    expect(events.every((event) => event.id && event.body.length > event.title.length)).toBe(true)
+    expect(events.every((event) => event.id && event.body.length > event.title.length && event.effect && event.effect.years >= 1)).toBe(true)
     expect(events.filter((event) => event.good)).not.toHaveLength(0)
     expect(events.filter((event) => !event.good)).not.toHaveLength(0)
   })
