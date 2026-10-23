@@ -8,7 +8,8 @@ const client = new OAuth2Client()
 function config() {
   const clientId = process.env.GOOGLE_CLIENT_ID
   const secret = process.env.AUTH_SESSION_SECRET
-  if (!clientId || !secret || secret.length < 32) throw new HttpError(503, 'Đăng nhập Google chưa được cấu hình trên máy chủ')
+  if (!clientId) throw new HttpError(503, 'Backend thiếu GOOGLE_CLIENT_ID')
+  if (!secret || secret.length < 32) throw new HttpError(503, 'AUTH_SESSION_SECRET phải có ít nhất 32 ký tự')
   return { clientId, secret }
 }
 
