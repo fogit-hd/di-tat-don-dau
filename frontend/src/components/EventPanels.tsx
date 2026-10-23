@@ -106,12 +106,7 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
                 </span>
               </header>
               <ul>
-                {row.causes.map((cause, index) => (
-                  <li key={`${row.year}-${cause.kind}-${index}`}>
-                    <span>{causeLabel(cause.kind)} · {cause.label}</span>
-                    <b className={cause.cash < 0 ? 'down' : 'up'}>{signed(cause.cash)}</b>
-                  </li>
-                ))}
+                {row.causes.map((cause, index) => <LedgerCause key={`${row.year}-${cause.kind}-${index}`} cause={cause} />)}
               </ul>
             </article>
           ))}
@@ -160,18 +155,31 @@ export function GameTabs({ investment, events, changes }: { investment: ReactNod
                 <span>Tài sản {vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}</span>
               </header>
               <ul>
-                {row.causes.map((cause, index) => (
-                  <li key={`${row.year}-${cause.kind}-${index}`}>
-                    <span>{causeLabel(cause.kind)} · {cause.label}</span>
-                    <b className={cause.cash < 0 ? 'down' : 'up'}>{signed(cause.cash)}</b>
-                  </li>
-                ))}
+                {row.causes.map((cause, index) => <LedgerCause key={`${row.year}-${cause.kind}-${index}`} cause={cause} />)}
               </ul>
             </article>
           ))}
         </div>
       )}
     </section>
+  )
+}
+
+function LedgerCause({ cause }: { cause: YearChangeView['causes'][number] }) {
+  const hasImmediateCash = Math.abs(cause.cash) >= 0.5
+  const hasNonCashImpact = !hasImmediateCash && (Boolean(cause.detail) || cause.kind === 'event')
+  return (
+    <li className={hasNonCashImpact ? 'non-cash-cause' : ''}>
+      <span>
+        <strong>{causeLabel(cause.kind)} · {cause.label}</strong>
+        {cause.detail && cause.detail !== cause.label && <small>{cause.detail}</small>}
+      </span>
+      {hasImmediateCash ? (
+        <b className={cause.cash < 0 ? 'down' : 'up'}>{signed(cause.cash)}</b>
+      ) : hasNonCashImpact ? (
+        <em>{cause.detail ? 'Tác động theo chỉ số' : 'Tác động phi tiền mặt'}</em>
+      ) : null}
+    </li>
   )
 }
 

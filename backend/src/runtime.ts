@@ -638,6 +638,37 @@ export async function investLine(code: string, token: string, line: Line) {
   return { ok: true, cash: team.state.cash }
 }
 
+/** Lets a bankrupt team re-enter the same industry without resetting the room or other teams. */
+export async function restartTeam(code: string, token: string) {
+  const room = requireRoom(code)
+  const team = findTeam(room, token)
+  if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Không thể làm lại lúc này')
+  if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
+  if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
+  if (team.state.cash > 0) throw new HttpError(409, 'Chỉ có thể làm lại khi đã hết vốn vận hành')
+
+  const now = Date.now()
+  const old = team.state
+  const rng = makeRng(hashString(`${room.seed}:${team.id}:restart:${old.cycles}:${now}`))
+  const fresh = createState(team.theme, room.startingCapital, rng, rules().balance, now)
+  fresh.factoryName = old.factoryName
+  fresh.introDone = true
+  fresh.eventBag = shuffleIds(team.theme.eventIds, rng)
+  fresh.yearOpenCash = fresh.cash
+  fresh.yearOpenAssets = computeValue(fresh, team.theme, rules().balance)
+  fresh.nextYearAt = now + room.cycleSeconds * 1000
+  fresh.yearLockUntil = now
+  fresh.seed = hashString(`${room.seed}:${team.id}:restart:${now}`)
+  fresh.rng = rng.getState()
+  fresh.log = ['Phá sản: nhà máy được khởi động lại với vốn ban đầu.', ...fresh.log].slice(0, rules().balance.logLimit)
+  team.state = fresh
+  team.score = null
+  team.ending = null
+  await persist(room)
+  push(room.code)
+  return { ok: true, cash: fresh.cash }
+}
+
 export async function answerPrompt(code: string, token: string, optionId: string) {
   const room = requireRoom(code)
   const team = findTeam(room, token)
@@ -801,8 +832,7 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   for (const id of drawn.ids) {
     const event = rules().events.find((item) => item.id === id)
     if (!event || event.trait) continue
-    const title = eventCopy(event, team.theme).title
-    eventCauses.push({ kind: 'event', label: title, cash: applyEvent(team, event, rng, now) })
+    eventCauses.push(applyEvent(team, event, rng, now))
   }
   team.state.rng = rng.getState()
   const sharedId = drawn.classWide ? drawn.ids[0] : undefined
@@ -901,6 +931,18 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
   team.state.yearLockUntil = 0
   team.state.pending = null
   team.state.log = [stored.causeText, ...team.state.log].slice(0, balance.logLimit)
+  // A natural succession is not drawn from the ordinary event deck, so make it visible
+  // in exactly the same two event lists as any other event.
+  if (!forced) {
+    rememberSystemEvent(team, {
+      eventId: `succession-${team.state.cycles}`,
+      title: stored.causeText,
+      body: 'Chủ xưởng đã qua đời. Quyền điều hành và toàn bộ kết quả được chuyển sang người thừa kế.',
+      icon: 'heart',
+      good: false,
+      effect: `Kết thúc lượt chơi · ${stored.outcomeLabel}`,
+    })
+  }
   team.score = assetsAfter
   team.ending = heir.outcomeType
   void now
@@ -962,8 +1004,8 @@ function rollFamily(room: LiveRoom, team: LiveTeam, now: number): { retired: boo
   const before = team.state.cash
   team.state.traits = [...owned, event.trait]
   if (event.trait === 'longevity') emitRoom(room.code, 'team:longevity', { teamId: team.id, year: team.state.cycles })
-  applyEvent(team, event, teamRngOf(team), now)
-  return { retired: false, cause: { kind: 'event', label: copy.title, cash: team.state.cash - before } }
+  const applied = applyEvent(team, event, teamRngOf(team), now)
+  return { retired: false, cause: { ...applied, cash: team.state.cash - before } }
 }
 
 function presentYearQuestion(team: LiveTeam, now: number) {
@@ -986,15 +1028,19 @@ function presentYearQuestion(team: LiveTeam, now: number) {
 }
 
 function rememberEvent(team: LiveTeam, event: EventDef, title: string, body: string, effect: string) {
+  rememberSystemEvent(team, { eventId: event.id, title, body, icon: event.icon || event.visual, good: event.good, effect })
+}
+
+function rememberSystemEvent(team: LiveTeam, event: { eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }) {
   if (!team.state) return
   team.state.eventLog = [
-    { year: team.state.cycles, eventId: event.id, title, body, icon: event.icon || event.visual, good: event.good, effect },
+    { year: team.state.cycles, ...event },
     ...(team.state.eventLog ?? []),
   ].slice(0, 200)
 }
 
-function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number) {
-  if (!team.state || !team.theme || team.state.finished) return 0
+function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number): YearCause {
+  if (!team.state || !team.theme || team.state.finished) return { kind: 'event', label: event.title, cash: 0 }
   const before = team.state.cash
   const copy = eventCopy(event, team.theme)
   const factor = team.theme.scaleFactor || 1
@@ -1010,7 +1056,13 @@ function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof make
     latest.year = team.state.cycles
   }
   rememberEvent(team, event, copy.title, copy.body, latest?.summary || copy.title)
-  return team.state.cash - before
+  return {
+    kind: 'event',
+    label: copy.title,
+    cash: team.state.cash - before,
+    // For example, "sản lượng -10%" is meaningful even though it has no immediate cash movement.
+    detail: latest?.summary || copy.title,
+  }
 }
 
 function finish(room: LiveRoom, now: number) {

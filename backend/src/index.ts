@@ -23,6 +23,7 @@ import {
   noteDisconnect,
   notifyRoom,
   pauseRoom,
+  restartTeam,
   resumeRoom,
   setEmitter,
   setRoomEventEmitter,
@@ -260,6 +261,15 @@ app.post('/api/rooms/:code/invest', async (req, res, next) => {
     const code = param(req.params.code)
     const body = z.object({ line: z.enum(['eng', 'mac', 'sup', 'inf', 'grn']) }).parse(req.body)
     res.json(await withRoom(code, () => investLine(code, playerToken(req), body.line as Line)))
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.post('/api/rooms/:code/restart', async (req, res, next) => {
+  try {
+    const code = param(req.params.code)
+    res.json(await withRoom(code, () => restartTeam(code, playerToken(req))))
   } catch (error) {
     next(error)
   }

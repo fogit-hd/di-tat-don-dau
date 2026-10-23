@@ -134,7 +134,8 @@ export type SuccessionResult = {
 
 export type CauseKind = 'production' | 'investment' | 'event' | 'ongoing' | 'interest' | 'centennial' | 'insurance'
 
-export type YearCause = { kind: CauseKind; label: string; cash: number }
+/** A ledger item may change cash immediately, or describe a percentage effect which applies later. */
+export type YearCause = { kind: CauseKind; label: string; cash: number; detail?: string }
 
 export type YearChange = {
   year: number

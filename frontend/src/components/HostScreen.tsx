@@ -6,7 +6,6 @@ import type { Snapshot } from '../api/types.ts'
 import { clock, vnd } from '../lib/format.ts'
 import { useClock, useRoom } from '../realtime/useRoom.ts'
 import { CentennialReveal } from './CentennialReveal.tsx'
-import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
 import { Leaderboard } from './Leaderboard.tsx'
 
@@ -16,7 +15,6 @@ export function HostScreen() {
   const [token] = useState<string | null>(() => localStorage.getItem(`host:${upper}`))
   const { snap, centennial, offline, error } = useRoom(upper, 'host', token)
   const [centurySeen, setCenturySeen] = useState<string | null>(null)
-  const [hideQuestion, setHideQuestion] = useState('')
   const now = useClock(snap)
   const [qr, setQr] = useState('')
   const [minutes, setMinutes] = useState(15)
@@ -246,18 +244,6 @@ export function HostScreen() {
           </div>
         </section>
       )}
-      {snap &&
-        watched?.scene?.pending?.kind === 'question' &&
-        hideQuestion !== watched.scene.pending.id &&
-        (snap.room.status === 'playing' || snap.room.status === 'paused') && (
-          <EventQuizModal
-            pending={watched.scene.pending}
-            busy={false}
-            readOnly
-            onAnswer={() => undefined}
-            onDismiss={() => setHideQuestion(watched.scene?.pending?.id || 'x')}
-          />
-        )}
       {snap && snap.room.status === 'ended' && <HostEnd snap={snap} />}
     </main>
   )

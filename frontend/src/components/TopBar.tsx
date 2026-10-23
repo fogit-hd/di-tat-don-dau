@@ -26,7 +26,7 @@ export function TopBar({
           {scene.cash < 0 ? 'Nợ' : 'Vốn'} <b>{vnd(scene.cash)}</b>
         </div>
         <div className="top-tools">
-          <span>⏱ {clock(remaining)}</span>
+          {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span>⏱ {clock(remaining)}</span>}
           <span className={income >= 0 ? 'up' : 'down'}>
             {income >= 0 ? '+' : ''}
             Năm {scene.cycles} · {Math.round(income).toLocaleString('vi-VN')} tỷ/năm
