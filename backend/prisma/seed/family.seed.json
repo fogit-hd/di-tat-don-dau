@@ -1,0 +1,92 @@
+{
+  "events": [
+    {
+      "id": "fam-truong-tho",
+      "trait": "longevity",
+      "title": "Chủ xưởng trường thọ",
+      "body": "Chủ {{factory}} khỏe lạ. Từ nay nguy cơ qua đời chỉ còn 1% mỗi năm.",
+      "visual": "none",
+      "icon": "heart",
+      "severity": 1,
+      "good": true,
+      "weight": 1
+    },
+    {
+      "id": "fam-bao-benh",
+      "trait": "illness",
+      "title": "Chủ xưởng bạo bệnh",
+      "body": "Một cơn bệnh nặng. Nguy cơ qua đời tăng thêm 10 điểm phần trăm mỗi năm.",
+      "visual": "epidemic",
+      "icon": "heart-pulse",
+      "severity": 2,
+      "good": false,
+      "weight": 1
+    },
+    {
+      "id": "fam-dao-tao",
+      "trait": "heir_trained",
+      "title": "Đào tạo người kế nghiệp",
+      "body": "Con cái được đưa vào xưởng từ sớm. Đời sau dễ phát đạt hơn.",
+      "visual": "expansion",
+      "icon": "graduation-cap",
+      "severity": 1,
+      "good": true,
+      "weight": 1
+    },
+    {
+      "id": "fam-tranh-chap",
+      "trait": "inheritance_dispute",
+      "title": "Con cháu tranh chấp thừa kế",
+      "body": "Anh em chưa thống nhất ai giữ {{factory}}. Khi sang tay, dễ phá gia chi tử.",
+      "visual": "scandal",
+      "icon": "gavel",
+      "severity": 2,
+      "good": false,
+      "weight": 1
+    },
+    {
+      "id": "fam-quy",
+      "trait": "family_fund",
+      "title": "Lập quỹ gia tộc",
+      "body": "Một khoản để riêng. Dù chủ qua đời, xưởng cũng không phá sản vì hết vốn.",
+      "visual": "boom",
+      "icon": "piggy-bank",
+      "severity": 1,
+      "good": true,
+      "weight": 1
+    },
+    {
+      "id": "fam-bao-hiem",
+      "trait": "life_insurance",
+      "title": "Mua bảo hiểm nhân thọ",
+      "body": "Hợp đồng bảo hiểm ghi tên chủ xưởng. Khi qua đời, xưởng nhận thêm tiền.",
+      "visual": "none",
+      "icon": "shield-check",
+      "severity": 1,
+      "good": true,
+      "weight": 1
+    },
+    {
+      "id": "fam-du-hoc",
+      "trait": "heir_abroad",
+      "title": "Con du học về nước",
+      "body": "Người thừa kế mang nghề mới về {{factory}}. Thêm một cơ hội nhân đôi tài sản.",
+      "visual": "boom",
+      "icon": "plane-landing",
+      "severity": 1,
+      "good": true,
+      "weight": 1
+    },
+    {
+      "id": "fam-nghi-huu",
+      "trait": "early_retirement",
+      "title": "Chủ xưởng nghỉ hưu sớm",
+      "body": "Chủ giao {{factory}} ngay trong năm nay. Đời sau bước vào.",
+      "visual": "none",
+      "icon": "hourglass",
+      "severity": 2,
+      "good": false,
+      "weight": 0.7
+    }
+  ]
+}

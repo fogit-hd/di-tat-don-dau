@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from '@prisma/client'
-import { EFFECT_CODES, effectPayload } from './effects'
+import { EFFECT_CODES, authoredEffectDocument, effectPayload } from './effects'
 import { loadGeneralEvents, type GeneralEventSeed } from './event-file'
 import { loadOfficialFile, slugify } from './official'
 
@@ -51,10 +51,12 @@ export async function seedEventTypes(prisma: PrismaClient) {
       title: event.title,
       body: event.body,
       exposure: 'any',
-      effect: effectPayload(event.visual, event.severity) as Prisma.InputJsonValue,
+      effect: (event.effect ? authoredEffectDocument(event.effect) : effectPayload(event.visual, event.severity)) as Prisma.InputJsonValue,
       effectCode: event.visual,
       severity: event.severity,
       good: event.good,
+      icon: event.icon || event.visual,
+      trait: '',
       group: event.group,
       sort: 1000,
       active: true,

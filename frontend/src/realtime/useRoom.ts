@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
-import type { Snapshot, SuccessionNotice } from '../api/types.ts'
+import type { CentennialNotice, LongevityNotice, Snapshot, SuccessionNotice } from '../api/types.ts'
 import { socketBase } from '../lib/endpoints.ts'
 
 export function useRoom(code: string, role: 'host' | 'player', token: string | null) {
   const [snap, setSnap] = useState<Snapshot | null>(null)
   const [succession, setSuccession] = useState<SuccessionNotice | null>(null)
+  const [centennial, setCentennial] = useState<CentennialNotice | null>(null)
+  const [longevity, setLongevity] = useState<LongevityNotice | null>(null)
   const [offline, setOffline] = useState(false)
   const [error, setError] = useState('')
 
@@ -25,6 +27,8 @@ export function useRoom(code: string, role: 'host' | 'player', token: string | n
       setError('')
     })
     socket.on('team:succession', (payload: SuccessionNotice) => setSuccession(payload))
+    socket.on('team:centennial', (payload: CentennialNotice) => setCentennial(payload))
+    socket.on('team:longevity', (payload: LongevityNotice) => setLongevity(payload))
     socket.on('problem', (payload: { error?: string }) => setError(payload.error || 'Không vào được phòng'))
     socket.on('disconnect', () => setOffline(true))
     const onVisible = () => {
@@ -37,7 +41,7 @@ export function useRoom(code: string, role: 'host' | 'player', token: string | n
     }
   }, [code, role, token])
 
-  return { snap, succession, offline, error }
+  return { snap, succession, centennial, longevity, offline, error }
 }
 
 export function useClock(snap: Snapshot | null) {

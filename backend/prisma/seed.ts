@@ -5,6 +5,7 @@ import { loadEnv } from '../src/load-env'
 import { balance } from './seed/balance'
 import { seedOfficial } from './seed/official'
 import { seedEventTypes } from './seed/event-types'
+import { seedFamily } from './seed/family'
 import { seedSuccession } from './seed/succession'
 import { QUESTIONS } from './seed/pack'
 import { ENDINGS, LINES, QUESTION_TYPES, TEMPLATES } from './seed/rules'
@@ -21,6 +22,7 @@ async function main() {
   const official = await seedOfficial(prisma)
   const eventTypes = await seedEventTypes(prisma)
   const succession = await seedSuccession(prisma)
+  const family = await seedFamily(prisma)
   for (const type of QUESTION_TYPES) {
     await prisma.questionType.upsert({
       where: { id: type.id },
@@ -81,7 +83,7 @@ async function main() {
   })
 
   console.log(
-    `Đã nạp ${official.industries} ngành, ${official.regions} vùng, ${official.themes} chủ đề ghép, ${QUESTIONS.length} câu hỏi, ${official.events} sự kiện ngành, ${eventTypes} loại sự kiện, ${ENDINGS.length} kết cục, ${succession.reasons} lý do chuyển giao.`,
+    `Đã nạp ${official.industries} ngành, ${official.regions} vùng, ${official.themes} chủ đề ghép, ${QUESTIONS.length} câu hỏi, ${official.events} sự kiện ngành, ${eventTypes} loại sự kiện, ${family} sự kiện gia đình, ${ENDINGS.length} kết cục, ${succession.reasons} lý do chuyển giao.`,
   )
 }
 

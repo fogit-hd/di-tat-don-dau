@@ -1,16 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { makeRng } from './rng'
 import {
+  applyTraitRules,
   companyHealth,
+  deathChanceFor,
+  deathStartYear,
   heirAssets,
+  mildDeathChance,
   pickHeirOutcome,
   pickSuccessionReason,
+  rollHeirMultiplier,
   successionChance,
   successionNotice,
   type HeirRow,
   type HealthWeight,
   type ReasonRow,
   type SuccessionGauge,
+  type SuccessionPolicy,
 } from './succession'
 
 const curve = [
@@ -61,6 +67,56 @@ describe('successionChance', () => {
     expect(successionChance(18, curve)).toBe(0.03)
     expect(successionChance(20, curve)).toBe(0.1)
     expect(successionChance(30, curve)).toBe(0.36)
+  })
+})
+
+const mild: SuccessionPolicy = {
+  baseChance: 0.03,
+  stepPerYear: 0.03,
+  maxChance: 0.3,
+  longevityChance: 0.01,
+  illnessAdd: 0.1,
+  traitRules: {
+    heir_trained: { outcome: 'prosper', add: 3 },
+    family_fund: { outcome: 'bankrupt', set: 0 },
+  },
+}
+
+describe('mild death curve', () => {
+  it('starts at session length divided by seconds per year', () => {
+    expect(deathStartYear(15 * 60, 60)).toBe(15)
+    expect(deathStartYear(10 * 60, 30)).toBe(20)
+  })
+
+  it('uses 3 percent plus 3 points a year, capped at 30', () => {
+    expect(mildDeathChance(14, 15, mild)).toBe(0)
+    expect(mildDeathChance(15, 15, mild)).toBeCloseTo(0.03)
+    expect(mildDeathChance(16, 15, mild)).toBeCloseTo(0.06)
+    expect(mildDeathChance(40, 15, mild)).toBeCloseTo(0.3)
+  })
+
+  it('locks longevity at 1 percent and adds illness on top', () => {
+    expect(deathChanceFor(30, 15, mild, ['longevity'])).toBeCloseTo(0.01)
+    expect(deathChanceFor(15, 15, mild, ['illness'])).toBeCloseTo(0.13)
+    expect(deathChanceFor(14, 15, mild, ['illness'])).toBeCloseTo(0.1)
+  })
+})
+
+describe('heir multiplier ranges', () => {
+  it('rolls inside the seeded range and stays put when the range is a point', () => {
+    const rng = makeRng(4)
+    const rolled = rollHeirMultiplier({ multiplier: 0.65, multiplierMin: 0.4, multiplierMax: 0.9 }, rng)
+    expect(rolled).toBeGreaterThanOrEqual(0.4)
+    expect(rolled).toBeLessThanOrEqual(0.9)
+    expect(rollHeirMultiplier({ multiplier: 0, multiplierMin: 0, multiplierMax: 0 }, makeRng(1))).toBe(0)
+  })
+
+  it('lets a family fund remove bankruptcy and training favor prosper', () => {
+    const rows = heirs.map((row) => ({ ...row, weight: 1 }))
+    const funded = applyTraitRules(rows, ['family_fund'], mild.traitRules)
+    expect(funded.find((row) => row.outcomeType === 'bankrupt')?.weight).toBe(0)
+    const trained = applyTraitRules(rows, ['heir_trained'], mild.traitRules)
+    expect(trained.find((row) => row.id === 'prosper')?.weight).toBe(4)
   })
 })
 

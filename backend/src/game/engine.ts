@@ -54,6 +54,14 @@ export function createState(theme: ThemeDef, capital: number, rng: Rng, balance:
     yearLockUntil: 0,
     finished: false,
     succession: null,
+    centennial: null,
+    traits: [],
+    eventLog: [],
+    yearLedger: [],
+    pendingCauses: [],
+    yearOpenCash: cash,
+    yearOpenAssets: 0,
+    pulseYear: 0,
     nextPromptAt: now,
     introDone: false,
     factoryName: theme.factoryName,
@@ -89,6 +97,10 @@ export function invest(
     added: added.toFixed(1),
   })
   next.cash -= amount
+  next.pendingCauses = [
+    ...(state.pendingCauses ?? []),
+    { kind: 'investment', label: spec?.label || line, cash: -amount },
+  ]
   if (line === 'eng') {
     next.engineers += hired
     next.dependency = Math.max(0, next.dependency - balance.engDependencyRelief)
@@ -162,10 +174,17 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   const revenue = Math.max(0, output * price * revenueMul)
   const opex = (operating * theme.coefs.opex + idle * theme.coefs.idleCost) * costMul
   const net = revenue - opex
+  let interest = 0
+  if (s.cash < 0 && balance.debtInterest) {
+    interest = s.cash * balance.debtInterest
+    s.cash += interest
+  }
   const inflRate =
     balance.inflationBase * inflationMul * (balance.inflationNoiseMin + rng.next() * (balance.inflationNoiseMax - balance.inflationNoiseMin))
-  const infl = s.cash * inflRate
-  s.cash = Math.max(0, s.cash - infl + net + cashPerYear)
+  const infl = Math.max(0, s.cash) * inflRate
+  const production = net - infl
+  s.cash = s.cash + production + cashPerYear
+  s.yearParts = { production, ongoing: cashPerYear, interest }
   s.cumulativeOutput += output
   s.cumulativeRevenue += revenue
   s.lastIncome = net - infl + cashPerYear
@@ -278,7 +297,7 @@ export function applyPatch(
   const support = roll(rng, patch.support, 0) * exposure
   const pollution = roll(rng, patch.pollution, 0) * exposure
   const dependency = roll(rng, patch.dependency, 0) * exposure
-  next.cash = Math.max(0, next.cash + cash + next.cash * cashPct)
+  next.cash = next.cash + cash + next.cash * cashPct
   next.engineers = Math.max(0, next.engineers * (1 + engineersPct) + engineersAdd)
   next.machines = Math.max(0, next.machines * (1 + machinesPct) + machinesAdd)
   next.tech = Math.max(0, next.tech + tech)
@@ -288,7 +307,7 @@ export function applyPatch(
   const assetsPct = patch.assetsPct ? roll(rng, patch.assetsPct, 0) : 0
   if (assetsPct) {
     const factor = 1 + assetsPct / 100
-    next.cash = Math.max(0, next.cash * factor)
+    next.cash = next.cash * factor
     next.engineers = Math.max(0, next.engineers * factor)
     next.machines = Math.max(0, next.machines * factor)
     next.support = Math.max(0, next.support * factor)
@@ -301,6 +320,16 @@ export function applyPatch(
   const yearSpan = Math.max(0, Math.round(patch.yearSpan ?? 0))
   const duration = Math.round(roll(rng, patch.durationSec, 60))
   const shownFor = Math.max(duration, yearSpan * 180)
+  const bits = [fillText(balance.logs.event, { title: patch.title })]
+  if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
+  if (Math.abs(engineersPct) > 0.01) bits.push(`kỹ sư ${Math.round(engineersPct * 100)}%`)
+  if (Math.abs(machinesAdd) > 0.05) bits.push(`dây chuyền ${machinesAdd > 0 ? '+' : ''}${machinesAdd.toFixed(1)}`)
+  if (Math.abs(machinesPct) > 0.01) bits.push(`dây chuyền ${Math.round(machinesPct * 100)}%`)
+  if (Math.abs(cash) > 20) bits.push(`vốn ${Math.round(cash).toLocaleString('vi-VN')} tỷ`)
+  if (revenuePct) bits.push(`doanh thu ${Math.round(revenuePct)}%`)
+  if (costPct) bits.push(`chi phí ${Math.round(costPct)}%`)
+  if (assetsPct) bits.push(`tài sản ${Math.round(assetsPct)}%`)
+  if (perYear) bits.push(`mỗi năm ${Math.round(perYear).toLocaleString('vi-VN')} tỷ`)
   const effect: Effect = {
     id,
     visual: patch.visual,
@@ -318,21 +347,17 @@ export function applyPatch(
     yearsLeft: yearSpan,
     defer: yearSpan > 0,
     bornAt: now,
+    summary: bits.slice(1).join(' · ') || patch.title,
   }
   next.effects = [effect, ...next.effects].slice(0, 12)
-  const bits = [fillText(balance.logs.event, { title: patch.title })]
-  if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
-  if (Math.abs(engineersPct) > 0.01) bits.push(`kỹ sư ${Math.round(engineersPct * 100)}%`)
-  if (Math.abs(machinesAdd) > 0.05) bits.push(`dây chuyền ${machinesAdd > 0 ? '+' : ''}${machinesAdd.toFixed(1)}`)
-  if (Math.abs(machinesPct) > 0.01) bits.push(`dây chuyền ${Math.round(machinesPct * 100)}%`)
-  if (Math.abs(cash) > 20) bits.push(`vốn ${Math.round(cash).toLocaleString('vi-VN')} tỷ`)
-  if (revenuePct) bits.push(`doanh thu ${Math.round(revenuePct)}%`)
-  if (costPct) bits.push(`chi phí ${Math.round(costPct)}%`)
-  if (assetsPct) bits.push(`tài sản ${Math.round(assetsPct)}%`)
-  if (perYear) bits.push(`mỗi năm ${Math.round(perYear).toLocaleString('vi-VN')} tỷ`)
   next.log = [bits.join(' · '), ...next.log].slice(0, balance.logLimit)
   next.rng = rng.getState()
   return next
+}
+
+export function scaleRange(range: Range | undefined, factor: number): Range | undefined {
+  if (!range || factor === 1) return range
+  return [range[0] * factor, range[1] * factor]
 }
 
 export function patchFromEvent(event: EventDef, title: string, body: string): EffectPatch {

@@ -1522,6 +1522,148 @@
     "cong-nghe-cao"
    ],
    "contexts": []
+  },
+  {
+   "id": "gen-uu-dai-thue",
+   "group": "policy",
+   "title": "Ưu đãi thuế cho hàng xuất",
+   "body": "{{factory}} được giảm thuế một kỳ. Biên lợi nhuận rộng hơn.",
+   "visual": "boom",
+   "icon": "badge-percent",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": [],
+   "effect": {
+    "cashPerYear": 80,
+    "years": 2
+   }
+  },
+  {
+   "id": "gen-phan-mem-mo",
+   "group": "technology",
+   "title": "Phần mềm vận hành được mở",
+   "body": "Một bộ công cụ mở giúp ca kỹ thuật của {{industry}} bớt việc tay.",
+   "visual": "cyber",
+   "icon": "cpu",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghe-cao",
+    "ha-tang",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-lop-nghe",
+   "group": "people",
+   "title": "Lớp nghề tại chỗ",
+   "body": "Thợ mới học việc ngay trong {{factory}}. Ca sau đỡ thiếu người.",
+   "visual": "expansion",
+   "icon": "graduation-cap",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "nong-san",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-don-bat-ngo",
+   "group": "luck",
+   "title": "Đơn hàng bất ngờ cuối năm",
+   "body": "Một khách cũ gọi thêm. Kho {{factory}} xuất hết tồn.",
+   "visual": "boom",
+   "icon": "gift",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-hang-nhai",
+   "group": "market",
+   "title": "Hàng nhái đội lốt nhãn",
+   "body": "Chợ bán hàng giả mang tên {{industry}}. Giá thật bị ép.",
+   "visual": "scandal",
+   "icon": "copy-x",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "nong-san",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-mua-da",
+   "group": "nature",
+   "title": "Mưa đá làm móp mái kho",
+   "body": "Một trận mưa đá. Mái kho {{factory}} phải vá trước ca tối.",
+   "visual": "storm",
+   "icon": "cloud-hail",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong",
+    "ha-tang",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-thanh-tra",
+   "group": "policy",
+   "title": "Đoàn thanh tra vào cổng",
+   "body": "Thanh tra dừng một dây chuyền để kiểm tra. {{factory}} mất nửa ca.",
+   "visual": "scandal",
+   "icon": "clipboard-list",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "ha-tang",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "gen-bang-sang-che",
+   "group": "technology",
+   "title": "Bằng sáng chế được cấp",
+   "body": "{{factory}} giữ độc quyền một cải tiến. Khách chịu giá cao hơn.",
+   "visual": "boom",
+   "icon": "scroll-text",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghe-cao",
+    "cong-nghiep-nang",
+    "nang-luong"
+   ],
+   "contexts": [],
+   "effect": {
+    "revenuePct": 8,
+    "years": 2
+   }
   }
  ]
 }

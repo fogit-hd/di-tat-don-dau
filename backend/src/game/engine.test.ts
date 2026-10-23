@@ -107,6 +107,16 @@ function fresh(capital = 10000, seed = 7) {
 }
 
 describe('economy', () => {
+  it('lets cash go negative and charges the database interest rate', () => {
+    const state = fresh()
+    state.cash = -1000
+    state.engineers = 0
+    state.machines = 0
+    const next = runCycle(state, theme, makeRng(2), 10_000, balance)
+    expect(next.cash).toBeLessThan(-1000)
+    expect(next.yearParts?.interest).toBeCloseTo(-80, 5)
+  })
+
   it('rejects spending more cash than the team holds', () => {
     const state = fresh()
     const result = invest(state, 'mac', state.cash + 500, balance, lines)

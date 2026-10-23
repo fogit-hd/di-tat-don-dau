@@ -5,7 +5,7 @@ import { normalizeAnchors } from './anchors'
 import { eventApplies, type EventTags } from './event-pool'
 import { fillText } from './engine'
 import { hashString } from './rng'
-import { isHeirOutcome, type HealthWeight, type HeirRow, type OddsPoint, type ReasonRow, type SuccessionGauge } from './succession'
+import { isHeirOutcome, type HealthWeight, type HeirRow, type OddsPoint, type ReasonRow, type SuccessionGauge, type SuccessionPolicy } from './succession'
 import type {
   Anchors,
   Balance,
@@ -184,6 +184,9 @@ export type Catalog = {
   heirOutcomes: HeirRow[]
   successionGauge: SuccessionGauge
   heirHealthWeights: HealthWeight[]
+  successionPolicy: SuccessionPolicy
+  familyEvents: EventDef[]
+  traitCopy: { id: string; label: string; detail: string }[]
   loadedAt: number
 }
 
@@ -195,7 +198,7 @@ export function catalog(): Catalog {
 }
 
 export async function loadCatalog(): Promise<Catalog> {
-  const [industries, regions, scales, contexts, scenarios, nameParts, templates, lines, types, questions, events, endings, balanceRow, successionOdds, successionReasons, heirOutcomes, successionGauge, heirHealthWeights] =
+  const [industries, regions, scales, contexts, scenarios, nameParts, templates, lines, types, questions, events, endings, balanceRow, successionOdds, successionReasons, heirOutcomes, successionGauge, heirHealthWeights, successionPolicy, traitRows] =
     await Promise.all([
       prisma.industry.findMany({
         where: { active: true },
@@ -235,6 +238,8 @@ export async function loadCatalog(): Promise<Catalog> {
       prisma.heirOutcome.findMany({ orderBy: { sort: 'asc' } }),
       prisma.successionGauge.findUnique({ where: { id: 'default' } }),
       prisma.heirHealthWeight.findMany({ orderBy: { id: 'asc' } }),
+      prisma.successionPolicy.findUnique({ where: { id: 'default' } }),
+      prisma.traitCopy.findMany({ orderBy: { sort: 'asc' } }),
     ])
 
   if (!industries.length) throw new Error('Chưa có ngành trong cơ sở dữ liệu. Hãy chạy prisma db seed.')
@@ -242,7 +247,7 @@ export async function loadCatalog(): Promise<Catalog> {
   if (!questions.length) throw new Error('Chưa có câu hỏi')
   if (!events.length) throw new Error('Chưa có sự kiện')
   if (!endings.length) throw new Error('Chưa có kết cục')
-  if (!successionOdds.length || !successionReasons.length || !heirOutcomes.length || !successionGauge || !heirHealthWeights.length) {
+  if (!successionOdds.length || !successionReasons.length || !heirOutcomes.length || !successionGauge || !heirHealthWeights.length || !successionPolicy) {
     throw new Error('Chưa có nội dung chuyển giao')
   }
   if (!balanceRow) throw new Error('Chưa có bảng cân bằng')
@@ -267,7 +272,7 @@ export async function loadCatalog(): Promise<Catalog> {
       const list = eventIds.get(event.industryId) ?? []
       list.push(event.id)
       eventIds.set(event.industryId, list)
-    } else {
+    } else if (!event.trait) {
       sharedEvents.push({
         id: event.id,
         industryIds: event.industryTags.map((tag) => tag.industryId),
@@ -382,6 +387,8 @@ export async function loadCatalog(): Promise<Catalog> {
       effectCode: row.visual || row.effectCode,
       severity: row.severity,
       good: row.good,
+      icon: row.icon || '',
+      trait: row.trait || '',
       title: row.title,
       body: row.body,
       narrations: row.narrations.map((item) => ({
@@ -425,6 +432,8 @@ export async function loadCatalog(): Promise<Catalog> {
         detail: row.detail,
         weight: row.weight,
         multiplier: row.multiplier,
+        multiplierMin: row.multiplierMin,
+        multiplierMax: row.multiplierMax,
         sort: row.sort,
       }
     }),
@@ -446,6 +455,9 @@ export async function loadCatalog(): Promise<Catalog> {
         weightAdd: row.weightAdd,
       }
     }),
+    successionPolicy: readPolicy(successionPolicy),
+    familyEvents: eventDefs.filter((event) => Boolean(event.trait)),
+    traitCopy: traitRows.length ? traitRows.map((row) => ({ id: row.id, label: row.label, detail: row.detail })) : TRAIT_FALLBACK,
     loadedAt: Date.now(),
   }
   return cache
@@ -467,13 +479,43 @@ export function parseBalance(value: unknown): Balance {
   for (const key of ['start', 'cycle', 'quizCorrect', 'quizWrong', 'quizTimeout', 'event'] as const) {
     if (typeof (logs as Record<string, unknown>)[key] !== 'string') throw new Error(`Cân bằng thiếu mẫu ${key}`)
   }
-  return value as Balance
+  return { ...BALANCE_DEFAULTS, ...(value as object) } as Balance
+}
+
+const BALANCE_DEFAULTS = {
+  debtInterest: 0.08,
+  centennialYear: 100,
+  centennialMultiplier: 1.5,
+  familyEventChance: 0.05,
+  lifeInsuranceCash: 2000,
+}
+
+const TRAIT_FALLBACK = [
+  { id: 'longevity', label: 'Trường thọ', detail: 'Chủ xưởng sống lâu. Nguy cơ qua đời cố định 1% mỗi năm.' },
+  { id: 'illness', label: 'Bạo bệnh', detail: 'Chủ xưởng mang bệnh nặng. Nguy cơ qua đời tăng thêm 10 điểm phần trăm mỗi năm.' },
+  { id: 'heir_trained', label: 'Người kế nghiệp được đào tạo', detail: 'Đời sau dễ phát đạt hơn khi nhận xưởng.' },
+  { id: 'inheritance_dispute', label: 'Tranh chấp thừa kế', detail: 'Con cháu dễ phá gia chi tử khi chia xưởng.' },
+  { id: 'family_fund', label: 'Quỹ gia tộc', detail: 'Gia đình có quỹ dự phòng, nên chuyển giao không còn phá sản.' },
+  { id: 'life_insurance', label: 'Bảo hiểm nhân thọ', detail: 'Khi chủ qua đời, xưởng nhận thêm một khoản tiền.' },
+  { id: 'heir_abroad', label: 'Con du học về nước', detail: 'Người thừa kế có thêm cơ hội nhân đôi tài sản.' },
+]
+
+function readPolicy(row: { baseChance: number; stepPerYear: number; maxChance: number; longevityChance: number; illnessAdd: number; traitRules: unknown }): SuccessionPolicy {
+  const rules = row.traitRules && typeof row.traitRules === 'object' ? (row.traitRules as SuccessionPolicy['traitRules']) : {}
+  return {
+    baseChance: row.baseChance,
+    stepPerYear: row.stepPerYear,
+    maxChance: row.maxChance,
+    longevityChance: row.longevityChance,
+    illnessAdd: row.illnessAdd,
+    traitRules: rules,
+  }
 }
 
 export function buildThemes(input: {
   industries: IndustryPart[]
   regions: { id: string; name: string; sort: number }[]
-  scales: { id: string; name: string; sort: number; roleTemplate: string }[]
+  scales: { id: string; name: string; sort: number; roleTemplate: string; capitalFactor?: number }[]
   contexts: { id: string; name: string; line: string; sort: number; start: ThemeStart }[]
   scenarios: ScenarioPart[]
   lines: LineDef[]
@@ -540,6 +582,7 @@ export function buildThemes(input: {
             scaleName: scale.name,
             contextId: context.id,
             contextName: context.name,
+            scaleFactor: scale.capitalFactor || 1,
             vars,
             coefs: {
               epl: industry.epl,
@@ -668,6 +711,7 @@ function composeTheme(
     scaleName: scale.name,
     contextId: context.id,
     contextName: context.name,
+    scaleFactor: scale.capitalFactor || 1,
     vars,
     coefs: {
       epl: industry.epl,

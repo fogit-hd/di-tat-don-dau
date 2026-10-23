@@ -48,7 +48,7 @@ const FEATURES = [
     id: 'd',
     icon: 'sliders',
     title: 'Chủ phòng tùy chỉnh thời gian và vốn',
-    body: 'Chọn phút của trận, vốn khởi điểm, số giây mỗi năm và thời gian khóa nút.',
+    body: 'Chọn phút của trận, vốn khởi điểm, giá từng khoản đầu tư, số giây mỗi năm và thời gian khóa nút.',
   },
   {
     id: 'e',
@@ -98,7 +98,13 @@ export function StartScreen() {
   const [minutes, setMinutes] = useState(15)
   const [capital, setCapital] = useState(10000)
   const [cycle, setCycle] = useState(60)
-  const [yearMin, setYearMin] = useState(10)
+  const [yearMin, setYearMin] = useState(5)
+  const [prices, setPrices] = useState({ eng: 1000, mac: 1000, sup: 1000, inf: 1000, grn: 1000 })
+  const [priceBase, setPriceBase] = useState(1000)
+  const [formula, setFormula] = useState({ divisor: 10, round: 100, min: 500 })
+  const [joinOpen, setJoinOpen] = useState(false)
+  const [hostOpen, setHostOpen] = useState(false)
+  const [joinStep, setJoinStep] = useState<'code' | 'name'>('code')
   const codeFromUrl = readCode(searchParams)
   const [joinCode, setJoinCode] = useState(codeFromUrl)
   const [urlCode, setUrlCode] = useState(codeFromUrl)
@@ -133,10 +139,59 @@ export function StartScreen() {
   }, [])
 
   useEffect(() => {
-    if (!readCode(searchParams)) return
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    document.getElementById('vao-phong')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+    const code = readCode(searchParams)
+    if (!code) return
+    setJoinOpen(true)
+    setJoinCode(code)
+    setJoinStep('code')
+    void checkCode(code)
   }, [searchParams])
+
+  useEffect(() => {
+    void api<{ yearMinSeconds: number; stepDivisor: number; stepRound: number; stepMin: number; lines: { id: string; label: string }[] }>('/api/setup')
+      .then((setup) => {
+        setYearMin(setup.yearMinSeconds)
+        setFormula({ divisor: setup.stepDivisor, round: setup.stepRound, min: setup.stepMin })
+        const price = Math.max(setup.stepMin, Math.round(10000 / setup.stepDivisor / setup.stepRound) * setup.stepRound)
+        setPriceBase(price)
+        setPrices({ eng: price, mac: price, sup: price, inf: price, grn: price })
+      })
+      .catch(() => undefined)
+  }, [])
+
+  function priceFor(capitalValue: number) {
+    return Math.max(formula.min, Math.round(capitalValue / formula.divisor / formula.round) * formula.round)
+  }
+
+  function changeCapital(value: number) {
+    const nextDefault = priceFor(value)
+    setPrices((current) => {
+      const untouched = (Object.values(current) as number[]).every((price) => price === priceBase)
+      return untouched ? { eng: nextDefault, mac: nextDefault, sup: nextDefault, inf: nextDefault, grn: nextDefault } : current
+    })
+    setPriceBase(nextDefault)
+    setCapital(value)
+  }
+
+  async function checkCode(code = joinCode) {
+    const next = code.trim().toUpperCase()
+    if (next.length < 4) {
+      setError('Nhập đủ mã phòng')
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      await api(`/api/rooms/${next}/exists`)
+      setJoinCode(next)
+      setJoinStep('name')
+    } catch (err) {
+      setJoinStep('code')
+      setError(err instanceof ApiError ? err.message : 'Không thấy phòng này')
+    } finally {
+      setBusy(false)
+    }
+  }
 
   async function createRoom() {
     setBusy(true)
@@ -144,7 +199,7 @@ export function StartScreen() {
     try {
       const created = await api<{ code: string; hostToken: string }>('/api/rooms', {
         method: 'POST',
-        body: { hostName, durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin },
+        body: { hostName, durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin, linePrices: prices },
       })
       localStorage.setItem(`host:${created.code}`, created.hostToken)
       navigate(`/host/${created.code}`)
@@ -176,8 +231,8 @@ export function StartScreen() {
 
   return (
     <div className="landing">
-      <a className="skip" href="#vao-phong">
-        Tới chỗ vào phòng
+      <a className="skip" href="#cach-choi">
+        Tới cách chơi
       </a>
       <header className="land-bar" id="dau-trang">
         <div className="land-wrap bar-inner">
@@ -187,11 +242,15 @@ export function StartScreen() {
           <nav className="land-nav" aria-label="Mục lục">
             <a href="#cach-choi">Cách chơi</a>
             <a href="#tinh-nang">Tính năng</a>
-            <a href="#vao-choi">Vào chơi</a>
           </nav>
-          <a className="btn land-cta" href="#vao-phong">
-            Vào phòng
-          </a>
+          <div className="land-actions">
+            <button type="button" className="btn s" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
+              Vào chơi
+            </button>
+            <button type="button" className="btn land-cta" onClick={() => { setError(''); setJoinOpen(false); setHostOpen(true) }}>
+              Tạo phòng
+            </button>
+          </div>
         </div>
       </header>
       {server === 'down' && (
@@ -211,12 +270,12 @@ export function StartScreen() {
               <p className="tagline">Gây dựng nhà máy gia đình và truyền lại qua nhiều năm.</p>
               <p className="sub">Một lớp, một phòng: chủ phòng chiếu mã, mỗi đội chơi trên điện thoại.</p>
               <div className="hero-cta">
-                <a className="btn" href="#vao-phong">
-                  Vào phòng
-                </a>
-                <a className="btn s" href="#tao-phong">
+                <button type="button" className="btn" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
+                  Vào chơi
+                </button>
+                <button type="button" className="btn s" onClick={() => { setError(''); setJoinOpen(false); setHostOpen(true) }}>
                   Tạo phòng
-                </a>
+                </button>
               </div>
             </div>
             <HeroArt />
@@ -274,110 +333,6 @@ export function StartScreen() {
           </div>
         </section>
 
-        <section className="play-sec" id="vao-choi" aria-labelledby="play-title">
-          <div className="land-wrap">
-            <div className="section-head">
-              <h2 className="section-title" id="play-title">
-                Vào chơi
-              </h2>
-              <p className="deck">Đội chơi vào phòng có sẵn. Chủ phòng mở phòng mới.</p>
-            </div>
-            {error && (
-              <p className="form-alert" role="alert">
-                {error}
-              </p>
-            )}
-            <div className="play-grid">
-              <article className="card play-card play-join" id="vao-phong">
-                <p className="role">Đội chơi</p>
-                <h3>Vào phòng</h3>
-                <p className="play-help" id="join-help">
-                  Nhập mã trên máy chiếu và tên đội.
-                </p>
-                <form
-                  aria-describedby="join-help"
-                  onSubmit={(event) => {
-                    event.preventDefault()
-                    void join()
-                  }}
-                >
-                  <label className="field">
-                    Mã phòng
-                    <input
-                      value={joinCode}
-                      maxLength={8}
-                      placeholder="Mã phòng"
-                      autoCapitalize="characters"
-                      autoComplete="off"
-                      spellCheck={false}
-                      onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
-                    />
-                  </label>
-                  <label className="field">
-                    Tên đội
-                    <input
-                      value={team}
-                      maxLength={24}
-                      placeholder="Tên đội"
-                      autoComplete="off"
-                      onChange={(event) => setTeam(event.target.value)}
-                    />
-                  </label>
-                  <button type="submit" className="btn big" disabled={busy || joinCode.trim().length < 4 || team.trim().length < 1}>
-                    Vào sảnh
-                  </button>
-                </form>
-              </article>
-
-              <article className="card play-card" id="tao-phong">
-                <p className="role">Chủ phòng</p>
-                <h3>Tạo phòng</h3>
-                <p className="play-help" id="host-help">
-                  Mở phòng trên máy này, rồi chiếu mã cho cả lớp.
-                </p>
-                <form
-                  aria-describedby="host-help"
-                  onSubmit={(event) => {
-                    event.preventDefault()
-                    void createRoom()
-                  }}
-                >
-                  <label className="field">
-                    Tên
-                    <input
-                      value={hostName}
-                      maxLength={40}
-                      placeholder="Tên nhóm trình chiếu"
-                      autoComplete="off"
-                      onChange={(event) => setHostName(event.target.value)}
-                    />
-                  </label>
-                  <div className="settings">
-                    <label>
-                      Phút
-                      <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
-                    </label>
-                    <label>
-                      Vốn (tỷ)
-                      <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => setCapital(Number(event.target.value))} />
-                    </label>
-                    <label>
-                      Giây mỗi năm
-                      <input type="number" min={10} max={180} value={cycle} onChange={(event) => setCycle(Number(event.target.value))} />
-                    </label>
-                    <label>
-                      Khóa nút (giây)
-                      <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
-                    </label>
-                  </div>
-                  <button type="submit" className="btn big" disabled={busy || hostName.trim().length < 1}>
-                    Mở phòng
-                  </button>
-                </form>
-              </article>
-            </div>
-          </div>
-        </section>
       </main>
       <footer className="land-foot">
         <div className="land-wrap foot-inner">
@@ -401,6 +356,148 @@ export function StartScreen() {
           </button>
         </div>
       </footer>
+      {joinOpen && (
+        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="join-title">
+          <div className="card">
+            <h2 id="join-title">Vào chơi</h2>
+            {joinStep === 'code' ? (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void checkCode()
+                }}
+              >
+                <p>Nhập mã phòng. Chỉ khi phòng tồn tại mới hỏi tên đội.</p>
+                <label>
+                  Mã phòng
+                  <input
+                    value={joinCode}
+                    maxLength={8}
+                    autoCapitalize="characters"
+                    autoFocus
+                    placeholder="Mã phòng"
+                    onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
+                  />
+                </label>
+                {error && (
+                  <p className="warn" role="alert">
+                    {error}
+                  </p>
+                )}
+                <button type="submit" className="btn big" disabled={busy}>
+                  {busy ? 'Đang kiểm tra…' : 'Kiểm tra mã'}
+                </button>
+              </form>
+            ) : (
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void join()
+                }}
+              >
+                <p>
+                  Phòng <b>{joinCode}</b> đang mở. Nhập tên đội để vào sảnh.
+                </p>
+                <label>
+                  Tên đội
+                  <input value={team} maxLength={24} autoFocus placeholder="Tên đội" onChange={(event) => setTeam(event.target.value)} />
+                </label>
+                {error && (
+                  <p className="warn" role="alert">
+                    {error}
+                  </p>
+                )}
+                <button type="submit" className="btn big" disabled={busy || team.trim().length < 1}>
+                  Vào sảnh
+                </button>
+                <button
+                  type="button"
+                  className="btn s"
+                  onClick={() => {
+                    setError('')
+                    setJoinStep('code')
+                  }}
+                >
+                  Đổi mã
+                </button>
+              </form>
+            )}
+            <button type="button" className="btn s" onClick={() => setJoinOpen(false)}>
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
+      {hostOpen && (
+        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="host-title">
+          <div className="card">
+            <h2 id="host-title">Tạo phòng</h2>
+            <p>Chủ phòng chiếu mã. Giá từng khoản đầu tư mặc định theo vốn, và có thể sửa trước khi mở phòng.</p>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault()
+                void createRoom()
+              }}
+            >
+              <label>
+                Tên
+                <input value={hostName} maxLength={40} onChange={(event) => setHostName(event.target.value)} />
+              </label>
+              <div className="settings">
+                <label>
+                  Phút
+                  <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
+                </label>
+                <label>
+                  Vốn (tỷ)
+                  <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => changeCapital(Number(event.target.value))} />
+                </label>
+                <label>
+                  Giây mỗi năm
+                  <input type="number" min={10} max={180} value={cycle} onChange={(event) => setCycle(Number(event.target.value))} />
+                </label>
+                <label>
+                  Khóa nút (giây)
+                  <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
+                </label>
+              </div>
+              <div className="settings price-grid">
+                {(
+                  [
+                    ['eng', 'Đào tạo'],
+                    ['mac', 'Dây chuyền'],
+                    ['sup', 'Phụ trợ'],
+                    ['inf', 'Hạ tầng'],
+                    ['grn', 'Công nghệ sạch'],
+                  ] as const
+                ).map(([id, label]) => (
+                  <label key={id}>
+                    Giá {label}
+                    <input
+                      type="number"
+                      min={100}
+                      max={100000}
+                      value={prices[id]}
+                      onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}
+                    />
+                  </label>
+                ))}
+              </div>
+              {error && (
+                <p className="warn" role="alert">
+                  {error}
+                </p>
+              )}
+              <button type="submit" className="btn big" disabled={busy || hostName.trim().length < 1}>
+                Mở phòng
+              </button>
+            </form>
+            <button type="button" className="btn s" onClick={() => setHostOpen(false)}>
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
       {board && (
         <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="lb-title">
           <div className="card">
