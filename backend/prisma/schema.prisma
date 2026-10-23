@@ -1,0 +1,359 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Industry {
+  id         String  @id
+  name       String
+  unit       String
+  art        String
+  sort       Int
+  active     Boolean @default(true)
+  role       String
+  mission    String
+  worker     String
+  product    String
+  leap       String
+  weak       String
+  epl        Float
+  tech       Float
+  support    Float
+  infra      Float
+  emission   Float
+  baseOutput Float
+  basePrice  Float
+  opex       Float
+  idleCost   Float
+  group      String  @default("")
+  groupName  String  @default("")
+  anchors    Json?
+  directions IndustryDirection[]
+  patterns   IndustryNamePattern[]
+  scenarios  Scenario[]
+  variants   EventVariant[]
+  events     GameEvent[]
+  eventTags  EventIndustryTag[]
+}
+
+model IndustryDirection {
+  industryId String
+  line       String
+  label      String
+  sort       Int
+  industry   Industry @relation(fields: [industryId], references: [id], onDelete: Cascade)
+
+  @@id([industryId, line])
+}
+
+model IndustryNamePattern {
+  id         String   @id
+  industryId String
+  pattern    String
+  sort       Int
+  industry   Industry @relation(fields: [industryId], references: [id], onDelete: Cascade)
+
+  @@unique([industryId, sort])
+}
+
+model Region {
+  id     String  @id
+  name   String
+  sort   Int
+  active Boolean @default(true)
+}
+
+model Scale {
+  id            String  @id
+  name          String
+  sort          Int
+  roleTemplate  String
+  capitalFactor Float   @default(1)
+  active        Boolean @default(true)
+}
+
+model Context {
+  id         String  @id
+  name       String
+  line       String
+  sort       Int
+  active     Boolean @default(true)
+  cashMul    Float
+  engineers  Float
+  machines   Float
+  pollution  Float
+  dependency Float
+  condition  Float
+  eventTags  EventContextTag[]
+}
+
+model Scenario {
+  id          String  @id
+  industryId  String
+  regionId    String?
+  scaleId     String?
+  contextId   String?
+  role        String?
+  mission     String?
+  factoryName String?
+  body        String  @default("")
+  active      Boolean @default(true)
+  industry    Industry @relation(fields: [industryId], references: [id], onDelete: Cascade)
+}
+
+model FactoryNamePart {
+  id   String @id
+  name String
+  sort Int
+}
+
+model CopyTemplate {
+  key   String @id
+  value String
+}
+
+model InvestmentLine {
+  id    String @id
+  label String
+  hint  String
+  log   String
+  sort  Int
+}
+
+model QuestionType {
+  id        String     @id
+  title     String
+  sort      Int
+  questions Question[]
+}
+
+model Question {
+  id              String           @id
+  topic           String
+  section         String
+  difficulty      Int
+  typeId          String
+  prompt          String
+  explanation     String
+  correctOptionId String
+  active          Boolean          @default(true)
+  type            QuestionType     @relation(fields: [typeId], references: [id])
+  options         QuestionOption[]
+
+  @@index([topic])
+}
+
+model QuestionOption {
+  questionId String
+  key        String
+  text       String
+  sort       Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, key])
+}
+
+model GameEvent {
+  id            String         @id
+  industryId    String?
+  scope         String
+  weight        Float
+  visual        String
+  title         String
+  body          String
+  exposure      String
+  effect        Json
+  effectCode    String         @default("none")
+  severity      Int            @default(1)
+  good          Boolean        @default(false)
+  group         String         @default("")
+  timeoutChoice Int?
+  sort          Int            @default(0)
+  active        Boolean        @default(true)
+  industry      Industry?      @relation(fields: [industryId], references: [id], onDelete: Cascade)
+  variants      EventVariant[]
+  choices       EventChoice[]
+  industryTags  EventIndustryTag[]
+  contextTags   EventContextTag[]
+  narrations    EventNarration[]
+
+  @@index([scope])
+  @@index([industryId])
+}
+
+model EventNarration {
+  eventId   String
+  regionId  String   @default("")
+  contextId String   @default("")
+  title     String
+  body      String
+  event     GameEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, regionId, contextId])
+}
+
+model EventIndustryTag {
+  eventId    String
+  industryId String
+  event      GameEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  industry   Industry  @relation(fields: [industryId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, industryId])
+}
+
+model EventContextTag {
+  eventId   String
+  contextId String
+  event     GameEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  context   Context   @relation(fields: [contextId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, contextId])
+}
+
+model EventVariant {
+  eventId    String
+  industryId String
+  title      String
+  body       String
+  event      GameEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  industry   Industry  @relation(fields: [industryId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, industryId])
+}
+
+model EventChoice {
+  eventId String
+  key     String
+  text    String
+  sort    Int
+  patch   Json
+  event   GameEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, key])
+}
+
+model Ending {
+  id                 String  @id
+  title              String
+  text               String
+  sort               Int
+  isDefault          Boolean @default(false)
+  requiresProduction Boolean @default(false)
+  productionMul      Float   @default(0.4)
+  minRatio           Float?
+  maxRatio           Float?
+  minTech            Float?
+  maxDependency      Float?
+  minMachines        Float?
+}
+
+model BalanceConfig {
+  id      String @id
+  payload Json
+}
+
+model SuccessionOdds {
+  minYear Int   @id
+  chance  Float
+}
+
+model SuccessionReason {
+  id         String  @id
+  industryId String?
+  contextId  String?
+  text       String
+  weight     Float
+  sort       Int     @default(0)
+}
+
+model HeirOutcome {
+  id          String  @id
+  outcomeType String
+  industryId  String?
+  contextId   String?
+  label       String
+  detail      String
+  weight      Float
+  multiplier  Float
+  sort        Int     @default(0)
+}
+
+model SuccessionGauge {
+  id                    String @id
+  debtDependencyWeight  Float
+  debtLeverageWeight    Float
+  debtCap               Float
+  valueFloor            Float
+}
+
+model HeirHealthWeight {
+  id               String @id
+  outcome          String
+  minReserveRatio  Float?
+  maxReserveRatio  Float?
+  minDebtRatio     Float?
+  maxDebtRatio     Float?
+  weightAdd        Float
+}
+
+model Room {
+  id               String   @id @default(cuid())
+  code             String   @unique
+  hostTokenHash    String
+  hostName         String
+  status           String
+  durationSec      Int
+  startingCapital  Float
+  cycleSeconds     Int
+  yearMinSeconds   Int      @default(10)
+  step             Float
+  seed             String
+  meta             Json
+  createdAt        DateTime @default(now())
+  startedAt        DateTime?
+  endsAt           DateTime?
+  remainingMs      Int?
+  pausedAt         DateTime?
+  cycleStartedAt   DateTime?
+  cycleElapsedMs   Int      @default(0)
+  countdownEndsAt  DateTime?
+  nextRoomEventAt  DateTime?
+  participants     Participant[]
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  tokenHash String
+  teamName  String
+  theme     Json?
+  state     Json?
+  score     Float?
+  ending    String?
+  connected Boolean  @default(true)
+  createdAt DateTime @default(now())
+  answers   Answer[]
+
+  @@unique([roomId, teamName])
+  @@index([roomId])
+}
+
+model Answer {
+  id            String      @id
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  roomId        String
+  questionId    String
+  prompt        String
+  optionId      String
+  correct       Boolean
+  createdAt     DateTime    @default(now())
+
+  @@index([roomId])
+}

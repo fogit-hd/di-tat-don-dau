@@ -1,0 +1,61 @@
+name: nha-may
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: chip
+      POSTGRES_PASSWORD: chip
+      POSTGRES_DB: chipgame
+    ports:
+      - "54329:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chip -d chipgame"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://chip:chip@postgres:5432/chipgame?schema=public
+      DIRECT_URL: postgresql://chip:chip@postgres:5432/chipgame?schema=public
+      SEED_ON_BOOT: "1"
+      CONTENT_RELOAD_TOKEN: dev-reload
+      PORT: "4607"
+      CORS_ORIGINS: "https://neoforcelab.com,http://localhost:4517,http://127.0.0.1:4517,http://localhost:4607,http://127.0.0.1:4607"
+    ports:
+      - "4607:4607"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4607/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 25s
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    environment:
+      API_UPSTREAM: http://backend:4607
+    ports:
+      - "4517:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:

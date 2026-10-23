@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.prod
+*.tsbuildinfo
+backups/
+.DS_Store
+frontend/dist/
+backend/dist/
+coverage/

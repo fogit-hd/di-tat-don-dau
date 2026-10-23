@@ -1,0 +1,1527 @@
+{
+ "version": 1,
+ "events": [
+  {
+   "id": "nat-bao-do-bo",
+   "group": "nature",
+   "title": "Bão đổ bộ vào khu sản xuất",
+   "body": "Gió mạnh làm dừng ca ngoài trời và hỏng một phần mái {{factory}}.",
+   "visual": "storm",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "region": "Cần Thơ",
+     "title": "Bão vào miền Tây, mái xưởng tốc",
+     "body": "Gió từ biển Tây quật {{factory}}. Ca ngoài trời phải dừng."
+    },
+    {
+     "context": "hạ tầng còn yếu",
+     "title": "Bão đánh vào nơi hạ tầng còn yếu",
+     "body": "Đường vào {{factory}} ngập trước khi gió tới. Xe không ra cổng."
+    }
+   ]
+  },
+  {
+   "id": "nat-mua-lon",
+   "group": "nature",
+   "title": "Mưa lớn làm trễ chuyến hàng",
+   "body": "Xe không ra cổng được. {{industry}} vẫn chạy trong nhà.",
+   "visual": "rain",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong",
+    "ha-tang",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-lu-vao-xuong",
+   "group": "nature",
+   "title": "Lũ tràn vào sân nhà máy",
+   "body": "Nước ngập tới nền xưởng. Máy ở tầng trệt phải tắt.",
+   "visual": "flood",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "region": "Đà Nẵng",
+     "title": "Nước lũ tràn xưởng miền Trung",
+     "body": "Mưa nguồn đổ về. Nền {{factory}} ngập tới máy tầng trệt."
+    }
+   ]
+  },
+  {
+   "id": "nat-han-han",
+   "group": "nature",
+   "title": "Hạn hán siết nguồn nước",
+   "body": "{{factory}} thiếu nước cho nồi hơi và tưới.",
+   "visual": "drought",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong",
+    "tieu-dung"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-nang-nong",
+   "group": "nature",
+   "title": "Nắng nóng kỷ lục trên mái xưởng",
+   "body": "Ca ngày phải nghỉ sớm. Điều hòa và làm mát ngốn điện.",
+   "visual": "heatwave",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-suong-mu",
+   "group": "nature",
+   "title": "Sương mù dày, cảng và đường chậm",
+   "body": "Xe và tàu không vào đúng giờ. Dây chuyền chờ nguyên liệu.",
+   "visual": "fog",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "ha-tang",
+    "nang-luong",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-dong-dat",
+   "group": "nature",
+   "title": "Động đất rung chuyển mặt bằng",
+   "body": "Nền {{factory}} nứt. Ca sản xuất dừng để kiểm tra kết cấu.",
+   "visual": "earthquake",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-nut-nen",
+   "group": "nature",
+   "title": "Rung chấn làm nứt nền xưởng",
+   "body": "Một nhịp sàn phải gia cố. Máy nặng chưa được chạy lại.",
+   "visual": "earthquake",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-dich-ca",
+   "group": "nature",
+   "title": "Ổ dịch trong ca làm việc",
+   "body": "Nhiều người phải cách ly. {{factory}} chạy thiếu người.",
+   "visual": "epidemic",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-dich-nguon",
+   "group": "nature",
+   "title": "Dịch trên nguồn nguyên liệu",
+   "body": "Lô đầu vào bị giữ. {{industry}} không đủ hàng sạch để ra lò.",
+   "visual": "epidemic",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-bao-duong-day",
+   "group": "nature",
+   "title": "Bão quật đường dây và turbine",
+   "body": "Phát và truyền điện gián đoạn sau đêm gió.",
+   "visual": "storm",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-ngap-tuyen",
+   "group": "nature",
+   "title": "Ngập một đoạn tuyến vận hành",
+   "body": "Đoàn xe và kíp hiện trường không qua được đoạn thấp.",
+   "visual": "flood",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "ha-tang",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-khoi-vuot",
+   "group": "nature",
+   "title": "Khói vượt ngưỡng đo",
+   "body": "Trạm quan trắc báo bụi cao. {{factory}} phải giảm tải đốt.",
+   "visual": "pollution",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-chay-kho",
+   "group": "nature",
+   "title": "Cháy kho nguyên liệu",
+   "body": "Một kho của {{factory}} cháy. Lô trong kho không còn dùng được.",
+   "visual": "fire",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-thieu-nuoc",
+   "group": "nature",
+   "title": "Nhà máy thiếu nước sản xuất",
+   "body": "Bồn chứa xuống thấp. Ca rửa và pha chế phải xếp lại.",
+   "visual": "drought",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "nat-mua-keo-dai",
+   "group": "nature",
+   "title": "Mưa kéo dài cả tuần",
+   "body": "Sân và đường nội bộ trơn. Xuất hàng chậm hơn thường lệ.",
+   "visual": "rain",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-don-xuat",
+   "group": "market",
+   "title": "Đơn xuất khẩu đến dày",
+   "body": "Khách ngoài đặt thêm. {{industry}} chạy hết ca.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-gia-lao-doc",
+   "group": "market",
+   "title": "Giá bán lao dốc",
+   "body": "Thị trường quay đầu. {{factory}} bán dưới giá thành.",
+   "visual": "market_crash",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "context": "khủng hoảng",
+     "title": "Giá gãy thêm sau khủng hoảng",
+     "body": "{{factory}} vốn đang yếu, đợt giảm giá này nuốt nốt biên lợi nhuận."
+    }
+   ]
+  },
+  {
+   "id": "mkt-hop-dong-lon",
+   "group": "market",
+   "title": "Một hợp đồng lớn được chốt",
+   "body": "Đối tác giữ sản lượng cả năm. Dây chuyền có việc đều.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghe-cao",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-huy-don",
+   "group": "market",
+   "title": "Chuỗi bán lẻ hủy đơn hàng loạt",
+   "body": "Kệ hàng đóng. Thành phẩm {{industry}} nằm trong kho.",
+   "visual": "market_crash",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-gia-dien",
+   "group": "market",
+   "title": "Giá điện tăng, nhà máy điện có lãi",
+   "body": "Công suất phát được trả cao hơn. Ca đêm đáng chạy.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-vat-lieu-rot",
+   "group": "market",
+   "title": "Giá vật liệu cơ bản rớt mạnh",
+   "body": "Hợp đồng đã ký nay lỗ. Kho {{factory}} đầy hàng cũ giá.",
+   "visual": "market_crash",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-doi-thu-giam",
+   "group": "market",
+   "title": "Đối thủ giảm giá sát sàn",
+   "body": "{{factory}} giữ khách nhưng biên lợi nhuận mỏng.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "cạnh tranh"
+   ]
+  },
+  {
+   "id": "mkt-mo-xuong",
+   "group": "market",
+   "title": "Cầu tăng, xưởng phải mở thêm",
+   "body": "Phải dựng thêm một nhịp nhà. Tiền ra trước, hàng ra sau.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-tra-cham",
+   "group": "market",
+   "title": "Khách lớn trả tiền chậm",
+   "body": "Hàng đã giao. Tiền về tài khoản muộn hơn hạn.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-goi-thau",
+   "group": "market",
+   "title": "Gói thầu hạ tầng được chọn",
+   "body": "{{factory}} trúng một đoạn việc dài. Máy và người có lịch.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-du-thua",
+   "group": "market",
+   "title": "Hàng công nghệ dư trên thị trường",
+   "body": "Giá linh kiện và thành phẩm giảm. Kho {{factory}} ế.",
+   "visual": "market_crash",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-duoc-gia",
+   "group": "market",
+   "title": "Mùa này nông sản được giá",
+   "body": "Thương lái tranh mua. {{industry}} xuất nhanh hơn mọi năm.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "mkt-no-keo-gia",
+   "group": "market",
+   "title": "Khủng hoảng kéo giá xuống đáy",
+   "body": "Người mua biến mất. {{factory}} cắt sản lượng để cầm cự.",
+   "visual": "market_crash",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "khủng hoảng"
+   ]
+  },
+  {
+   "id": "mkt-don-nha-nuoc",
+   "group": "market",
+   "title": "Đơn hàng dự án trọng điểm vào sổ",
+   "body": "Nhà nước giữ sản lượng. {{factory}} có đầu ra chắc.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "trọng điểm"
+   ]
+  },
+  {
+   "id": "mkt-ty-gia",
+   "group": "market",
+   "title": "Tỷ giá làm đội chi phí nhập",
+   "body": "Linh kiện ngoài đắt hơn dự toán. Giá thành {{industry}} tăng.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "nhập khẩu"
+   ]
+  },
+  {
+   "id": "mkt-sieu-thi",
+   "group": "market",
+   "title": "Siêu thị dừng nhập mặt hàng này",
+   "body": "Kệ không nhận thêm. Thành phẩm phải tìm đường khác.",
+   "visual": "market_crash",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-kiem-tra-mt",
+   "group": "policy",
+   "title": "Đoàn kiểm tra môi trường vào cổng",
+   "body": "Họ đo khói và nước thải. {{factory}} phải giảm tải trong lúc đo.",
+   "visual": "pollution",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong",
+    "tieu-dung"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-trong-diem",
+   "group": "policy",
+   "title": "Dự án được ghi vào danh mục trọng điểm",
+   "body": "Thủ tục thông hơn. Đầu ra của {{factory}} có chỗ đứng.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "trọng điểm"
+   ]
+  },
+  {
+   "id": "pol-giay-phep",
+   "group": "policy",
+   "title": "Giấy phép mở rộng được ký",
+   "body": "{{factory}} được xây thêm một hạng mục. Vốn phải ứng trước.",
+   "visual": "expansion",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-thue-tang",
+   "group": "policy",
+   "title": "Thuế chuyên ngành tăng giữa năm",
+   "body": "Mỗi đơn vị ra lò chịu thêm một khoản. Lợi nhuận mỏng đi.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-uu-dai",
+   "group": "policy",
+   "title": "Ưu đãi thuế được gia hạn",
+   "body": "Khoản thuế được hoãn. {{factory}} giữ lại tiền để chạy máy.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-siet-xa",
+   "group": "policy",
+   "title": "Quy chuẩn xả thải bị siết",
+   "body": "Hệ thống xử lý chưa đạt. Ca sản xuất phải giảm đến khi đo lại.",
+   "visual": "pollution",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong",
+    "tieu-dung"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-kiem-toan",
+   "group": "policy",
+   "title": "Kiểm toán đột xuất sổ sách",
+   "body": "Một tuần lãnh đạo bận giải trình. Xưởng vẫn chạy nhưng chậm quyết.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-quy-hoach",
+   "group": "policy",
+   "title": "Quy hoạch mới mở thêm mặt bằng",
+   "body": "Tuyến và nhà máy được cấp đất. Phải san nền trước khi dựng.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "ha-tang",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-fdi",
+   "group": "policy",
+   "title": "Liên doanh ngoại được chấp thuận",
+   "body": "Đối tác FDI đưa thêm đơn và quy trình. {{factory}} có việc mới.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "FDI"
+   ],
+   "variants": [
+    {
+     "region": "Bình Dương",
+     "title": "Liên doanh được duyệt tại Bình Dương",
+     "body": "Đối tác ngoại ký tại khu công nghiệp. {{factory}} có thêm đơn và quy trình."
+    }
+   ]
+  },
+  {
+   "id": "pol-co-phan",
+   "group": "policy",
+   "title": "Chuyển cổ phần làm chậm quyết định",
+   "body": "Hội đồng chưa chốt ngân sách. Máy mới phải đợi.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "cổ phần"
+   ]
+  },
+  {
+   "id": "pol-han-ngach",
+   "group": "policy",
+   "title": "Hạn ngạch nước bị cắt",
+   "body": "Cơ quan cấp ít nước hơn. {{industry}} phải xếp lại ca dùng nước.",
+   "visual": "drought",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-cam-xuat",
+   "group": "policy",
+   "title": "Một mặt hàng bị hạn chế xuất",
+   "body": "Giấy phép xuất không kịp. Thành phẩm nằm lại trong nước.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "nong-san",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-tieu-chuan",
+   "group": "policy",
+   "title": "Tiêu chuẩn mới buộc nâng xưởng",
+   "body": "Phải sửa chuyền cho đúng chuẩn. Chi phí đến trước doanh thu.",
+   "visual": "expansion",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "pol-vay-uu-dai",
+   "group": "policy",
+   "title": "Gói vay ưu đãi giải ngân",
+   "body": "Tiền vay về tài khoản. {{factory}} đỡ áp lực vốn lưu động.",
+   "visual": "boom",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "vay ưu đãi"
+   ]
+  },
+  {
+   "id": "tec-tan-cong-mang",
+   "group": "technology",
+   "title": "Mạng điều khiển bị tấn công",
+   "body": "Tin tặc khóa một phần hệ thống. {{factory}} chuyển sang chạy tay.",
+   "visual": "cyber",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "ha-tang"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "region": "Bắc Ninh",
+     "title": "Mạng xưởng ở Bắc Ninh bị chiếm",
+     "body": "Tin tặc khóa điều khiển. {{factory}} phải chạy tay đến khi tách được máy chủ."
+    }
+   ]
+  },
+  {
+   "id": "tec-ma-doc",
+   "group": "technology",
+   "title": "Mã độc lây trong phòng máy",
+   "body": "Máy chủ ca sản xuất phải cách ly. Dữ liệu mẻ hàng chưa khôi phục.",
+   "visual": "cyber",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "tieu-dung",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-mat-dien",
+   "group": "technology",
+   "title": "Trạm điện nội bộ nhảy",
+   "body": "Một phân xưởng mất điện giữa ca. Mẻ đang chạy hỏng.",
+   "visual": "power_outage",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-day-chuyen",
+   "group": "technology",
+   "title": "Dây chuyền mới vào guồng",
+   "body": "{{factory}} lắp thêm một chuyền. Vốn đã chi, sản lượng sắp tăng.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghe-cao",
+    "tieu-dung"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-bang-sang-che",
+   "group": "technology",
+   "title": "Bằng sáng chế được cấp",
+   "body": "Khách trả giá cao hơn cho quy trình mới của {{industry}}.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-may-hong",
+   "group": "technology",
+   "title": "Một máy chủ lực hỏng giữa ca",
+   "body": "Phải chờ phụ tùng. Các chuyền khác vẫn chạy.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-ro-ri",
+   "group": "technology",
+   "title": "Dữ liệu khách bị rò",
+   "body": "Hệ thống bán hàng phải tắt để vá. Đơn online dừng một ngày.",
+   "visual": "cyber",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-cong-nghe-moi",
+   "group": "technology",
+   "title": "Công nghệ mới thay khối thiết bị cũ",
+   "body": "{{factory}} đổi một cụm máy. Sản lượng sẽ lên sau khi chạy thử.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "nang-luong",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-dut-mang",
+   "group": "technology",
+   "title": "Mạng truyền tải chập chờn",
+   "body": "Tín hiệu điều độ mất từng quãng. Hiện trường phải vận hành cục bộ.",
+   "visual": "power_outage",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "ha-tang",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-robot",
+   "group": "technology",
+   "title": "Robot phụ việc được nghiệm thu",
+   "body": "Một công đoạn hết phải đứng người. Nhịp {{factory}} đều hơn.",
+   "visual": "boom",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-cam-bien",
+   "group": "technology",
+   "title": "Cảm biến đồng ruộng bị phá sóng",
+   "body": "Số liệu tưới và thu hoạch đứt. Kíp phải đi đo tay.",
+   "visual": "cyber",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-phan-mem",
+   "group": "technology",
+   "title": "Phần mềm điều hành ra bản lỗi",
+   "body": "Lệnh sản xuất in sai. {{factory}} dừng nửa ca để sửa.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "tieu-dung",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-lo-nung",
+   "group": "technology",
+   "title": "Lò mới thay lò cũ",
+   "body": "Công suất nung tăng. Tiền lắp máy đã chi trong năm nay.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-chay-lab",
+   "group": "technology",
+   "title": "Cháy nhỏ trong phòng thí nghiệm",
+   "body": "Một bàn thử bị cháy. Mẻ mẫu của {{factory}} phải làm lại.",
+   "visual": "fire",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-phu-thuoc-dien",
+   "group": "technology",
+   "title": "Lưới điện khu công nghiệp sụt",
+   "body": "Cả dãy xưởng tối một lúc. Máy nhạy phải khởi động lại.",
+   "visual": "power_outage",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "tec-doi-ky-su",
+   "group": "technology",
+   "title": "Đội kỹ sư nội bộ làm chủ quy trình",
+   "body": "Ít phải gọi chuyên gia ngoài. {{factory}} ra hàng đều hơn.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "nhiều kỹ sư"
+   ]
+  },
+  {
+   "id": "peo-dinh-cong",
+   "group": "people",
+   "title": "Công nhân đình công một ca",
+   "body": "Cổng có người đứng. {{factory}} không xuất được trong buổi đó.",
+   "visual": "strike",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "region": "Đồng Nai",
+     "title": "Công nhân Đồng Nai dừng một ca",
+     "body": "Cổng {{factory}} có người đứng. Buổi đó không xuất được hàng."
+    }
+   ]
+  },
+  {
+   "id": "peo-bai-cong",
+   "group": "people",
+   "title": "Bãi công lan sang cả phân xưởng",
+   "body": "Ba chuyền nặng dừng. Đơn trong tuần bị trễ.",
+   "visual": "strike",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nang-luong"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-ky-su-nghi",
+   "group": "people",
+   "title": "Nhóm kỹ sư chủ chốt nghỉ việc",
+   "body": "Ca kỹ thuật mỏng. {{factory}} chưa ai thay được ngay.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "thiếu kỹ sư"
+   ]
+  },
+  {
+   "id": "peo-tuyen-duoc",
+   "group": "people",
+   "title": "Tuyển đủ một kíp lành nghề",
+   "body": "Người mới vào guồng nhanh. Nhịp {{industry}} kín hơn.",
+   "visual": "boom",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-to-cao",
+   "group": "people",
+   "title": "Người trong xưởng tố cáo quy trình",
+   "body": "Đoàn xác minh vào làm việc. Một công đoạn phải tạm dừng.",
+   "visual": "scandal",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-so-suat",
+   "group": "people",
+   "title": "Sơ suất vận hành gây cháy nhỏ",
+   "body": "Một người thao tác sai. Cháy được dập nhưng mẻ hàng hỏng.",
+   "visual": "fire",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-ca-dem",
+   "group": "people",
+   "title": "Mở thêm ca đêm",
+   "body": "{{factory}} chạy dài hơn. Lương ca đêm tăng theo.",
+   "visual": "expansion",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-tai-nan",
+   "group": "people",
+   "title": "Tai nạn nhẹ ở hiện trường",
+   "body": "Một kíp phải nghỉ kiểm tra an toàn. Sản lượng ngày đó giảm.",
+   "visual": "none",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-xuong-may",
+   "group": "people",
+   "title": "Xưởng may và đóng gói ngừng việc",
+   "body": "Công nhân đòi ca kíp rõ hơn. Hàng tiêu dùng nằm tại xưởng.",
+   "visual": "strike",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "tieu-dung"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-doi-gioi",
+   "group": "people",
+   "title": "Đội kỹ sư đông giữ được nhịp máy cũ",
+   "body": "Máy lạc hậu vẫn ra hàng nhờ người giỏi. {{factory}} chưa phải dừng.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": [
+    "nhiều kỹ sư"
+   ]
+  },
+  {
+   "id": "peo-be-boi",
+   "group": "people",
+   "title": "Bê bối lãnh đạo lên mặt báo",
+   "body": "Phóng viên đứng trước cổng. Khách hoãn chuyến thăm {{factory}}.",
+   "visual": "scandal",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-thao-tac-dien",
+   "group": "people",
+   "title": "Thao tác điện nhầm làm nhảy aptomat",
+   "body": "Một phân xưởng tối nửa giờ. Mẻ ngắn bị hủy.",
+   "visual": "power_outage",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-cung-ung-dung",
+   "group": "people",
+   "title": "Nhà cung cấp đình công",
+   "body": "Linh kiện và bao bì không về. {{industry}} chạy bằng tồn kho.",
+   "visual": "strike",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-them-ca",
+   "group": "people",
+   "title": "Thêm một kíp để kịp đơn",
+   "body": "Người làm thêm giờ. Sản lượng tuần này nhích lên.",
+   "visual": "expansion",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-om-dong",
+   "group": "people",
+   "title": "Cả kíp nghỉ vì ốm cùng lúc",
+   "body": "Ca chính vắng. {{factory}} gom người từ chuyền khác.",
+   "visual": "epidemic",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "peo-thay-ca",
+   "group": "people",
+   "title": "Đổi ca bị lệch giờ",
+   "body": "Giao ca chậm. Máy chạy không tải một lúc.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-trung-thau",
+   "group": "luck",
+   "title": "Trúng thầu ngoài dự kiến",
+   "body": "Hồ sơ {{factory}} được gọi. Đơn mới phủ lịch hai tháng.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-doi-tac-pha-san",
+   "group": "luck",
+   "title": "Đối tác lớn phá sản",
+   "body": "Khoản phải thu không về. Giá bán của {{industry}} cũng tụt theo.",
+   "visual": "market_crash",
+   "severity": 3,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-giai-thuong",
+   "group": "luck",
+   "title": "Lô hàng được giải thưởng chất lượng",
+   "body": "Tên {{factory}} được nhắc. Khách mới gọi đến.",
+   "visual": "boom",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-bao-doi-huong",
+   "group": "luck",
+   "title": "Bão đổi hướng, chỉ còn mưa",
+   "body": "Kế hoạch sơ tán không phải dùng. Ca ngoài trời vẫn ướt.",
+   "visual": "storm",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong",
+    "ha-tang",
+    "cong-nghiep-nang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-tin-don",
+   "group": "luck",
+   "title": "Tin đồn không kiểm chứng lan ra",
+   "body": "Báo đăng trước khi hỏi. Khách gọi điện hỏi {{factory}} cả ngày.",
+   "visual": "scandal",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-dat-giao",
+   "group": "luck",
+   "title": "Một mảnh đất được giao đúng lúc",
+   "body": "{{factory}} có chỗ dựng thêm. Phải trả tiền san lấp ngay.",
+   "visual": "expansion",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "ha-tang",
+    "cong-nghiep-nang",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-phat-hien-lo-hong",
+   "group": "luck",
+   "title": "Phát hiện lỗ hổng mạng trước khi bị khai thác",
+   "body": "Phải khóa hệ thống một buổi để vá. Chưa mất dữ liệu.",
+   "visual": "cyber",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghe-cao",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-rung-nhe",
+   "group": "luck",
+   "title": "Rung lắc nhẹ, kết cấu còn nguyên",
+   "body": "Máy phải dừng để soi lại. Không có vết nứt lớn tại {{factory}}.",
+   "visual": "earthquake",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-don-bu",
+   "group": "luck",
+   "title": "Khách bù một đơn bị trễ",
+   "body": "Họ nhận thêm để đủ chuyến tàu. Xưởng chạy hết công suất tuần này.",
+   "visual": "boom",
+   "severity": 2,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-mua-giai-han",
+   "group": "luck",
+   "title": "Trận mưa giải hạn đúng vụ",
+   "body": "Đồng và bồn nước được tiếp. {{industry}} đỡ phải chở nước.",
+   "visual": "rain",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "nong-san",
+    "nang-luong"
+   ],
+   "contexts": [],
+   "variants": [
+    {
+     "region": "Đắk Lắk",
+     "title": "Mưa giải hạn trên cao nguyên",
+     "body": "Một trận mưa đúng vụ. Bồn và ruộng của {{industry}} được tiếp nước."
+    }
+   ]
+  },
+  {
+   "id": "luc-may-cu-chay",
+   "group": "luck",
+   "title": "Máy cũ bất ngờ chạy lại",
+   "body": "Một chuyền tưởng bỏ được khởi động. Chưa cần mua máy mới.",
+   "visual": "none",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-gia-nhay",
+   "group": "luck",
+   "title": "Giá nguyên liệu nhảy trong một phiên",
+   "body": "Hợp đồng mua chưa chốt. Giá thành {{industry}} đội lên.",
+   "visual": "market_crash",
+   "severity": 2,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "nong-san",
+    "cong-nghe-cao",
+    "tieu-dung",
+    "nang-luong",
+    "ha-tang"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-lo-hang-nham",
+   "group": "luck",
+   "title": "Lô giao nhầm hóa ra bán được giá",
+   "body": "Khách giữ lô và trả cao hơn. {{factory}} có một khoản ngoài kế hoạch.",
+   "visual": "boom",
+   "severity": 1,
+   "good": true,
+   "groups": [
+    "tieu-dung",
+    "nong-san"
+   ],
+   "contexts": []
+  },
+  {
+   "id": "luc-chay-nho",
+   "group": "luck",
+   "title": "Cháy nhỏ được dập trước khi lan",
+   "body": "Một góc kho cháy xém. Ca sau vẫn chạy được.",
+   "visual": "fire",
+   "severity": 1,
+   "good": false,
+   "groups": [
+    "cong-nghiep-nang",
+    "tieu-dung",
+    "cong-nghe-cao"
+   ],
+   "contexts": []
+  }
+ ]
+}

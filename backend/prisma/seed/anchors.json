@@ -1,0 +1,2904 @@
+{
+ "version": 1,
+ "units": "percent",
+ "images": {
+  "ca-phe": {
+   "file": "assets/industries/ca-phe/factory-1.webp",
+   "smoke": [
+    [
+     62.1,
+     7.5
+    ]
+   ],
+   "roof": [
+    [
+     83.3,
+     24.1
+    ],
+    [
+     72.9,
+     27.4
+    ]
+   ],
+   "door": [
+    [
+     89.6,
+     48.1
+    ]
+   ],
+   "windows": [
+    [
+     77.1,
+     42.6
+    ],
+    [
+     93.8,
+     41.7
+    ]
+   ],
+   "ground": 75.0,
+   "road": [
+    58.3,
+    96.3,
+    88.5,
+    74.1
+   ],
+   "skyBottom": 7.0,
+   "notes": "coffee drying yard with silo tower and open processing shed"
+  },
+  "cang-bien-logistics": {
+   "file": "assets/industries/cang-bien-logistics/factory-1.webp",
+   "smoke": [
+    [
+     12.7,
+     44.4
+    ]
+   ],
+   "roof": [
+    [
+     83.3,
+     48.5
+    ],
+    [
+     64.6,
+     43.5
+    ]
+   ],
+   "door": [
+    [
+     91.7,
+     58.3
+    ]
+   ],
+   "windows": [
+    [
+     79.2,
+     55.6
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    70.8,
+    90.7,
+    99.0,
+    71.3
+   ],
+   "skyBottom": 23.0,
+   "notes": "container port with gantry cranes, ship and rail"
+  },
+  "cao-su": {
+   "file": "assets/industries/cao-su/factory-1.webp",
+   "smoke": [
+    [
+     87.5,
+     23.5
+    ],
+    [
+     95.0,
+     26.0
+    ]
+   ],
+   "roof": [
+    [
+     72.9,
+     31.5
+    ],
+    [
+     88.5,
+     26.9
+    ]
+   ],
+   "door": [
+    [
+     71.9,
+     46.3
+    ]
+   ],
+   "windows": [
+    [
+     82.3,
+     39.8
+    ]
+   ],
+   "ground": 75.0,
+   "road": [
+    37.5,
+    98.0,
+    28.1,
+    55.6
+   ],
+   "skyBottom": 20.4,
+   "notes": "rubber plantation with latex processing smokehouse"
+  },
+  "che": {
+   "file": "assets/industries/che/factory-1.webp",
+   "smoke": [
+    [
+     73.3,
+     20.7
+    ],
+    [
+     62.9,
+     34.1
+    ],
+    [
+     46.0,
+     33.0
+    ]
+   ],
+   "roof": [
+    [
+     58.3,
+     39.8
+    ],
+    [
+     54.2,
+     49.1
+    ],
+    [
+     80.2,
+     49.1
+    ]
+   ],
+   "door": [
+    [
+     71.9,
+     60.2
+    ]
+   ],
+   "windows": [
+    [
+     54.2,
+     44.4
+    ],
+    [
+     64.6,
+     45.4
+    ],
+    [
+     45.8,
+     43.7
+    ]
+   ],
+   "ground": 68.0,
+   "road": [
+    21.9,
+    51.9,
+    58.3,
+    70.4
+   ],
+   "skyBottom": 20.5,
+   "notes": "tea factory by a river among tea hills"
+  },
+  "chip-ban-dan": {
+   "file": "assets/industries/chip-ban-dan/factory-1.webp",
+   "smoke": [
+    [
+     56.6,
+     21.9
+    ],
+    [
+     43.5,
+     22.6
+    ]
+   ],
+   "roof": [
+    [
+     67.7,
+     37.0
+    ],
+    [
+     36.5,
+     35.2
+    ]
+   ],
+   "door": [
+    [
+     86.5,
+     55.6
+    ]
+   ],
+   "windows": [
+    [
+     64.6,
+     53.7
+    ],
+    [
+     54.2,
+     55.6
+    ],
+    [
+     75.0,
+     53.7
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    70.0,
+    78.0,
+    92.0,
+    94.0
+   ],
+   "skyBottom": 21.5,
+   "notes": "semiconductor fab with glass cleanroom wall and tanks"
+  },
+  "da-giay": {
+   "file": "assets/industries/da-giay/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     35.4,
+     11.5
+    ],
+    [
+     52.1,
+     18.5
+    ],
+    [
+     18.8,
+     16.7
+    ]
+   ],
+   "door": [
+    [
+     66.0,
+     58.0
+    ]
+   ],
+   "windows": [
+    [
+     31.3,
+     46.3
+    ],
+    [
+     46.9,
+     40.7
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    58.3,
+    81.5,
+    79.2,
+    61.1
+   ],
+   "skyBottom": 10.5,
+   "notes": "open-sided shoe/leather workshop with truck loading"
+  },
+  "det-may": {
+   "file": "assets/industries/det-may/factory-1.webp",
+   "smoke": [
+    [
+     62.7,
+     12.6
+    ],
+    [
+     72.9,
+     25.0
+    ],
+    [
+     78.6,
+     26.9
+    ]
+   ],
+   "roof": [
+    [
+     58.3,
+     35.2
+    ],
+    [
+     54.2,
+     61.1
+    ]
+   ],
+   "door": [
+    [
+     46.9,
+     79.6
+    ],
+    [
+     63.5,
+     68.5
+    ]
+   ],
+   "windows": [
+    [
+     46.9,
+     68.5
+    ],
+    [
+     20.8,
+     53.7
+    ],
+    [
+     82.3,
+     55.6
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    20.0,
+    77.0,
+    52.0,
+    96.0
+   ],
+   "skyBottom": 12.5,
+   "notes": "textile complex with cooling towers and fabric-roll trucks"
+  },
+  "dien-gio": {
+   "file": "assets/industries/dien-gio/factory-1.webp",
+   "smoke": [
+    [
+     88.3,
+     27.4
+    ],
+    [
+     84.0,
+     27.8
+    ],
+    [
+     80.0,
+     28.3
+    ]
+   ],
+   "roof": [
+    [
+     77.1,
+     48.1
+    ],
+    [
+     54.2,
+     53.7
+    ]
+   ],
+   "door": [
+    [
+     72.9,
+     63.9
+    ]
+   ],
+   "windows": [
+    [
+     72.9,
+     55.6
+    ],
+    [
+     58.3,
+     59.3
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    64.6,
+    98.1,
+    99.0,
+    61.1
+   ],
+   "skyBottom": 9.0,
+   "notes": "coastal wind-turbine plant with turbines, blades and crane"
+  },
+  "dien-mat-troi": {
+   "file": "assets/industries/dien-mat-troi/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     19.3,
+     47.2
+    ],
+    [
+     30.2,
+     48.5
+    ]
+   ],
+   "door": [
+    [
+     19.8,
+     50.0
+    ]
+   ],
+   "windows": [
+    [
+     21.9,
+     48.5
+    ],
+    [
+     39.6,
+     49.6
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    5.0,
+    92.0,
+    35.0,
+    80.0
+   ],
+   "skyBottom": 17.0,
+   "notes": "desert solar farm with substation and pylons"
+  },
+  "do-go": {
+   "file": "assets/industries/do-go/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     75.0,
+     27.8
+    ],
+    [
+     90.6,
+     31.5
+    ],
+    [
+     28.1,
+     39.8
+    ]
+   ],
+   "door": [
+    [
+     70.8,
+     48.1
+    ],
+    [
+     46.9,
+     62.0
+    ]
+   ],
+   "windows": [
+    [
+     81.3,
+     45.4
+    ],
+    [
+     67.7,
+     46.3
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    3.0,
+    66.0,
+    16.0,
+    55.0
+   ],
+   "skyBottom": 22.0,
+   "notes": "forest sawmill and furniture workshop"
+  },
+  "dong-tau": {
+   "file": "assets/industries/dong-tau/factory-1.webp",
+   "smoke": [
+    [
+     87.7,
+     27.4
+    ],
+    [
+     83.9,
+     25.9
+    ],
+    [
+     82.1,
+     27.8
+    ]
+   ],
+   "roof": [
+    [
+     79.2,
+     40.7
+    ],
+    [
+     64.6,
+     36.1
+    ]
+   ],
+   "door": [
+    [
+     83.3,
+     50.0
+    ]
+   ],
+   "windows": [
+    [
+     72.9,
+     47.2
+    ],
+    [
+     61.5,
+     44.4
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    40.0,
+    96.0,
+    79.0,
+    70.0
+   ],
+   "skyBottom": 13.0,
+   "notes": "shipyard with dry dock and gantry cranes"
+  },
+  "duoc-pham": {
+   "file": "assets/industries/duoc-pham/factory-1.webp",
+   "smoke": [
+    [
+     69.3,
+     19.4
+    ],
+    [
+     77.6,
+     19.4
+    ],
+    [
+     62.7,
+     9.3
+    ]
+   ],
+   "roof": [
+    [
+     64.6,
+     49.1
+    ],
+    [
+     44.8,
+     63.0
+    ]
+   ],
+   "door": [
+    [
+     61.5,
+     65.7
+    ]
+   ],
+   "windows": [
+    [
+     70.8,
+     59.3
+    ],
+    [
+     32.3,
+     41.7
+    ],
+    [
+     88.5,
+     44.4
+    ]
+   ],
+   "ground": 90.0,
+   "road": [
+    22.0,
+    78.0,
+    45.0,
+    99.0
+   ],
+   "skyBottom": 9.0,
+   "notes": "pharma/chemical plant with stacks, tanks and car park"
+  },
+  "duong-sat": {
+   "file": "assets/industries/duong-sat/factory-1.webp",
+   "smoke": [
+    [
+     85.4,
+     52.8
+    ]
+   ],
+   "roof": [
+    [
+     30.2,
+     3.0
+    ],
+    [
+     18.8,
+     11.1
+    ],
+    [
+     43.8,
+     13.0
+    ]
+   ],
+   "door": [
+    [
+     26.0,
+     58.0
+    ]
+   ],
+   "windows": [
+    [
+     8.9,
+     46.3
+    ],
+    [
+     3.1,
+     46.3
+    ],
+    [
+     52.6,
+     41.7
+    ]
+   ],
+   "ground": 78.0,
+   "road": [
+    20.0,
+    99.0,
+    28.0,
+    70.0
+   ],
+   "skyBottom": 1.5,
+   "notes": "railway workshop hall with locomotive and carriages"
+  },
+  "gao": {
+   "file": "assets/industries/gao/factory-1.webp",
+   "smoke": [
+    [
+     72.9,
+     26.9
+    ]
+   ],
+   "roof": [
+    [
+     75.0,
+     36.1
+    ],
+    [
+     83.3,
+     34.3
+    ]
+   ],
+   "door": [
+    [
+     64.6,
+     53.7
+    ]
+   ],
+   "windows": [
+    [
+     79.2,
+     48.1
+    ],
+    [
+     64.6,
+     50.9
+    ]
+   ],
+   "ground": 70.0,
+   "road": [
+    70.0,
+    66.0,
+    99.0,
+    77.0
+   ],
+   "skyBottom": 14.5,
+   "notes": "rice mill with silos beside canal and paddies"
+  },
+  "gom-su": {
+   "file": "assets/industries/gom-su/factory-1.webp",
+   "smoke": [
+    [
+     9.2,
+     10.2
+    ],
+    [
+     29.9,
+     3.3
+    ]
+   ],
+   "roof": [
+    [
+     39.6,
+     27.8
+    ],
+    [
+     18.2,
+     23.1
+    ]
+   ],
+   "door": [
+    [
+     43.8,
+     38.0
+    ]
+   ],
+   "windows": [
+    [
+     43.8,
+     36.0
+    ],
+    [
+     16.7,
+     39.8
+    ]
+   ],
+   "ground": 75.0,
+   "road": null,
+   "skyBottom": 3.0,
+   "notes": "riverside pottery village with brick kilns"
+  },
+  "hang-khong": {
+   "file": "assets/industries/hang-khong/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     46.9,
+     32.4
+    ],
+    [
+     83.3,
+     40.7
+    ]
+   ],
+   "door": [
+    [
+     54.2,
+     50.0
+    ]
+   ],
+   "windows": [
+    [
+     72.9,
+     50.0
+    ],
+    [
+     44.8,
+     46.3
+    ]
+   ],
+   "ground": 92.0,
+   "road": [
+    88.0,
+    82.0,
+    97.0,
+    69.0
+   ],
+   "skyBottom": 12.6,
+   "notes": "aircraft maintenance hangar at airport"
+  },
+  "hat-dieu": {
+   "file": "assets/industries/hat-dieu/factory-1.webp",
+   "smoke": [
+    [
+     41.7,
+     23.7
+    ],
+    [
+     44.6,
+     23.7
+    ],
+    [
+     50.8,
+     23.7
+    ]
+   ],
+   "roof": [
+    [
+     77.1,
+     15.7
+    ],
+    [
+     89.6,
+     17.6
+    ]
+   ],
+   "door": [
+    [
+     66.7,
+     46.3
+    ]
+   ],
+   "windows": [
+    [
+     83.3,
+     42.6
+    ],
+    [
+     72.9,
+     40.7
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    75.0,
+    88.0,
+    99.0,
+    80.0
+   ],
+   "skyBottom": 9.3,
+   "notes": "cashew processing shed with orchard and drying yard"
+  },
+  "loc-hoa-dau": {
+   "file": "assets/industries/loc-hoa-dau/factory-1.webp",
+   "smoke": [
+    [
+     40.6,
+     23.7
+    ],
+    [
+     70.6,
+     11.1
+    ],
+    [
+     61.3,
+     15.7
+    ]
+   ],
+   "roof": [
+    [
+     54.2,
+     54.6
+    ],
+    [
+     65.6,
+     51.9
+    ]
+   ],
+   "door": [
+    [
+     54.2,
+     59.3
+    ]
+   ],
+   "windows": [
+    [
+     67.7,
+     61.1
+    ],
+    [
+     31.3,
+     46.3
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    76.0,
+    82.0,
+    90.0,
+    97.0
+   ],
+   "skyBottom": 10.5,
+   "notes": "coastal oil refinery with flare and tanker jetty"
+  },
+  "man-hinh": {
+   "file": "assets/industries/man-hinh/factory-1.webp",
+   "smoke": [
+    [
+     37.0,
+     13.3
+    ],
+    [
+     82.3,
+     18.0
+    ]
+   ],
+   "roof": [
+    [
+     57.3,
+     16.7
+    ],
+    [
+     41.7,
+     14.8
+    ]
+   ],
+   "door": [
+    [
+     85.4,
+     64.8
+    ]
+   ],
+   "windows": [
+    [
+     52.1,
+     46.3
+    ],
+    [
+     46.9,
+     29.6
+    ],
+    [
+     52.1,
+     70.4
+    ]
+   ],
+   "ground": 87.0,
+   "road": [
+    3.0,
+    80.0,
+    25.0,
+    64.0
+   ],
+   "skyBottom": 12.5,
+   "notes": "cutaway multi-floor display/TV factory"
+  },
+  "nhom": {
+   "file": "assets/industries/nhom/factory-1.webp",
+   "smoke": [
+    [
+     60.4,
+     36.1
+    ],
+    [
+     72.9,
+     43.5
+    ]
+   ],
+   "roof": [
+    [
+     64.6,
+     44.4
+    ],
+    [
+     79.2,
+     48.1
+    ]
+   ],
+   "door": [
+    [
+     85.4,
+     59.3
+    ]
+   ],
+   "windows": [
+    [
+     83.3,
+     63.0
+    ],
+    [
+     89.6,
+     64.8
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    70.0,
+    78.0,
+    99.0,
+    90.0
+   ],
+   "skyBottom": 15.5,
+   "notes": "bauxite mine and aluminium smelter potline"
+  },
+  "nuoc-mam": {
+   "file": "assets/industries/nuoc-mam/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     62.5,
+     40.7
+    ],
+    [
+     81.3,
+     31.5
+    ]
+   ],
+   "door": [
+    [
+     56.3,
+     68.5
+    ]
+   ],
+   "windows": [
+    [
+     52.1,
+     53.7
+    ],
+    [
+     79.2,
+     55.6
+    ]
+   ],
+   "ground": 80.0,
+   "road": [
+    92.0,
+    88.0,
+    70.0,
+    80.0
+   ],
+   "skyBottom": 21.0,
+   "notes": "seaside fish-sauce barrel shed with boats"
+  },
+  "o-to": {
+   "file": "assets/industries/o-to/factory-1.webp",
+   "smoke": [
+    [
+     23.9,
+     35.0
+    ]
+   ],
+   "roof": [
+    [
+     62.5,
+     35.2
+    ],
+    [
+     78.1,
+     36.1
+    ]
+   ],
+   "door": [
+    [
+     71.9,
+     51.9
+    ],
+    [
+     42.7,
+     46.3
+    ]
+   ],
+   "windows": [
+    [
+     83.3,
+     48.1
+    ],
+    [
+     44.8,
+     44.4
+    ],
+    [
+     18.8,
+     49.1
+    ]
+   ],
+   "ground": 90.0,
+   "road": [
+    94.0,
+    66.0,
+    78.0,
+    82.0
+   ],
+   "skyBottom": 25.0,
+   "notes": "car assembly plant with car lot and rail"
+  },
+  "pin-lithium": {
+   "file": "assets/industries/pin-lithium/factory-1.webp",
+   "smoke": [
+    [
+     68.8,
+     20.0
+    ],
+    [
+     77.1,
+     20.7
+    ],
+    [
+     87.8,
+     30.6
+    ]
+   ],
+   "roof": [
+    [
+     46.9,
+     41.7
+    ],
+    [
+     60.4,
+     61.1
+    ],
+    [
+     16.7,
+     52.8
+    ]
+   ],
+   "door": [
+    [
+     72.9,
+     64.8
+    ],
+    [
+     47.9,
+     54.6
+    ]
+   ],
+   "windows": [
+    [
+     43.8,
+     53.7
+    ],
+    [
+     26.0,
+     61.1
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    35.0,
+    98.0,
+    62.0,
+    78.0
+   ],
+   "skyBottom": 11.0,
+   "notes": "battery gigafactory campus with cooling towers"
+  },
+  "robot-cong-nghiep": {
+   "file": "assets/industries/robot-cong-nghiep/factory-1.webp",
+   "smoke": [
+    [
+     66.3,
+     17.6
+    ],
+    [
+     71.8,
+     18.0
+    ],
+    [
+     74.4,
+     19.4
+    ]
+   ],
+   "roof": [
+    [
+     39.6,
+     44.4
+    ],
+    [
+     70.8,
+     33.3
+    ]
+   ],
+   "door": [
+    [
+     39.6,
+     66.7
+    ],
+    [
+     51.0,
+     63.0
+    ]
+   ],
+   "windows": [
+    [
+     26.0,
+     55.6
+    ],
+    [
+     83.3,
+     41.7
+    ],
+    [
+     60.4,
+     59.3
+    ]
+   ],
+   "ground": 90.0,
+   "road": [
+    40.0,
+    85.0,
+    70.0,
+    73.0
+   ],
+   "skyBottom": 13.0,
+   "notes": "industrial robot factory with open robot bays"
+  },
+  "sua": {
+   "file": "assets/industries/sua/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     82.3,
+     39.8
+    ],
+    [
+     62.5,
+     49.1
+    ]
+   ],
+   "door": [
+    [
+     75.0,
+     67.6
+    ],
+    [
+     59.9,
+     59.3
+    ]
+   ],
+   "windows": [
+    [
+     82.3,
+     55.6
+    ],
+    [
+     75.0,
+     53.7
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    47.0,
+    56.0,
+    52.0,
+    96.0
+   ],
+   "skyBottom": 10.5,
+   "notes": "dairy plant with steel silos, cows and milk tanker"
+  },
+  "tai-che": {
+   "file": "assets/industries/tai-che/factory-1.webp",
+   "smoke": [
+    [
+     77.6,
+     20.0
+    ]
+   ],
+   "roof": [
+    [
+     26.0,
+     34.3
+    ],
+    [
+     44.8,
+     23.7
+    ]
+   ],
+   "door": [
+    [
+     18.8,
+     44.4
+    ]
+   ],
+   "windows": [
+    [
+     75.0,
+     36.1
+    ],
+    [
+     42.7,
+     26.9
+    ]
+   ],
+   "ground": 90.0,
+   "road": [
+    2.0,
+    60.0,
+    15.0,
+    85.0
+   ],
+   "skyBottom": 14.5,
+   "notes": "recycling sorting plant with conveyors and bins"
+  },
+  "thep": {
+   "file": "assets/industries/thep/factory-1.webp",
+   "smoke": [
+    [
+     72.0,
+     14.3
+    ],
+    [
+     76.8,
+     15.7
+    ],
+    [
+     56.3,
+     13.0
+    ]
+   ],
+   "roof": [
+    [
+     64.6,
+     42.6
+    ],
+    [
+     41.7,
+     45.4
+    ]
+   ],
+   "door": [
+    [
+     49.0,
+     56.5
+    ]
+   ],
+   "windows": [
+    [
+     66.7,
+     39.8
+    ],
+    [
+     54.2,
+     51.9
+    ]
+   ],
+   "ground": 70.0,
+   "road": [
+    10.0,
+    52.0,
+    95.0,
+    88.0
+   ],
+   "skyBottom": 12.0,
+   "notes": "blast-furnace steelworks by a river with ore trains"
+  },
+  "thuy-dien": {
+   "file": "assets/industries/thuy-dien/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     35.4,
+     62.0
+    ],
+    [
+     75.0,
+     39.8
+    ]
+   ],
+   "door": [
+    [
+     31.3,
+     68.5
+    ]
+   ],
+   "windows": [
+    [
+     44.8,
+     68.5
+    ],
+    [
+     62.0,
+     64.8
+    ]
+   ],
+   "ground": 85.0,
+   "road": [
+    20.0,
+    85.0,
+    42.0,
+    98.0
+   ],
+   "skyBottom": 3.0,
+   "notes": "hydro dam spillway and turbine powerhouse in karst valley"
+  },
+  "thuy-san": {
+   "file": "assets/industries/thuy-san/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     62.5,
+     38.9
+    ],
+    [
+     83.3,
+     37.0
+    ]
+   ],
+   "door": [
+    [
+     57.3,
+     59.3
+    ],
+    [
+     75.0,
+     63.0
+    ]
+   ],
+   "windows": [
+    [
+     85.4,
+     47.8
+    ],
+    [
+     82.3,
+     47.8
+    ],
+    [
+     52.1,
+     55.6
+    ]
+   ],
+   "ground": 68.0,
+   "road": [
+    72.0,
+    74.0,
+    99.0,
+    70.0
+   ],
+   "skyBottom": 34.0,
+   "notes": "seafood processing shed beside shrimp ponds"
+  },
+  "ve-tinh": {
+   "file": "assets/industries/ve-tinh/factory-1.webp",
+   "smoke": [
+    [
+     60.4,
+     52.0
+    ],
+    [
+     10.9,
+     11.5
+    ]
+   ],
+   "roof": [
+    [
+     18.8,
+     15.7
+    ],
+    [
+     81.3,
+     47.2
+    ]
+   ],
+   "door": [
+    [
+     18.8,
+     44.4
+    ]
+   ],
+   "windows": [
+    [
+     22.9,
+     35.2
+    ],
+    [
+     80.2,
+     52.8
+    ]
+   ],
+   "ground": 92.0,
+   "road": [
+    28.0,
+    72.0,
+    58.0,
+    60.0
+   ],
+   "skyBottom": 5.5,
+   "notes": "satellite assembly building and coastal launch pad"
+  },
+  "xe-dien": {
+   "file": "assets/industries/xe-dien/factory-1.webp",
+   "smoke": [
+    [
+     89.1,
+     31.5
+    ]
+   ],
+   "roof": [
+    [
+     24.0,
+     18.5
+    ],
+    [
+     39.6,
+     25.9
+    ]
+   ],
+   "door": [
+    [
+     31.3,
+     51.9
+    ]
+   ],
+   "windows": [
+    [
+     15.6,
+     44.4
+    ],
+    [
+     31.3,
+     44.4
+    ]
+   ],
+   "ground": 80.0,
+   "road": [
+    40.0,
+    95.0,
+    66.0,
+    58.0
+   ],
+   "skyBottom": 11.0,
+   "notes": "EV assembly shed with solar roof and ro-ro ship"
+  },
+  "xe-may": {
+   "file": "assets/industries/xe-may/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     70.8,
+     19.4
+    ],
+    [
+     46.9,
+     24.1
+    ]
+   ],
+   "door": [
+    [
+     71.9,
+     50.0
+    ],
+    [
+     88.5,
+     50.0
+    ]
+   ],
+   "windows": [
+    [
+     31.3,
+     48.1
+    ],
+    [
+     52.1,
+     48.1
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    45.0,
+    96.0,
+    22.0,
+    60.0
+   ],
+   "skyBottom": 18.5,
+   "notes": "motorbike assembly hall with parked scooters"
+  },
+  "xi-mang": {
+   "file": "assets/industries/xi-mang/factory-1.webp",
+   "smoke": [
+    [
+     46.9,
+     8.9
+    ],
+    [
+     40.3,
+     18.1
+    ],
+    [
+     56.0,
+     37.0
+    ]
+   ],
+   "roof": [
+    [
+     64.6,
+     64.8
+    ],
+    [
+     45.8,
+     49.1
+    ]
+   ],
+   "door": [
+    [
+     64.6,
+     68.5
+    ]
+   ],
+   "windows": [
+    [
+     67.7,
+     67.6
+    ],
+    [
+     16.7,
+     64.8
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    20.0,
+    73.0,
+    72.0,
+    88.0
+   ],
+   "skyBottom": 3.0,
+   "notes": "cement plant with preheater tower among karst quarries"
+  },
+  "drone": {
+   "file": "assets/industries/drone/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     63,
+     34
+    ],
+    [
+     80,
+     27
+    ]
+   ],
+   "door": [
+    [
+     70.3,
+     51
+    ],
+    [
+     90.8,
+     50
+    ]
+   ],
+   "windows": [
+    [
+     71.5,
+     36
+    ],
+    [
+     89.5,
+     30
+    ]
+   ],
+   "ground": 63.0,
+   "road": [
+    45,
+    60,
+    98,
+    72
+   ],
+   "skyBottom": 21.0,
+   "notes": "drone assembly plant with sawtooth hall and test field with spray drone over rice paddies"
+  },
+  "vien-thong": {
+   "file": "assets/industries/vien-thong/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     22.5,
+     30.4
+    ],
+    [
+     78,
+     39
+    ]
+   ],
+   "door": [
+    [
+     29.3,
+     63.4
+    ]
+   ],
+   "windows": [
+    [
+     49,
+     37
+    ],
+    [
+     83,
+     48
+    ]
+   ],
+   "ground": 66.0,
+   "road": [
+    0,
+    66,
+    85,
+    98
+   ],
+   "skyBottom": 14.0,
+   "notes": "aerial telecom equipment plant with cutaway assembly hall, fiber cable drum yard and 5G test tower by highway"
+  },
+  "phan-mem-ai": {
+   "file": "assets/industries/phan-mem-ai/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     25.4,
+     17.4
+    ],
+    [
+     76,
+     26
+    ]
+   ],
+   "door": [
+    [
+     29.3,
+     61.6
+    ]
+   ],
+   "windows": [
+    [
+     22.5,
+     27
+    ],
+    [
+     37,
+     37
+    ]
+   ],
+   "ground": 66.0,
+   "road": [
+    15,
+    100,
+    88,
+    75
+   ],
+   "skyBottom": 16.0,
+   "notes": "AI/software campus: glass office plus GPU server hall with rooftop cooling fans, pond and substation"
+  },
+  "trung-tam-du-lieu": {
+   "file": "assets/industries/trung-tam-du-lieu/factory-1.webp",
+   "smoke": [
+    [
+     31.4,
+     50.3
+    ],
+    [
+     48.6,
+     54.2
+    ],
+    [
+     67.6,
+     57.3
+    ]
+   ],
+   "roof": [
+    [
+     45,
+     44
+    ],
+    [
+     74,
+     48.6
+    ]
+   ],
+   "door": [
+    [
+     86,
+     64
+    ]
+   ],
+   "windows": [
+    [
+     81,
+     61
+    ],
+    [
+     93,
+     60
+    ]
+   ],
+   "ground": 68.0,
+   "road": [
+    62,
+    70,
+    100,
+    80
+   ],
+   "skyBottom": 29.0,
+   "notes": "side view of data-center campus with rooftop coolers, generator row (small exhausts), substation and cutaway server hall"
+  },
+  "thiet-bi-y-te": {
+   "file": "assets/industries/thiet-bi-y-te/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     46,
+     20
+    ],
+    [
+     70,
+     19
+    ]
+   ],
+   "door": [
+    [
+     29.3,
+     49.5
+    ]
+   ],
+   "windows": [
+    [
+     42,
+     35.6
+    ],
+    [
+     86,
+     37.3
+    ]
+   ],
+   "ground": 61.0,
+   "road": [
+    2,
+    70,
+    40,
+    58
+   ],
+   "skyBottom": 17.0,
+   "notes": "white medical device factory with cleanroom cutaway, rooftop AHUs, loading dock and ambulance by canal"
+  },
+  "linh-kien-dien-tu": {
+   "file": "assets/industries/linh-kien-dien-tu/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     52,
+     27
+    ],
+    [
+     75,
+     37
+    ]
+   ],
+   "door": [
+    [
+     70.3,
+     57.3
+    ],
+    [
+     79,
+     55.6
+    ]
+   ],
+   "windows": [
+    [
+     19.5,
+     43.4
+    ],
+    [
+     44,
+     48.6
+    ]
+   ],
+   "ground": 73.0,
+   "road": [
+    55,
+    90,
+    100,
+    75
+   ],
+   "skyBottom": 13.0,
+   "notes": "cutaway electronics component hall with SMT lines, loading dock, shuttle buses, karst hills"
+  },
+  "may-nong-nghiep": {
+   "file": "assets/industries/may-nong-nghiep/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     38,
+     27
+    ],
+    [
+     20,
+     33
+    ]
+   ],
+   "door": [
+    [
+     35,
+     48.6
+    ]
+   ],
+   "windows": [
+    [
+     9.8,
+     47
+    ],
+    [
+     14.6,
+     48.6
+    ]
+   ],
+   "ground": 60.0,
+   "road": [
+    1,
+    54,
+    41,
+    100
+   ],
+   "skyBottom": 25.0,
+   "notes": "farm machinery hall with orange combine harvesters, test harvesting in golden paddy, canal"
+  },
+  "may-cong-cu": {
+   "file": "assets/industries/may-cong-cu/factory-1.webp",
+   "smoke": [
+    [
+     24.1,
+     29.5
+    ]
+   ],
+   "roof": [
+    [
+     66.4,
+     10.4
+    ],
+    [
+     22.5,
+     45
+    ]
+   ],
+   "door": [
+    [
+     71,
+     41.7
+    ],
+    [
+     25.9,
+     74.6
+    ]
+   ],
+   "windows": [
+    [
+     46,
+     39
+    ],
+    [
+     74,
+     18
+    ]
+   ],
+   "ground": 84.0,
+   "road": [
+    5,
+    96,
+    45,
+    84
+   ],
+   "skyBottom": 9.0,
+   "notes": "street-level machine-tool plant with gantry crane lifting cast bed, foundry chimney, CNC on truck"
+  },
+  "hoa-chat": {
+   "file": "assets/industries/hoa-chat/factory-1.webp",
+   "smoke": [
+    [
+     86.7,
+     18.2
+    ]
+   ],
+   "roof": [
+    [
+     68.4,
+     46
+    ],
+    [
+     55.2,
+     51.2
+    ]
+   ],
+   "door": [
+    [
+     54.7,
+     55.6
+    ]
+   ],
+   "windows": [
+    [
+     71.3,
+     50.3
+    ],
+    [
+     62.5,
+     56.4
+    ]
+   ],
+   "ground": 64.0,
+   "road": [
+    38,
+    60,
+    60,
+    64
+   ],
+   "skyBottom": 15.0,
+   "notes": "riverside chemical plant: columns, spherical tanks, flare stack, barge jetty, wastewater clarifiers"
+  },
+  "phan-bon": {
+   "file": "assets/industries/phan-bon/factory-1.webp",
+   "smoke": [
+    [
+     23.4,
+     9
+    ]
+   ],
+   "roof": [
+    [
+     56.6,
+     27.8
+    ],
+    [
+     76,
+     47
+    ]
+   ],
+   "door": [
+    [
+     45,
+     46
+    ]
+   ],
+   "windows": [
+    [
+     21,
+     22.6
+    ],
+    [
+     23.4,
+     33
+    ]
+   ],
+   "ground": 53.0,
+   "road": [
+    85,
+    57,
+    96,
+    100
+   ],
+   "skyBottom": 8.0,
+   "notes": "riverside fertilizer plant: prilling tower, urea dome store, conveyor to barge, bagging shed, paddies"
+  },
+  "hydro-xanh": {
+   "file": "assets/industries/hydro-xanh/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     29.3,
+     40
+    ],
+    [
+     41,
+     39
+    ]
+   ],
+   "door": [
+    [
+     19.5,
+     52
+    ]
+   ],
+   "windows": [
+    [
+     29.3,
+     52
+    ],
+    [
+     39,
+     51
+    ]
+   ],
+   "ground": 58.0,
+   "road": [
+    30,
+    58,
+    70,
+    70
+   ],
+   "skyBottom": 9.0,
+   "notes": "coastal green-hydrogen plant: electrolyser hall, bullet tanks, tube trailer, jetty with gas carrier, wind and solar behind"
+  },
+  "luoi-dien-thong-minh": {
+   "file": "assets/industries/luoi-dien-thong-minh/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     17.6,
+     27.8
+    ],
+    [
+     48.8,
+     40
+    ]
+   ],
+   "door": [
+    [
+     24.4,
+     48.6
+    ],
+    [
+     50.8,
+     65
+    ]
+   ],
+   "windows": [
+    [
+     49.8,
+     50.3
+    ],
+    [
+     25.9,
+     32
+    ]
+   ],
+   "ground": 68.0,
+   "road": [
+    15,
+    100,
+    40,
+    62
+   ],
+   "skyBottom": 3.0,
+   "notes": "transformer/switchgear factory, glass control center and HV substation with pylons"
+  },
+  "pin-luu-tru": {
+   "file": "assets/industries/pin-luu-tru/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     68.4,
+     34
+    ],
+    [
+     92.8,
+     33
+    ]
+   ],
+   "door": [
+    [
+     81,
+     52
+    ]
+   ],
+   "windows": [
+    [
+     70.3,
+     52
+    ],
+    [
+     88,
+     52
+    ]
+   ],
+   "ground": 68.0,
+   "road": null,
+   "skyBottom": 27.0,
+   "notes": "battery storage factory with open wall, row of BESS containers, crane loading truck, pilot solar site"
+  },
+  "nhua": {
+   "file": "assets/industries/nhua/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     58.6,
+     29.5
+    ],
+    [
+     29.8,
+     13
+    ]
+   ],
+   "door": [
+    [
+     47,
+     48.6
+    ],
+    [
+     62.5,
+     48.6
+    ]
+   ],
+   "windows": [
+    [
+     68.4,
+     47
+    ],
+    [
+     72,
+     52
+    ]
+   ],
+   "ground": 61.0,
+   "road": [
+    2,
+    60,
+    98,
+    62
+   ],
+   "skyBottom": 6.0,
+   "notes": "canal-side plastics plant: resin silos, injection hall, stacked chairs/basins loaded onto boat, recycling yard"
+  },
+  "giay": {
+   "file": "assets/industries/giay/factory-1.webp",
+   "smoke": [
+    [
+     77.7,
+     31
+    ],
+    [
+     60.5,
+     44
+    ],
+    [
+     67.4,
+     44
+    ]
+   ],
+   "roof": [
+    [
+     58.6,
+     48.6
+    ],
+    [
+     78,
+     64
+    ]
+   ],
+   "door": [
+    [
+     70.3,
+     69.4
+    ]
+   ],
+   "windows": [
+    [
+     48.8,
+     57.3
+    ],
+    [
+     63.5,
+     54.7
+    ]
+   ],
+   "ground": 62.0,
+   "road": [
+    12,
+    60,
+    25,
+    82
+   ],
+   "skyBottom": 19.0,
+   "notes": "aerial paper mill in river valley: log yard, chip piles, digester, paper machine hall, kraft rolls, aeration pond"
+  },
+  "thuy-tinh": {
+   "file": "assets/industries/thuy-tinh/factory-1.webp",
+   "smoke": [
+    [
+     40.6,
+     26.4
+    ],
+    [
+     44.2,
+     27.8
+    ]
+   ],
+   "roof": [
+    [
+     68.4,
+     50
+    ],
+    [
+     87.9,
+     55.6
+    ]
+   ],
+   "door": [
+    [
+     93.8,
+     60.8
+    ]
+   ],
+   "windows": [
+    [
+     42,
+     43.4
+    ],
+    [
+     63.5,
+     61.6
+    ]
+   ],
+   "ground": 64.0,
+   "road": [
+    58,
+    83,
+    92,
+    87
+   ],
+   "skyBottom": 26.0,
+   "notes": "long float-glass line beside white sand quarry: batch silos, furnace stacks, lehr, A-frame glass racks"
+  },
+  "do-choi": {
+   "file": "assets/industries/do-choi/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     42,
+     17.4
+    ],
+    [
+     86,
+     27.8
+    ]
+   ],
+   "door": [
+    [
+     86,
+     38.2
+    ]
+   ],
+   "windows": [
+    [
+     29.3,
+     34.7
+    ],
+    [
+     58.6,
+     34.7
+    ]
+   ],
+   "ground": 80.0,
+   "road": [
+    3,
+    68,
+    25,
+    100
+   ],
+   "skyBottom": 16.0,
+   "notes": "two-storey toy factory cutaway: plush sewing upstairs, moulding/painting below, carton warehouse and truck"
+  },
+  "my-pham": {
+   "file": "assets/industries/my-pham/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     46,
+     30.4
+    ],
+    [
+     56.6,
+     27
+    ]
+   ],
+   "door": [
+    [
+     47,
+     60
+    ]
+   ],
+   "windows": [
+    [
+     46,
+     44.3
+    ],
+    [
+     68.4,
+     57.3
+    ]
+   ],
+   "ground": 67.0,
+   "road": [
+    33,
+    68,
+    66,
+    72
+   ],
+   "skyBottom": 8.0,
+   "notes": "highland cosmetics plant with mixing-tank cutaway, QC lab, copper stills, tank farm, herb terraces"
+  },
+  "thiet-bi-gia-dung": {
+   "file": "assets/industries/thiet-bi-gia-dung/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     30,
+     52
+    ],
+    [
+     83,
+     30
+    ]
+   ],
+   "door": [
+    [
+     68.4,
+     33
+    ],
+    [
+     90.8,
+     46.9
+    ]
+   ],
+   "windows": [
+    [
+     37,
+     62.5
+    ],
+    [
+     53.7,
+     55.6
+    ]
+   ],
+   "ground": 88.0,
+   "road": [
+    82,
+    72,
+    100,
+    92
+   ],
+   "skyBottom": 17.0,
+   "notes": "aerial appliance plant: fridge/washer line cutaway, stamping hall with coils, warehouse with trucks, port beyond"
+  },
+  "cacao-chocolate": {
+   "file": "assets/industries/cacao-chocolate/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     61.5,
+     27.8
+    ],
+    [
+     86,
+     27
+    ]
+   ],
+   "door": [
+    [
+     90.8,
+     37.3
+    ],
+    [
+     80,
+     34.7
+    ]
+   ],
+   "windows": [
+    [
+     58.6,
+     40
+    ],
+    [
+     68.4,
+     40.8
+    ]
+   ],
+   "ground": 46.0,
+   "road": [
+    45,
+    50,
+    95,
+    44
+   ],
+   "skyBottom": 9.0,
+   "notes": "from cacao orchard: fermentation boxes, drying beds, roasting hall and cold store with reefer truck"
+  },
+  "trai-cay-say": {
+   "file": "assets/industries/trai-cay-say/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     54.7,
+     20.8
+    ],
+    [
+     92.8,
+     13.9
+    ]
+   ],
+   "door": [
+    [
+     48.8,
+     33
+    ],
+    [
+     91.8,
+     33
+    ]
+   ],
+   "windows": [
+    [
+     35,
+     33
+    ],
+    [
+     60.5,
+     32
+    ]
+   ],
+   "ground": 46.0,
+   "road": [
+    55,
+    100,
+    60,
+    52
+   ],
+   "skyBottom": 9.0,
+   "notes": "dried-fruit plant beyond dragon-fruit orchard: slicing tables, dryer chambers, cold store, fruit truck"
+  },
+  "mia-duong": {
+   "file": "assets/industries/mia-duong/factory-1.webp",
+   "smoke": [
+    [
+     66.8,
+     10.8
+    ],
+    [
+     72.3,
+     10.8
+    ]
+   ],
+   "roof": [
+    [
+     85,
+     28.6
+    ],
+    [
+     64.5,
+     40
+    ]
+   ],
+   "door": [
+    [
+     90.8,
+     55.6
+    ]
+   ],
+   "windows": [
+    [
+     78,
+     43.4
+    ],
+    [
+     88,
+     45
+    ]
+   ],
+   "ground": 55.0,
+   "road": [
+    25,
+    52,
+    60,
+    62
+   ],
+   "skyBottom": 9.0,
+   "notes": "sugar mill behind cane harvest: cane trucks, grab crane, crushing tower, twin chimneys, sugar warehouse"
+  },
+  "bia-nuoc-giai-khat": {
+   "file": "assets/industries/bia-nuoc-giai-khat/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     56.6,
+     22.6
+    ],
+    [
+     32.2,
+     23.4
+    ]
+   ],
+   "door": [
+    [
+     80,
+     69.4
+    ]
+   ],
+   "windows": [
+    [
+     54.7,
+     37.3
+    ],
+    [
+     62.5,
+     53.8
+    ]
+   ],
+   "ground": 72.0,
+   "road": [
+    0,
+    78,
+    100,
+    82
+   ],
+   "skyBottom": 21.0,
+   "notes": "street-level brewery: fermentation tanks, glass brewhouse with copper kettles, bottling hall, ring road"
+  },
+  "thuc-pham-dong-hop": {
+   "file": "assets/industries/thuc-pham-dong-hop/factory-1.webp",
+   "smoke": [
+    [
+     8,
+     40
+    ]
+   ],
+   "roof": [
+    [
+     48.8,
+     37.3
+    ],
+    [
+     88,
+     23.4
+    ]
+   ],
+   "door": [
+    [
+     85,
+     34.7
+    ],
+    [
+     11.7,
+     56.4
+    ]
+   ],
+   "windows": [
+    [
+     63.5,
+     57.3
+    ],
+    [
+     29.3,
+     53.8
+    ]
+   ],
+   "ground": 87.0,
+   "road": null,
+   "skyBottom": 21.0,
+   "notes": "coastal cannery cutaway: fish/pineapple prep, can seamer, retorts, carton warehouse, boiler chimney, sea"
+  },
+  "nong-nghiep-cong-nghe-cao": {
+   "file": "assets/industries/nong-nghiep-cong-nghe-cao/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     19.5,
+     55.6
+    ],
+    [
+     88,
+     46
+    ]
+   ],
+   "door": [
+    [
+     90.8,
+     64
+    ]
+   ],
+   "windows": [
+    [
+     29.3,
+     73
+    ],
+    [
+     81,
+     57.3
+    ]
+   ],
+   "ground": 76.0,
+   "road": [
+    72,
+    24,
+    90,
+    40
+   ],
+   "skyBottom": 12.0,
+   "notes": "aerial highland greenhouse complex: hydroponic glasshouse cutaway, reservoir, fertigation tanks, packing house"
+  },
+  "dat-hiem": {
+   "file": "assets/industries/dat-hiem/factory-1.webp",
+   "smoke": [
+    [
+     76,
+     41.7
+    ]
+   ],
+   "roof": [
+    [
+     51.8,
+     42.5
+    ],
+    [
+     75.2,
+     45.5
+    ]
+   ],
+   "door": [
+    [
+     74.2,
+     50.3
+    ]
+   ],
+   "windows": [
+    [
+     48.8,
+     52
+    ],
+    [
+     77,
+     48.6
+    ]
+   ],
+   "ground": 60.0,
+   "road": [
+    6,
+    66,
+    20,
+    100
+   ],
+   "skyBottom": 12.0,
+   "notes": "mountain rare-earth mine and plant: open-pit benches, conveyor, thickeners, mixer-settlers, tailings pond"
+  },
+  "day-cap-dien": {
+   "file": "assets/industries/day-cap-dien/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     68.4,
+     4.3
+    ],
+    [
+     83,
+     7
+    ]
+   ],
+   "door": [
+    [
+     55.7,
+     43.4
+    ]
+   ],
+   "windows": [
+    [
+     9.8,
+     34.7
+    ],
+    [
+     90.8,
+     33
+    ]
+   ],
+   "ground": 70.0,
+   "road": [
+    56,
+    50,
+    63,
+    100
+   ],
+   "skyBottom": 15.0,
+   "notes": "interior of cable factory hall: copper coils, extrusion lines, cooling troughs, cable drums, crane; door to yard"
+  },
+  "lng-khi-dot": {
+   "file": "assets/industries/lng-khi-dot/factory-1.webp",
+   "smoke": [
+    [
+     83.8,
+     18.2
+    ]
+   ],
+   "roof": [
+    [
+     55.4,
+     34.7
+    ],
+    [
+     67.9,
+     34.4
+    ]
+   ],
+   "door": [
+    [
+     81,
+     52
+    ]
+   ],
+   "windows": [
+    [
+     76,
+     55.6
+    ],
+    [
+     86,
+     51.2
+    ]
+   ],
+   "ground": 56.0,
+   "road": [
+    24,
+    72,
+    71,
+    59
+   ],
+   "skyBottom": 17.0,
+   "notes": "LNG terminal from sea: Moss carrier at jetty, two storage tanks, seawater vaporisers, flare stack"
+  },
+  "nha-tien-che": {
+   "file": "assets/industries/nha-tien-che/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     29.3,
+     24.3
+    ],
+    [
+     60.5,
+     23.4
+    ]
+   ],
+   "door": [
+    [
+     24.4,
+     47
+    ]
+   ],
+   "windows": [
+    [
+     9.8,
+     43.4
+    ],
+    [
+     39,
+     41.7
+    ]
+   ],
+   "ground": 53.0,
+   "road": [
+    76,
+    55,
+    100,
+    63
+   ],
+   "skyBottom": 13.0,
+   "notes": "steel-building yard: red I-beams, roof sheets, open fabrication hall, roll former, crane erecting portal frame"
+  },
+  "xu-ly-nuoc": {
+   "file": "assets/industries/xu-ly-nuoc/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     56.6,
+     31.3
+    ],
+    [
+     79,
+     30.4
+    ]
+   ],
+   "door": [
+    [
+     19.5,
+     71
+    ]
+   ],
+   "windows": [
+    [
+     54.7,
+     37.3
+    ],
+    [
+     80,
+     39
+    ]
+   ],
+   "ground": 60.0,
+   "road": [
+    19,
+    50,
+    40,
+    95
+   ],
+   "skyBottom": 13.0,
+   "notes": "aerial riverside water treatment plant: intake, clarifiers, filter beds, membrane hall, grassed reservoirs"
+  },
+  "in-3d": {
+   "file": "assets/industries/in-3d/factory-1.webp",
+   "smoke": [],
+   "roof": [
+    [
+     41,
+     26
+    ],
+    [
+     70.3,
+     28.6
+    ]
+   ],
+   "door": [
+    [
+     14.6,
+     46
+    ]
+   ],
+   "windows": [
+    [
+     17.6,
+     37.3
+    ],
+    [
+     85,
+     36.5
+    ]
+   ],
+   "ground": 71.0,
+   "road": null,
+   "skyBottom": 8.0,
+   "notes": "additive-manufacturing hall cutaway: metal powder printers, CNC finishing, gas tanks, crates of printed parts"
+  }
+ }
+}

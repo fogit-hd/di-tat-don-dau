@@ -1,0 +1,1 @@
+ALTER TABLE "Room" ALTER COLUMN "yearMinSeconds" SET DEFAULT 10;
