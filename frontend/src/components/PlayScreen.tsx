@@ -172,43 +172,47 @@ export function PlayScreen() {
               pulse={scene.pulseYear === scene.cycles && scene.cycles > 0}
             />
           </section>
-          <FactoryScene scene={scene} paused={snap.paused} />
-          <section className="card">
-            <h2>Sự kiện năm nay</h2>
-            <EventCardList events={(scene.eventLog ?? []).filter((event) => event.year === scene.cycles)} empty="Năm nay chưa có sự kiện." />
+          <section className="game-content">
+            <div className="game-stage">
+              <FactoryScene scene={scene} paused={snap.paused} />
+              <section className="card current-event">
+                <h2>Sự kiện năm nay</h2>
+                <EventCardList events={(scene.eventLog ?? []).filter((event) => event.year === scene.cycles)} empty="Năm nay chưa có sự kiện." />
+              </section>
+            </div>
+            <GameTabs
+              events={scene.eventLog ?? []}
+              changes={scene.yearChanges ?? []}
+              investment={
+                <>
+                  <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
+                  <BudgetPanel
+                    scene={scene}
+                    step={snap.room.step}
+                    prices={snap.room.linePrices}
+                    busy={busy}
+                    paused={snap.paused}
+                    onInvest={(line) => {
+                      beep(660, 0.06, muted)
+                      void act('invest', { line })
+                    }}
+                  />
+                  <StatCards scene={scene} />
+                  <YearButton
+                    busy={busy || snap.paused}
+                    now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
+                    nextYearAt={scene.nextYearAt}
+                    yearLockUntil={scene.yearLockUntil}
+                    yearSeconds={snap.room.cycleSeconds}
+                    onPress={() => {
+                      beep(520, 0.08, muted)
+                      void act('year')
+                    }}
+                  />
+                </>
+              }
+            />
           </section>
-          <GameTabs
-            events={scene.eventLog ?? []}
-            changes={scene.yearChanges ?? []}
-            investment={
-              <>
-                <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
-                <BudgetPanel
-                  scene={scene}
-                  step={snap.room.step}
-                  prices={snap.room.linePrices}
-                  busy={busy}
-                  paused={snap.paused}
-                  onInvest={(line) => {
-                    beep(660, 0.06, muted)
-                    void act('invest', { line })
-                  }}
-                />
-                <StatCards scene={scene} />
-                <YearButton
-                  busy={busy || snap.paused}
-                  now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
-                  nextYearAt={scene.nextYearAt}
-                  yearLockUntil={scene.yearLockUntil}
-                  yearSeconds={snap.room.cycleSeconds}
-                  onPress={() => {
-                    beep(520, 0.08, muted)
-                    void act('year')
-                  }}
-                />
-              </>
-            }
-          />
         </>
       )}
       {snap && showGame && reveal && theme && (
