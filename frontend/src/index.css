@@ -460,9 +460,39 @@ input {
   100% { transform: translate(var(--x), var(--y)) scale(0.3); opacity: 0; }
 }
 .price-grid { margin-top: 8px; }
-.actions { margin-top: 12px; }
+.config-section { margin-top: 18px; padding-top: 14px; border-top: 2px solid #ead8bf; }
+.config-section h2, .config-section h3 { margin: 0; color: var(--ink); font-size: 1.05rem; }
+.config-section p { margin: 4px 0 0; color: #7a6658; font-size: 0.9rem; }
+.host-config-section h2 { color: #ffd9a8; }
+.host-config-section p { color: #f3dcc8; }
+.game-tabs { margin-top: 12px; }
+.game-tabs-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.game-tabs-heading h2 { margin: 0; }
+.game-tabs-heading p { margin: 4px 0 0; color: #7a6658; font-size: 0.92rem; }
+.game-tablist { margin-bottom: 14px; }
+.tab-panel { min-height: 132px; }
 .year-tabs { margin-top: 12px; }
 @media (max-width: 800px) {
+  :root { font-size: 15px; }
+  .wrap { padding: 10px; }
   .status-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tablist { flex-direction: column; }
+  .scene { border-radius: 14px; }
+  .card { border-radius: 14px; padding: 13px; }
+  .event-card { padding: 11px; border-radius: 12px; }
+  .ev-icon { width: 44px; height: 44px; }
+  .game-tabs-heading h2 { font-size: 1.25rem; }
+  .game-tabs-heading p { font-size: 0.84rem; line-height: 1.4; }
+  .tablist { gap: 5px; overflow-x: auto; padding-bottom: 2px; }
+  .tablist button { flex: 0 0 auto; min-height: 42px; font-size: 0.83rem; white-space: nowrap; padding: 9px 11px; }
+  .year-row { padding: 9px; }
+  .year-row header { font-size: 0.84rem; }
+  .year-row li { font-size: 0.84rem; align-items: flex-start; }
+  .year-row li b { white-space: nowrap; }
+  .choice { min-height: 50px; padding: 12px 14px; font-size: 0.96rem; }
+  .stat { font-size: 0.75rem; padding: 7px 4px; }
+  .stat b { font-size: 0.96rem; }
+}
+@media (min-width: 801px) {
+  .game-tablist button { font-size: 0.98rem; }
+  .game-tabs { padding: 18px; }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { ActiveEffectView, EventLogView, TraitView, YearChangeView } from '../api/types.ts'
 import { vnd } from '../lib/format.ts'
 import { EventIcon } from './EventIcon.tsx'
@@ -99,6 +99,60 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
                 <span>
                   Tài sản {vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}
                 </span>
+              </header>
+              <ul>
+                {row.causes.map((cause, index) => (
+                  <li key={`${row.year}-${cause.kind}-${index}`}>
+                    <span>{causeLabel(cause.kind)} · {cause.label}</span>
+                    <b className={cause.cash < 0 ? 'down' : 'up'}>{signed(cause.cash)}</b>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
+
+/** One predictable place for the player's next decision and the evidence behind it. */
+export function GameTabs({ investment, events, changes }: { investment: ReactNode; events: EventLogView[]; changes: YearChangeView[] }) {
+  const [tab, setTab] = useState<'investment' | 'events' | 'years'>('investment')
+  return (
+    <section className="card game-tabs" aria-label="Điều khiển trận chơi">
+      <div className="game-tabs-heading">
+        <div>
+          <h2>Điều hành nhà máy</h2>
+          <p>Đầu tư trước, rồi xem lại sự kiện và thay đổi của từng năm.</p>
+        </div>
+      </div>
+      <div className="tablist game-tablist" role="tablist" aria-label="Điều hành nhà máy">
+        <button type="button" role="tab" aria-selected={tab === 'investment'} className={tab === 'investment' ? 'on' : ''} onClick={() => setTab('investment')}>
+          Đầu tư
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'events'} className={tab === 'events' ? 'on' : ''} onClick={() => setTab('events')}>
+          Lịch sử sự kiện
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'years'} className={tab === 'years' ? 'on' : ''} onClick={() => setTab('years')}>
+          Thay đổi từng năm
+        </button>
+      </div>
+      {tab === 'investment' && <div role="tabpanel">{investment}</div>}
+      {tab === 'events' && (
+        <div role="tabpanel" className="tab-panel">
+          <EventCardList events={events} empty="Chưa có sự kiện nào." />
+        </div>
+      )}
+      {tab === 'years' && (
+        <div role="tabpanel" className="year-ledger tab-panel">
+          {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
+          {changes.map((row) => (
+            <article key={row.year} className="year-row">
+              <header>
+                <b>Năm {row.year}</b>
+                <span>Tiền {signed(row.cashBefore)} → {signed(row.cashAfter)}</span>
+                <span>Tài sản {vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}</span>
               </header>
               <ul>
                 {row.causes.map((cause, index) => (

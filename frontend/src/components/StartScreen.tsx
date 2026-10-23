@@ -269,14 +269,6 @@ export function StartScreen() {
               </h1>
               <p className="tagline">Gây dựng nhà máy gia đình và truyền lại qua nhiều năm.</p>
               <p className="sub">Một lớp, một phòng: chủ phòng chiếu mã, mỗi đội chơi trên điện thoại.</p>
-              <div className="hero-cta">
-                <button type="button" className="btn" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
-                  Vào chơi
-                </button>
-                <button type="button" className="btn s" onClick={() => { setError(''); setJoinOpen(false); setHostOpen(true) }}>
-                  Tạo phòng
-                </button>
-              </div>
             </div>
             <HeroArt />
           </div>
@@ -461,7 +453,11 @@ export function StartScreen() {
                   <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
                 </label>
               </div>
-              <div className="settings price-grid">
+              <div className="config-section">
+                <h3>Giá đầu tư mỗi lần bấm</h3>
+                <p>Giá này áp dụng chung cho tất cả đội trong phòng.</p>
+              </div>
+              <div className="settings price-grid" aria-label="Giá đầu tư">
                 {(
                   [
                     ['eng', 'Đào tạo'],

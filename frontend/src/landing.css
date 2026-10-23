@@ -201,18 +201,6 @@ html {
   line-height: 1.5;
 }
 
-.hero-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 26px;
-}
-
-.hero-cta .btn {
-  min-width: 11rem;
-  min-height: 48px;
-}
-
 .hero-art {
   background: #fbf3e4;
   border-radius: 18px;
@@ -226,25 +214,10 @@ html {
   height: auto;
 }
 
-.smoke-puff {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: puff 4.8s ease-in infinite;
-}
-
-.smoke-puff.d2 { animation-delay: -1.6s; }
-.smoke-puff.d3 { animation-delay: -3.2s; }
-
 .landing .btn.foot-link {
   background: transparent;
   color: #fff8ec;
   box-shadow: none;
-}
-
-@keyframes puff {
-  0% { transform: translate(0, 4px) scale(0.55); opacity: 0; }
-  18% { opacity: 0.9; }
-  100% { transform: translate(8px, -22px) scale(1.2); opacity: 0; }
 }
 
 .band {
@@ -404,10 +377,6 @@ html {
   color: #3b2a22;
 }
 
-.play-sec {
-  padding: 36px 0 72px;
-}
-
 .form-alert {
   margin: 0 0 14px;
   background: #8f2d22;
@@ -537,14 +506,6 @@ html {
     min-height: 0;
   }
 
-  .hero-cta {
-    flex-direction: column;
-  }
-
-  .hero-cta .btn {
-    width: 100%;
-  }
-
   .band {
     padding: 48px 0 40px;
   }
@@ -571,10 +532,6 @@ html {
     grid-column: auto;
   }
 
-  .play-sec {
-    padding: 28px 0 48px;
-  }
-
   .foot-inner {
     flex-direction: column;
     align-items: flex-start;
@@ -589,6 +546,4 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .smoke-puff { animation: none; }
-  .smoke-puff { opacity: 0.85; }
 }

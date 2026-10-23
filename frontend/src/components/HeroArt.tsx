@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 const STACKS = [
   { x: 88, n: 2 },
   { x: 196, n: 3 },
@@ -28,7 +26,6 @@ function Windows({ xs, y, w = 18, h = 14 }: { xs: number[]; y: number; w?: numbe
 }
 
 export function HeroArt() {
-  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   return (
     <div className="hero-art">
       <svg className="hero-svg" viewBox="0 0 640 440" role="img" aria-label="Sơ đồ các năm: nhà máy, đồng tiền và đời sau">
@@ -76,7 +73,6 @@ export function HeroArt() {
           </g>
         ))}
         <g className="year-pip">
-          {!still && <animateMotion dur="12s" repeatCount="indefinite" path="M0 0 H448" />}
           <circle cx="88" cy="362" r="9" fill="#c7382c" stroke="#3b2a22" strokeWidth="2" />
           <circle cx="88" cy="362" r="3.2" fill="#fff8ec" />
         </g>

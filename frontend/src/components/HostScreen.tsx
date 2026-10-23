@@ -112,7 +112,11 @@ export function HostScreen() {
                 <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
               </label>
             </div>
-            <div className="settings price-grid">
+            <div className="config-section host-config-section">
+              <h2>Giá đầu tư mỗi lần bấm</h2>
+              <p>Áp dụng chung cho mọi đội. Có thể chỉnh trước khi bắt đầu.</p>
+            </div>
+            <div className="settings price-grid" aria-label="Giá đầu tư">
               {(
                 [
                   ['eng', 'Đào tạo'],
