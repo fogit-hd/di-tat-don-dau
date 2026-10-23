@@ -20,11 +20,24 @@ import {
   presentQuestion,
   publicPending,
   runCycle,
+  scaleRange,
   stepOf,
 } from './game/engine'
+import { LINES } from './game/engine'
 import { hashString, makeRng } from './game/rng'
-import { companyHealth, heirAssets, pickHeirOutcome, pickSuccessionReason, successionChance, successionNotice, type SuccessionNotice } from './game/succession'
-import type { Ending, EventDef, Line, LineDef, SuccessionResult, TeamState, ThemeDef } from './game/types'
+import {
+  applyTraitRules,
+  deathChanceFor,
+  deathStartYear,
+  heirAssets,
+  pickHeirOutcome,
+  pickSuccessionReason,
+  rollHeirMultiplier,
+  successionNotice,
+  weightedPick,
+  type SuccessionNotice,
+} from './game/succession'
+import type { CentennialResult, Ending, EventDef, Line, LineDef, SuccessionResult, TeamState, ThemeDef, YearCause } from './game/types'
 
 export class HttpError extends Error {
   constructor(
@@ -67,6 +80,10 @@ export type LiveRoom = {
   cycleSeconds: number
   yearMinSeconds: number
   step: number
+  linePrices: Record<Line, number>
+  debugDeathYear: number | null
+  debugCentennialYear: number | null
+  debugForceDeath: boolean
   seed: string
   startedAt: number | null
   endsAt: number | null
@@ -91,7 +108,49 @@ const tails = new Map<string, Promise<unknown>>()
 let emit: (code: string) => void = () => undefined
 let emitSuccession: (code: string, notice: SuccessionNotice) => void = () => undefined
 
+export type CentennialNotice = {
+  teamId: string
+  year: number
+  bonusMultiplier: number
+  assetsBefore: number
+  assetsAfter: number
+  finished: true
+}
+
+export type LongevityNotice = { teamId: string; year: number }
+
 export type { SuccessionNotice }
+
+let emitRoom: (code: string, event: string, payload: unknown) => void = () => undefined
+
+export function setRoomEventEmitter(fn: (code: string, event: string, payload: unknown) => void) {
+  emitRoom = fn
+}
+
+export function linePricesOf(raw: unknown, fallback: number): Record<Line, number> {
+  const row = raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {}
+  const prices = {} as Record<Line, number>
+  for (const id of LINES) {
+    const value = row[id]
+    prices[id] = typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.round(value) : Math.round(fallback)
+  }
+  return prices
+}
+
+function hydrateState(state: TeamState | null): TeamState | null {
+  if (!state) return null
+  return {
+    ...state,
+    centennial: state.centennial ?? null,
+    traits: state.traits ?? [],
+    eventLog: state.eventLog ?? [],
+    yearLedger: state.yearLedger ?? [],
+    pendingCauses: state.pendingCauses ?? [],
+    yearOpenCash: state.yearOpenCash ?? state.cash,
+    yearOpenAssets: state.yearOpenAssets ?? 0,
+    pulseYear: state.pulseYear ?? 0,
+  }
+}
 
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
@@ -163,7 +222,13 @@ export async function bootRooms() {
   })
   for (const row of rows) {
     const answers = await prisma.answer.findMany({ where: { roomId: row.id } })
-    const meta = (row.meta ?? {}) as { seenRoomEvents?: string[]; roomRng?: number }
+    const meta = (row.meta ?? {}) as {
+      seenRoomEvents?: string[]
+      roomRng?: number
+      debugDeathYear?: number | null
+      debugCentennialYear?: number | null
+      debugForceDeath?: boolean
+    }
     const room: LiveRoom = {
       id: row.id,
       code: row.code,
@@ -175,6 +240,10 @@ export async function bootRooms() {
       cycleSeconds: row.cycleSeconds,
       yearMinSeconds: row.yearMinSeconds,
       step: row.step,
+      linePrices: linePricesOf(row.linePrices, row.step),
+      debugDeathYear: meta.debugDeathYear ?? null,
+      debugCentennialYear: meta.debugCentennialYear ?? null,
+      debugForceDeath: Boolean(meta.debugForceDeath),
       seed: row.seed,
       startedAt: num(row.startedAt),
       endsAt: num(row.endsAt),
@@ -200,7 +269,7 @@ export async function bootRooms() {
         tokenHash: participant.tokenHash,
         teamName: participant.teamName,
         theme: (participant.theme as ThemeDef | null) ?? null,
-        state: (participant.state as TeamState | null) ?? null,
+        state: hydrateState((participant.state as TeamState | null) ?? null),
         score: participant.score,
         ending: (participant.ending as Ending | null) ?? null,
         connected: participant.connected,
@@ -223,6 +292,7 @@ async function persist(room: LiveRoom) {
       cycleSeconds: room.cycleSeconds,
       yearMinSeconds: room.yearMinSeconds,
       step: room.step,
+      linePrices: room.linePrices,
       startedAt: room.startedAt ? new Date(room.startedAt) : null,
       endsAt: room.endsAt ? new Date(room.endsAt) : null,
       remainingMs: room.remainingMs,
@@ -231,7 +301,13 @@ async function persist(room: LiveRoom) {
       cycleElapsedMs: room.cycleElapsedMs,
       countdownEndsAt: room.countdownEndsAt ? new Date(room.countdownEndsAt) : null,
       nextRoomEventAt: room.nextRoomEventAt ? new Date(room.nextRoomEventAt) : null,
-      meta: json({ seenRoomEvents: room.seenRoomEvents, roomRng: room.roomRng }),
+      meta: json({
+        seenRoomEvents: room.seenRoomEvents,
+        roomRng: room.roomRng,
+        debugDeathYear: room.debugDeathYear,
+        debugCentennialYear: room.debugCentennialYear,
+        debugForceDeath: room.debugForceDeath,
+      }),
     },
   })
   const ids = room.teams.map((team) => team.id)
@@ -307,12 +383,20 @@ export async function createRoom(input: {
   startingCapital: number
   cycleSeconds?: number
   yearMinSeconds?: number
+  linePrices?: Partial<Record<Line, number>>
+  debugFast?: boolean
+  debugDeathYear?: number
+  debugCentennialYear?: number
+  debugForceDeath?: boolean
 }) {
   const hostToken = nid(18)
   const code = await uniqueCode()
   const seed = nid(8)
   const cycleSeconds = input.cycleSeconds ?? rules().balance.yearSeconds
   const yearMinSeconds = clampYearMin(input.yearMinSeconds ?? rules().balance.yearMinSeconds, cycleSeconds)
+  const step = stepOf(input.startingCapital, rules().balance)
+  const linePrices = linePricesOf(input.linePrices, step)
+  const debug = process.env.GAME_DEBUG === '1' && Boolean(input.debugFast)
   const row = await prisma.room.create({
     data: {
       code,
@@ -323,9 +407,16 @@ export async function createRoom(input: {
       startingCapital: input.startingCapital,
       cycleSeconds,
       yearMinSeconds,
-      step: stepOf(input.startingCapital, rules().balance),
+      step,
+      linePrices,
       seed,
-      meta: json({ seenRoomEvents: [], roomRng: hashString(seed + ':room') }),
+      meta: json({
+        seenRoomEvents: [],
+        roomRng: hashString(seed + ':room'),
+        debugDeathYear: debug ? (input.debugDeathYear ?? null) : null,
+        debugCentennialYear: debug ? (input.debugCentennialYear ?? 3) : null,
+        debugForceDeath: debug && Boolean(input.debugForceDeath),
+      }),
     },
   })
   const room: LiveRoom = {
@@ -338,7 +429,11 @@ export async function createRoom(input: {
     startingCapital: input.startingCapital,
     cycleSeconds,
     yearMinSeconds,
-    step: stepOf(input.startingCapital, rules().balance),
+    step,
+    linePrices,
+    debugDeathYear: debug ? (input.debugDeathYear ?? null) : null,
+    debugCentennialYear: debug ? (input.debugCentennialYear ?? 3) : null,
+    debugForceDeath: debug && Boolean(input.debugForceDeath),
     seed,
     startedAt: null,
     endsAt: null,
@@ -373,7 +468,14 @@ async function uniqueCode() {
 export async function updateRoom(
   code: string,
   token: string,
-  input: { hostName?: string; durationMin?: number; startingCapital?: number; cycleSeconds?: number; yearMinSeconds?: number },
+  input: {
+    hostName?: string
+    durationMin?: number
+    startingCapital?: number
+    cycleSeconds?: number
+    yearMinSeconds?: number
+    linePrices?: Partial<Record<Line, number>>
+  },
 ) {
   const room = requireRoom(code)
   assertHost(room, token)
@@ -384,6 +486,8 @@ export async function updateRoom(
     room.startingCapital = input.startingCapital
     room.step = stepOf(input.startingCapital, rules().balance)
   }
+  if (input.linePrices) room.linePrices = linePricesOf({ ...room.linePrices, ...input.linePrices }, room.step)
+  else if (input.startingCapital && !input.linePrices) room.linePrices = linePricesOf(room.linePrices, room.step)
   if (input.cycleSeconds) room.cycleSeconds = input.cycleSeconds
   if (input.yearMinSeconds != null) room.yearMinSeconds = input.yearMinSeconds
   room.yearMinSeconds = clampYearMin(room.yearMinSeconds, room.cycleSeconds)
@@ -496,6 +600,8 @@ export async function confirmIntro(code: string, token: string, factoryName: str
   const base = room.status === 'paused' && room.pausedAt ? room.pausedAt : Date.now()
   team.state.nextYearAt = base + yearMs
   team.theme = { ...team.theme, factoryName: name, vars: { ...team.theme.vars, factory: name } }
+  team.state.yearOpenCash = team.state.cash
+  team.state.yearOpenAssets = computeValue(team.state, team.theme, rules().balance)
   await persist(room)
   push(room.code)
   return { ok: true }
@@ -508,7 +614,8 @@ export async function investLine(code: string, token: string, line: Line) {
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
-  const result = invest(team.state, line, room.step, rules().balance, linesOf(team.theme))
+  const price = room.linePrices?.[line] ?? room.step
+  const result = invest(team.state, line, price, rules().balance, linesOf(team.theme))
   if (!result.ok) throw new HttpError(400, result.error)
   team.state = result.state
   await persist(room)
@@ -608,6 +715,8 @@ function beginPlay(room: LiveRoom, now: number) {
     const teamRng = makeRng(hashString(`${room.seed}:${team.id}`))
     const state = createState(theme, room.startingCapital, teamRng, balance, now)
     state.eventBag = shuffleIds(theme.eventIds, teamRng)
+    state.yearOpenCash = state.cash
+    state.yearOpenAssets = computeValue(state, theme, balance)
     state.nextYearAt = 0
     state.rng = teamRng.getState()
     state.seed = hashString(`${room.seed}:${team.id}`)
@@ -653,26 +762,37 @@ export async function advanceTeamYear(code: string, token: string) {
   return { ok: true, cycles: team.state.cycles }
 }
 
+function centennialAt(room: LiveRoom) {
+  if (room.debugCentennialYear && room.debugCentennialYear > 0) return room.debugCentennialYear
+  return rules().balance.centennialYear || 100
+}
+
 function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
-  if (!team.state || !team.theme) return
+  if (!team.state || !team.theme || team.state.finished) return
+  settlePending(room, team, now)
   const balance = rules().balance
   const rng = teamRngOf(team)
+  const cashBefore = team.state.yearOpenCash ?? team.state.cash
+  const assetsBefore = team.state.yearOpenAssets || computeValue(team.state, team.theme, balance)
+  const investCauses = [...(team.state.pendingCauses ?? [])]
+  team.state.pendingCauses = []
   team.state = openYearEffects(team.state, now)
   team.state = runCycle(team.state, team.theme, rng, now, balance)
+  const parts = team.state.yearParts ?? { production: 0, ongoing: 0, interest: 0 }
   team.state = closeYearEffects(team.state, now)
+  const eventCauses: YearCause[] = []
   const drawn = drawYearEvents(team.state.eventBag ?? [], team.theme.eventIds, rng, balance)
   team.state.eventBag = drawn.bag
   for (const id of drawn.ids) {
     const event = rules().events.find((item) => item.id === id)
-    if (!event) continue
-    applyEvent(team, event, rng, now)
+    if (!event || event.trait) continue
+    const title = eventCopy(event, team.theme).title
+    eventCauses.push({ kind: 'event', label: title, cash: applyEvent(team, event, rng, now) })
   }
   team.state.rng = rng.getState()
-  team.state.nextYearAt = now + room.cycleSeconds * 1000
-  team.state.yearLockUntil = now + room.yearMinSeconds * 1000
   const sharedId = drawn.classWide ? drawn.ids[0] : undefined
   const shared = sharedId ? rules().events.find((item) => item.id === sharedId) : undefined
-  if (shared) {
+  if (shared && !shared.trait) {
     for (const other of room.teams) {
       if (other.id === team.id || !other.state || !other.theme || other.state.finished) continue
       const otherRng = teamRngOf(other)
@@ -681,31 +801,78 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
       other.state.log = [`Cả lớp: ${shared.title}`, ...other.state.log].slice(0, balance.logLimit)
     }
   }
-  const notice = rollSuccession(room, team, now)
-  if (notice) emitSuccession(room.code, notice)
+  const celebrate = team.state.cycles >= centennialAt(room) ? grantCentennial(team) : null
+  if (celebrate) emitRoom(room.code, 'team:centennial', celebrate)
+  if (!team.state.finished) {
+    const family = rollFamily(room, team, now)
+    if (family.cause) eventCauses.push(family.cause)
+    if (!family.retired && !team.state.finished) {
+      const notice = rollSuccession(room, team, now)
+      if (notice) emitSuccession(room.code, notice)
+    }
+  }
+  if (!team.state.finished) presentYearQuestion(team, now)
+  const cashAfter = team.state.cash
+  const assetsAfter = team.state.finished ? (team.score ?? computeValue(team.state, team.theme, balance)) : computeValue(team.state, team.theme, balance)
+  const extra = team.state.pendingCauses ?? []
+  team.state.pendingCauses = []
+  const causes: YearCause[] = [
+    ...investCauses,
+    ...(parts.interest ? [{ kind: 'interest' as const, label: 'Lãi nợ', cash: parts.interest }] : []),
+    { kind: 'production', label: 'Sản xuất', cash: parts.production },
+    ...(parts.ongoing ? [{ kind: 'ongoing' as const, label: 'Khoản kéo dài', cash: parts.ongoing }] : []),
+    ...eventCauses,
+    ...extra,
+    ...(celebrate ? [{ kind: 'centennial' as const, label: 'Doanh nghiệp trăm năm', cash: 0 }] : []),
+  ]
+  team.state.yearLedger = [
+    { year: team.state.cycles, cashBefore, cashAfter, assetsBefore, assetsAfter, causes },
+    ...(team.state.yearLedger ?? []),
+  ].slice(0, 120)
+  team.state.yearOpenCash = team.state.cash
+  team.state.yearOpenAssets = assetsAfter
+  team.state.pulseYear = parts.ongoing < 0 || parts.interest < 0 ? team.state.cycles : 0
+  if (team.state.finished) {
+    team.state.nextYearAt = 0
+    team.state.yearLockUntil = 0
+    team.state.pending = null
+  } else {
+    team.state.nextYearAt = now + room.cycleSeconds * 1000
+    team.state.yearLockUntil = now + room.yearMinSeconds * 1000
+  }
 }
 
-function rollSuccession(room: LiveRoom, team: LiveTeam, now: number): SuccessionNotice | null {
+function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { causeText: string }): SuccessionNotice | null {
   if (!team.state || !team.theme || team.state.finished) return null
   const rng = teamRngOf(team)
-  const chance = successionChance(team.state.cycles, rules().successionOdds)
-  const hit = rng.next() < chance
+  const policy = rules().successionPolicy
+  const start = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
+  let chance = deathChanceFor(team.state.cycles, start, policy, team.state.traits ?? [])
+  if (room.debugForceDeath && team.state.cycles >= start) chance = 1
+  const hit = Boolean(forced) || rng.next() < chance
   if (!hit) {
     team.state.rng = rng.getState()
     return null
   }
   const reason = pickSuccessionReason(rules().successionReasons, team.theme.industryId, team.theme.contextId, rng)
   const assetsBefore = computeValue(team.state, team.theme, rules().balance)
-  const health = companyHealth(
-    { cash: team.state.cash, dependency: team.state.dependency, value: assetsBefore },
-    rules().successionGauge,
-  )
-  const heir = pickHeirOutcome(rules().heirOutcomes, team.theme.industryId, team.theme.contextId, rng, health, rules().heirHealthWeights)
+  const heirs = applyTraitRules(rules().heirOutcomes, team.state.traits ?? [], policy.traitRules)
+  const heir = pickHeirOutcome(heirs, team.theme.industryId, team.theme.contextId, rng, null, [])
+  if (!heir || (!reason && !forced)) {
+    team.state.rng = rng.getState()
+    return null
+  }
+  const multiplier = rollHeirMultiplier(heir, rng)
+  let assetsAfter = heirAssets(assetsBefore, multiplier)
+  const balance = rules().balance
+  if ((team.state.traits ?? []).includes('life_insurance')) {
+    const payout = Math.round((balance.lifeInsuranceCash || 0) * (team.theme.scaleFactor || 1))
+    assetsAfter += payout
+    team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'insurance', label: 'Bảo hiểm nhân thọ', cash: payout }]
+  }
   team.state.rng = rng.getState()
-  if (!reason || !heir) return null
-  const assetsAfter = heirAssets(assetsBefore, heir.multiplier)
   const stored: SuccessionResult = {
-    causeText: fillText(reason.text, team.theme.vars),
+    causeText: forced?.causeText || fillText(reason?.text || 'Chủ xưởng qua đời', team.theme.vars),
     outcome: heir.outcomeType,
     outcomeLabel: fillText(heir.label, team.theme.vars),
     outcomeDetail: fillText(heir.detail, team.theme.vars),
@@ -718,9 +885,10 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number): Succession
   team.state.nextYearAt = 0
   team.state.yearLockUntil = 0
   team.state.pending = null
-  team.state.log = [stored.causeText, ...team.state.log].slice(0, rules().balance.logLimit)
+  team.state.log = [stored.causeText, ...team.state.log].slice(0, balance.logLimit)
   team.score = assetsAfter
   team.ending = heir.outcomeType
+  void now
   return successionNotice({
     teamId: team.id,
     year: stored.year,
@@ -731,12 +899,103 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number): Succession
   })
 }
 
-function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number) {
-  if (!team.state || !team.theme || team.state.finished) return
+function grantCentennial(team: LiveTeam): CentennialNotice | null {
+  if (!team.state || !team.theme || team.state.finished || team.state.centennial) return null
+  const balance = rules().balance
+  const before = computeValue(team.state, team.theme, balance)
+  const bonusMultiplier = balance.centennialMultiplier || 1.5
+  const after = Math.round(before * bonusMultiplier)
+  const stored: CentennialResult = { year: team.state.cycles, bonusMultiplier, assetsBefore: before, assetsAfter: after }
+  team.state.centennial = stored
+  team.state.finished = true
+  team.state.pending = null
+  team.state.nextYearAt = 0
+  team.state.yearLockUntil = 0
+  team.state.log = [`Doanh nghiệp trăm năm · tài sản ×${bonusMultiplier}`, ...team.state.log].slice(0, balance.logLimit)
+  team.score = after
+  team.ending = 'centennial'
+  return {
+    teamId: team.id,
+    year: stored.year,
+    bonusMultiplier,
+    assetsBefore: before,
+    assetsAfter: after,
+    finished: true,
+  }
+}
+
+function rollFamily(room: LiveRoom, team: LiveTeam, now: number): { retired: boolean; cause: YearCause | null } {
+  if (!team.state || !team.theme || team.state.finished) return { retired: false, cause: null }
+  const rng = teamRngOf(team)
+  const chance = rules().balance.familyEventChance ?? 0
+  if (rng.next() >= chance) {
+    team.state.rng = rng.getState()
+    return { retired: false, cause: null }
+  }
+  const owned = new Set(team.state.traits ?? [])
+  const pool = rules().familyEvents.filter((event) => event.trait === 'early_retirement' || (event.trait && !owned.has(event.trait)))
+  const event = weightedPick(pool, rng)
+  team.state.rng = rng.getState()
+  if (!event?.trait) return { retired: false, cause: null }
   const copy = eventCopy(event, team.theme)
-  team.state = applyPatch(team.state, patchFromEvent(event, copy.title, copy.body), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
+  if (event.trait === 'early_retirement') {
+    rememberEvent(team, event, copy.title, copy.body, 'Nghỉ hưu, chuyển giao ngay')
+    const notice = rollSuccession(room, team, now, { causeText: copy.title })
+    if (notice) emitSuccession(room.code, notice)
+    return { retired: Boolean(notice), cause: { kind: 'event', label: copy.title, cash: 0 } }
+  }
+  const before = team.state.cash
+  team.state.traits = [...owned, event.trait]
+  if (event.trait === 'longevity') emitRoom(room.code, 'team:longevity', { teamId: team.id, year: team.state.cycles })
+  applyEvent(team, event, teamRngOf(team), now)
+  return { retired: false, cause: { kind: 'event', label: copy.title, cash: team.state.cash - before } }
+}
+
+function presentYearQuestion(team: LiveTeam, now: number) {
+  if (!team.state || !team.theme || team.state.finished) return
+  const rng = teamRngOf(team)
+  let question = drawQuestion(team.state, rules().questions, rng)
+  if (!question && team.state.seenQuestions.length) {
+    team.state.seenQuestions = []
+    question = drawQuestion(team.state, rules().questions, rng)
+  }
+  if (!question) {
+    team.state.rng = rng.getState()
+    return
+  }
+  team.state.seenQuestions = [...team.state.seenQuestions, question.id]
+  const pending = presentQuestion(question, team.theme, rng, now, rules().balance.questionOpenMs)
+  pending.title = 'Câu hỏi đề tài thuyết trình'
+  team.state.pending = pending
+  team.state.rng = rng.getState()
+}
+
+function rememberEvent(team: LiveTeam, event: EventDef, title: string, body: string, effect: string) {
+  if (!team.state) return
+  team.state.eventLog = [
+    { year: team.state.cycles, eventId: event.id, title, body, icon: event.icon || event.visual, good: event.good, effect },
+    ...(team.state.eventLog ?? []),
+  ].slice(0, 200)
+}
+
+function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number) {
+  if (!team.state || !team.theme || team.state.finished) return 0
+  const before = team.state.cash
+  const copy = eventCopy(event, team.theme)
+  const factor = team.theme.scaleFactor || 1
+  const patch = patchFromEvent(event, copy.title, copy.body)
+  if (patch.cashPerYear) patch.cashPerYear = scaleRange(patch.cashPerYear, factor)
+  team.state = applyPatch(team.state, patch, rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
   const latest = team.state.effects[0]
-  if (latest) latest.severity = event.severity || 1
+  if (latest) {
+    latest.severity = event.severity || 1
+    latest.icon = event.icon || event.visual
+    latest.good = event.good
+    latest.eventId = event.id
+    latest.year = team.state.cycles
+  }
+  rememberEvent(team, event, copy.title, copy.body, latest?.summary || copy.title)
+  return team.state.cash - before
 }
 
 function finish(room: LiveRoom, now: number) {
@@ -927,6 +1186,32 @@ function serviceTeam(room: LiveRoom, team: LiveTeam, now: number) {
   return changed
 }
 
+function settlePending(room: LiveRoom, team: LiveTeam, now: number) {
+  const pending = team.state?.pending
+  if (!pending) return
+  if (pending.phase === 'open') {
+    const rec = timeoutPending(team, now)
+    if (rec) {
+      room.answers.push(rec)
+      room.unsavedAnswers.push(rec)
+    }
+  }
+  if (team.state) team.state.pending = null
+}
+
+function expirePrompt(room: LiveRoom, team: LiveTeam, now: number) {
+  const pending = team.state?.pending
+  if (!pending || now < pending.expiresAt) return false
+  if (pending.phase === 'open') {
+    const rec = timeoutPending(team, now)
+    if (rec) {
+      room.answers.push(rec)
+      room.unsavedAnswers.push(rec)
+    }
+  } else team.state!.pending = null
+  return true
+}
+
 function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
   if (room.status === 'countdown' && room.countdownEndsAt && now >= room.countdownEndsAt) {
     beginPlay(room, now)
@@ -939,11 +1224,12 @@ function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
   if (room.status !== 'playing') return 'none'
   let dirty = false
   for (const team of room.teams) {
-    if (!team.state?.introDone || !team.theme || team.state.finished) continue
-    if (team.state.nextYearAt && now >= team.state.nextYearAt) {
+    if (!team.state?.introDone || !team.theme) continue
+    if (!team.state.finished && team.state.nextYearAt && now >= team.state.nextYearAt) {
       advanceYear(room, team, now)
       dirty = true
     }
+    if (expirePrompt(room, team, now)) dirty = true
   }
   if (dirty) return 'dirty'
   if (now - room.lastClockPush >= 1000) {
@@ -999,8 +1285,8 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
     themeName: team.theme?.name ?? 'Chờ chủ đề',
     industryId: team.theme?.industryId ?? '',
     value: valueOf(team),
-    ending: team.state?.succession?.outcome ?? team.ending,
-    endingTitle: team.state?.succession?.outcomeLabel ?? (team.ending ? endingMap()[team.ending]?.title ?? null : null),
+    ending: team.state?.centennial ? 'centennial' : (team.state?.succession?.outcome ?? team.ending),
+    endingTitle: outcomeTitle(team),
   }))
   const self = viewer.role === 'player' ? room.teams.find((team) => team.id === viewer.teamId) ?? null : null
   const youCorrect = self ? room.answers.filter((answer) => answer.teamId === self.id && answer.correct).length : 0
@@ -1018,6 +1304,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       cycleSeconds: room.cycleSeconds,
       yearMinSeconds: room.yearMinSeconds,
       step: room.step,
+      linePrices: room.linePrices,
       endsAt: room.endsAt,
       remainingMs: room.remainingMs,
       countdownEndsAt: room.countdownEndsAt,
@@ -1039,8 +1326,10 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       value: valueOf(team),
       finished: Boolean(team.state?.finished),
       succession: team.state?.succession ?? null,
-      ending: team.state?.succession?.outcome ?? team.ending,
-      endingTitle: team.state?.succession?.outcomeLabel ?? (team.ending ? endingMap()[team.ending]?.title ?? null : null),
+      ending: team.state?.centennial ? 'centennial' : (team.state?.succession?.outcome ?? team.ending),
+      endingTitle: outcomeTitle(team),
+      centennial: team.state?.centennial ?? null,
+      traits: traitViews(team.state?.traits ?? []),
       score: team.score,
       scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team) : null,
     })),
@@ -1054,6 +1343,8 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
           answered: youAnswered,
           finished: Boolean(self.state?.finished),
           succession: self.state?.succession ?? null,
+          centennial: self.state?.centennial ?? null,
+          traits: traitViews(self.state?.traits ?? []),
           theme: self.theme
             ? {
                 id: self.theme.id,
@@ -1125,7 +1416,34 @@ function sceneOf(team: LiveTeam) {
     })),
     pending: publicPending(state.pending),
     introDone: state.introDone,
+    eventLog: state.eventLog ?? [],
+    yearChanges: state.yearLedger ?? [],
+    activeEffects: (state.effects ?? [])
+      .filter((effect) => !effect.defer && (effect.cashPerYear ?? 0) !== 0 && (effect.yearsLeft ?? 0) > 0)
+      .map((effect) => ({
+        eventId: effect.eventId || effect.id,
+        label: effect.title,
+        cashPerYear: Math.round(effect.cashPerYear || 0),
+        yearsLeft: effect.yearsLeft || 0,
+      })),
+    traits: traitViews(state.traits ?? []),
+    centennial: state.centennial ?? null,
+    pulseYear: state.pulseYear ?? 0,
   }
+}
+
+function traitViews(ids: string[]) {
+  return ids.map((id) => {
+    const copy = rules().traitCopy.find((row) => row.id === id)
+    return { id, label: copy?.label || id, detail: copy?.detail || '' }
+  })
+}
+
+function outcomeTitle(team: LiveTeam) {
+  if (team.state?.centennial || team.ending === 'centennial') return 'Doanh nghiệp trăm năm'
+  if (team.state?.succession) return team.state.succession.outcomeLabel
+  if (team.ending && endingMap()[team.ending]) return endingMap()[team.ending]!.title
+  return null
 }
 
 export function lobbyView(room: LiveRoom) {
@@ -1138,6 +1456,7 @@ export function lobbyView(room: LiveRoom) {
     cycleSeconds: room.cycleSeconds,
     yearMinSeconds: room.yearMinSeconds,
     step: room.step,
+    linePrices: room.linePrices,
     teams: room.teams.map((team) => ({ id: team.id, teamName: team.teamName, connected: team.connected })),
   }
 }
@@ -1163,6 +1482,18 @@ export async function globalBoard(theme?: string) {
     .filter((row) => (theme ? row.theme.toLowerCase().includes(theme.toLowerCase()) : true))
     .slice(0, 10)
   return mapped
+}
+
+export function publicSetup() {
+  const balance = rules().balance
+  return {
+    yearSeconds: balance.yearSeconds,
+    yearMinSeconds: balance.yearMinSeconds,
+    stepDivisor: balance.stepDivisor,
+    stepRound: balance.stepRound,
+    stepMin: balance.stepMin,
+    lines: rules().lines.map((line) => ({ id: line.id, label: line.label, hint: line.hint })),
+  }
 }
 
 export function listThemes() {

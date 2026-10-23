@@ -62,6 +62,8 @@ export type ThemeDef = {
   regionName: string
   scaleId: string
   scaleName: string
+  /** 1 is the medium factory. Ongoing cash is authored for that size. */
+  scaleFactor?: number
   contextId: string
   contextName: string
   vars: Record<string, string>
@@ -84,10 +86,15 @@ export type Effect = {
   revenueMul?: number
   /** 1 + costPct/100. Missing means 1. */
   costMul?: number
-  /** Cash added on each year this effect is settled. */
+  /** Cash added on each year this effect is settled. Already scaled to the team. */
   cashPerYear?: number
   /** Game years still to settle. 0 means a wall-clock effect. */
   yearsLeft?: number
+  icon?: string
+  good?: boolean
+  eventId?: string
+  summary?: string
+  year?: number
   /**
    * Drawn at a year boundary and shown immediately, but settled on a later advance.
    * `bornAt` is the clock of the advance that drew it, so the same tick does not settle it.
@@ -123,6 +130,50 @@ export type SuccessionResult = {
   year: number
 }
 
+export type CauseKind = 'production' | 'investment' | 'event' | 'ongoing' | 'interest' | 'centennial' | 'insurance'
+
+export type YearCause = { kind: CauseKind; label: string; cash: number }
+
+export type YearChange = {
+  year: number
+  cashBefore: number
+  cashAfter: number
+  assetsBefore: number
+  assetsAfter: number
+  causes: YearCause[]
+}
+
+export type EventLogItem = {
+  year: number
+  eventId: string
+  title: string
+  body: string
+  icon: string
+  good: boolean
+  effect: string
+}
+
+export type YearParts = { production: number; ongoing: number; interest: number }
+
+export type CentennialResult = {
+  year: number
+  bonusMultiplier: number
+  assetsBefore: number
+  assetsAfter: number
+}
+
+export const TRAIT_IDS = [
+  'longevity',
+  'illness',
+  'heir_trained',
+  'inheritance_dispute',
+  'family_fund',
+  'life_insurance',
+  'heir_abroad',
+] as const
+
+export type TraitId = (typeof TRAIT_IDS)[number]
+
 export type TeamState = {
   cash: number
   engineers: number
@@ -148,6 +199,15 @@ export type TeamState = {
   yearLockUntil: number
   finished: boolean
   succession: SuccessionResult | null
+  centennial: CentennialResult | null
+  traits: string[]
+  eventLog: EventLogItem[]
+  yearLedger: YearChange[]
+  pendingCauses: YearCause[]
+  yearOpenCash: number
+  yearOpenAssets: number
+  yearParts?: YearParts
+  pulseYear: number
   nextPromptAt: number
   introDone: boolean
   factoryName: string
@@ -303,6 +363,11 @@ export type Balance = {
   defaultIdleCost: number
   yearSeconds: number
   yearMinSeconds: number
+  debtInterest: number
+  centennialYear: number
+  centennialMultiplier: number
+  familyEventChance: number
+  lifeInsuranceCash: number
   yearEventChance: number
   yearMinEvents: number
   yearMaxEvents: number
@@ -320,6 +385,9 @@ export type EventDef = {
   effectCode: string
   severity: number
   good: boolean
+  icon?: string
+  /** Family trait this event grants. `early_retirement` hands the factory over immediately. */
+  trait?: string
   title: string
   body: string
   variants?: Record<string, { title: string; body: string }>

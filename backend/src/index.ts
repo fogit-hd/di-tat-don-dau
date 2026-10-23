@@ -19,11 +19,13 @@ import {
   joinRoom,
   listThemes,
   lobbyView,
+  publicSetup,
   noteDisconnect,
   notifyRoom,
   pauseRoom,
   resumeRoom,
   setEmitter,
+  setRoomEventEmitter,
   setSuccessionEmitter,
   startLoop,
   startRoom,
@@ -78,6 +80,14 @@ app.post('/api/content/reload', async (req, res, next) => {
   }
 })
 
+app.get('/api/setup', (_req, res, next) => {
+  try {
+    res.json(publicSetup())
+  } catch (error) {
+    next(error)
+  }
+})
+
 app.get('/api/themes', async (_req, res, next) => {
   try {
     res.json(await listThemes())
@@ -101,17 +111,41 @@ const settings = z.object({
   startingCapital: z.number().min(2000).max(100000).optional(),
   cycleSeconds: z.number().int().min(10).max(180).optional(),
   yearMinSeconds: z.number().int().min(0).max(120).optional(),
+  linePrices: z
+    .object({
+      eng: z.number().positive().max(100000),
+      mac: z.number().positive().max(100000),
+      sup: z.number().positive().max(100000),
+      inf: z.number().positive().max(100000),
+      grn: z.number().positive().max(100000),
+    })
+    .partial()
+    .optional(),
 })
 
 app.post('/api/rooms', async (req, res, next) => {
   try {
     const body = settings
-      .extend({ hostName: z.string().trim().min(1).max(40), durationMin: z.number().int().min(1).max(45), startingCapital: z.number().min(2000).max(100000) })
+      .extend({
+        hostName: z.string().trim().min(1).max(40),
+        durationMin: z.number().int().min(1).max(45),
+        startingCapital: z.number().min(2000).max(100000),
+        debugFast: z.boolean().optional(),
+        debugDeathYear: z.number().int().min(1).max(200).optional(),
+        debugCentennialYear: z.number().int().min(1).max(200).optional(),
+        debugForceDeath: z.boolean().optional(),
+      })
       .parse(req.body)
     res.json(await createRoom(body))
   } catch (error) {
     next(error)
   }
+})
+
+app.get('/api/rooms/:code/exists', (req, res) => {
+  const room = getRoom(param(req.params.code))
+  if (!room) return res.status(404).json({ error: 'Không thấy phòng này' })
+  return res.json({ ok: true, code: room.code, status: room.status, hostName: room.hostName })
 })
 
 app.get('/api/rooms/:code', (req, res) => {
@@ -243,6 +277,10 @@ app.use((error: unknown, _req: express.Request, res: express.Response, _next: ex
 const server = createServer(app)
 const io = new Server(server, {
   cors: { origin: origins.includes('*') ? true : origins, credentials: true },
+})
+
+setRoomEventEmitter((code, event, payload) => {
+  io.to(`room:${code}`).emit(event, payload)
 })
 
 setSuccessionEmitter((code, notice) => {

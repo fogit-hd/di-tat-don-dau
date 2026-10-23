@@ -23,6 +23,8 @@ export type HeirRow = {
   detail: string
   weight: number
   multiplier: number
+  multiplierMin?: number | null
+  multiplierMax?: number | null
   sort: number
 }
 
@@ -43,6 +45,15 @@ export type HealthWeight = {
   weightAdd: number
 }
 
+export type SuccessionPolicy = {
+  baseChance: number
+  stepPerYear: number
+  maxChance: number
+  longevityChance: number
+  illnessAdd: number
+  traitRules: Record<string, { outcome?: string; add?: number; set?: number }>
+}
+
 export type CompanyBooks = { cash: number; dependency: number; value: number }
 
 export type SuccessionNotice = {
@@ -57,6 +68,49 @@ export type SuccessionNotice = {
 
 export function isHeirOutcome(value: string): value is HeirOutcome {
   return (HEIR_OUTCOMES as readonly string[]).includes(value)
+}
+
+/** Years of play before death risk starts: session length divided by seconds per year. */
+export function deathStartYear(durationSec: number, cycleSeconds: number) {
+  const cycle = Math.max(1, Math.round(cycleSeconds))
+  return Math.max(1, Math.floor(Math.max(0, durationSec) / cycle))
+}
+
+/** Mild curve: base at the start year, plus step each later year, capped. */
+export function mildDeathChance(year: number, startYear: number, policy: Pick<SuccessionPolicy, 'baseChance' | 'stepPerYear' | 'maxChance'>) {
+  if (year < startYear) return 0
+  const steps = year - startYear
+  return Math.min(policy.maxChance, policy.baseChance + steps * policy.stepPerYear)
+}
+
+export function deathChanceFor(year: number, startYear: number, policy: SuccessionPolicy, traits: string[]) {
+  let chance = traits.includes('longevity') ? policy.longevityChance : mildDeathChance(year, startYear, policy)
+  if (traits.includes('illness')) chance += policy.illnessAdd
+  return Math.max(0, Math.min(0.95, chance))
+}
+
+export function rollHeirMultiplier(row: Pick<HeirRow, 'multiplier' | 'multiplierMin' | 'multiplierMax'>, rng: Rng) {
+  const min = row.multiplierMin ?? row.multiplier
+  const max = row.multiplierMax ?? row.multiplier
+  if (!(max > min)) return min
+  return min + rng.next() * (max - min)
+}
+
+export function applyTraitRules<T extends { outcomeType: string; weight: number }>(
+  rows: T[],
+  traits: string[],
+  rules: SuccessionPolicy['traitRules'],
+) {
+  return rows.map((row) => {
+    let weight = row.weight
+    for (const trait of traits) {
+      const rule = rules[trait]
+      if (!rule || rule.outcome !== row.outcomeType) continue
+      if (typeof rule.set === 'number') weight = rule.set
+      if (typeof rule.add === 'number') weight += rule.add
+    }
+    return { ...row, weight: Math.max(0, weight) }
+  })
 }
 
 export function successionChance(year: number, curve: OddsPoint[]) {
