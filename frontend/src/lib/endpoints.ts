@@ -1,6 +1,7 @@
 type AppConfig = {
   apiUrl?: string
   socketUrl?: string
+  googleClientId?: string
 }
 
 declare global {
@@ -25,4 +26,9 @@ export function apiBase() {
 
 export function socketBase() {
   return trimUrl(runtimeConfig().socketUrl) || trimUrl(import.meta.env.VITE_SOCKET_URL) || apiBase()
+}
+
+/** Google client id can be injected by the container at runtime, avoiding a rebuild for frontend environment changes. */
+export function googleClientId() {
+  return runtimeConfig().googleClientId?.trim() || import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() || ''
 }

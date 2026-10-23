@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
 import { HeroArt } from './HeroArt.tsx'
 import '../landing.css'
+import { googleClientId } from '../lib/endpoints.ts'
 
 type GoogleIdentity = {
   accounts: {
@@ -148,9 +149,9 @@ export function StartScreen() {
 
   useEffect(() => {
     if (!loginOpen || !loginButton.current) return
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+    const clientId = googleClientId()
     if (!clientId) {
-      setError('Máy chủ frontend chưa có VITE_GOOGLE_CLIENT_ID')
+      setError('Máy chủ frontend chưa có GOOGLE_CLIENT_ID')
       return
     }
     const render = () => {

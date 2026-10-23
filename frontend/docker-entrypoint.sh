@@ -3,6 +3,7 @@ set -eu
 
 API_URL="${API_URL:-${VITE_API_URL:-}}"
 SOCKET_URL="${SOCKET_URL:-${VITE_SOCKET_URL:-$API_URL}}"
+GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-${VITE_GOOGLE_CLIENT_ID:-}}"
 
 js_escape() {
   printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
@@ -11,7 +12,8 @@ js_escape() {
 cat > /usr/share/nginx/html/config.js <<EOF
 window.__APP_CONFIG__ = {
   apiUrl: "$(js_escape "$API_URL")",
-  socketUrl: "$(js_escape "$SOCKET_URL")"
+  socketUrl: "$(js_escape "$SOCKET_URL")",
+  googleClientId: "$(js_escape "$GOOGLE_CLIENT_ID")"
 };
 EOF
 
