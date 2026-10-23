@@ -327,6 +327,8 @@ model Room {
   code             String   @unique
   hostTokenHash    String
   hostName         String
+  hostUserId       String?
+  hostUser         HostUser? @relation(fields: [hostUserId], references: [id])
   status           String
   durationSec      Int
   startingCapital  Float
@@ -345,7 +347,33 @@ model Room {
   cycleElapsedMs   Int      @default(0)
   countdownEndsAt  DateTime?
   nextRoomEventAt  DateTime?
+  report           Json?
   participants     Participant[]
+
+  @@index([hostUserId])
+}
+
+model HostUser {
+  id        String   @id @default(cuid())
+  googleSub String   @unique
+  email     String   @unique
+  name      String
+  picture   String?
+  createdAt DateTime @default(now())
+  rooms     Room[]
+  sessions  HostSession[]
+}
+
+model HostSession {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userId    String
+  user      HostUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Participant {
@@ -362,7 +390,6 @@ model Participant {
   createdAt DateTime @default(now())
   answers   Answer[]
 
-  @@unique([roomId, teamName])
   @@index([roomId])
 }
 

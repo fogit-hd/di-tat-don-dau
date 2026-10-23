@@ -6,6 +6,7 @@ export function authoredEffectDocument(effect: AuthoredEffect) {
   if (effect.costPct != null) doc.costPct = effect.costPct
   if (effect.assetsPct != null) doc.assetsPct = effect.assetsPct
   if (effect.cashPerYear != null) doc.cashPerYear = effect.cashPerYear
+  if (effect.investmentPct != null) doc.investmentPct = effect.investmentPct
   return doc
 }
 

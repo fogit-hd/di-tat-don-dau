@@ -15,6 +15,7 @@ import {
   fillText,
   invest,
   jitterMs,
+  investmentPrice,
   openYearEffects,
   patchFromEvent,
   presentQuestion,
@@ -69,10 +70,19 @@ export type LiveTeam = {
   connectGen: number
 }
 
+export type HostReport = {
+  code: string
+  completedAt: number
+  startingCapital: number
+  durationSec: number
+  teams: Array<{ rank: number; teamName: string; industry: string; value: number; years: number; correct: number; answered: number; outcome: string }>
+}
+
 export type LiveRoom = {
   id: string
   code: string
   hostTokenHash: string
+  hostUserId: string | null
   hostName: string
   status: 'lobby' | 'countdown' | 'playing' | 'paused' | 'ended'
   durationSec: number
@@ -97,6 +107,7 @@ export type LiveRoom = {
   roomRng: number
   answers: AnswerRec[]
   unsavedAnswers: AnswerRec[]
+  report: HostReport | null
   teams: LiveTeam[]
   lastClockPush: number
 }
@@ -233,6 +244,7 @@ export async function bootRooms() {
       id: row.id,
       code: row.code,
       hostTokenHash: row.hostTokenHash,
+      hostUserId: row.hostUserId,
       hostName: row.hostName,
       status: row.status as LiveRoom['status'],
       durationSec: row.durationSec,
@@ -264,6 +276,7 @@ export async function bootRooms() {
         correct: answer.correct,
       })),
       unsavedAnswers: [],
+      report: (row.report as HostReport | null) ?? null,
       teams: row.participants.map((participant) => ({
         id: participant.id,
         tokenHash: participant.tokenHash,
@@ -286,6 +299,7 @@ async function persist(room: LiveRoom) {
     where: { id: room.id },
     data: {
       hostName: room.hostName,
+      report: room.report ? json(room.report) : undefined,
       status: room.status,
       durationSec: room.durationSec,
       startingCapital: room.startingCapital,
@@ -378,6 +392,7 @@ function clampYearMin(value: number, cycleSeconds: number) {
 }
 
 export async function createRoom(input: {
+  hostUserId: string
   hostName: string
   durationMin: number
   startingCapital: number
@@ -400,6 +415,7 @@ export async function createRoom(input: {
   const row = await prisma.room.create({
     data: {
       code,
+      hostUserId: input.hostUserId,
       hostTokenHash: sha(hostToken),
       hostName: input.hostName.trim(),
       status: 'lobby',
@@ -423,6 +439,7 @@ export async function createRoom(input: {
     id: row.id,
     code,
     hostTokenHash: sha(hostToken),
+    hostUserId: input.hostUserId,
     hostName: input.hostName.trim(),
     status: 'lobby',
     durationSec: input.durationMin * 60,
@@ -447,6 +464,7 @@ export async function createRoom(input: {
     roomRng: hashString(seed + ':room'),
     answers: [],
     unsavedAnswers: [],
+    report: null,
     teams: [],
     lastClockPush: 0,
   }
@@ -501,9 +519,6 @@ export async function joinRoom(code: string, teamName: string) {
   if (room.status !== 'lobby') throw new HttpError(409, 'Phòng không còn nhận đội')
   const name = teamName.trim()
   if (name.length < 1 || name.length > 24) throw new HttpError(400, 'Tên đội từ 1 đến 24 ký tự')
-  if (room.teams.some((team) => team.teamName.toLowerCase() === name.toLowerCase())) {
-    throw new HttpError(409, 'Tên đội đã có trong phòng')
-  }
   if (room.teams.length >= Math.min(24, Math.max(1, rules().themeCount))) throw new HttpError(409, 'Phòng đã đủ đội')
   const playerToken = nid(18)
   const team: LiveTeam = {
@@ -614,7 +629,7 @@ export async function investLine(code: string, token: string, line: Line) {
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
-  const price = room.linePrices?.[line] ?? room.step
+  const price = investmentPrice(team.state, room.linePrices?.[line] ?? room.step, Date.now())
   const result = invest(team.state, line, price, rules().balance, linesOf(team.theme))
   if (!result.ok) throw new HttpError(400, result.error)
   team.state = result.state
@@ -1009,6 +1024,34 @@ function finish(room: LiveRoom, now: number) {
   room.status = 'ended'
   room.endsAt = now
   room.pausedAt = null
+  room.report = makeReport(room, now)
+}
+
+function makeReport(room: LiveRoom, completedAt: number): HostReport {
+  const teams = room.teams.slice().sort((a, b) => valueOf(b) - valueOf(a) || a.id.localeCompare(b.id))
+  return {
+    code: room.code,
+    completedAt,
+    startingCapital: room.startingCapital,
+    durationSec: room.durationSec,
+    teams: teams.map((team, index) => ({
+      rank: index + 1,
+      teamName: team.teamName,
+      industry: team.theme?.industryName ?? team.theme?.name ?? 'Chưa phân ngành',
+      value: Math.round(valueOf(team)),
+      years: team.state?.cycles ?? 0,
+      correct: room.answers.filter((answer) => answer.teamId === team.id && answer.correct).length,
+      answered: room.answers.filter((answer) => answer.teamId === team.id && answer.optionId).length,
+      outcome: outcomeTitle(team) ?? 'Chưa chốt',
+    })),
+  }
+}
+
+export async function getSavedReport(code: string, hostUserId: string) {
+  const row = await prisma.room.findFirst({ where: { code: code.toUpperCase(), hostUserId }, select: { report: true } })
+  if (!row) throw new HttpError(404, 'Không thấy báo cáo của phòng này')
+  if (!row.report) throw new HttpError(409, 'Báo cáo sẽ có sau khi lượt chơi kết thúc')
+  return row.report as HostReport
 }
 
 function teamRngOf(team: LiveTeam) {
@@ -1277,7 +1320,7 @@ function questionStats(room: LiveRoom) {
 export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) {
   const ranked = room.teams
     .slice()
-    .sort((a, b) => valueOf(b) - valueOf(a) || a.teamName.localeCompare(b.teamName, 'vi'))
+    .sort((a, b) => valueOf(b) - valueOf(a) || a.id.localeCompare(b.id))
   const leaderboard = ranked.map((team, index) => ({
     rank: index + 1,
     teamId: team.id,
@@ -1331,7 +1374,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       centennial: team.state?.centennial ?? null,
       traits: traitViews(team.state?.traits ?? []),
       score: team.score,
-      scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team) : null,
+      scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team, room) : null,
     })),
     leaderboard,
     you: self
@@ -1362,14 +1405,14 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
                 art: self.theme.art,
               }
             : null,
-          scene: self.state && self.theme ? sceneOf(self) : null,
+          scene: self.state && self.theme ? sceneOf(self, room) : null,
         }
       : null,
     role: viewer.role,
   }
 }
 
-function sceneOf(team: LiveTeam) {
+function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
   const state = team.state!
   const theme = team.theme!
   const epl = theme.coefs.epl
@@ -1418,17 +1461,22 @@ function sceneOf(team: LiveTeam) {
     introDone: state.introDone,
     eventLog: state.eventLog ?? [],
     yearChanges: state.yearLedger ?? [],
+    linePrices: Object.fromEntries(
+      LINES.map((line) => [line, investmentPrice(state, room.linePrices?.[line] ?? room.step, now)]),
+    ),
     activeEffects: (state.effects ?? [])
-      .filter((effect) => !effect.defer && (effect.cashPerYear ?? 0) !== 0 && (effect.yearsLeft ?? 0) > 0)
+      .filter((effect) => !effect.defer && ((effect.cashPerYear ?? 0) !== 0 || (effect.investmentMul ?? 1) !== 1) && (effect.yearsLeft ?? 0) > 0)
       .map((effect) => ({
         eventId: effect.eventId || effect.id,
         label: effect.title,
         cashPerYear: Math.round(effect.cashPerYear || 0),
         yearsLeft: effect.yearsLeft || 0,
+        investmentPct: Math.round(((effect.investmentMul ?? 1) - 1) * 100),
       })),
     traits: traitViews(state.traits ?? []),
     centennial: state.centennial ?? null,
     pulseYear: state.pulseYear ?? 0,
+    deathChance: deathChanceFor(state.cycles, room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds), rules().successionPolicy, state.traits ?? []),
   }
 }
 
@@ -1459,29 +1507,6 @@ export function lobbyView(room: LiveRoom) {
     linePrices: room.linePrices,
     teams: room.teams.map((team) => ({ id: team.id, teamName: team.teamName, connected: team.connected })),
   }
-}
-
-export async function globalBoard(theme?: string) {
-  const rows = await prisma.participant.findMany({
-    where: { score: { not: null } },
-    orderBy: { score: 'desc' },
-    take: 40,
-    include: { room: { select: { code: true } } },
-  })
-  const mapped = rows
-    .map((row) => {
-      const payload = (row.theme ?? {}) as { industryName?: string; name?: string }
-      return {
-        teamName: row.teamName,
-        score: Math.round(row.score ?? 0),
-        ending: row.ending,
-        theme: payload.industryName || payload.name || 'Ngành',
-        roomCode: row.room.code,
-      }
-    })
-    .filter((row) => (theme ? row.theme.toLowerCase().includes(theme.toLowerCase()) : true))
-    .slice(0, 10)
-  return mapped
 }
 
 export function publicSetup() {

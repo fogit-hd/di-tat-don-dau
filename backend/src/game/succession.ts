@@ -76,15 +76,16 @@ export function deathStartYear(durationSec: number, cycleSeconds: number) {
   return Math.max(1, Math.floor(Math.max(0, durationSec) / cycle))
 }
 
-/** Mild curve: base at the start year, plus step each later year, capped. */
-export function mildDeathChance(year: number, startYear: number, policy: Pick<SuccessionPolicy, 'baseChance' | 'stepPerYear' | 'maxChance'>) {
-  if (year < startYear) return 0
-  const steps = year - startYear
+/** Base chance begins in year 1 and rises by the configured amount every later year. */
+export function mildDeathChance(year: number, _startYear: number, policy: Pick<SuccessionPolicy, 'baseChance' | 'stepPerYear' | 'maxChance'>) {
+  const steps = Math.max(0, Math.round(year) - 1)
   return Math.min(policy.maxChance, policy.baseChance + steps * policy.stepPerYear)
 }
 
 export function deathChanceFor(year: number, startYear: number, policy: SuccessionPolicy, traits: string[]) {
-  let chance = traits.includes('longevity') ? policy.longevityChance : mildDeathChance(year, startYear, policy)
+  // Trường thọ is intentionally a true lock: other annual escalation does not leak through.
+  if (traits.includes('longevity')) return Math.max(0, Math.min(0.95, policy.longevityChance))
+  let chance = mildDeathChance(year, startYear, policy)
   if (traits.includes('illness')) chance += policy.illnessAdd
   return Math.max(0, Math.min(0.95, chance))
 }

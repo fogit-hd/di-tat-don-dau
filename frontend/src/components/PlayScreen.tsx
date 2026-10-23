@@ -108,7 +108,7 @@ export function PlayScreen() {
   const youFinished = Boolean(snap?.you?.finished)
 
   return (
-    <main className="wrap">
+    <main className={showGame ? 'wrap game-shell' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
       {snap && status === 'lobby' && (
@@ -189,7 +189,7 @@ export function PlayScreen() {
                   <BudgetPanel
                     scene={scene}
                     step={snap.room.step}
-                    prices={snap.room.linePrices}
+                    prices={scene.linePrices ?? snap.room.linePrices}
                     busy={busy}
                     paused={snap.paused}
                     onInvest={(line) => {

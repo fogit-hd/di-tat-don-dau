@@ -15,8 +15,8 @@ const TRAITS = [
 
 const POLICY = {
   id: 'default',
-  baseChance: 0.03,
-  stepPerYear: 0.03,
+  baseChance: 0.01,
+  stepPerYear: 0.005,
   maxChance: 0.3,
   longevityChance: 0.01,
   illnessAdd: 0.1,

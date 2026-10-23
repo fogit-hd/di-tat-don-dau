@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { api, ApiError, fetchGlobalBoard } from '../api/client.ts'
-import type { GlobalRow } from '../api/types.ts'
-import { vnd } from '../lib/format.ts'
+import { api, ApiError } from '../api/client.ts'
 import { HeroArt } from './HeroArt.tsx'
 import '../landing.css'
+
+type GoogleIdentity = {
+  accounts: {
+    id: {
+      initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void
+      renderButton: (element: HTMLElement, options: Record<string, unknown>) => void
+    }
+  }
+}
 
 const STEPS = [
   {
@@ -104,6 +111,9 @@ export function StartScreen() {
   const [formula, setFormula] = useState({ divisor: 10, round: 100, min: 500 })
   const [joinOpen, setJoinOpen] = useState(false)
   const [hostOpen, setHostOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
+  const loginButton = useRef<HTMLDivElement | null>(null)
   const [joinStep, setJoinStep] = useState<'code' | 'name'>('code')
   const codeFromUrl = readCode(searchParams)
   const [joinCode, setJoinCode] = useState(codeFromUrl)
@@ -115,8 +125,6 @@ export function StartScreen() {
   const [team, setTeam] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  const [board, setBoard] = useState(false)
-  const [rows, setRows] = useState<GlobalRow[] | null>(null)
   const [server, setServer] = useState<'unknown' | 'up' | 'down'>('unknown')
 
   useEffect(() => {
@@ -137,6 +145,47 @@ export function StartScreen() {
       window.clearInterval(id)
     }
   }, [])
+
+  useEffect(() => {
+    if (!loginOpen || !loginButton.current) return
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+    if (!clientId) {
+      setError('Máy chủ frontend chưa có VITE_GOOGLE_CLIENT_ID')
+      return
+    }
+    const render = () => {
+      const google = (window as Window & { google?: GoogleIdentity }).google
+      if (!google || !loginButton.current) return
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: (response) => {
+          void api<{ token: string; user: { name: string } }>('/api/auth/google', { method: 'POST', body: { credential: response.credential } })
+            .then(({ token, user }) => {
+              localStorage.setItem('host-session', token)
+              setHostSession(token)
+              setHostName(user.name || 'Chủ phòng')
+              setLoginOpen(false)
+              setHostOpen(true)
+            })
+            .catch((err) => setError(err instanceof ApiError ? err.message : 'Không đăng nhập được Google'))
+        },
+      })
+      loginButton.current.replaceChildren()
+      google.accounts.id.renderButton(loginButton.current, { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', width: 280 })
+    }
+    const existing = document.querySelector('script[data-google-identity]')
+    if (existing) {
+      render()
+      return
+    }
+    const script = document.createElement('script')
+    script.src = 'https://accounts.google.com/gsi/client'
+    script.async = true
+    script.defer = true
+    script.dataset.googleIdentity = 'true'
+    script.onload = render
+    document.head.appendChild(script)
+  }, [loginOpen])
 
   useEffect(() => {
     const code = readCode(searchParams)
@@ -199,6 +248,7 @@ export function StartScreen() {
     try {
       const created = await api<{ code: string; hostToken: string }>('/api/rooms', {
         method: 'POST',
+        hostSession,
         body: { hostName, durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin, linePrices: prices },
       })
       localStorage.setItem(`host:${created.code}`, created.hostToken)
@@ -247,7 +297,7 @@ export function StartScreen() {
             <button type="button" className="btn s" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
               Vào chơi
             </button>
-            <button type="button" className="btn land-cta" onClick={() => { setError(''); setJoinOpen(false); setHostOpen(true) }}>
+            <button type="button" className="btn land-cta" onClick={() => { setError(''); setJoinOpen(false); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
               Tạo phòng
             </button>
           </div>
@@ -332,20 +382,6 @@ export function StartScreen() {
             Đi Tắt Đón Đầu
           </a>
           <p className="foot-copy">Trò chơi lớp học về nhà máy gia đình.</p>
-          <button
-            type="button"
-            className="btn s foot-link"
-            id="lbBtn"
-            onClick={() => {
-              setBoard(true)
-              setRows(null)
-              void fetchGlobalBoard()
-                .then(setRows)
-                .catch(() => setRows([]))
-            }}
-          >
-            Bảng xếp hạng
-          </button>
         </div>
       </footer>
       {joinOpen && (
@@ -420,6 +456,17 @@ export function StartScreen() {
           </div>
         </div>
       )}
+      {loginOpen && (
+        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="google-login-title">
+          <div className="card">
+            <h2 id="google-login-title">Đăng nhập để tạo phòng</h2>
+            <p>Chỉ chủ phòng cần đăng nhập Google. Báo cáo từng lượt chơi sẽ được lưu vào tài khoản này.</p>
+            <div ref={loginButton} className="google-login" />
+            {error && <p className="warn" role="alert">{error}</p>}
+            <button type="button" className="btn s" onClick={() => setLoginOpen(false)}>Đóng</button>
+          </div>
+        </div>
+      )}
       {hostOpen && (
         <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="host-title">
           <div className="card">
@@ -489,46 +536,6 @@ export function StartScreen() {
               </button>
             </form>
             <button type="button" className="btn s" onClick={() => setHostOpen(false)}>
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
-      {board && (
-        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="lb-title">
-          <div className="card">
-            <h2 id="lb-title">Bảng mọi phòng</h2>
-            {rows == null ? (
-              <p>
-                <span className="lb-load" /> Đang tải bảng xếp hạng…
-              </p>
-            ) : rows.length === 0 ? (
-              <p>Chưa có đội nào.</p>
-            ) : (
-              <table className="lb">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Đội</th>
-                    <th>Ngành</th>
-                    <th>Điểm</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row, index) => (
-                    <tr key={`${row.roomCode}-${row.teamName}-${index}`}>
-                      <td>{index + 1}</td>
-                      <td>{row.teamName}</td>
-                      <td>{row.theme}</td>
-                      <td>
-                        <b>{vnd(row.score)}</b>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-            <button type="button" className="btn big" onClick={() => setBoard(false)}>
               Đóng
             </button>
           </div>

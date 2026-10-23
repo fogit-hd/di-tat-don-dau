@@ -13,7 +13,7 @@ import {
   dismissPrompt,
   endRoom,
   getRoom,
-  globalBoard,
+  getSavedReport,
   advanceTeamYear,
   investLine,
   joinRoom,
@@ -37,6 +37,7 @@ import {
 import type { Line } from './game/types'
 import { startDbKeepAlive } from './db/keep-alive'
 import { loadEnv } from './load-env'
+import { requireHostUser, signInGoogle } from './auth'
 
 loadEnv()
 
@@ -96,10 +97,23 @@ app.get('/api/themes', async (_req, res, next) => {
   }
 })
 
-app.get('/api/leaderboard', async (req, res, next) => {
+function hostSession(req: express.Request) {
+  return req.header('x-host-session') || ''
+}
+
+app.post('/api/auth/google', async (req, res, next) => {
   try {
-    const theme = typeof req.query.theme === 'string' ? req.query.theme : undefined
-    res.json({ rows: await globalBoard(theme) })
+    const body = z.object({ credential: z.string().min(20) }).parse(req.body)
+    res.json(await signInGoogle(body.credential))
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/api/auth/me', async (req, res, next) => {
+  try {
+    const user = await requireHostUser(hostSession(req))
+    res.json({ user: { id: user.id, name: user.name, email: user.email, picture: user.picture } })
   } catch (error) {
     next(error)
   }
@@ -136,7 +150,8 @@ app.post('/api/rooms', async (req, res, next) => {
         debugForceDeath: z.boolean().optional(),
       })
       .parse(req.body)
-    res.json(await createRoom(body))
+    const user = await requireHostUser(hostSession(req))
+    res.json(await createRoom({ ...body, hostUserId: user.id }))
   } catch (error) {
     next(error)
   }
@@ -152,6 +167,15 @@ app.get('/api/rooms/:code', (req, res) => {
   const room = getRoom(param(req.params.code))
   if (!room) return res.status(404).json({ error: 'Không thấy phòng' })
   return res.json(lobbyView(room))
+})
+
+app.get('/api/rooms/:code/report', async (req, res, next) => {
+  try {
+    const user = await requireHostUser(hostSession(req))
+    res.json(await getSavedReport(param(req.params.code), user.id))
+  } catch (error) {
+    next(error)
+  }
 })
 
 app.patch('/api/rooms/:code', async (req, res, next) => {

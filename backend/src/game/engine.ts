@@ -118,6 +118,15 @@ export function invest(
   return { ok: true, state: next }
 }
 
+/** The server is authoritative: event discounts/surcharges are calculated here before every purchase. */
+export function investmentPrice(state: TeamState, base: number, now: number) {
+  const mul = state.effects.reduce((value, effect) => {
+    if (effect.defer || ((effect.yearsLeft ?? 0) <= 0 && effect.endsAt <= now)) return value
+    return value * (effect.investmentMul ?? 1)
+  }, 1)
+  return Math.max(1, Math.round(base * mul))
+}
+
 function effectFactors(effects: Effect[], now: number) {
   let outputMul = 1
   let priceMul = 1
@@ -317,6 +326,10 @@ export function applyPatch(
   const revenuePct = patch.revenuePct ? roll(rng, patch.revenuePct, 0) : 0
   const costPct = patch.costPct ? roll(rng, patch.costPct, 0) : 0
   const perYear = patch.cashPerYear ? roll(rng, patch.cashPerYear, 0) : 0
+  const investmentPct = patch.investmentPct ? roll(rng, patch.investmentPct, 0) : 0
+  const outputMul = scaleMul(roll(rng, patch.outputMul, 1), exposure, balance)
+  const priceMul = scaleMul(roll(rng, patch.priceMul, 1), exposure, balance)
+  const inflationMul = scaleMul(roll(rng, patch.inflationMul, 1), exposure, balance)
   const yearSpan = Math.max(0, Math.round(patch.yearSpan ?? 0))
   const duration = Math.round(roll(rng, patch.durationSec, 60))
   const shownFor = Math.max(duration, yearSpan * 180)
@@ -330,6 +343,14 @@ export function applyPatch(
   if (costPct) bits.push(`chi phí ${Math.round(costPct)}%`)
   if (assetsPct) bits.push(`tài sản ${Math.round(assetsPct)}%`)
   if (perYear) bits.push(`mỗi năm ${Math.round(perYear).toLocaleString('vi-VN')} tỷ`)
+  if (investmentPct) bits.push(`giá đầu tư ${investmentPct > 0 ? '+' : ''}${Math.round(investmentPct)}%`)
+  if (Math.abs(outputMul - 1) > 0.005) bits.push(`sản lượng ${outputMul >= 1 ? '+' : ''}${Math.round((outputMul - 1) * 100)}%`)
+  if (Math.abs(priceMul - 1) > 0.005) bits.push(`giá bán ${priceMul >= 1 ? '+' : ''}${Math.round((priceMul - 1) * 100)}%`)
+  if (Math.abs(inflationMul - 1) > 0.005) bits.push(`lạm phát ${inflationMul >= 1 ? '+' : ''}${Math.round((inflationMul - 1) * 100)}%`)
+  if (tech) bits.push(`công nghệ ${tech > 0 ? '+' : ''}${Math.round(tech)}`)
+  if (support) bits.push(`hỗ trợ ${support > 0 ? '+' : ''}${Math.round(support)}`)
+  if (pollution) bits.push(`ô nhiễm ${pollution > 0 ? '+' : ''}${Math.round(pollution)}`)
+  if (dependency) bits.push(`phụ thuộc ${dependency > 0 ? '+' : ''}${Math.round(dependency)}`)
   const effect: Effect = {
     id,
     visual: patch.visual,
@@ -338,12 +359,13 @@ export function applyPatch(
     severity: 1,
     startedAt: now,
     endsAt: now + shownFor * 1000,
-    outputMul: scaleMul(roll(rng, patch.outputMul, 1), exposure, balance),
-    priceMul: scaleMul(roll(rng, patch.priceMul, 1), exposure, balance),
-    inflationMul: scaleMul(roll(rng, patch.inflationMul, 1), exposure, balance),
+    outputMul,
+    priceMul,
+    inflationMul,
     revenueMul: 1 + revenuePct / 100,
     costMul: 1 + costPct / 100,
     cashPerYear: perYear,
+    investmentMul: 1 + investmentPct / 100,
     yearsLeft: yearSpan,
     defer: yearSpan > 0,
     bornAt: now,
@@ -376,6 +398,7 @@ export function patchFromEvent(event: EventDef, title: string, body: string): Ef
     costPct: event.costPct,
     assetsPct: event.assetsPct,
     cashPerYear: event.cashPerYear,
+    investmentPct: event.investmentPct,
     yearSpan: event.yearSpan,
     engineersAdd: event.engineersAdd,
     engineersPct: event.engineersPct,

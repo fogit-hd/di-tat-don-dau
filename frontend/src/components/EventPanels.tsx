@@ -19,12 +19,17 @@ export function EffectBadges({
   return (
     <div className="badge-row">
       {centennial && <span className="badge good">Bách niên</span>}
-      {effects.map((effect) => (
-        <span key={effect.eventId} className={`badge${effect.cashPerYear < 0 ? ' bad' : ' good'}${pulse && effect.cashPerYear < 0 ? ' pulse' : ''}`}>
-          {effect.cashPerYear > 0 ? '+' : ''}
-          {effect.cashPerYear.toLocaleString('vi-VN')} tỷ/năm, còn {effect.yearsLeft} năm
-        </span>
-      ))}
+      {effects.map((effect) => {
+        const isPriceOnly = effect.cashPerYear === 0 && Boolean(effect.investmentPct)
+        const isGood = isPriceOnly ? (effect.investmentPct ?? 0) < 0 : effect.cashPerYear >= 0
+        return (
+          <span key={effect.eventId} className={`badge${isGood ? ' good' : ' bad'}${pulse && !isGood ? ' pulse' : ''}`}>
+            {isPriceOnly
+              ? `Giá đầu tư ${effect.investmentPct! > 0 ? '+' : ''}${effect.investmentPct}%, còn ${effect.yearsLeft} năm`
+              : `${effect.cashPerYear > 0 ? '+' : ''}${effect.cashPerYear.toLocaleString('vi-VN')} tỷ/năm, còn ${effect.yearsLeft} năm`}
+          </span>
+        )
+      })}
       {traits.map((trait) => (
         <button type="button" key={trait.id} className={`badge trait${open === trait.id ? ' on' : ''}`} onClick={() => setOpen(open === trait.id ? null : trait.id)}>
           {trait.label}

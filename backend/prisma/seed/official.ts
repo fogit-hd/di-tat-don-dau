@@ -5,6 +5,7 @@ import { normalizeAnchors } from '../../src/game/anchors'
 import { balance } from './balance'
 import { authoredEffectDocument, effectPayload } from './effects'
 import { normalizeIndustryEvent } from './event-file'
+import { expandIndustryEvents } from './industry-event-expansion'
 
 type OfficialIndustry = {
   slug: string
@@ -176,9 +177,10 @@ export async function seedOfficial(prisma: PrismaClient) {
       const scenario = { industryId: industry.slug, role: industry.role, mission: body, body, active: true }
       await prisma.scenario.upsert({ where: { id }, create: { id, ...scenario }, update: scenario })
     }
-    for (const [sort, raw] of industry.events.entries()) {
-      const event = normalizeIndustryEvent(raw, sort)
-      const id = event.id ?? `${industry.slug}.e${sort + 1}`
+    const authoredEvents = industry.events.map((raw, sort) => normalizeIndustryEvent(raw, sort))
+    const expandedEvents = expandIndustryEvents(industry.name, authoredEvents)
+    for (const [sort, event] of expandedEvents.entries()) {
+      const id = event.id || `${industry.slug}.e${sort + 1}`
       const data = {
         industryId: industry.slug,
         scope: 'team',
@@ -207,7 +209,7 @@ export async function seedOfficial(prisma: PrismaClient) {
     scales: source.scales.length,
     contexts: source.contexts.length,
     nameParts: source.factoryNameParts.length,
-    events: source.industries.reduce((sum, item) => sum + item.events.length, 0),
+    events: source.industries.reduce((sum, item) => sum + item.events.length * 8, 0),
     themes:
       source.industries.length *
       source.regions.length *

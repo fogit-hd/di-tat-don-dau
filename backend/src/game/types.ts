@@ -88,6 +88,8 @@ export type Effect = {
   costMul?: number
   /** Cash added on each year this effect is settled. Already scaled to the team. */
   cashPerYear?: number
+  /** Multiplier applied to all investment prices while this event remains active. */
+  investmentMul?: number
   /** Game years still to settle. 0 means a wall-clock effect. */
   yearsLeft?: number
   icon?: string
@@ -253,6 +255,7 @@ export type EffectPatch = {
   costPct?: Range
   assetsPct?: Range
   cashPerYear?: Range
+  investmentPct?: Range
   /** How many future year settlements this patch covers. 0 settles only by the wall clock. */
   yearSpan?: number
 }
@@ -411,6 +414,7 @@ export type EventDef = {
   costPct?: Range
   assetsPct?: Range
   cashPerYear?: Range
+  investmentPct?: Range
   /** Game years the authored effect stays in force. Engine-shaped rows default to 1 when loaded. */
   yearSpan?: number
   choice?: { timeoutIndex: number; options: EventChoice[] }

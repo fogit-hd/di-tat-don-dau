@@ -20,7 +20,7 @@ export const effectSchema = z.object({
   dependency: range.optional(),
 })
 
-const AUTHORED_KEYS = ['revenuePct', 'costPct', 'assetsPct', 'cashPerYear'] as const
+const AUTHORED_KEYS = ['revenuePct', 'costPct', 'assetsPct', 'cashPerYear', 'investmentPct'] as const
 
 export type StoredEffect = z.infer<typeof effectSchema> & {
   yearSpan: number
@@ -28,6 +28,7 @@ export type StoredEffect = z.infer<typeof effectSchema> & {
   costPct?: Range
   assetsPct?: Range
   cashPerYear?: Range
+  investmentPct?: Range
 }
 
 function pair(value: number): Range {
@@ -58,7 +59,8 @@ export function readStoredEffect(raw: unknown, label: string): StoredEffect {
     const costPct = optionalNumber(row, 'costPct', label)
     const assetsPct = optionalNumber(row, 'assetsPct', label)
     const cashPerYear = optionalNumber(row, 'cashPerYear', label)
-    if (revenuePct == null && costPct == null && assetsPct == null && cashPerYear == null) {
+    const investmentPct = optionalNumber(row, 'investmentPct', label)
+    if (revenuePct == null && costPct == null && assetsPct == null && cashPerYear == null && investmentPct == null) {
       throw new Error(`Sự kiện ${label} có effect trống`)
     }
     return {
@@ -71,6 +73,7 @@ export function readStoredEffect(raw: unknown, label: string): StoredEffect {
       costPct: costPct == null ? undefined : pair(costPct),
       assetsPct: assetsPct == null ? undefined : pair(assetsPct),
       cashPerYear: cashPerYear == null ? undefined : pair(cashPerYear),
+      investmentPct: investmentPct == null ? undefined : pair(investmentPct),
     }
   }
   const parsed = effectSchema.safeParse(raw)

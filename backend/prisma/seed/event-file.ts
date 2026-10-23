@@ -9,6 +9,8 @@ export type AuthoredEffect = {
   costPct?: number
   assetsPct?: number
   cashPerYear?: number
+  /** Percent change to every investment price while this event is active. */
+  investmentPct?: number
   years: number
 }
 
@@ -105,7 +107,7 @@ function readVisualEvent(row: Record<string, unknown>, label: string): SeedVisua
   }
 }
 
-const AUTHORED_KEYS = ['revenuePct', 'costPct', 'assetsPct', 'cashPerYear'] as const
+const AUTHORED_KEYS = ['revenuePct', 'costPct', 'assetsPct', 'cashPerYear', 'investmentPct'] as const
 
 function readAuthoredEffect(raw: unknown, label: string): AuthoredEffect | undefined {
   if (raw == null) return undefined
