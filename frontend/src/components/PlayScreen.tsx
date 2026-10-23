@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
+import type { CentennialNotice, SuccessionNotice } from '../api/types.ts'
 import { useClock, useRoom } from '../realtime/useRoom.ts'
 import { beep } from '../lib/sound.ts'
-import { clock } from '../lib/format.ts'
+import { clock, vnd } from '../lib/format.ts'
 import { BudgetPanel } from './BudgetPanel.tsx'
+import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
+import { EffectBadges, EventCardList, YearTabs } from './EventPanels.tsx'
 import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
 import { StatCards } from './StatCards.tsx'
@@ -13,7 +16,6 @@ import { ThemeIntro } from './ThemeIntro.tsx'
 import { TopBar } from './TopBar.tsx'
 import { SuccessionLock } from './SuccessionLock.tsx'
 import { SuccessionReveal } from './SuccessionReveal.tsx'
-import { YearLog } from './YearLog.tsx'
 
 export function PlayScreen() {
   const { code = '' } = useParams()
@@ -24,7 +26,8 @@ export function PlayScreen() {
   const [busy, setBusy] = useState(false)
   const [muted, setMuted] = useState(() => localStorage.getItem('muted') === '1')
   const [revealDone, setRevealDone] = useState(false)
-  const { snap, succession, offline, error } = useRoom(upper, 'player', token)
+  const [centuryDone, setCenturyDone] = useState(false)
+  const { snap, succession, centennial, offline, error } = useRoom(upper, 'player', token)
   const now = useClock(snap)
 
   useEffect(() => {
@@ -82,7 +85,26 @@ export function PlayScreen() {
   const theme = snap?.you?.theme
   const status = snap?.room.status
   const showGame = scene && theme && (status === 'playing' || status === 'paused') && scene.introDone
-  const reveal = succession && succession.teamId === snap?.you?.id && !revealDone ? succession : null
+  const storedSuccession = snap?.you?.succession
+  const successionNotice: SuccessionNotice | null =
+    succession ??
+    (storedSuccession && snap?.you
+      ? {
+          teamId: snap.you.id,
+          year: storedSuccession.year,
+          causeText: storedSuccession.causeText,
+          outcome: storedSuccession.outcome,
+          assetsBefore: storedSuccession.assetsBefore,
+          assetsAfter: storedSuccession.assetsAfter,
+          finished: true,
+        }
+      : null)
+  const storedCentury = snap?.you?.centennial
+  const centuryNotice: CentennialNotice | null =
+    centennial ??
+    (storedCentury && snap?.you ? { teamId: snap.you.id, ...storedCentury, finished: true } : null)
+  const reveal = successionNotice && successionNotice.teamId === snap?.you?.id && !revealDone ? successionNotice : null
+  const century = centuryNotice && centuryNotice.teamId === snap?.you?.id && !centuryDone ? centuryNotice : null
   const youFinished = Boolean(snap?.you?.finished)
 
   return (
@@ -110,7 +132,7 @@ export function PlayScreen() {
           <ThemeIntro theme={{ ...theme, factoryName: scene.factoryName }} busy={busy} onBegin={(factoryName) => void act('intro', { factoryName })} />
         </>
       )}
-      {snap && showGame && scene && !youFinished && !reveal && (
+      {snap && showGame && scene && !youFinished && !reveal && !century && (
         <>
           <TopBar
             snap={snap}
@@ -126,35 +148,63 @@ export function PlayScreen() {
           />
           {snap.paused && <p className="banner">Chủ phòng đang tạm dừng</p>}
           {formError && <p className="warn">{formError}</p>}
-          <div className="grid">
-            <FactoryScene scene={scene} paused={snap.paused} now={now} />
-            <div className="card panel">
-              <h2>Đầu tư ngay</h2>
-              <BudgetPanel
-                scene={scene}
-                step={snap.room.step}
-                busy={busy}
-                paused={snap.paused}
-                onInvest={(line) => {
-                  beep(660, 0.06, muted)
-                  void act('invest', { line })
-                }}
-              />
-              <StatCards scene={scene} />
-              <YearLog scene={scene} />
+          <section className="status-board card">
+            <div>
+              <span>Năm</span>
+              <b>{scene.cycles}</b>
             </div>
-          </div>
-          <YearButton
-            busy={busy || snap.paused}
-            now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
-            nextYearAt={scene.nextYearAt}
-            yearLockUntil={scene.yearLockUntil}
-            yearSeconds={snap.room.cycleSeconds}
-            onPress={() => {
-              beep(520, 0.08, muted)
-              void act('year')
-            }}
-          />
+            <div className={scene.cash < 0 ? 'debt' : ''}>
+              <span>{scene.cash < 0 ? 'Nợ' : 'Tiền mặt'}</span>
+              <b>{vnd(scene.cash)}</b>
+            </div>
+            <div>
+              <span>Tài sản</span>
+              <b>{vnd(scene.value)}</b>
+            </div>
+            <div>
+              <span>Hạng</span>
+              <b>{snap.you?.rank ?? 1}</b>
+            </div>
+            <EffectBadges
+              effects={scene.activeEffects ?? []}
+              traits={scene.traits ?? []}
+              centennial={Boolean(scene.centennial)}
+              pulse={scene.pulseYear === scene.cycles && scene.cycles > 0}
+            />
+          </section>
+          <FactoryScene scene={scene} paused={snap.paused} />
+          <section className="card">
+            <h2>Sự kiện năm nay</h2>
+            <EventCardList events={(scene.eventLog ?? []).filter((event) => event.year === scene.cycles)} empty="Năm nay chưa có sự kiện." />
+          </section>
+          <section className="card actions">
+            <h2>Đầu tư và sang năm</h2>
+            <p className="meta">Bấm một hướng để đầu tư. Bấm Sang năm để sản xuất và chốt năm.</p>
+            <BudgetPanel
+              scene={scene}
+              step={snap.room.step}
+              prices={snap.room.linePrices}
+              busy={busy}
+              paused={snap.paused}
+              onInvest={(line) => {
+                beep(660, 0.06, muted)
+                void act('invest', { line })
+              }}
+            />
+            <StatCards scene={scene} />
+            <YearButton
+              busy={busy || snap.paused}
+              now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
+              nextYearAt={scene.nextYearAt}
+              yearLockUntil={scene.yearLockUntil}
+              yearSeconds={snap.room.cycleSeconds}
+              onPress={() => {
+                beep(520, 0.08, muted)
+                void act('year')
+              }}
+            />
+          </section>
+          <YearTabs events={scene.eventLog ?? []} changes={scene.yearChanges ?? []} />
         </>
       )}
       {snap && showGame && reveal && theme && (
@@ -166,7 +216,10 @@ export function PlayScreen() {
           onDone={() => setRevealDone(true)}
         />
       )}
-      {snap && showGame && youFinished && !reveal && <SuccessionLock snap={snap} />}
+      {snap && showGame && century && theme && (
+        <CentennialReveal notice={century} industryId={theme.industryId} teamName={snap.you?.teamName ?? ''} onDone={() => setCenturyDone(true)} />
+      )}
+      {snap && showGame && youFinished && !reveal && !century && <SuccessionLock snap={snap} />}
       {snap && scene?.pending && status !== 'ended' && !youFinished && !reveal && (
         <EventQuizModal
           pending={scene.pending}

@@ -5,6 +5,8 @@ import { api, ApiError } from '../api/client.ts'
 import type { Snapshot } from '../api/types.ts'
 import { clock, vnd } from '../lib/format.ts'
 import { useClock, useRoom } from '../realtime/useRoom.ts'
+import { CentennialReveal } from './CentennialReveal.tsx'
+import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
 import { Leaderboard } from './Leaderboard.tsx'
 
@@ -12,13 +14,22 @@ export function HostScreen() {
   const { code = '' } = useParams()
   const upper = code.toUpperCase()
   const [token] = useState<string | null>(() => localStorage.getItem(`host:${upper}`))
-  const { snap, offline, error } = useRoom(upper, 'host', token)
+  const { snap, centennial, offline, error } = useRoom(upper, 'host', token)
+  const [centurySeen, setCenturySeen] = useState<string | null>(null)
+  const [hideQuestion, setHideQuestion] = useState('')
   const now = useClock(snap)
   const [qr, setQr] = useState('')
   const [minutes, setMinutes] = useState(15)
   const [capital, setCapital] = useState(10000)
   const [cycle, setCycle] = useState(60)
-  const [yearMin, setYearMin] = useState(10)
+  const [yearMin, setYearMin] = useState(5)
+  const [prices, setPrices] = useState<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>({
+    eng: 1000,
+    mac: 1000,
+    sup: 1000,
+    inf: 1000,
+    grn: 1000,
+  })
   const [primed, setPrimed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState('')
@@ -26,7 +37,7 @@ export function HostScreen() {
   const [watch, setWatch] = useState<string | null>(null)
 
   useEffect(() => {
-    const url = `${window.location.origin}/play/${upper}`
+    const url = `${window.location.origin}/?code=${upper}`
     void QRCode.toDataURL(url, { margin: 1, width: 320, color: { dark: '#3b2a22', light: '#fff8ec' } }).then(setQr)
   }, [upper])
 
@@ -36,6 +47,7 @@ export function HostScreen() {
     setCapital(snap.room.startingCapital)
     setCycle(snap.room.cycleSeconds)
     setYearMin(snap.room.yearMinSeconds)
+    if (snap.room.linePrices) setPrices(snap.room.linePrices)
     setPrimed(true)
   }, [snap, primed])
 
@@ -66,6 +78,10 @@ export function HostScreen() {
 
   const joinUrl = `${window.location.origin}/play/${upper}`
   const watched = snap?.teams.find((team) => team.id === watch) ?? snap?.teams[0]
+  const centuryTeam = snap?.teams.find((team) => team.centennial)
+  const centuryNotice =
+    centennial ??
+    (centuryTeam?.centennial ? { teamId: centuryTeam.id, ...centuryTeam.centennial, finished: true as const } : null)
 
   return (
     <main className="wrap host">
@@ -96,6 +112,28 @@ export function HostScreen() {
                 <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
               </label>
             </div>
+            <div className="settings price-grid">
+              {(
+                [
+                  ['eng', 'Đào tạo'],
+                  ['mac', 'Dây chuyền'],
+                  ['sup', 'Phụ trợ'],
+                  ['inf', 'Hạ tầng'],
+                  ['grn', 'Công nghệ sạch'],
+                ] as const
+              ).map(([id, label]) => (
+                <label key={id}>
+                  Giá {label}
+                  <input
+                    type="number"
+                    min={100}
+                    max={100000}
+                    value={prices[id]}
+                    onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}
+                  />
+                </label>
+              ))}
+            </div>
             {note && <p className="warn">{note}</p>}
             <button
               type="button"
@@ -109,7 +147,7 @@ export function HostScreen() {
                     await api(`/api/rooms/${upper}`, {
                       method: 'PATCH',
                       hostToken: token,
-                      body: { durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin },
+                      body: { durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin, linePrices: prices },
                     })
                     await api(`/api/rooms/${upper}/start`, { method: 'POST', hostToken: token, body: {} })
                   } catch (err) {
@@ -167,6 +205,14 @@ export function HostScreen() {
             </div>
           </header>
           {note && <p className="warn">{note}</p>}
+          {centuryNotice && centurySeen !== `${centuryNotice.teamId}-${centuryNotice.year}` && (
+            <CentennialReveal
+              notice={centuryNotice}
+              industryId={snap.teams.find((team) => team.id === centuryNotice.teamId)?.industryId || watched?.industryId || ''}
+              teamName={snap.teams.find((team) => team.id === centuryNotice.teamId)?.teamName || 'Một đội'}
+              onDone={() => setCenturySeen(`${centuryNotice.teamId}-${centuryNotice.year}`)}
+            />
+          )}
           <div className="host-grid">
             <Leaderboard rows={snap.leaderboard} />
             <div>
@@ -174,7 +220,10 @@ export function HostScreen() {
               <div className="team-grid">
                 {snap.teams.map((team) => (
                   <button type="button" key={team.id} className={`team-card${team.id === watched?.id ? ' on' : ''}`} onClick={() => setWatch(team.id)}>
-                    <b>{team.teamName}</b>
+                    <b>
+                      {team.teamName}
+                      {team.centennial ? ' · Bách niên' : ''}
+                    </b>
                     <span>{team.themeName || 'Đang nhận ngành'}</span>
                     {team.finished ? (
                       <span>
@@ -193,6 +242,18 @@ export function HostScreen() {
           </div>
         </section>
       )}
+      {snap &&
+        watched?.scene?.pending?.kind === 'question' &&
+        hideQuestion !== watched.scene.pending.id &&
+        (snap.room.status === 'playing' || snap.room.status === 'paused') && (
+          <EventQuizModal
+            pending={watched.scene.pending}
+            busy={false}
+            readOnly
+            onAnswer={() => undefined}
+            onDismiss={() => setHideQuestion(watched.scene?.pending?.id || 'x')}
+          />
+        )}
       {snap && snap.room.status === 'ended' && <HostEnd snap={snap} />}
     </main>
   )

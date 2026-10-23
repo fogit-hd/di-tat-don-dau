@@ -22,8 +22,8 @@ export function TopBar({
     <div className="top">
       <div className="top-main">
         <div>{scene.factoryName}</div>
-        <div>
-          Vốn <b>{vnd(scene.cash)}</b>
+        <div className={scene.cash < 0 ? 'debt' : ''}>
+          {scene.cash < 0 ? 'Nợ' : 'Vốn'} <b>{vnd(scene.cash)}</b>
         </div>
         <div className="top-tools">
           <span>⏱ {clock(remaining)}</span>

@@ -191,6 +191,8 @@ export async function seedOfficial(prisma: PrismaClient) {
         effectCode: event.visual,
         severity: event.severity,
         good: event.good,
+        icon: event.icon ?? '',
+        trait: '',
         group: '',
         sort,
         active: true,

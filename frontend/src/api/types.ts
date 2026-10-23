@@ -19,6 +19,24 @@ export type Anchors = {
   skyBottom: number
 }
 
+export type LinePrices = Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>
+
+export type ActiveEffectView = { eventId: string; label: string; cashPerYear: number; yearsLeft: number }
+export type TraitView = { id: string; label: string; detail: string }
+export type EventLogView = { year: number; eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }
+export type YearCauseView = { kind: string; label: string; cash: number }
+export type YearChangeView = {
+  year: number
+  cashBefore: number
+  cashAfter: number
+  assetsBefore: number
+  assetsAfter: number
+  causes: YearCauseView[]
+}
+export type CentennialView = { year: number; bonusMultiplier: number; assetsBefore: number; assetsAfter: number }
+export type CentennialNotice = CentennialView & { teamId: string; finished: true }
+export type LongevityNotice = { teamId: string; year: number }
+
 export type EffectView = {
   id: string
   visual: string
@@ -77,6 +95,12 @@ export type SceneView = {
   effects: EffectView[]
   pending: PendingView | null
   introDone: boolean
+  eventLog?: EventLogView[]
+  yearChanges?: YearChangeView[]
+  activeEffects?: ActiveEffectView[]
+  traits?: TraitView[]
+  centennial?: CentennialView | null
+  pulseYear?: number
 }
 
 export type ThemeView = {
@@ -141,6 +165,8 @@ export type TeamRow = {
   value: number
   finished: boolean
   succession: SuccessionView | null
+  centennial?: CentennialView | null
+  traits?: TraitView[]
   ending: Ending | null
   endingTitle: string | null
   score: number | null
@@ -160,6 +186,7 @@ export type Snapshot = {
     cycleSeconds: number
     yearMinSeconds: number
     step: number
+    linePrices?: LinePrices
     endsAt: number | null
     remainingMs: number | null
     countdownEndsAt: number | null
@@ -178,6 +205,8 @@ export type Snapshot = {
     answered: number
     finished: boolean
     succession: SuccessionView | null
+    centennial?: CentennialView | null
+    traits?: TraitView[]
     theme: ThemeView | null
     scene: SceneView | null
   } | null

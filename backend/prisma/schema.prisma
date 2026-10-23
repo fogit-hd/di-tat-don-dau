@@ -171,6 +171,8 @@ model GameEvent {
   effectCode    String         @default("none")
   severity      Int            @default(1)
   good          Boolean        @default(false)
+  icon          String         @default("")
+  trait         String         @default("")
   group         String         @default("")
   timeoutChoice Int?
   sort          Int            @default(0)
@@ -278,9 +280,11 @@ model HeirOutcome {
   contextId   String?
   label       String
   detail      String
-  weight      Float
-  multiplier  Float
-  sort        Int     @default(0)
+  weight         Float
+  multiplier     Float
+  multiplierMin  Float?
+  multiplierMax  Float?
+  sort           Int     @default(0)
 }
 
 model SuccessionGauge {
@@ -301,6 +305,23 @@ model HeirHealthWeight {
   weightAdd        Float
 }
 
+model TraitCopy {
+  id     String @id
+  label  String
+  detail String
+  sort   Int    @default(0)
+}
+
+model SuccessionPolicy {
+  id              String @id
+  baseChance      Float
+  stepPerYear     Float
+  maxChance       Float
+  longevityChance Float
+  illnessAdd      Float
+  traitRules      Json
+}
+
 model Room {
   id               String   @id @default(cuid())
   code             String   @unique
@@ -310,8 +331,9 @@ model Room {
   durationSec      Int
   startingCapital  Float
   cycleSeconds     Int
-  yearMinSeconds   Int      @default(10)
+  yearMinSeconds   Int      @default(5)
   step             Float
+  linePrices       Json?
   seed             String
   meta             Json
   createdAt        DateTime @default(now())

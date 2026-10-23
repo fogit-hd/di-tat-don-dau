@@ -108,6 +108,25 @@ html {
   flex: none;
 }
 
+.land-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.landing .modal {
+  z-index: 40;
+}
+
+.landing .modal .card {
+  color: var(--ink);
+}
+
+.landing .modal .settings label {
+  color: var(--ink);
+}
+
 .landing .btn {
   background: #c7382c;
   box-shadow: 0 4px 0 #8e261e;
@@ -494,7 +513,8 @@ html {
   }
 
   .wordmark { grid-area: logo; align-self: center; }
-  .land-cta { grid-area: cta; }
+  .land-actions { grid-area: cta; }
+  .land-cta { grid-area: auto; }
   .land-nav {
     grid-area: nav;
     margin-left: 0;

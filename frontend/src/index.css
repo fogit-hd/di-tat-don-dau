@@ -249,7 +249,7 @@ input {
   html { font-size: 14px; }
   .stat svg { width: 42px; height: 42px; }
 }
-.year-dock { position: sticky; bottom: 12px; display: flex; justify-content: center; margin-top: 14px; z-index: 4; }
+.year-dock { position: static; display: flex; justify-content: center; margin-top: 14px; }
 .year-btn {
   position: relative;
   width: 132px;
@@ -320,4 +320,149 @@ input {
 .succession-lock h2 { color: var(--red); }
 @media (prefers-reduced-motion: reduce) {
   .flip-inner { transition: none; }
+  .ev-icon, .ev-icon * { animation: none; }
+  .badge.pulse { animation: none; }
+  .fireworks span { animation: none; opacity: 0.85; }
+}
+
+.status-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 12px;
+  margin: 12px 0;
+}
+.status-board > div span { display: block; color: #7a6658; font-size: 0.78rem; font-weight: 700; }
+.status-board > div b { font-size: 1.35rem; }
+.status-board .debt, .status-board .debt b, .remain.debt, .remain.debt b { color: #c7382c; }
+.status-board .badge-row { grid-column: 1 / -1; }
+.top .debt, .top .debt b { color: #ffb4a8; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: #fff;
+  border: 2px solid #ead8bf;
+  color: var(--ink);
+}
+.badge.good { border-color: #2f7d46; color: #1f5c32; }
+.badge.bad { border-color: #c7382c; color: #8e261e; }
+.badge.pulse { animation: badge-pulse 0.7s ease-in-out 3; }
+.badge.trait { cursor: pointer; font: inherit; font-weight: 700; min-height: 36px; }
+.badge.trait.on { background: #fff4d6; }
+.trait-note { flex: 1 0 100%; margin: 0; background: #fff4d6; border-radius: 10px; padding: 8px; }
+@keyframes badge-pulse { 50% { background: #ffd0c8; } }
+.event-list { display: grid; gap: 8px; }
+.event-card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  background: #fff;
+  border: 2px solid #ead8bf;
+  border-radius: 14px;
+  padding: 10px;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  width: 100%;
+}
+.event-card.good { border-color: #2f7d46; }
+.event-card.bad { border-color: #c7382c; }
+.event-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.event-copy b { font-size: 1rem; }
+.event-copy > span { color: #7a6658; font-size: 0.85rem; }
+.event-body { color: var(--ink); white-space: pre-wrap; font-weight: 500; }
+.quiet { color: #7a6658; }
+.tablist { display: flex; gap: 6px; margin-bottom: 10px; }
+.tablist button {
+  flex: 1;
+  font: inherit;
+  font-weight: 800;
+  border: 2px solid #ead8bf;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 8px;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink);
+}
+.tablist button.on { background: #5a2236; color: #fff8ec; border-color: #5a2236; }
+.year-row { background: #fff; border-radius: 12px; padding: 10px; margin-top: 8px; }
+.year-row header { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.year-row ul { list-style: none; padding: 0; margin: 8px 0 0; }
+.year-row li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid #ead8bf; }
+.down { color: #c7382c; }
+.up { color: #1f5c32; }
+.ev-icon {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: #5a2236;
+}
+.event-card.good .ev-icon { color: #1f5c32; }
+.event-card.bad .ev-icon { color: #c7382c; }
+.ev-icon .flicker, .ev-icon ellipse { fill: currentColor; }
+.ev-icon .drop { animation: ev-drop 0.9s linear infinite; }
+.ev-icon .d2 { animation-delay: 0.25s; }
+.ev-icon .d3 { animation-delay: 0.5s; }
+.ev-icon .flicker { transform-box: fill-box; transform-origin: center; animation: ev-flicker 0.45s ease-in-out infinite; }
+.ev-icon .spin { transform-origin: 16px 16px; animation: spin 6s linear infinite; }
+.ev-icon .coin { animation: ev-coin 1s ease-in-out infinite; }
+.ev-icon .rise { animation: ev-rise 1.1s ease-in-out infinite; }
+.ev-icon .fall { animation: ev-fall 1.1s ease-in-out infinite; }
+.ev-icon .drive { animation: ev-drive 1.3s ease-in-out infinite; }
+.ev-icon .bob { transform-origin: center; animation: bob 1.6s ease-in-out infinite; }
+.ev-icon .sway { transform-origin: 16px 28px; animation: ev-sway 1.8s ease-in-out infinite; }
+.ev-icon .pulse { transform-origin: 16px 16px; animation: ev-pulse 1.2s ease-in-out infinite; }
+.ev-icon .shake { animation: year-shake 0.45s linear infinite; }
+.ev-icon .blink { animation: ev-blink 1s steps(2) infinite; }
+.ev-icon .knock { transform-origin: 8px 16px; animation: ev-knock 0.8s ease-in-out infinite; }
+.ev-icon .wave { animation: ev-wave 1.4s ease-in-out infinite; }
+.ev-icon .bubble { animation: ev-drop 1.2s ease-in infinite reverse; }
+.ev-icon .bolt { fill: currentColor; animation: ev-flicker 0.7s ease-in-out infinite; }
+@keyframes ev-drop { to { transform: translateY(5px); opacity: 0.15; } }
+@keyframes ev-flicker { 50% { opacity: 0.45; transform: scale(0.92); } }
+@keyframes ev-coin { 50% { transform: translateY(-2px); } }
+@keyframes ev-rise { 50% { transform: translateY(-3px); } }
+@keyframes ev-fall { 50% { transform: translateY(3px); } }
+@keyframes ev-drive { 50% { transform: translateX(3px); } }
+@keyframes ev-sway { 50% { transform: rotate(-7deg); } }
+@keyframes ev-pulse { 50% { transform: scale(1.08); } }
+@keyframes ev-blink { 50% { opacity: 0.15; } }
+@keyframes ev-knock { 40% { transform: rotate(-12deg); } }
+@keyframes ev-wave { 50% { transform: translateX(2px); } }
+.fireworks { position: relative; height: 72px; pointer-events: none; }
+.fireworks span {
+  position: absolute;
+  left: 50%;
+  top: 36px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: fw 1.3s ease-out infinite;
+}
+.fireworks span:nth-child(1) { background: #e7a93b; --x: -90px; --y: -50px; }
+.fireworks span:nth-child(2) { background: #c7382c; --x: 80px; --y: -60px; animation-delay: 0.15s; }
+.fireworks span:nth-child(3) { background: #fff8ec; --x: -30px; --y: -80px; animation-delay: 0.3s; }
+.fireworks span:nth-child(4) { background: #2f7d46; --x: 40px; --y: -30px; animation-delay: 0.45s; }
+.fireworks span:nth-child(5) { background: #e7a93b; --x: 110px; --y: -20px; animation-delay: 0.2s; }
+@keyframes fw {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(0.3); opacity: 0; }
+}
+.price-grid { margin-top: 8px; }
+.actions { margin-top: 12px; }
+.year-tabs { margin-top: 12px; }
+@media (max-width: 800px) {
+  .status-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tablist { flex-direction: column; }
 }

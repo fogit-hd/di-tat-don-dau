@@ -19,6 +19,7 @@ export type SeedVisualEvent = {
   visual: EffectCode
   severity: 1 | 2 | 3
   good: boolean
+  icon?: string
   effect?: AuthoredEffect
 }
 
@@ -99,6 +100,7 @@ function readVisualEvent(row: Record<string, unknown>, label: string): SeedVisua
     visual: visual as EffectCode,
     severity,
     good: readGood(row, label),
+    icon: optionalText(row.icon) ?? '',
     effect: readAuthoredEffect(row.effect, label),
   }
 }

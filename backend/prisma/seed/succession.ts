@@ -70,12 +70,20 @@ const CONTEXT_HEIR: { test: RegExp; outcomeType: string; label: string; detail: 
   { test: /trọng điểm/, outcomeType: 'double', label: 'Nhân đôi', detail: 'Dự án trọng điểm làm tài sản tăng gấp đôi.', weight: 1.8, multiplier: 2 },
 ]
 
+const RANGES: Record<string, [number, number]> = {
+  bankrupt: [0, 0],
+  squander: [0.4, 0.9],
+  steady: [1, 1],
+  prosper: [1.2, 2],
+  double: [2, 3],
+}
+
 const HEIRS = [
-  { outcomeType: 'bankrupt', label: 'Phá sản', detail: 'Người thừa kế làm tan nhà máy.', weight: 1, multiplier: 0, sort: 1 },
-  { outcomeType: 'squander', label: 'Hoang phí', detail: 'Người thừa kế tiêu bớt một phần tư tài sản.', weight: 1.4, multiplier: 0.75, sort: 2 },
-  { outcomeType: 'steady', label: 'Giữ nguyên', detail: 'Người thừa kế giữ nhà máy như cũ.', weight: 2.2, multiplier: 1, sort: 3 },
-  { outcomeType: 'prosper', label: 'Khá giả', detail: 'Người thừa kế làm ăn khấm khá.', weight: 1.4, multiplier: 1.5, sort: 4 },
-  { outcomeType: 'double', label: 'Nhân đôi', detail: 'Người thừa kế nhân đôi tài sản.', weight: 0.8, multiplier: 2, sort: 5 },
+  { outcomeType: 'bankrupt', label: 'Phá sản', detail: 'Người thừa kế làm tan nhà máy. Tài sản về 0.', weight: 1, multiplier: 0, sort: 1 },
+  { outcomeType: 'squander', label: 'Phá gia chi tử', detail: 'Người thừa kế làm mất từ 10% đến 60% tài sản.', weight: 1, multiplier: 0.65, sort: 2 },
+  { outcomeType: 'steady', label: 'Giữ nguyên', detail: 'Người thừa kế giữ nhà máy như cũ.', weight: 1, multiplier: 1, sort: 3 },
+  { outcomeType: 'prosper', label: 'Phát đạt', detail: 'Người thừa kế làm tài sản tăng thêm từ 20% đến 100%.', weight: 1, multiplier: 1.6, sort: 4 },
+  { outcomeType: 'double', label: 'Gặp may', detail: 'Người thừa kế nhân tài sản từ 2 đến 3 lần.', weight: 1, multiplier: 2.5, sort: 5 },
 ]
 
 export async function seedSuccession(prisma: PrismaClient) {
@@ -126,7 +134,7 @@ export async function seedSuccession(prisma: PrismaClient) {
       industryId: industry.slug,
       contextId: null,
       text,
-      weight: 2.2,
+      weight: 1,
       sort: 10 + index,
     })
   })
@@ -165,6 +173,8 @@ export async function seedSuccession(prisma: PrismaClient) {
     detail: string
     weight: number
     multiplier: number
+    multiplierMin: number
+    multiplierMax: number
     sort: number
   }[] = HEIRS.map((row) => ({
     id: row.outcomeType,
@@ -173,8 +183,10 @@ export async function seedSuccession(prisma: PrismaClient) {
     contextId: null,
     label: row.label,
     detail: row.detail,
-    weight: row.weight,
+    weight: 1,
     multiplier: row.multiplier,
+    multiplierMin: RANGES[row.outcomeType]?.[0] ?? row.multiplier,
+    multiplierMax: RANGES[row.outcomeType]?.[1] ?? row.multiplier,
     sort: row.sort,
   }))
   source.industries.forEach((industry) => {
@@ -187,8 +199,10 @@ export async function seedSuccession(prisma: PrismaClient) {
       contextId: null,
       label: 'Khá giả',
       detail,
-      weight: 1.4,
-      multiplier: 1.5,
+      weight: 1,
+      multiplier: 1.6,
+      multiplierMin: RANGES.prosper?.[0] ?? 1.2,
+      multiplierMax: RANGES.prosper?.[1] ?? 2,
       sort: 4,
     })
   })
@@ -203,8 +217,10 @@ export async function seedSuccession(prisma: PrismaClient) {
       contextId: id,
       label: hit.label,
       detail: hit.detail,
-      weight: hit.weight,
+      weight: 1,
       multiplier: hit.multiplier,
+      multiplierMin: RANGES[hit.outcomeType]?.[0] ?? hit.multiplier,
+      multiplierMax: RANGES[hit.outcomeType]?.[1] ?? hit.multiplier,
       sort: HEIRS.find((row) => row.outcomeType === hit.outcomeType)?.sort ?? 1,
     })
   })
@@ -218,8 +234,10 @@ export async function seedSuccession(prisma: PrismaClient) {
         contextId: row.contextId,
         label: row.label,
         detail: row.detail,
-        weight: row.weight,
+        weight: 1,
         multiplier: row.multiplier,
+        multiplierMin: RANGES[row.outcomeType]?.[0] ?? row.multiplier,
+        multiplierMax: RANGES[row.outcomeType]?.[1] ?? row.multiplier,
         sort: row.sort,
       },
     })
