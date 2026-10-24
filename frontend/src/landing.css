@@ -198,7 +198,7 @@ html {
 }
 .hero-title-art {
   display: block;
-  width: min(480px, 100%);
+  width: min(445px, 100%);
   height: auto;
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .42));
 }
@@ -606,7 +606,7 @@ html {
   display: grid;
   width: 100%;
   max-width: none;
-  min-height: calc(100svh - 58px);
+  min-height: clamp(385px, 28vw, 500px);
   margin: 0;
   grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
@@ -634,8 +634,8 @@ html {
   position: relative;
   z-index: 2;
   align-self: center;
-  max-width: 570px;
-  padding: clamp(30px, 5vw, 70px) clamp(28px, 8vw, 180px);
+  max-width: 540px;
+  padding: clamp(22px, 3.7vw, 56px) clamp(28px, 7.7vw, 150px);
   padding-right: 30px;
 }
 .landing h1 {
@@ -646,8 +646,8 @@ html {
   line-height: .94;
   text-shadow: 0 5px 0 #be302a, 0 12px 28px rgba(0,0,0,.55);
 }
-.tagline { max-width: 29em; color: #fff3d8; font-size: clamp(.92rem, 1.35vw, 1.08rem); }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px; }
+.tagline { margin-top: 14px; max-width: 28em; color: #fff3d8; font-size: clamp(.78rem, 1.03vw, .94rem); line-height: 1.45; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
 .landing .hero-actions .btn { background: var(--game-coral); box-shadow: 0 5px 0 #a62c2c; min-width: 154px; }
 .hero-ghost {
   min-height: 48px;
@@ -667,28 +667,28 @@ html {
   background: var(--game-cream);
   border-top: 7px solid #fff8e9;
 }
-.how-grid { display: block; padding: 34px 0 40px; }
+.how-grid { display: block; padding: 17px 0 20px; }
 .how-grid > div { text-align: center; }
-.band .section-title { color: #25152f; font-size: clamp(2rem, 4vw, 3rem); }
+.band .section-title { color: #25152f; font-size: clamp(1.55rem, 2.55vw, 2.5rem); }
 .band .deck { margin-inline: auto; }
 .steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  margin-top: 28px;
+  margin-top: 14px;
   background: rgba(255,255,255,.45);
   border: 1px solid #f0d4a1;
   border-radius: 20px;
   overflow: hidden;
 }
 .steps::before { display: none; }
-.step { grid-template-columns: 46px minmax(0, 1fr); padding: 20px 22px; align-items: center; }
+.step { grid-template-columns: 42px minmax(0, 1fr); padding: 14px 20px; align-items: center; }
 .step + .step { border-left: 1px solid #e7cfa6; }
 .step-num { background: var(--game-coral); box-shadow: none; }
-.step h3 { font-size: 1.06rem; }
-.step p { font-size: .9rem; }
+.step h3 { font-size: .98rem; }
+.step p { font-size: .78rem; }
 
-.feat-sec { padding: 48px 0 56px; background: radial-gradient(ellipse at 50% -30%, #542060, #170c2d 68%); }
+.feat-sec { padding: 20px 0 24px; background: radial-gradient(ellipse at 50% -30%, #542060, #170c2d 68%); }
 .section-head { text-align: center; }
 .section-head .deck { margin-inline: auto; max-width: 48em; }
 .feat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
@@ -696,8 +696,8 @@ html {
   grid-column: auto;
   display: flex;
   flex-direction: column;
-  min-height: 268px;
-  padding: 16px;
+  min-height: 160px;
+  padding: 10px;
   color: #fff7e3;
   background: linear-gradient(150deg, rgba(48, 30, 81, .96), rgba(20, 15, 43, .98));
   border: 1px solid rgba(255, 226, 162, .38);
@@ -707,11 +707,13 @@ html {
 .feat h3, .feat p, .feat-top h3 { color: inherit; }
 .feat h3, .feat-top h3 { font-size: 1rem; }
 .feat p { color: #f8e8d1; font-size: .84rem; }
-.investment-card-art { width: 100%; height: 132px; object-fit: contain; margin: -6px 0 4px; }
+.investment-card-art { width: 100%; height: 76px; object-fit: contain; margin: -4px 0 2px; }
+.feat h3, .feat-top h3 { margin: 2px 0; font-size: .78rem; }
+.feat p { margin: 2px 0; font-size: .67rem; line-height: 1.25; }
 .feat-icon { color: var(--game-amber); }
 .feat-top { align-items: center; }
 
-.host-strip { padding: 42px 0; background: #f0a339 url('/assets/landing/game-world-hero-art.png') center 68% / cover no-repeat; position: relative; }
+.host-strip { padding: 28px 0; background: #f0a339 url('/assets/landing/game-world-hero-art.png') center 68% / cover no-repeat; position: relative; }
 .host-strip::before { content: ''; position: absolute; inset: 0; background: rgba(28, 11, 42, .8); }
 .host-strip-inner { position: relative; display: flex; gap: 24px; justify-content: space-between; align-items: center; }
 .host-strip h2 { margin: 0; color: #fff0ba; font-size: clamp(1.85rem, 3vw, 2.6rem); }
