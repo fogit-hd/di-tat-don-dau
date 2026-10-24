@@ -1,0 +1,142 @@
+{
+  "generator": "Built-in image_gen (no API key or new app dependency)",
+  "status": "rejected-by-user-photographic-style",
+  "productionAssetsRemoved": 19,
+  "note": "Historical provenance only. All listed production images were removed at the user's request. New hand-drawn images remain preview-only pending approval.",
+  "style": "Production thumbnail illustration for Vietnamese industry strategy board game. Warm painterly semi-realistic premium illustration; precise industry-correct machinery. Landscape 3:2, full-bleed warm golden sunlight, cream and olive-green palette. Large legible subject at 100px. No text, frame, icons, watermark or UI.",
+  "processing": "Resize to 480x320, WebP quality 88; reviewed as contact sheet and in browser.",
+  "coverage": {
+    "industriesTotal": 64,
+    "individualUpgradesRequired": 256,
+    "individualUpgradesGenerated": 12,
+    "commonCleanTechnology": 1
+  },
+  "assets": [
+    {
+      "industry": "pin-lithium",
+      "line": "mac",
+      "subject": "Mua dây chuyền sản xuất cell pin",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất pin lithium\". The specific upgrade to illustrate is \"Mua dây chuyền sản xuất cell pin\". Show the actual named machine, production line or computing equipment as the dominant subject, with correct process and material cues for this industry, not a generic factory. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, pin-lithium/mac.",
+      "path": "frontend/public/assets/industries/pin-lithium/investments/mac.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-a7172da3-70e9-40f9-b282-ed516e2978a7.png"
+    },
+    {
+      "industry": "man-hinh",
+      "line": "inf",
+      "subject": "Xây phòng sạch quy mô lớn",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất màn hình điện tử (LCD/OLED)\". The specific upgrade to illustrate is \"Xây phòng sạch quy mô lớn\". Show the actual named infrastructure, utility, testing facility, cold storage, transport or distribution upgrade as the dominant subject in this industry's context. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, man-hinh/inf.",
+      "path": "frontend/public/assets/industries/man-hinh/investments/inf.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-04050425-f749-4b22-8e09-8e05140c67cb.png"
+    },
+    {
+      "industry": "pin-lithium",
+      "line": "eng",
+      "subject": "Đào tạo kỹ sư điện hóa",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất pin lithium\". The specific upgrade to illustrate is \"Đào tạo kỹ sư điện hóa\". Show Vietnamese specialists being trained or mentored with the actual tools of this upgrade's discipline; the industry-specific training activity must be clear, not a generic business meeting. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, pin-lithium/eng.",
+      "path": "frontend/public/assets/industries/pin-lithium/investments/eng.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-dd9a2c45-3aa5-49f1-8199-e7f8057dddd3.png"
+    },
+    {
+      "industry": "man-hinh",
+      "line": "sup",
+      "subject": "Nội địa hóa kính và phim phân cực",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất màn hình điện tử (LCD/OLED)\". The specific upgrade to illustrate is \"Nội địa hóa kính và phim phân cực\". Show the named upstream material, component supplier, production ecosystem or supply-chain partnership in its real industry setting. The actual resource/component must be clearly visible, not merely a generic handshake. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, man-hinh/sup.",
+      "path": "frontend/public/assets/industries/man-hinh/investments/sup.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-17734021-0df7-4b64-8be7-0695d5dd7183.png"
+    },
+    {
+      "industry": "man-hinh",
+      "line": "mac",
+      "subject": "Mua dây chuyền OLED",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất màn hình điện tử (LCD/OLED)\". The specific upgrade to illustrate is \"Mua dây chuyền OLED\". Show the actual named machine, production line or computing equipment as the dominant subject, with correct process and material cues for this industry, not a generic factory. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, man-hinh/mac.",
+      "path": "frontend/public/assets/industries/man-hinh/investments/mac.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-41eb901c-9aab-4d23-9ac0-1d48b3445046.png"
+    },
+    {
+      "industry": "man-hinh",
+      "line": "eng",
+      "subject": "Đào tạo kỹ sư quang học",
+      "prompt": "Use case: stylized-concept. Asset: one meaningful investment-upgrade thumbnail for a Vietnamese industry strategy board game. Industry: \"Sản xuất màn hình điện tử (LCD/OLED)\". The specific upgrade to illustrate is \"Đào tạo kỹ sư quang học\". Show Vietnamese specialists being trained or mentored with the actual tools of this upgrade's discipline; the industry-specific training activity must be clear, not a generic business meeting. Warm painterly semi-realistic premium illustration, matching the existing fruit-drying / semiconductor / pharmaceutical investment art: refined natural faces and materials, realistic equipment, cream and olive-green colors with warm golden light, believable Vietnamese setting where appropriate. Wide landscape 3:2 composition, close enough for the main subject to remain readable at 100px. Full bleed illustration, no frame, no card border. No text, captions, logos, watermark, UI, diagrams or collage. Avoid unrelated industry machinery, magical objects, generic office scenes and fantastical equipment. One asset only, man-hinh/eng.",
+      "path": "frontend/public/assets/industries/man-hinh/investments/eng.webp",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-81962aec-eb7e-4924-88c2-deafbbc51597.png"
+    },
+    {
+      "industry": "trai-cay-say",
+      "line": "eng",
+      "subject": "Vietnamese woman food scientist in white lab coat and hairnet inspecting a slice of dried dragon fruit beside food testing instruments in a fruit drying factory laboratory",
+      "path": "frontend/public/assets/industries/trai-cay-say/investments/eng.webp"
+    },
+    {
+      "industry": "trai-cay-say",
+      "line": "mac",
+      "subject": "industrial freeze dryer stainless steel machine with open cylindrical chamber and racks of mango and dragon fruit slices, Vietnamese fruit processing factory",
+      "path": "frontend/public/assets/industries/trai-cay-say/investments/mac.webp"
+    },
+    {
+      "industry": "trai-cay-say",
+      "line": "sup",
+      "subject": "Vietnamese fruit farmer and factory procurement worker shaking hands in a lush dragon fruit and mango orchard, baskets of fresh fruit, linking domestic suppliers",
+      "path": "frontend/public/assets/industries/trai-cay-say/investments/sup.webp"
+    },
+    {
+      "industry": "trai-cay-say",
+      "line": "inf",
+      "subject": "modern refrigerated cold storage warehouse with insulated loading dock doors and a small refrigerated delivery truck holding fruit crates, Vietnam",
+      "path": "frontend/public/assets/industries/trai-cay-say/investments/inf.webp"
+    },
+    {
+      "industry": "chip-ban-dan",
+      "line": "eng",
+      "subject": "Vietnamese microelectronics design engineer learning with a mentor at a workstation displaying integrated circuit schematics, a silicon wafer and microscope on desk, semiconductor design laboratory",
+      "path": "frontend/public/assets/industries/chip-ban-dan/investments/eng.webp"
+    },
+    {
+      "industry": "chip-ban-dan",
+      "line": "mac",
+      "subject": "precise semiconductor photolithography fabrication machine inside an immaculate amber-lit chip cleanroom, wafer handling robot and silicon wafer, PPE technician for scale",
+      "path": "frontend/public/assets/industries/chip-ban-dan/investments/mac.webp"
+    },
+    {
+      "industry": "chip-ban-dan",
+      "line": "sup",
+      "subject": "domestic supplier cleanroom technician checking sealed ultra pure chemical canisters connected to semiconductor process piping, safe clean lab, no exposed liquids",
+      "path": "frontend/public/assets/industries/chip-ban-dan/investments/sup.webp"
+    },
+    {
+      "industry": "chip-ban-dan",
+      "line": "inf",
+      "subject": "ultrapure water treatment plant serving a semiconductor factory, banks of stainless steel filtration columns and clean piping beside a substation building in Vietnam",
+      "path": "frontend/public/assets/industries/chip-ban-dan/investments/inf.webp"
+    },
+    {
+      "industry": "duoc-pham",
+      "line": "eng",
+      "subject": "Vietnamese pharmaceutical research pharmacist wearing lab coat using a pipette beside a microscope and capped medicine sample vials in research laboratory",
+      "path": "frontend/public/assets/industries/duoc-pham/investments/eng.webp"
+    },
+    {
+      "industry": "duoc-pham",
+      "line": "mac",
+      "subject": "GMP pharmaceutical tablet production and blister packaging line in a cleanroom, stainless steel enclosed machines, PPE technician, realistic orderly equipment",
+      "path": "frontend/public/assets/industries/duoc-pham/investments/mac.webp"
+    },
+    {
+      "industry": "duoc-pham",
+      "line": "sup",
+      "subject": "Vietnamese medicinal herb cultivator and pharmaceutical raw material quality inspector examine baskets of freshly harvested medicinal plants at domestic cultivation area",
+      "path": "frontend/public/assets/industries/duoc-pham/investments/sup.webp"
+    },
+    {
+      "industry": "duoc-pham",
+      "line": "inf",
+      "subject": "pharmaceutical factory cleanroom entrance with airlock and refrigerated medicine storage racks and insulated cold storage doors, no food, clean controlled environment",
+      "path": "frontend/public/assets/industries/duoc-pham/investments/inf.webp"
+    },
+    {
+      "industry": "common",
+      "line": "grn",
+      "subject": "industrial wastewater treatment and resource recycling equipment surrounded by healthy green vegetation beside a Vietnamese factory, clear water settling tanks, sustainability upgrade, not a magic forest",
+      "path": "frontend/public/assets/investments/clean-production.webp"
+    }
+  ]
+}

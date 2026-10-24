@@ -1,5 +1,6 @@
 import type { SceneView, Snapshot } from '../api/types.ts'
 import { clock, vnd } from '../lib/format.ts'
+import { EventIcon } from './EventIcon.tsx'
 
 export function TopBar({
   snap,
@@ -21,15 +22,19 @@ export function TopBar({
   return (
     <div className="top">
       <div className="top-main">
-        <div>{scene.factoryName}</div>
-        <div className={scene.cash < 0 ? 'debt' : ''}>
-          {scene.cash < 0 ? 'Nợ' : 'Vốn'} <b>{vnd(scene.cash)}</b>
+        <details className="company-name">
+          <summary title={`${snap.you?.teamName ?? ''} · ${scene.factoryName}`}><span className="company-crest"><EventIcon name={scene.industryId === 'trai-cay-say' ? 'leaf' : scene.industryId === 'chip-ban-dan' ? 'chip' : scene.industryId === 'duoc-pham' ? 'flask' : 'factory'} /></span><span className="company-title">{scene.factoryName}</span></summary>
+          <div className="company-full"><b>{snap.you?.teamName}</b><span>{scene.factoryName}</span></div>
+        </details>
+        <div className={`hud-value${scene.cash < 0 ? ' debt' : ''}`}>
+          <small>{scene.cash < 0 ? 'Nợ' : 'Tiền mặt'}</small><b>{vnd(scene.cash)}</b>
         </div>
+        <div className="hud-value"><small>Tài sản</small><b>{vnd(scene.value)}</b></div>
         <div className="top-tools">
+          <span className="hud-year">Năm {scene.cycles}</span>
           {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span>⏱ {clock(remaining)}</span>}
           <span className={income >= 0 ? 'up' : 'down'}>
-            {income >= 0 ? '+' : ''}
-            Năm {scene.cycles} · {Math.round(income).toLocaleString('vi-VN')} tỷ/năm
+            {income >= 0 ? '+' : ''}{Math.round(income).toLocaleString('vi-VN')} tỷ/năm
           </span>
           <span className="rank">Hạng {rank}</span>
           <button type="button" className="btn s" onClick={onMute} aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}>

@@ -1,0 +1,10 @@
+{
+  "required": 256,
+  "industries": 64,
+  "present": 256,
+  "missing": [],
+  "invalid": [],
+  "duplicates": [],
+  "totalBytes": 18275430,
+  "sharedCleanTechnology": true
+}

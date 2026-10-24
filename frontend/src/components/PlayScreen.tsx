@@ -8,13 +8,14 @@ import { clock, vnd } from '../lib/format.ts'
 import { BudgetPanel } from './BudgetPanel.tsx'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
-import { EffectBadges, EventCardList, GameTabs } from './EventPanels.tsx'
+import { EffectBadges, EventCardList, GameTabs, OngoingEvents } from './EventPanels.tsx'
 import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
 import { GovernanceRiskCard } from './GovernanceRiskCard.tsx'
 import { StatCards } from './StatCards.tsx'
 import { ThemeIntro } from './ThemeIntro.tsx'
 import { TopBar } from './TopBar.tsx'
+import './gameplay.css'
 
 export function PlayScreen() {
   const { code = '' } = useParams()
@@ -92,7 +93,7 @@ export function PlayScreen() {
   const youFinished = Boolean(snap?.you?.finished)
 
   return (
-    <main className={showGame ? 'wrap game-shell' : 'wrap'}>
+    <main className={showGame ? 'wrap game-shell gameplay' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
       {snap && status === 'lobby' && (
@@ -132,31 +133,6 @@ export function PlayScreen() {
           />
           {snap.paused && <p className="banner">Chủ phòng đang tạm dừng</p>}
           {formError && <p className="warn">{formError}</p>}
-          <section className="status-board card">
-            <div>
-              <span>Năm</span>
-              <b>{scene.cycles}</b>
-            </div>
-            <div className={scene.cash < 0 ? 'debt' : ''}>
-              <span>{scene.cash < 0 ? 'Nợ' : 'Tiền mặt'}</span>
-              <b>{vnd(scene.cash)}</b>
-            </div>
-            <div>
-              <span>Tài sản</span>
-              <b>{vnd(scene.value)}</b>
-            </div>
-            <div>
-              <span>Hạng</span>
-              <b>{snap.you?.rank ?? 1}</b>
-            </div>
-            <EffectBadges
-              effects={scene.activeEffects ?? []}
-              traits={scene.traits ?? []}
-              centennial={Boolean(scene.centennial)}
-              pulse={scene.pulseYear === scene.cycles && scene.cycles > 0}
-            />
-            <GovernanceRiskCard scene={scene} />
-          </section>
           <section className="game-content">
             <div className="game-stage">
               <FactoryScene scene={scene} paused={snap.paused} />
@@ -164,53 +140,56 @@ export function PlayScreen() {
                 <h2>Sự kiện năm nay</h2>
                 <EventCardList events={(scene.eventLog ?? []).filter((event) => event.year === scene.cycles)} empty="Năm nay chưa có sự kiện." />
               </section>
+              <OngoingEvents effects={scene.activeEffects ?? []} timed={scene.effects} events={scene.eventLog ?? []} now={youFinished ? snap.serverNow : now} />
             </div>
-            <GameTabs
-              events={scene.eventLog ?? []}
-              changes={scene.yearChanges ?? []}
-              investment={
-                <>
-                  {youFinished ? (
-                    <p className="finish-note">Lượt chơi của đội đã được chốt. Xem lịch sử sự kiện ở các tab bên trên trước khi kết thúc.</p>
-                  ) : (
-                    <>
-                      <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
-                      <BudgetPanel
-                        scene={scene}
-                        step={snap.room.step}
-                        prices={scene.linePrices ?? snap.room.linePrices}
-                        busy={busy}
-                        paused={snap.paused}
-                        onInvest={(line) => {
-                          beep(660, 0.06, muted)
-                          void act('invest', { line })
-                        }}
-                        onRestart={() => {
-                          beep(430, 0.08, muted)
-                          void act('restart')
-                        }}
-                      />
-                    </>
-                  )}
-                  <StatCards scene={scene} />
-                  {(youFinished || scene.cash > 0) && (
-                    <YearButton
-                      finished={youFinished}
-                      busy={busy || snap.paused}
-                      now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
-                      nextYearAt={scene.nextYearAt}
-                      yearLockUntil={scene.yearLockUntil}
-                      yearSeconds={snap.room.cycleSeconds}
-                      onPress={() => {
-                        beep(520, 0.08, muted)
-                        void act('year')
-                      }}
-                      onFinish={() => setFinishedSummary(true)}
-                    />
-                  )}
-                </>
-              }
+            <div className="game-workspace">
+              <GameTabs
+                enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}
+                risk={<GovernanceRiskCard scene={scene} />}
+                riskIncreasing={(scene.nextDeathChance ?? 0) > (scene.deathChance ?? 0) || (scene.nextSuccessionChance ?? 0) > (scene.successionChance ?? 0)}
+                events={scene.eventLog ?? []}
+                changes={scene.yearChanges ?? []}
+                investment={
+                  <>
+                    {youFinished ? (
+                      <p className="finish-note">Lượt chơi của đội đã được chốt. Xem lịch sử sự kiện ở các tab bên trên trước khi kết thúc.</p>
+                    ) : (
+                      <>
+                        <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
+                        <BudgetPanel
+                          scene={scene}
+                          step={snap.room.step}
+                          prices={scene.linePrices ?? snap.room.linePrices}
+                          busy={busy}
+                          paused={snap.paused}
+                          onInvest={(line) => {
+                            beep(660, 0.06, muted)
+                            void act('invest', { line })
+                          }}
+                          onRestart={() => {
+                            beep(430, 0.08, muted)
+                            void act('restart')
+                          }}
+                        />
+                      </>
+                    )}
+                  </>
+                }
+              />
+            <YearButton
+              finished={youFinished}
+              busy={busy || snap.paused || scene.cash <= 0}
+              now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
+              nextYearAt={scene.nextYearAt}
+              yearLockUntil={scene.yearLockUntil}
+              yearSeconds={snap.room.cycleSeconds}
+              onPress={() => {
+                beep(520, 0.08, muted)
+                void act('year')
+              }}
+              onFinish={() => setFinishedSummary(true)}
             />
+            </div>
           </section>
         </>
       )}

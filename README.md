@@ -159,6 +159,17 @@ docker compose up --build -d
 
 4. Máy chiếu và điện thoại mở `http://IP-CÔNG-KHAI:4517`. Lần đầu backend tự migrate và nạp seed vì compose đặt `SEED_ON_BOOT=1`.
 
+## JavaScript production
+
+`npm run build:web` tự nén và làm rối vừa phải mã ứng dụng frontend bằng
+`javascript-obfuscator` (chỉ là devDependency khi build). Thư viện bên thứ ba
+được tách vào vendor chunk và chỉ nén; `npm run dev` giữ mã dễ debug.
+Bản build không xuất source map. Không bật chống DevTools, chèn mã thừa,
+đổi tên property hoặc biến đổi luồng chạy nặng.
+
+Làm rối không giấu được ảnh, địa chỉ API hoặc dữ liệu gửi tới trình duyệt.
+Thông tin bí mật và kiểm tra quyền/thao tác vẫn phải nằm ở backend.
+
 ## Cấu trúc
 
 ```

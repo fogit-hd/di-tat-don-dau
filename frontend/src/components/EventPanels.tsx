@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react'
-import type { ActiveEffectView, EventLogView, TraitView, YearChangeView } from '../api/types.ts'
+import { useId, useRef, useEffect, useState, type ReactNode } from 'react'
+import type { ActiveEffectView, EffectView, EventLogView, TraitView, YearChangeView } from '../api/types.ts'
 import { vnd } from '../lib/format.ts'
 import { EventIcon } from './EventIcon.tsx'
 
@@ -117,35 +117,37 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
 }
 
 /** One predictable place for the player's next decision and the evidence behind it. */
-export function GameTabs({ investment, events, changes }: { investment: ReactNode; events: EventLogView[]; changes: YearChangeView[] }) {
-  const [tab, setTab] = useState<'investment' | 'events' | 'years'>('investment')
+export function GameTabs({ investment, enterprise, risk, riskIncreasing, events, changes }: { investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; changes: YearChangeView[] }) {
+  const [tab, setTab] = useState('investment')
+  const uid = useId()
+  const tabs = [['investment', 'Đầu tư'], ['enterprise', 'Doanh nghiệp'], ['risk', 'Rủi ro'], ['events', 'Lịch sử sự kiện'], ['years', 'Thay đổi từng năm']]
   return (
     <section className="card game-tabs" aria-label="Điều khiển trận chơi">
       <div className="game-tabs-heading">
         <div>
           <h2>Điều hành nhà máy</h2>
-          <p>Đầu tư trước, rồi xem lại sự kiện và thay đổi của từng năm.</p>
         </div>
       </div>
       <div className="tablist game-tablist" role="tablist" aria-label="Điều hành nhà máy">
-        <button type="button" role="tab" aria-selected={tab === 'investment'} className={tab === 'investment' ? 'on' : ''} onClick={() => setTab('investment')}>
-          Đầu tư
-        </button>
-        <button type="button" role="tab" aria-selected={tab === 'events'} className={tab === 'events' ? 'on' : ''} onClick={() => setTab('events')}>
-          Lịch sử sự kiện
-        </button>
-        <button type="button" role="tab" aria-selected={tab === 'years'} className={tab === 'years' ? 'on' : ''} onClick={() => setTab('years')}>
-          Thay đổi từng năm
-        </button>
+        {tabs.map(([id, label], index) => <button key={id} id={`${uid}-${id}`} aria-controls={`${uid}-panel`} type="button" role="tab" aria-selected={tab === id} tabIndex={tab === id ? 0 : -1} className={tab === id ? 'on' : ''} onClick={() => setTab(id)} onKeyDown={(event) => {
+          const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : -1
+          if (next < 0) return
+          event.preventDefault()
+          setTab(tabs[next][0])
+          document.getElementById(`${uid}-${tabs[next][0]}`)?.focus()
+        }}>{label}{id === 'risk' && riskIncreasing && <span className="risk-dot" aria-label="Rủi ro kỳ sau tăng" />}</button>)}
       </div>
-      {tab === 'investment' && <div role="tabpanel">{investment}</div>}
+      <div role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-${tab}`} className="game-panel" tabIndex={0}>
+      {tab === 'investment' && investment}
+      {tab === 'enterprise' && enterprise}
+      {tab === 'risk' && risk}
       {tab === 'events' && (
-        <div role="tabpanel" className="tab-panel">
+        <div className="tab-panel">
           <EventCardList events={events} empty="Chưa có sự kiện nào." />
         </div>
       )}
       {tab === 'years' && (
-        <div role="tabpanel" className="year-ledger tab-panel">
+        <div className="year-ledger tab-panel">
           {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
           {changes.map((row) => (
             <article key={row.year} className="year-row">
@@ -161,8 +163,56 @@ export function GameTabs({ investment, events, changes }: { investment: ReactNod
           ))}
         </div>
       )}
+      </div>
     </section>
   )
+}
+
+export function OngoingEvents({ effects, timed, events, now }: { effects: ActiveEffectView[]; timed: EffectView[]; events: EventLogView[]; now: number }) {
+  const rail = useRef<HTMLDivElement>(null)
+  const [overflow, setOverflow] = useState(false)
+  const [expanded, setExpanded] = useState<{ label: string; detail: string; impact: string; remaining: string; bad: boolean } | null>(null)
+  const detail = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    if (expanded && !detail.current?.open) detail.current?.showModal()
+  }, [expanded])
+  useEffect(() => {
+    const node = rail.current
+    if (!node) return
+    const measure = () => setOverflow(node.scrollWidth > node.clientWidth + 2)
+    const observer = new ResizeObserver(measure)
+    observer.observe(node)
+    measure()
+    return () => observer.disconnect()
+  }, [effects, timed])
+  const entries = [
+    ...effects.map((effect, index) => {
+      const event = events.find((item) => item.eventId === effect.eventId || item.title === effect.label)
+      const bad = (effect.investmentPct ?? 0) > 0 || effect.cashPerYear < 0
+      return { key: `${effect.eventId}-${index}`, label: effect.label, icon: event?.icon ?? (effect.investmentPct ? 'truck' : bad ? 'coinsDown' : 'coinsUp'), detail: timed.find((item) => item.title === effect.label)?.body ?? event?.body ?? effect.label, bad, impact: [effect.investmentPct ? `Giá đầu tư ${effect.investmentPct > 0 ? '+' : ''}${effect.investmentPct}%` : '', effect.cashPerYear ? `${effect.cashPerYear > 0 ? '+' : ''}${effect.cashPerYear.toLocaleString('vi-VN')} tỷ/năm` : ''].filter(Boolean).join(' · '), remaining: `Còn ${effect.yearsLeft} năm` }
+    }),
+    ...timed.filter((item) => now > 0 && item.endsAt > now && !effects.some((effect) => effect.label === item.title || effect.eventId === item.id)).map((item) => {
+      const event = events.find((event) => event.title === item.title)
+      return { key: item.id, label: item.title, icon: event?.icon ?? item.visual, detail: item.body, bad: event ? !event.good : false, impact: event?.effect ?? item.body, remaining: `Còn ${Math.ceil((item.endsAt - now) / 1000)} giây` }
+    }),
+  ]
+  return <section className="ongoing-events" aria-label="Sự kiện đang diễn ra">
+    <h2>Sự kiện đang diễn ra <span className="event-count">{entries.length}</span></h2>
+    <div className="ongoing-rail" ref={rail} role="region" aria-label="Các tác động còn hiệu lực" tabIndex={0}>
+      {!entries.length && <p className="quiet">Chưa có sự kiện nào đang diễn ra.</p>}
+      {entries.map((effect) => <button type="button" className="ongoing-card" key={effect.key} aria-haspopup="dialog" onClick={() => setExpanded(effect)}>
+        <EventIcon name={effect.icon} />
+        <b>{effect.label}</b>
+        <span className={effect.bad ? 'down' : 'up'}>{effect.impact}</span>
+        <small>{effect.remaining}</small>
+      </button>)}
+    </div>
+    {overflow && <div className="rail-controls"><button type="button" aria-label="Sự kiện trước" onClick={() => rail.current?.scrollBy({ left: -240, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7" /></svg></button><button type="button" aria-label="Sự kiện tiếp" onClick={() => rail.current?.scrollBy({ left: 240, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5 7 7-7 7" /></svg></button></div>}
+    <dialog ref={detail} className="event-detail-dialog" aria-label="Chi tiết sự kiện đang diễn ra" onClose={() => setExpanded(null)}>
+      {expanded && <div><h2>{expanded.label}</h2><p>{expanded.detail}</p><p className={expanded.bad ? 'down' : 'up'}>{expanded.impact}</p><small>{expanded.remaining}</small></div>}
+      <button type="button" className="btn" onClick={() => detail.current?.close()}>Đóng</button>
+    </dialog>
+  </section>
 }
 
 function LedgerCause({ cause }: { cause: YearChangeView['causes'][number] }) {

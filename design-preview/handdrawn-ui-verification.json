@@ -1,0 +1,140 @@
+{
+  "results": [
+    {
+      "width": 1600,
+      "height": 1000,
+      "scrollX": 1600,
+      "scrollY": 1000,
+      "dock": {
+        "top": 906,
+        "bottom": 986
+      },
+      "inPanel": false,
+      "panelHeight": 616,
+      "choicesWithin": true
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "scrollX": 1440,
+      "scrollY": 900,
+      "dock": {
+        "top": 806,
+        "bottom": 886
+      },
+      "inPanel": false,
+      "panelHeight": 516,
+      "choicesWithin": true
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "scrollX": 1280,
+      "scrollY": 720,
+      "dock": {
+        "top": 638,
+        "bottom": 710
+      },
+      "inPanel": false,
+      "panelHeight": 381,
+      "choicesWithin": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "scrollX": 1920,
+      "scrollY": 1080,
+      "dock": {
+        "top": 986,
+        "bottom": 1066
+      },
+      "inPanel": false,
+      "panelHeight": 696,
+      "choicesWithin": true
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "scrollX": 1024,
+      "scrollY": 768,
+      "dock": {
+        "top": 674,
+        "bottom": 754
+      },
+      "inPanel": false,
+      "panelHeight": 337,
+      "choicesWithin": false
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "scrollX": 768,
+      "scrollY": 1024,
+      "dock": {
+        "top": 930,
+        "bottom": 1010
+      },
+      "inPanel": false,
+      "panelHeight": 593,
+      "choicesWithin": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollX": 390,
+      "scrollY": 844,
+      "dock": {
+        "top": 764,
+        "bottom": 836
+      },
+      "inPanel": false,
+      "panelHeight": 249,
+      "choicesWithin": false
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "scrollX": 360,
+      "scrollY": 640,
+      "dock": {
+        "top": 568,
+        "bottom": 632
+      },
+      "inPanel": false,
+      "panelHeight": 133,
+      "choicesWithin": false
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "scrollX": 844,
+      "scrollY": 390,
+      "dock": {
+        "top": 320,
+        "bottom": 384
+      },
+      "inPanel": false,
+      "panelHeight": 83,
+      "choicesWithin": false
+    }
+  ],
+  "requests": [
+    {
+      "url": "/api/rooms/QA1234/invest",
+      "body": {
+        "line": "eng"
+      }
+    },
+    {
+      "url": "/api/rooms/QA1234/year",
+      "body": {}
+    },
+    {
+      "url": "/api/rooms/QA1234/restart",
+      "body": {}
+    }
+  ],
+  "industriesChecked": 64,
+  "errors": [],
+  "passed": true
+}

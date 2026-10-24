@@ -1,7 +1,7 @@
 import type { SceneView } from '../api/types.ts'
 
 function percent(value: number) {
-  return `${(Math.max(0, value) * 100).toLocaleString('vi-VN', { maximumFractionDigits: 1 })}%`
+  return `${(Math.max(0, value) * 100).toLocaleString('vi-VN', { maximumFractionDigits: 3 })}%`
 }
 
 export function GovernanceRiskCard({ scene }: { scene: SceneView }) {
