@@ -9,3 +9,5 @@ backups/
 frontend/dist/
 backend/dist/
 coverage/
+# Temporary files and directories at any depth
+.tmp*

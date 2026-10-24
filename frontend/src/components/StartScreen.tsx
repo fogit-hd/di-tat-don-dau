@@ -279,12 +279,7 @@ export function StartScreen() {
               <h1 id="hero-title" className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</h1>
               <img className="hero-title-art" src="/assets/landing/hero-title.png" alt="Xây doanh nghiệp. Chốt vận mệnh." />
               <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="join-strip" aria-labelledby="join-title">
-          <div className="land-wrap join-strip-inner">
+          <div className="hero-join" aria-labelledby="join-title">
             <div className="join-intro">
               <span className="join-icon" aria-hidden="true">↳</span>
               <div>
@@ -324,6 +319,8 @@ export function StartScreen() {
               </form>
             )}
             {error && <p className="join-error" role="alert">{error}</p>}
+          </div>
+            </div>
           </div>
         </section>
 

@@ -1,4 +1,4 @@
-<svg width="1600" height="110" viewBox="0 0 1600 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1600" height="110" viewBox="0 0 1600 110" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
  <defs><filter id="s" x="-4%" y="-40%" width="108%" height="180%"><feGaussianBlur stdDeviation="3"/></filter></defs>
  <path d="M0 43C120 54 177 23 294 39C410 55 500 27 605 43C717 59 817 25 919 42C1024 59 1128 24 1242 40C1354 56 1454 26 1600 44V110H0V43Z" fill="#3d173d"/>
  <path d="M0 48C117 60 182 29 291 45C403 61 499 32 606 48C718 64 815 30 921 47C1024 64 1130 29 1244 45C1357 61 1457 31 1600 49" stroke="#54214e" stroke-width="18" stroke-linecap="round" filter="url(#s)" opacity=".75"/>
