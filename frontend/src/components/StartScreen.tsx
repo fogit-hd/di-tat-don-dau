@@ -249,7 +249,7 @@ export function StartScreen() {
       <header className="land-bar" id="dau-trang">
         <div className="land-wrap bar-inner">
           <a className="wordmark" href="#dau-trang">
-            <img src="/assets/landing/game-logo.png" alt="Đi Tắt Đón Đầu" />
+            <img src="/assets/landing/game-logo-header.png" alt="Đi Tắt Đón Đầu" />
           </a>
           <nav className="land-nav" aria-label="Mục lục">
             <a href="#cach-choi">Cách chơi</a>
@@ -274,7 +274,7 @@ export function StartScreen() {
       <main>
         <section className="hero-sec" aria-labelledby="hero-title">
           <div className="land-wrap hero-grid">
-            <img className="hero-game-art" src="/assets/landing/game-world-hero-art.png" alt="Thành phố công nghiệp, nhà máy và các biến cố trong trò chơi" />
+            <img className="hero-game-art" src="/assets/landing/game-world-fullscreen.png" alt="Thành phố công nghiệp, nhà máy, nông nghiệp và cảng biển trong trò chơi" />
             <div className="hero-copy">
               <h1 id="hero-title" className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</h1>
               <img className="hero-title-art" src="/assets/landing/hero-title.png" alt="Xây doanh nghiệp. Chốt vận mệnh." />
@@ -350,9 +350,6 @@ export function StartScreen() {
       </main>
       <footer className="land-foot">
         <div className="land-wrap foot-inner">
-          <a className="wordmark" href="#dau-trang">
-            <img src="/assets/landing/game-logo.png" alt="Đi Tắt Đón Đầu" />
-          </a>
           <p className="foot-copy">Trò chơi lớp học về nhà máy gia đình.</p>
         </div>
       </footer>
