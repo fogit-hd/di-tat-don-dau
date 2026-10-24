@@ -1522,7 +1522,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       ending: team.state?.centennial ? 'centennial' : (team.state?.succession?.outcome ?? team.ending),
       endingTitle: outcomeTitle(team),
       centennial: team.state?.centennial ?? null,
-      traits: traitViews(team.state?.traits ?? []),
+      traits: traitViews(team.state?.traits ?? [], team.state?.eventLog),
       score: team.score,
       scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team, room) : null,
     })),
@@ -1537,7 +1537,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
           finished: Boolean(self.state?.finished),
           succession: self.state?.succession ?? null,
           centennial: self.state?.centennial ?? null,
-          traits: traitViews(self.state?.traits ?? []),
+          traits: traitViews(self.state?.traits ?? [], self.state?.eventLog),
           theme: self.theme
             ? {
                 id: self.theme.id,
@@ -1610,6 +1610,15 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
       severity: effect.severity || 1,
       startedAt: effect.startedAt,
       endsAt: effect.endsAt,
+      eventId: effect.eventId,
+      yearsLeft: effect.yearsLeft ?? 0,
+      deferred: Boolean(effect.defer),
+      summary: effect.summary,
+      icon: effect.icon,
+      good: effect.good,
+      economic: effect.outputMul !== 1 || effect.priceMul !== 1 || effect.inflationMul !== 1 ||
+        (effect.revenueMul ?? 1) !== 1 || (effect.costMul ?? 1) !== 1 ||
+        (effect.cashPerYear ?? 0) !== 0 || (effect.investmentMul ?? 1) !== 1,
     })),
     pending: publicPending(state.pending),
     introDone: state.introDone,
@@ -1627,7 +1636,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
         yearsLeft: effect.yearsLeft || 0,
         investmentPct: Math.round(((effect.investmentMul ?? 1) - 1) * 100),
       })),
-    traits: traitViews(state.traits ?? []),
+    traits: traitViews(state.traits ?? [], state.eventLog),
     centennial: state.centennial ?? null,
     pulseYear: state.pulseYear ?? 0,
     deathChance: mortalityChanceFor(nextYear, riskStartsAt, rules().successionPolicy, state.traits ?? []),
@@ -1639,10 +1648,15 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
   }
 }
 
-function traitViews(ids: string[]) {
+function traitViews(ids: string[], events: TeamState['eventLog'] = []) {
   return ids.map((id) => {
     const copy = rules().traitCopy.find((row) => row.id === id)
-    return { id, label: copy?.label || id, detail: copy?.detail || '' }
+    const source = events.find((entry) => rules().familyEvents.some((event) => event.id === entry.eventId && event.trait === id))
+    return {
+      id, label: copy?.label || id, detail: copy?.detail || '',
+      acquiredYear: source?.year, eventId: source?.eventId,
+      icon: source?.icon, good: source?.good,
+    }
   })
 }
 

@@ -1,0 +1,232 @@
+/* Approved responsive canvas: compact HUD, bounded event preview and one content scroller. */
+.gameplay.game-shell { padding:10px; gap:8px; }
+.gameplay.game-shell .top { min-height:0; padding:8px 12px; }
+.gameplay.game-shell .game-content { grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr); gap:10px; }
+.gameplay.game-shell .game-stage { gap:8px; overflow:visible; }
+.gameplay.game-shell .scene { flex:none; height:auto; min-height:0; aspect-ratio:16/10; max-height:240px; padding:4px; }
+.gameplay.game-shell .game-workspace { gap:0; }
+.gameplay.game-shell .game-tabs { padding:5px; gap:5px; }
+.gameplay.game-shell .game-tabs-heading { display:flex; padding:3px 8px 6px; }
+.gameplay.game-shell .game-tabs-heading h2 { font-size:20px; }
+.gameplay.game-shell .game-tablist { grid-template-columns:repeat(6,minmax(0,1fr)); gap:3px; overflow:visible; }
+.gameplay.game-shell .game-tablist button,
+.gameplay.game-shell .game-tablist button:nth-child(n+4) {
+  min-height:36px; padding:5px 3px; font-size:13px; line-height:1.2; white-space:nowrap;
+}
+.gameplay.game-shell .risk-dot { width:5px; height:5px; margin-left:3px; }
+.gameplay.game-shell .game-panel { padding:7px; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.gameplay.game-shell .game-panel > .meta { font-size:11px; margin:0 0 6px; }
+.gameplay.game-shell .game-panel .tab-panel,
+.gameplay.game-shell .game-panel .event-list,
+.gameplay.game-shell .game-panel .year-ledger { max-height:none; height:auto; overflow:visible; }
+.gameplay.game-shell .game-panel .event-card { flex:none; }
+.gameplay.game-shell .choices { flex:0 0 auto; gap:6px; padding:0; background:transparent; }
+.gameplay.game-shell .choice.btn { display:grid; grid-template-columns:56px minmax(0,1fr) 80px; gap:8px; min-height:78px; padding:6px; }
+.gameplay.game-shell .upgrade-art { width:56px; height:52px; grid-row:auto; }
+.gameplay.game-shell .choice-copy { gap:3px; }
+.gameplay.game-shell .choice-label { font:700 15px/1.2 Cambria,Georgia,serif; }
+.gameplay.game-shell .choice-benefit { font-size:12px; line-height:1.35; }
+.gameplay.game-shell .choice-current { font-size:11px; line-height:1.3; }
+.gameplay.game-shell .choice-price { display:block; grid-column:auto; justify-self:stretch; margin:0; padding:6px 4px; font-size:11px; text-align:center; background:linear-gradient(#f79332,#c83c14); color:#fff5db; border:1px solid #e9a34f; box-shadow:inset 0 1px #ffdaa0,0 2px #8b2b11; }
+.gameplay.game-shell .choice-price b { display:block; margin-top:3px; font-size:17px; }
+.gameplay.game-shell .year-dock { min-height:64px; padding:6px; }
+.gameplay.game-shell .year-btn,.gameplay.game-shell .year-finish.btn { height:50px; min-height:50px; font-size:26px; }
+.gameplay.game-shell .year-btn > span small { top:16px; right:12px; font-size:15px; }
+.gameplay.game-shell .year-finish small { font-size:12px; }
+.gameplay.game-shell .trait-status-strip { flex:none; height:30px; padding:2px 4px; border-radius:7px; }
+.gameplay.game-shell .trait-status-item { padding:2px 6px; gap:5px; font-size:12px; }
+.gameplay.game-shell .trait-status-item .ev-icon { width:18px; height:18px; }
+.gameplay.game-shell .trait-status-item small { font-size:11px; }
+.gameplay.game-shell .trait-status-strip { order:0; }
+.gameplay.game-shell .scene { order:1; }
+.gameplay.game-shell .event-overview { order:2; }
+
+.gameplay.game-shell .event-overview {
+  flex:none; min-width:0; border:2px solid #d7a043; border-radius:10px; overflow:hidden;
+  background:linear-gradient(120deg,#5e1d2a,#310b19); padding:4px;
+  box-shadow:inset 0 0 0 1px #fff0a1,0 3px 0 #210813;
+}
+.gameplay.game-shell .event-overview-heading { display:grid; grid-template-columns:auto 1fr 1.2fr; align-items:center; gap:4px; padding:0 2px 4px; }
+.gameplay.game-shell .event-overview-heading > h2 { font-size:18px; color:#ffedba; }
+.gameplay.game-shell .event-overview-heading button,.gameplay.game-shell .event-group-controls button {
+  min-width:0; min-height:36px; padding:4px; border:1px solid #ae7951; border-radius:6px;
+  background:#3e111d; color:#ffedba; font:700 12px/1.2 Cambria,Georgia,serif; white-space:nowrap;
+}
+.gameplay.game-shell .event-overview-heading button[aria-pressed=true],.gameplay.game-shell .event-group-controls button[aria-pressed=true] { background:linear-gradient(#ec8125,#a93013); border-color:#f1c563; color:#fff8dc; }
+.gameplay.game-shell .event-overview-heading button b { display:inline-grid; place-items:center; min-width:19px; height:19px; margin-left:3px; border-radius:50%; background:#e2b14b; color:#46180f; }
+.gameplay.game-shell .event-rows { display:flex; flex-direction:column; min-width:0; }
+.gameplay.game-shell .event-row {
+  display:grid; grid-template-columns:24px minmax(0,1fr) minmax(45px,26%) 10px; gap:7px; align-items:center;
+  width:100%; min-width:0; min-height:48px; padding:6px 8px; border:0; border-bottom:1px solid #d9bd86;
+  background:linear-gradient(110deg,#fff7e4,#f5e4bf); color:#3c2418; text-align:left; cursor:pointer;
+}
+.gameplay.game-shell .event-row .ev-icon { width:24px; height:24px; }
+.gameplay.game-shell .event-row-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.gameplay.game-shell .event-row-copy b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:700 14px/1.25 Cambria,Georgia,serif; }
+.gameplay.game-shell .event-row-copy > span { font-size:11px; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gameplay.game-shell .event-row small { font:400 11px/1.3 'Be Vietnam Pro',sans-serif; color:#69503a; overflow-wrap:anywhere; }
+.gameplay.game-shell .event-row.bad .ev-icon { color:#b33124; }
+.gameplay.game-shell .event-row.good .ev-icon { color:#477037; }
+.gameplay.game-shell .event-chevron,.gameplay.game-shell .event-show-all svg { width:12px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.gameplay.game-shell .event-show-all {
+  display:flex; align-items:center; justify-content:space-between; width:100%; min-height:36px;
+  margin-top:4px; padding:5px 12px; border:1px solid #f4c270; border-radius:6px;
+  background:linear-gradient(#ed7b23,#b33513); color:#fff7dc; font:700 14px Cambria,Georgia,serif; cursor:pointer;
+}
+.gameplay.game-shell .event-rows .quiet { margin:0; padding:12px; background:#fff0d1; color:#68503c; font-size:12px; }
+.gameplay.game-shell .event-group-controls { display:grid; grid-template-columns:1fr 1.3fr 1fr; gap:4px; margin-bottom:7px; }
+.gameplay.game-shell .inline-result { padding:10px; margin:0 0 8px; border:1px solid #c89845; border-radius:7px; background:#fff3d4; }
+.gameplay.game-shell .inline-result h3 { margin:0 0 6px; font:700 20px Cambria,Georgia,serif; }
+.gameplay.game-shell .inline-result p { margin:5px 0 0; font-size:12px; line-height:1.5; }
+.gameplay.game-shell .stats { gap:6px; }
+.gameplay.game-shell .stat { min-height:90px; padding:8px; font-size:12px; }
+.gameplay.game-shell .stat b { font-size:18px; }
+.gameplay.game-shell .governance-risk { padding:10px; font-size:12px; }
+.gameplay.game-shell .year-row header { font-size:13px; }
+.gameplay.game-shell .year-row li { font-size:12px; }
+
+@media (min-width:1200px) {
+  .gameplay.game-shell .game-tablist { grid-template-columns:.7fr 1fr .65fr 1.2fr 1.45fr; }
+  .gameplay.game-shell .game-tablist button,.gameplay.game-shell .game-tablist button:nth-child(n+4) { grid-column:auto; }
+}
+@media (min-width:700px) {
+  .gameplay.game-shell .company-name,
+  .gameplay.game-shell .hud-value,
+  .gameplay.game-shell .hud-value:nth-of-type(2) { grid-column:auto; grid-row:auto; }
+}
+@media (max-width:1199px) {
+  .gameplay.game-shell .top-main { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr); gap:6px 12px; }
+  .gameplay.game-shell .top-tools { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:12px; }
+  .gameplay.game-shell .top-tools > .up,.gameplay.game-shell .top-tools > .down { font-size:12px; }
+  .gameplay.game-shell .company-name summary { font-size:17px; gap:6px; }
+  .gameplay.game-shell .company-name summary .company-title { display:block; white-space:nowrap; text-overflow:ellipsis; }
+  .gameplay.game-shell .company-crest { flex-basis:28px; height:32px; }
+  .gameplay.game-shell .company-crest .ev-icon { width:23px; height:27px; padding:2px; }
+  .gameplay.game-shell .hud-value { padding-left:8px; gap:2px; }
+  .gameplay.game-shell .hud-value small { font-size:12px; }
+  .gameplay.game-shell .hud-value b { font-size:16px; }
+  .gameplay.game-shell .rank { font-size:12px; padding:3px 6px; }
+  .gameplay.game-shell .top-tools .btn { width:44px; min-height:36px; }
+  .gameplay.game-shell .game-content { display:grid; grid-template-columns:minmax(200px,.7fr) minmax(0,1.3fr); }
+  .gameplay.game-shell .game-stage { display:flex; flex-direction:column; }
+  .gameplay.game-shell .scene { display:block; aspect-ratio:16/10; max-height:190px; }
+  .gameplay.game-shell .game-tabs-heading h2 { font-size:18px; }
+  .gameplay.game-shell .game-tablist button,.gameplay.game-shell .game-tablist button:nth-child(n+4) { font-size:12px; }
+  .gameplay.game-shell .choice.btn { grid-template-columns:46px minmax(0,1fr) 70px; min-height:74px; gap:6px; }
+  .gameplay.game-shell .upgrade-art { width:46px; height:46px; }
+  .gameplay.game-shell .choice-label { font-size:14px; }
+  .gameplay.game-shell .choice-benefit { font-size:12px; }
+  .gameplay.game-shell .choice-current { font-size:11px; }
+  .gameplay.game-shell .choice-price b { font-size:15px; }
+  .gameplay.game-shell .event-overview-heading { grid-template-columns:1fr 1.2fr; }
+  .gameplay.game-shell .event-overview-heading > h2 { grid-column:1/-1; padding:3px 5px; font-size:16px; }
+  .gameplay.game-shell .event-row { grid-template-columns:20px minmax(0,1fr) 10px; gap:5px; }
+  .gameplay.game-shell .event-row .ev-icon { width:20px; height:20px; }
+  .gameplay.game-shell .event-row small { grid-column:2; }
+  .gameplay.game-shell .event-row .event-chevron { grid-column:3; grid-row:1/3; }
+  .gameplay.game-shell .event-row-copy b { font-size:13px; }
+}
+@media (max-width:699px) {
+  .gameplay.game-shell { padding:6px; gap:6px; padding-bottom:max(6px,env(safe-area-inset-bottom)); }
+  .gameplay.game-shell .top { padding:6px 8px; border-width:2px; }
+  .gameplay.game-shell .top-main { grid-template-columns:repeat(6,minmax(0,1fr)); gap:3px 5px; }
+  .gameplay.game-shell .company-name { grid-column:1/6; grid-row:1; }
+  .gameplay.game-shell .company-name summary { font-size:15px; }
+  .gameplay.game-shell .company-crest { flex-basis:24px; height:28px; }
+  .gameplay.game-shell .company-crest .ev-icon { width:20px; height:24px; }
+  .gameplay.game-shell .hud-value { grid-column:span 3; grid-row:2; border:0; padding:0; }
+  .gameplay.game-shell .hud-value b { font-size:16px; }
+  .gameplay.game-shell .hud-value small { font-size:11px; }
+  .gameplay.game-shell .top-tools { display:contents; font-size:11px; }
+  .gameplay.game-shell .top-tools .btn { grid-column:6; grid-row:1; width:100%; min-height:30px; height:30px; }
+  .gameplay.game-shell .hud-year { grid-column:1; grid-row:3; white-space:nowrap; }
+  .gameplay.game-shell .hud-clock,.gameplay.game-shell .top-ended { grid-column:2/4; grid-row:3; white-space:nowrap; text-align:center; }
+  .gameplay.game-shell .top-tools > .up,.gameplay.game-shell .top-tools > .down { grid-column:4/6; grid-row:3; font-size:10px; text-align:right; white-space:nowrap; }
+  .gameplay.game-shell .rank { grid-column:6; grid-row:3; font-size:10px; padding:2px 3px; text-align:center; }
+  .gameplay.game-shell .top-tools .rank { grid-column:6; grid-row:3; }
+  .gameplay.game-shell .top-tools > .hud-clock,.gameplay.game-shell .top-tools > .top-ended { grid-column:2/4; grid-row:3; }
+  .gameplay.game-shell .game-content { display:flex; flex-direction:column; gap:6px; }
+  .gameplay.game-shell .game-stage { flex:none; gap:5px; }
+  .gameplay.game-shell .scene { display:none; }
+  .gameplay.game-shell .trait-status-strip { height:26px; }
+  .gameplay.game-shell .trait-status-empty,.gameplay.game-shell .trait-status-item { font-size:11px; }
+  .gameplay.game-shell .trait-status-item small { font-size:10px; }
+  .gameplay.game-shell .game-workspace { flex:1; }
+  .gameplay.game-shell .event-overview { padding:3px; border-radius:8px; }
+  .gameplay.game-shell .event-overview-heading { grid-template-columns:auto 1fr 1.2fr; padding-bottom:3px; }
+  .gameplay.game-shell .event-overview-heading > h2 { grid-column:auto; padding:0 3px; font-size:16px; }
+  .gameplay.game-shell .event-overview-heading button { min-height:30px; font-size:11px; padding:3px; }
+  .gameplay.game-shell .event-row { grid-template-columns:20px minmax(0,1fr) 10px; min-height:44px; padding:4px 6px; gap:3px 6px; }
+  .gameplay.game-shell .event-overview .event-row { grid-template-columns:20px minmax(0,1fr) minmax(44px,22%) 10px; }
+  .gameplay.game-shell .event-overview .event-row small { display:block; grid-column:3; grid-row:1; font-size:10px; }
+  .gameplay.game-shell .event-overview .event-row .event-chevron { grid-column:4; grid-row:1; }
+  .gameplay.game-shell .event-show-all { min-height:32px; margin-top:3px; font-size:13px; }
+  .gameplay.game-shell .game-tabs { padding:4px; gap:4px; border-width:2px; }
+  .gameplay.game-shell .game-tabs-heading { padding:2px 6px 4px; }
+  .gameplay.game-shell .game-tabs-heading h2 { font-size:17px; }
+  .gameplay.game-shell .game-tablist button,.gameplay.game-shell .game-tablist button:nth-child(n+4) { min-height:32px; font-size:12px; padding:4px 2px; }
+  .gameplay.game-shell .game-panel { padding:5px; scrollbar-gutter:auto; }
+  .gameplay.game-shell .game-panel > .meta { display:none; }
+  .gameplay.game-shell .choices { gap:4px; }
+  .gameplay.game-shell .choice.btn { grid-template-columns:40px minmax(0,1fr) 65px; min-height:62px; gap:5px; padding:5px; }
+  .gameplay.game-shell .upgrade-art { width:40px; height:40px; }
+  .gameplay.game-shell .choice-label { font-size:13px; }
+  .gameplay.game-shell .choice-benefit { font-size:11px; line-height:1.3; }
+  .gameplay.game-shell .choice-current { font-size:10px; line-height:1.25; }
+  .gameplay.game-shell .choice-copy { gap:2px; }
+  .gameplay.game-shell .choice-price { font-size:10px; padding:4px 2px; }
+  .gameplay.game-shell .choice-price b { font-size:14px; margin-top:2px; }
+  .gameplay.game-shell .year-dock { min-height:58px; padding:5px; border-width:2px; }
+  .gameplay.game-shell .year-btn,.gameplay.game-shell .year-finish.btn { height:44px; min-height:44px; font-size:23px; }
+  .gameplay.game-shell .year-btn > span small { top:12px; right:10px; font-size:14px; }
+  .gameplay.game-shell .event-group-controls button { font-size:11px; }
+}
+@media (max-width:699px) and (max-height:740px) {
+  .gameplay.game-shell .event-overview .event-row:nth-child(n+2) { display:none; }
+  .gameplay.game-shell .trait-status-strip:has(.trait-status-empty) { display:none; }
+  .gameplay.game-shell .top { padding:4px 7px; }
+  .gameplay.game-shell .top-main { gap:2px 4px; }
+  .gameplay.game-shell .hud-value small { font-size:10px; }
+  .gameplay.game-shell .hud-value b { font-size:14px; }
+  .gameplay.game-shell .company-name summary { font-size:14px; }
+  .gameplay.game-shell .company-crest { display:none; }
+  .gameplay.game-shell .company-name summary { min-height:26px; }
+  .gameplay.game-shell .event-overview { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px; }
+  .gameplay.game-shell .event-overview-heading { grid-column:1; grid-row:1; grid-template-columns:1fr 1.2fr; padding:0; }
+  .gameplay.game-shell .event-overview-heading > h2 { display:none; }
+  .gameplay.game-shell .event-overview > .event-rows { grid-column:1/-1; grid-row:2; }
+  .gameplay.game-shell .event-show-all { grid-column:2; grid-row:1; margin:0; min-height:30px; font-size:11px; padding:3px 5px; gap:4px; }
+}
+@media (min-width:700px) and (max-height:600px) {
+  .gameplay.game-shell { padding:6px; gap:6px; }
+  .gameplay.game-shell .top-main { grid-template-columns:minmax(0,1.5fr) 1fr 1fr; }
+  .gameplay.game-shell .top { padding:5px 8px; }
+  .gameplay.game-shell .top-tools { font-size:11px; }
+  .gameplay.game-shell .top-tools .btn { min-height:26px; height:26px; width:32px; }
+  .gameplay.game-shell .company-name summary { font-size:14px; }
+  .gameplay.game-shell .company-crest { display:none; }
+  .gameplay.game-shell .hud-value b { font-size:14px; }
+  .gameplay.game-shell .game-content { grid-template-columns:minmax(200px,.7fr) minmax(0,1.3fr); gap:6px; }
+  .gameplay.game-shell .scene { max-height:100px; }
+  .gameplay.game-shell .game-stage { gap:5px; }
+  .gameplay.game-shell .game-tablist { grid-template-columns:.7fr 1fr .65fr 1.2fr 1.45fr; }
+  .gameplay.game-shell .game-tablist button,.gameplay.game-shell .game-tablist button:nth-child(n+4) { grid-column:auto; font-size:11px; min-height:32px; }
+  .gameplay.game-shell .game-tabs-heading h2 { font-size:16px; }
+  .gameplay.game-shell .game-tabs-heading { padding:0 5px 4px; }
+  .gameplay.game-shell .choice.btn { min-height:54px; grid-template-columns:36px minmax(0,1fr) 65px; padding:4px; }
+  .gameplay.game-shell .choices { gap:4px; }
+  .gameplay.game-shell .upgrade-art { width:36px; height:36px; }
+  .gameplay.game-shell .choice-label { font-size:13px; }
+  .gameplay.game-shell .choice-benefit { font-size:11px; }
+  .gameplay.game-shell .choice-current { font-size:10px; }
+  .gameplay.game-shell .game-panel > .meta { display:none; }
+  .gameplay.game-shell .year-dock { min-height:56px; padding:4px; }
+  .gameplay.game-shell .year-btn,.gameplay.game-shell .year-finish.btn { height:44px; min-height:44px; font-size:23px; }
+  .gameplay.game-shell .year-btn > span small { top:12px; }
+  .gameplay.game-shell .game-stage:has(.event-overview .event-row:nth-child(3)) .scene { display:none; }
+}
+@media (max-height:480px) {
+  .gameplay.game-shell .scene { display:none; }
+  .gameplay.game-shell .event-overview .event-row:nth-child(n+2) { display:none; }
+  .gameplay.game-shell .trait-status-strip { height:26px; }
+}

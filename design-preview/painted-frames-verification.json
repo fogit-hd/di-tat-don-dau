@@ -1,0 +1,1363 @@
+{
+  "passed": true,
+  "frames": [
+    {
+      "name": "panel",
+      "width": 768,
+      "height": 768
+    },
+    {
+      "name": "inset",
+      "width": 768,
+      "height": 768
+    },
+    {
+      "name": "control",
+      "width": 768,
+      "height": 768
+    }
+  ],
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "scrollX": 320,
+      "scrollY": 568,
+      "dock": {
+        "top": 504,
+        "bottom": 562
+      },
+      "panelHeight": 177,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 12,
+          "right": 108.65625,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 111.65625,
+          "right": 208.328125,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 211.328125,
+          "right": 307.984375,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 12,
+          "right": 158.484375,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 161.484375,
+          "right": 307.984375,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [
+        "game-panel"
+      ],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "scrollX": 360,
+      "scrollY": 640,
+      "dock": {
+        "top": 576,
+        "bottom": 634
+      },
+      "panelHeight": 249,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 12,
+          "right": 122,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 125,
+          "right": 235,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 238,
+          "right": 348,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 12,
+          "right": 178.5,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 181.5,
+          "right": 348,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [
+        "game-panel"
+      ],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scrollX": 390,
+      "scrollY": 844,
+      "dock": {
+        "top": 780,
+        "bottom": 838
+      },
+      "panelHeight": 379,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 12,
+          "right": 132,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 135,
+          "right": 255,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 258,
+          "right": 378,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 12,
+          "right": 193.5,
+          "y": 348.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 196.5,
+          "right": 378,
+          "y": 348.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 412,
+      "height": 915,
+      "scrollX": 412,
+      "scrollY": 915,
+      "dock": {
+        "top": 851,
+        "bottom": 909
+      },
+      "panelHeight": 450,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 12,
+          "right": 139.328125,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 142.328125,
+          "right": 269.65625,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 272.65625,
+          "right": 400,
+          "y": 313.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 12,
+          "right": 204.5,
+          "y": 348.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 207.5,
+          "right": 400,
+          "y": 348.9375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 540,
+      "height": 720,
+      "scrollX": 540,
+      "scrollY": 720,
+      "dock": {
+        "top": 656,
+        "bottom": 714
+      },
+      "panelHeight": 329,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 12,
+          "right": 182,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 185,
+          "right": 355,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 358,
+          "right": 528,
+          "y": 239.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 12,
+          "right": 268.5,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 271.5,
+          "right": 528,
+          "y": 274.640625,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [
+        "game-panel"
+      ],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 720,
+      "height": 540,
+      "scrollX": 720,
+      "scrollY": 540,
+      "dock": {
+        "top": 476,
+        "bottom": 534
+      },
+      "panelHeight": 293,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 265.6875,
+          "right": 325.640625,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 328.640625,
+          "right": 414.3125,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 417.3125,
+          "right": 472.984375,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 475.984375,
+          "right": 578.78125,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 581.78125,
+          "right": 706,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [
+        "game-panel"
+      ],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "scrollX": 768,
+      "scrollY": 1024,
+      "dock": {
+        "top": 946,
+        "bottom": 1014
+      },
+      "panelHeight": 686,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 286.296875,
+          "right": 438.859375,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 441.859375,
+          "right": 594.421875,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 597.421875,
+          "right": 749.984375,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 286.296875,
+          "right": 516.640625,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 519.640625,
+          "right": 749.984375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 820,
+      "height": 1180,
+      "scrollX": 820,
+      "scrollY": 1180,
+      "dock": {
+        "top": 1102,
+        "bottom": 1170
+      },
+      "panelHeight": 842,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 304.5,
+          "right": 463.328125,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 466.328125,
+          "right": 625.15625,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 628.15625,
+          "right": 786.984375,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 304.5,
+          "right": 544.234375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 547.234375,
+          "right": 786.984375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "scrollX": 1024,
+      "scrollY": 768,
+      "dock": {
+        "top": 690,
+        "bottom": 758
+      },
+      "panelHeight": 430,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 375.890625,
+          "right": 578.921875,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 581.921875,
+          "right": 784.953125,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 787.953125,
+          "right": 990.984375,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 375.890625,
+          "right": 681.9375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 684.9375,
+          "right": 990.984375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 1180,
+      "height": 820,
+      "scrollX": 1180,
+      "scrollY": 820,
+      "dock": {
+        "top": 742,
+        "bottom": 810
+      },
+      "panelHeight": 482,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 430.5,
+          "right": 667.328125,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 670.328125,
+          "right": 907.15625,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 910.15625,
+          "right": 1146.984375,
+          "y": 160.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 430.5,
+          "right": 787.234375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 790.234375,
+          "right": 1146.984375,
+          "y": 199.078125,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "scrollX": 844,
+      "scrollY": 390,
+      "dock": {
+        "top": 326,
+        "bottom": 384
+      },
+      "panelHeight": 143,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 309.09375,
+          "right": 378.234375,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 381.234375,
+          "right": 480.015625,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 483.015625,
+          "right": 547.21875,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 550.21875,
+          "right": 668.765625,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 671.765625,
+          "right": 815,
+          "y": 128.484375,
+          "height": 32,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [
+        "game-panel"
+      ],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "scrollX": 1440,
+      "scrollY": 900,
+      "dock": {
+        "top": 822,
+        "bottom": 890
+      },
+      "panelHeight": 620,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 535.59375,
+          "right": 655.90625,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 658.90625,
+          "right": 830.78125,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 833.78125,
+          "right": 945.5,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 948.5,
+          "right": 1154.765625,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 1157.765625,
+          "right": 1407,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    },
+    {
+      "width": 1600,
+      "height": 1000,
+      "scrollX": 1600,
+      "scrollY": 1000,
+      "dock": {
+        "top": 922,
+        "bottom": 990
+      },
+      "panelHeight": 720,
+      "tabs": [
+        {
+          "label": "Đầu tư",
+          "x": 593.1875,
+          "right": 727.828125,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Doanh nghiệp",
+          "x": 730.828125,
+          "right": 923.203125,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Rủi ro",
+          "x": 926.203125,
+          "right": 1051.234375,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Lịch sử sự kiện",
+          "x": 1054.234375,
+          "right": 1285.0625,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        },
+        {
+          "label": "Thay đổi từng năm",
+          "x": 1288.0625,
+          "right": 1567,
+          "y": 141,
+          "height": 36,
+          "wrap": "nowrap",
+          "clipped": false
+        }
+      ],
+      "scrollers": [],
+      "painted": [
+        {
+          "selector": ".top",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tabs",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".event-overview",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-dock",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/panel.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-panel",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".choice.btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/inset.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".game-tablist button.on",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        },
+        {
+          "selector": ".year-btn",
+          "source": "url(\"http://game.test/assets/ui/painted-frames-v1/control.svg\")",
+          "shadow": "none"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "url": "/api/rooms/QA1234/invest",
+      "body": {
+        "line": "eng"
+      }
+    },
+    {
+      "url": "/api/rooms/QA1234/year",
+      "body": {}
+    },
+    {
+      "url": "/api/rooms/QA1234/restart",
+      "body": {}
+    }
+  ],
+  "industries": 64,
+  "errors": []
+}

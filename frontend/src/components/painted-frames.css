@@ -1,0 +1,98 @@
+/* Model-generated artwork, exported as SVG containing PNG. CSS only places the nine slices. */
+.gameplay.game-shell {
+  --painted-panel:url('/assets/ui/painted-frames-v1/panel.svg');
+  --painted-inset:url('/assets/ui/painted-frames-v1/inset.svg');
+  --painted-control:url('/assets/ui/painted-frames-v1/control.svg');
+}
+.gameplay.game-shell .top,
+.gameplay.game-shell .scene,
+.gameplay.game-shell .game-tabs,
+.gameplay.game-shell .event-overview,
+.gameplay.game-shell .year-dock {
+  border-style:solid;
+  border-color:transparent;
+  border-image-source:var(--painted-panel);
+  border-image-slice:112;
+  border-image-width:20px;
+  border-image-outset:0;
+  border-image-repeat:stretch;
+  outline:0;
+  box-shadow:none;
+}
+.gameplay.game-shell .game-panel,
+.gameplay.game-shell .choice.btn,
+.gameplay.game-shell .inline-result,
+.gameplay.game-shell .stat,
+.gameplay.game-shell .year-row,
+.gameplay.game-shell .bankrupt-restart,
+.gameplay.game-shell .event-card,
+.gameplay.game-shell .event-detail-dialog,
+.gameplay.game-shell .company-full,
+.gameplay.game-shell .governance-risk,
+.gameplay.game-shell .governance-metrics > div,
+.gameplay.game-shell .restructuring-status,
+.gameplay.game-shell .upgrade-art,
+.gameplay.game-shell .rank,
+.gameplay.game-shell .badge.trait,
+.gameplay.game-shell .trait-status-item,
+.gameplay.game-shell .trait-status-strip {
+  border-style:solid;
+  border-color:transparent;
+  border-image-source:var(--painted-inset);
+  border-image-slice:80;
+  border-image-width:10px;
+  border-image-outset:0;
+  border-image-repeat:stretch;
+  box-shadow:none;
+  outline:0;
+}
+.gameplay.game-shell .game-tablist button,
+.gameplay.game-shell .game-tablist button.on,
+.gameplay.game-shell .event-group-controls button,
+.gameplay.game-shell .event-group-controls button[aria-pressed=true],
+.gameplay.game-shell .event-overview-heading button,
+.gameplay.game-shell .event-overview-heading button[aria-pressed=true],
+.gameplay.game-shell .event-show-all,
+.gameplay.game-shell .choice-price,
+.gameplay.game-shell .year-btn,
+.gameplay.game-shell .year-finish.btn,
+.gameplay.game-shell .event-detail-dialog .btn,
+.gameplay.game-shell .top-tools .btn {
+  border-style:solid;
+  border-color:transparent;
+  border-image-source:var(--painted-control);
+  border-image-slice:96;
+  border-image-width:12px;
+  border-image-outset:0;
+  border-image-repeat:stretch;
+  box-shadow:none;
+}
+.gameplay.game-shell .event-row {
+  border-image-source:var(--painted-inset);
+  border-image-slice:80;
+  border-image-width:0 0 4px;
+  border-image-repeat:stretch;
+  border-bottom-color:transparent;
+}
+.gameplay.game-shell .trait-status-strip { border-image-width:6px; }
+.gameplay.game-shell .rank,.gameplay.game-shell .badge.trait,.gameplay.game-shell .trait-status-item { border-image-width:5px; }
+.gameplay.game-shell .upgrade-art { border-image-width:6px; }
+.gameplay.game-shell .event-detail-dialog { padding:24px; }
+.gameplay.game-shell .year-btn svg.year-perimeter { z-index:1; }
+.gameplay.game-shell .year-btn > span { z-index:2; }
+.gameplay.game-shell :focus-visible { outline:3px solid #ffe79a; outline-offset:2px; }
+@media (max-width:699px), (max-height:600px) {
+  .gameplay.game-shell .top,
+  .gameplay.game-shell .scene,
+  .gameplay.game-shell .game-tabs,
+  .gameplay.game-shell .event-overview,
+  .gameplay.game-shell .year-dock { border-image-width:16px; }
+  .gameplay.game-shell .game-panel,
+  .gameplay.game-shell .choice.btn,
+  .gameplay.game-shell .stat,
+  .gameplay.game-shell .inline-result { border-image-width:8px; }
+  .gameplay.game-shell .game-tablist button,
+  .gameplay.game-shell .game-tablist button.on,
+  .gameplay.game-shell .event-show-all,
+  .gameplay.game-shell .choice-price { border-image-width:10px; }
+}

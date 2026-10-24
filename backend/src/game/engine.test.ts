@@ -209,7 +209,7 @@ describe('economy', () => {
     expect(busy.machines - high.machines).toBeGreaterThan(bare.machines - low.machines)
   })
 
-  it('settles an authored revenue cut on the next year, not the year it is drawn', () => {
+  it('settles an authored revenue cut by game years even after its animation timer expires', () => {
     const base = () => {
       const state = fresh()
       state.machines = 2
@@ -240,16 +240,18 @@ describe('economy', () => {
     const sameYear = runCycle(drawn, theme, makeRng(5), 10_000, balance)
     expect(sameYear.cumulativeRevenue).toBeCloseTo(calm.cumulativeRevenue, 5)
     expect(drawn.cash).toBeCloseTo(10000, 5)
-    const opened = openYearEffects(sameYear, 20_000)
-    const hit = runCycle(opened, theme, makeRng(5), 20_000, balance)
-    const calmSecond = runCycle(calm, theme, makeRng(5), 20_000, balance)
+    expect(drawn.effects[0]).toMatchObject({ yearsLeft: 2, defer: true })
+    const opened = openYearEffects(sameYear, 600_000)
+    const hit = runCycle(opened, theme, makeRng(5), 600_000, balance)
+    const calmSecond = runCycle(calm, theme, makeRng(5), 600_000, balance)
     const hitDelta = hit.cumulativeRevenue - sameYear.cumulativeRevenue
     const calmDelta = calmSecond.cumulativeRevenue - calm.cumulativeRevenue
     expect(hitDelta).toBeLessThan(calmDelta * 0.6)
-    const still = closeYearEffects(hit, 20_000)
+    const still = closeYearEffects(hit, 600_000)
     expect(still.effects[0]?.yearsLeft).toBe(1)
-    const again = runCycle(openYearEffects(still, 30_000), theme, makeRng(5), 30_000, balance)
-    expect(closeYearEffects(again, 30_000).effects).toHaveLength(0)
+    expect(still.effects[0]?.defer).toBe(false)
+    const again = runCycle(openYearEffects(still, 1_200_000), theme, makeRng(5), 1_200_000, balance)
+    expect(closeYearEffects(again, 1_200_000).effects).toHaveLength(0)
   })
 
   it('cuts assets once when the event is drawn', () => {

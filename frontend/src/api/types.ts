@@ -22,7 +22,7 @@ export type Anchors = {
 export type LinePrices = Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>
 
 export type ActiveEffectView = { eventId: string; label: string; cashPerYear: number; yearsLeft: number; investmentPct?: number }
-export type TraitView = { id: string; label: string; detail: string }
+export type TraitView = { id: string; label: string; detail: string; acquiredYear?: number; eventId?: string; icon?: string; good?: boolean }
 export type EventLogView = { year: number; eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }
 export type YearCauseView = { kind: string; label: string; cash: number; detail?: string }
 export type YearChangeView = {
@@ -45,6 +45,13 @@ export type EffectView = {
   severity?: number
   startedAt: number
   endsAt: number
+  eventId?: string
+  yearsLeft?: number
+  deferred?: boolean
+  summary?: string
+  icon?: string
+  good?: boolean
+  economic?: boolean
 }
 
 export type PendingView = {

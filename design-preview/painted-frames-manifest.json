@@ -1,0 +1,53 @@
+[
+  {
+    "name": "panel",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-61c4b104-db0e-469f-9295-d0dee795c7db.png",
+    "sourceBounds": [
+      33,
+      36,
+      1222,
+      1190
+    ],
+    "width": 768,
+    "height": 768,
+    "slice": 112,
+    "svgBytes": 282875,
+    "pngBytes": 211957,
+    "transparentCenter": true,
+    "renderer": "SVG with embedded generated PNG"
+  },
+  {
+    "name": "inset",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-984e8847-cf62-4282-8757-0d29ecd4512b.png",
+    "sourceBounds": [
+      35,
+      42,
+      1218,
+      1194
+    ],
+    "width": 768,
+    "height": 768,
+    "slice": 80,
+    "svgBytes": 365434,
+    "pngBytes": 273879,
+    "transparentCenter": true,
+    "renderer": "SVG with embedded generated PNG"
+  },
+  {
+    "name": "control",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-f5184e7d-38b8-4ad1-9c13-86f82569958b.png",
+    "sourceBounds": [
+      77,
+      97,
+      1178,
+      1157
+    ],
+    "width": 768,
+    "height": 768,
+    "slice": 96,
+    "svgBytes": 208060,
+    "pngBytes": 155847,
+    "transparentCenter": true,
+    "renderer": "SVG with embedded generated PNG"
+  }
+]

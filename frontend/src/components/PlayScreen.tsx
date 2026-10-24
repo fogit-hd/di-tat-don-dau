@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
 import type { CentennialNotice, Snapshot } from '../api/types.ts'
@@ -8,14 +8,20 @@ import { clock, vnd } from '../lib/format.ts'
 import { BudgetPanel } from './BudgetPanel.tsx'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
-import { EffectBadges, EventCardList, GameTabs, OngoingEvents } from './EventPanels.tsx'
+import { EffectBadges, GameTabs, type GameTabsHandle } from './EventPanels.tsx'
+import { EventOverview } from './EventOverview.tsx'
+import { currentEventEntries, ongoingEventEntries } from '../lib/ongoing-events.ts'
 import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
 import { GovernanceRiskCard } from './GovernanceRiskCard.tsx'
 import { StatCards } from './StatCards.tsx'
 import { ThemeIntro } from './ThemeIntro.tsx'
 import { TopBar } from './TopBar.tsx'
+import { specialStatuses } from '../lib/special-status.ts'
+import { TraitNotice } from './TraitNotice.tsx'
 import './gameplay.css'
+import './responsive-gameplay.css'
+import './painted-frames.css'
 
 export function PlayScreen() {
   const { code = '' } = useParams()
@@ -27,6 +33,7 @@ export function PlayScreen() {
   const [muted, setMuted] = useState(() => localStorage.getItem('muted') === '1')
   const [centuryDone, setCenturyDone] = useState(false)
   const [finishedSummary, setFinishedSummary] = useState(false)
+  const gameTabs = useRef<GameTabsHandle>(null)
   const { snap, centennial, offline, error } = useRoom(upper, 'player', token)
   const now = useClock(snap)
 
@@ -91,9 +98,12 @@ export function PlayScreen() {
     (storedCentury && snap?.you ? { teamId: snap.you.id, ...storedCentury, finished: true } : null)
   const century = centuryNotice && centuryNotice.teamId === snap?.you?.id && !centuryDone ? centuryNotice : null
   const youFinished = Boolean(snap?.you?.finished)
+  const statuses = scene ? specialStatuses(scene) : []
+  const currentEvents = scene?.eventLog?.filter(event => event.year === scene.cycles) ?? []
+  const ongoing = scene ? ongoingEventEntries({ effects: scene.activeEffects ?? [], timed: scene.effects, traits: statuses, events: scene.eventLog ?? [], now: youFinished ? snap?.serverNow ?? now : now }) : []
 
   return (
-    <main className={showGame ? 'wrap game-shell gameplay' : 'wrap'}>
+    <main className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
       {snap && status === 'lobby' && (
@@ -135,19 +145,22 @@ export function PlayScreen() {
           {formError && <p className="warn">{formError}</p>}
           <section className="game-content">
             <div className="game-stage">
+              <TraitNotice traits={statuses} />
               <FactoryScene scene={scene} paused={snap.paused} />
-              <section className="card current-event">
-                <h2>Sự kiện năm nay</h2>
-                <EventCardList events={(scene.eventLog ?? []).filter((event) => event.year === scene.cycles)} empty="Năm nay chưa có sự kiện." />
-              </section>
-              <OngoingEvents effects={scene.activeEffects ?? []} timed={scene.effects} events={scene.eventLog ?? []} now={youFinished ? snap.serverNow : now} />
+              <EventOverview current={currentEventEntries(currentEvents)} ongoing={ongoing} onShowAll={group => gameTabs.current?.showEvents(group)} />
             </div>
             <div className="game-workspace">
               <GameTabs
+                key={`${upper}-${youFinished ? 'finished' : 'playing'}`}
+                ref={gameTabs}
+                finished={youFinished}
+                result={<InlineResult snap={snap} />}
                 enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}
                 risk={<GovernanceRiskCard scene={scene} />}
                 riskIncreasing={(scene.nextDeathChance ?? 0) > (scene.deathChance ?? 0) || (scene.nextSuccessionChance ?? 0) > (scene.successionChance ?? 0)}
                 events={scene.eventLog ?? []}
+                currentEvents={currentEvents}
+                ongoing={ongoing}
                 changes={scene.yearChanges ?? []}
                 investment={
                   <>
@@ -176,6 +189,8 @@ export function PlayScreen() {
                   </>
                 }
               />
+            </div>
+          </section>
             <YearButton
               finished={youFinished}
               busy={busy || snap.paused || scene.cash <= 0}
@@ -189,8 +204,6 @@ export function PlayScreen() {
               }}
               onFinish={() => setFinishedSummary(true)}
             />
-            </div>
-          </section>
         </>
       )}
       {snap && showGame && century && theme && (
@@ -245,8 +258,6 @@ function YearButton({
   const total = Math.max(1, yearSeconds) * 1000
   const left = Math.max(0, nextYearAt - now)
   const ratio = Math.min(1, left / total)
-  const radius = 46
-  const circumference = 2 * Math.PI * radius
   const seconds = Math.ceil(left / 1000)
   const lockLeft = Math.max(0, yearLockUntil - now)
   const locked = lockLeft > 0
@@ -259,18 +270,7 @@ function YearButton({
         onClick={onPress}
         aria-label={locked ? `Đang diễn, còn ${Math.ceil(lockLeft / 1000)} giây` : `Sang năm, còn ${seconds} giây`}
       >
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <circle className="year-ring-track" cx="60" cy="60" r={radius} />
-          <circle
-            className="year-ring"
-            cx="60"
-            cy="60"
-            r={radius}
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference * (1 - ratio)}
-            transform="rotate(-90 60 60)"
-          />
-        </svg>
+        <YearPerimeter ratio={ratio} />
         <span>
           {locked ? 'Đang diễn' : 'Sang năm'}
           <small>{locked ? Math.ceil(lockLeft / 1000) : seconds}s</small>
@@ -278,6 +278,39 @@ function YearButton({
       </button>
     </div>
   )
+}
+
+function YearPerimeter({ ratio }: { ratio: number }) {
+  const frame = useRef<SVGSVGElement>(null)
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  useEffect(() => {
+    const node = frame.current
+    if (!node) return
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect
+      setSize(previous => previous.width === width && previous.height === height ? previous : { width, height })
+    })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+  const width = Math.max(0, size.width - 10)
+  const height = Math.max(0, size.height - 10)
+  return <svg ref={frame} className="year-perimeter" aria-hidden="true" focusable="false">
+    {width > 0 && height > 0 && <>
+      <rect className="year-perimeter-track" x="5" y="5" width={width} height={height} rx="5" />
+      <rect className="year-perimeter-progress" x="5" y="5" width={width} height={height} rx="5" pathLength="100" strokeDasharray="100 100" strokeDashoffset={100 * (1 - ratio)} opacity={ratio > 0 ? 1 : 0} />
+    </>}
+  </svg>
+}
+
+function InlineResult({ snap }: { snap: Snapshot }) {
+  const scene = snap.you?.scene
+  const succession = snap.you?.succession
+  return <section className="inline-result" aria-label="Kết quả lượt chơi">
+    <h3>{succession?.outcomeLabel || 'Đã kết thúc lượt chơi'}</h3>
+    {succession && <p>{succession.causeText} · {succession.outcomeDetail}</p>}
+    <p>Giá trị cuối <b>{vnd(scene?.value ?? 0)}</b> · Hạng {snap.you?.rank ?? '—'}</p>
+  </section>
 }
 
 function FinishedSummary({ snap, onClose }: { snap: Snapshot; onClose: () => void }) {

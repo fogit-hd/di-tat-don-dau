@@ -25,25 +25,11 @@
   align-items:center;
   justify-content:center;
 }
-.gameplay.game-shell .year-btn svg {
-  inset:auto;
-  right:8px;
-  top:1px;
-}
 .gameplay.game-shell .year-btn > span {
   padding-right:0;
 }
 .gameplay.game-shell .top,.gameplay.game-shell .scene,.gameplay.game-shell .game-tabs,.gameplay.game-shell .current-event,.gameplay.game-shell .ongoing-events,.gameplay.game-shell .year-dock {
   position:relative;
-}
-.gameplay.game-shell .scene::after,.gameplay.game-shell .game-tabs::before,.gameplay.game-shell .current-event::after,.gameplay.game-shell .ongoing-events::after,.gameplay.game-shell .year-dock::before {
-  content:'';
-  pointer-events:none;
-  position:absolute;
-  z-index:2;
-  inset:1px;
-  border-radius:8px;
-  background:radial-gradient(circle at 6px 6px,#fff3a9 0 1px,#e6b44d 2px,#885018 4px,transparent 5px),radial-gradient(circle at calc(100% - 6px) 6px,#fff3a9 0 1px,#e6b44d 2px,#885018 4px,transparent 5px),radial-gradient(circle at 6px calc(100% - 6px),#fff3a9 0 1px,#e6b44d 2px,#885018 4px,transparent 5px),radial-gradient(circle at calc(100% - 6px) calc(100% - 6px),#fff3a9 0 1px,#e6b44d 2px,#885018 4px,transparent 5px);
 }
 body:has(.gameplay), #root:has(.gameplay) {
   height:100dvh;
@@ -283,7 +269,7 @@ body:has(.gameplay), #root:has(.gameplay) {
   background:radial-gradient(ellipse at center,#fff9e9,#ead4a6);
   overflow:hidden;
 }
-.gameplay.game-shell .current-event h2,.gameplay.game-shell .ongoing-events h2 {
+.gameplay.game-shell .current-event > h2,.gameplay.game-shell .ongoing-events > h2 {
   flex:none;
   align-self:flex-start;
   background:linear-gradient(#6a2430,#3a0b19);
@@ -302,12 +288,18 @@ body:has(.gameplay), #root:has(.gameplay) {
   text-align:center;
 }
 .gameplay.game-shell .current-event .event-list {
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
   max-height:none;
   min-height:0;
   overflow:auto;
   padding:8px 12px;
+  scrollbar-width:thin;
+  scrollbar-color:#ad7530 #f5e4c2;
 }
 .gameplay.game-shell .event-card {
+  flex:none;
   width:100%;
   text-align:left;
   min-height:60px;
@@ -327,6 +319,19 @@ body:has(.gameplay), #root:has(.gameplay) {
 }
 .gameplay.game-shell .event-card .event-copy > span {
   font-size:13px;
+}
+.gameplay.game-shell .event-card .event-copy > .event-body {
+  display:block;
+  padding-top:6px;
+  margin-top:4px;
+  border-top:1px solid #d6bc8d;
+  color:#442b1d;
+  font-family:'Be Vietnam Pro',sans-serif;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 .gameplay.game-shell .event-card .ev-icon {
   width:40px;
@@ -410,7 +415,32 @@ body:has(.gameplay), #root:has(.gameplay) {
   background:#210511aa;
 }
 .gameplay.game-shell .event-detail-dialog h2 {
+  display:block;
+  width:auto;
+  margin:0 0 14px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:none;
   color:#542018;
+  font:700 clamp(18px,2.2vw,24px)/1.35 Cambria,Georgia,serif;
+  text-shadow:none;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.gameplay.game-shell .event-detail-dialog p {
+  margin:0 0 12px;
+  font-family:'Be Vietnam Pro',sans-serif;
+  font-size:14px;
+  font-weight:400;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.gameplay.game-shell .event-detail-dialog small {
+  display:block;
+  color:#66503d;
+  font:400 12px/1.5 'Be Vietnam Pro',sans-serif;
 }
 .gameplay.game-shell .event-detail-dialog .btn {
   display:block;
@@ -658,22 +688,24 @@ body:has(.gameplay), #root:has(.gameplay) {
   text-align:center;
   font:700 16px Cambria,Georgia,serif;
 }
-.gameplay.game-shell .year-btn svg {
+.gameplay.game-shell .year-btn svg.year-perimeter {
   position:absolute;
-  width:55px;
-  height:55px;
-  right:8px;
-  top:1px;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
 }
-.gameplay.game-shell .year-ring-track {
+.gameplay.game-shell .year-perimeter-track {
   stroke:#7e2e0e;
-  stroke-width:8px;
-  fill:#8c300e;
-}
-.gameplay.game-shell .year-ring {
-  stroke:#ffe4a0;
-  stroke-width:7px;
+  stroke-width:3px;
   fill:none;
+}
+.gameplay.game-shell .year-perimeter-progress {
+  stroke:#ffe4a0;
+  stroke-width:3px;
+  stroke-linecap:round;
+  fill:none;
+  transition:stroke-dashoffset .2s linear;
 }
 .gameplay.game-shell .year-finish.btn {
   display:flex;
@@ -862,10 +894,6 @@ body:has(.gameplay), #root:has(.gameplay) {
     height:52px;
     min-height:52px;
   }
-  .gameplay.game-shell .year-btn svg {
-    height:48px;
-    width:48px;
-  }
   .gameplay.game-shell .year-btn > span small {
     top:17px;
     right:12px;
@@ -990,7 +1018,7 @@ body:has(.gameplay), #root:has(.gameplay) {
     height:90px;
     min-height:0;
   }
-  .gameplay.game-shell .current-event h2,.gameplay.game-shell .ongoing-events h2 {
+  .gameplay.game-shell .current-event > h2,.gameplay.game-shell .ongoing-events > h2 {
     font-size:17px;
     padding:4px 12px;
   }
@@ -1109,10 +1137,6 @@ body:has(.gameplay), #root:has(.gameplay) {
     min-height:54px;
     font-size:27px;
   }
-  .gameplay.game-shell .year-btn svg {
-    height:49px;
-    width:49px;
-  }
   .gameplay.game-shell .year-btn > span small {
     top:18px;
     right:12px;
@@ -1190,10 +1214,6 @@ body:has(.gameplay), #root:has(.gameplay) {
     min-height:44px;
     height:44px;
     font-size:24px;
-  }
-  .gameplay.game-shell .year-btn svg {
-    width:40px;
-    height:40px;
   }
   .gameplay.game-shell .year-btn > span small {
     top:13px;
@@ -1323,10 +1343,6 @@ body:has(.gameplay), #root:has(.gameplay) {
     min-height:46px;
     height:46px;
   }
-  .gameplay.game-shell .year-btn svg {
-    width:43px;
-    height:43px;
-  }
   .gameplay.game-shell .year-btn > span small {
     top:13px;
     right:8px;
@@ -1391,3 +1407,42 @@ body:has(.gameplay), #root:has(.gameplay) {
   
 }
 
+.gameplay.game-shell .trait-status-strip {
+  display:flex;
+  align-items:center;
+  flex:0 0 44px;
+  min-width:0;
+  gap:8px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:3px 6px;
+  border:1px solid #b7832c;
+  border-radius:8px;
+  background:#350b19;
+  color:#fff0ce;
+  scrollbar-width:thin;
+}
+.gameplay.game-shell .trait-status-strip:focus-visible { outline:2px solid #ffe8a3; outline-offset:2px; }
+.gameplay.game-shell .trait-status-empty { font-size:13px; opacity:.8; }
+.gameplay.game-shell .trait-status-item {
+  display:flex;
+  align-items:center;
+  flex:none;
+  gap:6px;
+  padding:4px 8px;
+  border:1px solid #8eae68;
+  border-radius:6px;
+  background:#e9edc9;
+  color:#304521;
+  white-space:nowrap;
+  font-size:13px;
+  animation:trait-status-arrive .35s ease-out,trait-status-emphasis .8s ease-in-out 3;
+}
+.gameplay.game-shell .trait-status-item.is-bad { background:#ffe2c9; color:#8b2922; border-color:#d97459; }
+.gameplay.game-shell .trait-status-item .ev-icon { width:22px; height:22px; flex:none; }
+.gameplay.game-shell .trait-status-item small { font-size:11px; }
+@keyframes trait-status-arrive { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes trait-status-emphasis { 50% { border-color:#fff0ce; box-shadow:inset 0 0 0 1px #fff0ce; } }
+@media (prefers-reduced-motion:reduce) {
+  .gameplay.game-shell .trait-status-item { animation:none; }
+}

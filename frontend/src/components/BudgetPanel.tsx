@@ -50,12 +50,12 @@ export function BudgetPanel({
         const can = !busy && !paused && scene.cash + 1 >= price
         const info = upgradeInfo(scene, line.id)
         return (
-          <button type="button" className="btn choice" key={line.id} disabled={!can} onClick={() => onInvest(line.id)}>
+          <button type="button" className="btn choice" key={line.id} disabled={!can} aria-description={info.effect} onClick={() => onInvest(line.id)}>
             <UpgradeArt key={`${scene.industryId}-${line.id}`} industry={scene.industryId} line={line.id} />
             <span className="choice-copy">
               <span className="choice-label">{line.label}</span>
-              <span className="choice-benefit">{info.effect}</span>
-              <small className="choice-current">{info.current}</small>
+              <span className="choice-benefit" title={info.effect}>{upgradeBrief(line.id)}</span>
+              <small className="choice-current" title={info.current}>{info.current.replace(/^Hiện có /, '').replace('dây chuyền nhàn', 'máy nhàn')}</small>
             </span>
             <span className="choice-price">Đầu tư <b>{Math.round(price).toLocaleString('vi-VN')} tỷ</b></span>
           </button>
@@ -66,6 +66,10 @@ export function BudgetPanel({
 }
 
 /** Explanations only: the server remains the authority for investment quantities. */
+function upgradeBrief(line: SceneView['lines'][number]['id']) {
+  return { eng: 'Bổ sung kỹ sư vận hành', mac: 'Tăng năng lực sản xuất', sup: 'Tăng hệ số sản lượng', inf: 'Hỗ trợ sản xuất · giảm ô nhiễm', grn: 'Giảm ô nhiễm · bảo vệ giá bán' }[line]
+}
+
 function upgradeInfo(scene: SceneView, line: SceneView['lines'][number]['id']) {
   const number = (n: number) => n.toLocaleString('vi-VN', { maximumFractionDigits: 1 })
   switch (line) {

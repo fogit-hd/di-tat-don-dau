@@ -32,7 +32,7 @@ export function TopBar({
         <div className="hud-value"><small>Tài sản</small><b>{vnd(scene.value)}</b></div>
         <div className="top-tools">
           <span className="hud-year">Năm {scene.cycles}</span>
-          {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span>⏱ {clock(remaining)}</span>}
+          {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span className="hud-clock">⏱ {clock(remaining)}</span>}
           <span className={income >= 0 ? 'up' : 'down'}>
             {income >= 0 ? '+' : ''}{Math.round(income).toLocaleString('vi-VN')} tỷ/năm
           </span>
