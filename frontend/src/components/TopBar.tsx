@@ -31,9 +31,6 @@ export function TopBar({
             {income >= 0 ? '+' : ''}
             Năm {scene.cycles} · {Math.round(income).toLocaleString('vi-VN')} tỷ/năm
           </span>
-          <span className="death-risk" title="Xác suất chủ xưởng qua đời khi chốt năm kế tiếp">
-            Rủi ro kế nghiệp {Math.round((scene.deathChance ?? 0) * 1000) / 10}%
-          </span>
           <span className="rank">Hạng {rank}</span>
           <button type="button" className="btn s" onClick={onMute} aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}>
             {muted ? '🔇' : '🔊'}

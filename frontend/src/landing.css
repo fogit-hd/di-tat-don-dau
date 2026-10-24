@@ -547,3 +547,158 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* Game-world landing refresh: the page mirrors the approved purple industrial-game concept. */
+.landing {
+  --game-night: #160c2a;
+  --game-plum: #2b1247;
+  --game-coral: #fb553c;
+  --game-amber: #ffba37;
+  --game-cream: #fff2d5;
+  background: var(--game-night);
+}
+
+.land-bar {
+  background: rgba(22, 12, 42, .96);
+  border-bottom: 1px solid rgba(255, 186, 55, .35);
+}
+
+.bar-inner { min-height: 58px; }
+.wordmark { color: #ffcf62; font-size: 1.12rem; text-shadow: 2px 2px 0 #d43c2e; }
+.land-nav { gap: 10px; }
+.land-nav a { font-size: .86rem; font-weight: 800; }
+.land-nav a:hover { color: #ffcf62; background: rgba(255,255,255,.06); }
+.landing .land-actions .btn { padding: 9px 14px; min-height: 40px; font-size: .85rem; }
+
+.hero-sec { padding: 18px 0 0; background: #0d091b; }
+.hero-grid {
+  position: relative;
+  display: grid;
+  min-height: min(650px, calc(100svh - 76px));
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(255, 203, 98, .28);
+  border-radius: 18px 18px 0 0;
+  background: #260b35;
+  box-shadow: 0 24px 58px rgba(0,0,0,.42);
+}
+.hero-game-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  max-width: 525px;
+  padding: clamp(32px, 6vw, 76px);
+  padding-right: 30px;
+}
+.landing h1 {
+  color: #fff0b8;
+  max-width: 9ch;
+  font-size: clamp(3.1rem, 6.4vw, 6.1rem);
+  letter-spacing: -.055em;
+  line-height: .92;
+  text-shadow: 0 5px 0 #be302a, 0 12px 28px rgba(0,0,0,.55);
+}
+.tagline { max-width: 31em; color: #fff3d8; font-size: clamp(1rem, 1.7vw, 1.22rem); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px; }
+.landing .hero-actions .btn { background: var(--game-coral); box-shadow: 0 5px 0 #a62c2c; min-width: 154px; }
+.hero-ghost {
+  min-height: 48px;
+  border: 2px solid rgba(255, 231, 172, .85);
+  border-radius: 14px;
+  padding: 10px 20px;
+  color: #fff7df;
+  background: rgba(20, 8, 34, .42);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.hero-ghost:hover { background: rgba(255,255,255,.14); }
+
+.band {
+  padding: 0;
+  background: var(--game-cream);
+  border-top: 7px solid #fff8e9;
+}
+.how-grid { display: block; padding: 34px 0 40px; }
+.how-grid > div { text-align: center; }
+.band .section-title { color: #25152f; font-size: clamp(2rem, 4vw, 3rem); }
+.band .deck { margin-inline: auto; }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 28px;
+  background: rgba(255,255,255,.45);
+  border: 1px solid #f0d4a1;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.steps::before { display: none; }
+.step { grid-template-columns: 46px minmax(0, 1fr); padding: 20px 22px; align-items: center; }
+.step + .step { border-left: 1px solid #e7cfa6; }
+.step-num { background: var(--game-coral); box-shadow: none; }
+.step h3 { font-size: 1.06rem; }
+.step p { font-size: .9rem; }
+
+.feat-sec { padding: 48px 0 56px; background: radial-gradient(ellipse at 50% -30%, #542060, #170c2d 68%); }
+.section-head { text-align: center; }
+.section-head .deck { margin-inline: auto; max-width: 48em; }
+.feat-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.feat, .feat-a, .feat-b, .feat-c, .feat-d, .feat-e {
+  grid-column: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 268px;
+  padding: 16px;
+  color: #fff7e3;
+  background: linear-gradient(150deg, rgba(48, 30, 81, .96), rgba(20, 15, 43, .98));
+  border: 1px solid rgba(255, 226, 162, .38);
+  box-shadow: 0 10px 24px rgba(0,0,0,.24);
+}
+.feat:nth-child(2n) { background: linear-gradient(150deg, rgba(96, 33, 61, .96), rgba(30, 14, 42, .98)); }
+.feat h3, .feat p, .feat-top h3 { color: inherit; }
+.feat h3, .feat-top h3 { font-size: 1rem; }
+.feat p { color: #f8e8d1; font-size: .84rem; }
+.investment-card-art { width: 100%; height: 132px; object-fit: contain; margin: -6px 0 4px; }
+.feat-icon { color: var(--game-amber); }
+.feat-top { align-items: center; }
+
+.host-strip { padding: 42px 0; background: #f0a339 url('/assets/landing/game-world-hero-art.png') center 68% / cover no-repeat; position: relative; }
+.host-strip::before { content: ''; position: absolute; inset: 0; background: rgba(28, 11, 42, .8); }
+.host-strip-inner { position: relative; display: flex; gap: 24px; justify-content: space-between; align-items: center; }
+.host-strip h2 { margin: 0; color: #fff0ba; font-size: clamp(1.85rem, 3vw, 2.6rem); }
+.host-strip p { max-width: 53ch; margin: 8px 0 0; color: #fff2d8; }
+.host-strip .light { flex: none; background: #fff4d5; color: #371832; border-color: #fff4d5; }
+
+.land-foot { background: #120a23; border-top: 1px solid rgba(255, 186, 55, .32); padding: 22px 0 28px; }
+
+@media (max-width: 800px) {
+  .land-nav { display: none; }
+  .bar-inner { min-height: 58px; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'logo cta'; }
+  .land-actions .btn.s { display: none; }
+  .hero-sec { padding-top: 0; }
+  .hero-grid { width: 100%; min-height: 570px; border-radius: 0; border-inline: 0; }
+  .hero-game-art { object-position: 63% center; }
+  .hero-copy { align-self: end; padding: 28px 18px 34px; max-width: 100%; background: linear-gradient(0deg, rgba(18,9,35,.9), rgba(18,9,35,0)); }
+  .landing h1 { font-size: clamp(3rem, 14vw, 4.5rem); }
+  .tagline { font-size: .98rem; max-width: 27em; }
+  .hero-actions { margin-top: 18px; }
+  .hero-actions > * { flex: 1; }
+  .how-grid { padding: 28px 0 32px; }
+  .steps { grid-template-columns: minmax(0, 1fr); margin-top: 20px; }
+  .step + .step { border-left: 0; border-top: 1px solid #e7cfa6; }
+  .feat-sec { padding: 36px 0 40px; }
+  .feat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .feat { min-height: 232px; padding: 13px; }
+  .investment-card-art { height: 108px; }
+  .feat:last-child { grid-column: 1 / -1; min-height: auto; }
+  .host-strip-inner { align-items: flex-start; flex-direction: column; }
+}

@@ -53,6 +53,8 @@ export function createState(theme: ThemeDef, capital: number, rng: Rng, balance:
     nextYearAt: 0,
     yearLockUntil: 0,
     finished: false,
+    secondLife: 'locked',
+    stateAidEligible: false,
     succession: null,
     centennial: null,
     traits: [],

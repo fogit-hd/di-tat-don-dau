@@ -201,6 +201,8 @@ export type TeamState = {
   nextYearAt: number
   yearLockUntil: number
   finished: boolean
+  secondLife: 'locked' | 'available' | 'used'
+  stateAidEligible: boolean
   succession: SuccessionResult | null
   centennial: CentennialResult | null
   traits: string[]

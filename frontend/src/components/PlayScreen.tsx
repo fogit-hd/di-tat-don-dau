@@ -11,6 +11,7 @@ import { EndScreen } from './EndScreen.tsx'
 import { EffectBadges, EventCardList, GameTabs } from './EventPanels.tsx'
 import { EventQuizModal } from './EventQuizModal.tsx'
 import { FactoryScene } from './FactoryScene.tsx'
+import { GovernanceRiskCard } from './GovernanceRiskCard.tsx'
 import { StatCards } from './StatCards.tsx'
 import { ThemeIntro } from './ThemeIntro.tsx'
 import { TopBar } from './TopBar.tsx'
@@ -154,6 +155,7 @@ export function PlayScreen() {
               centennial={Boolean(scene.centennial)}
               pulse={scene.pulseYear === scene.cycles && scene.cycles > 0}
             />
+            <GovernanceRiskCard scene={scene} />
           </section>
           <section className="game-content">
             <div className="game-stage">
@@ -168,36 +170,44 @@ export function PlayScreen() {
               changes={scene.yearChanges ?? []}
               investment={
                 <>
-                  <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
-                  <BudgetPanel
-                    scene={scene}
-                    step={snap.room.step}
-                    prices={scene.linePrices ?? snap.room.linePrices}
-                    busy={busy}
-                    paused={snap.paused}
-                    onInvest={(line) => {
-                      beep(660, 0.06, muted)
-                      void act('invest', { line })
-                    }}
-                    onRestart={() => {
-                      beep(430, 0.08, muted)
-                      void act('restart')
-                    }}
-                  />
+                  {youFinished ? (
+                    <p className="finish-note">Lượt chơi của đội đã được chốt. Xem lịch sử sự kiện ở các tab bên trên trước khi kết thúc.</p>
+                  ) : (
+                    <>
+                      <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
+                      <BudgetPanel
+                        scene={scene}
+                        step={snap.room.step}
+                        prices={scene.linePrices ?? snap.room.linePrices}
+                        busy={busy}
+                        paused={snap.paused}
+                        onInvest={(line) => {
+                          beep(660, 0.06, muted)
+                          void act('invest', { line })
+                        }}
+                        onRestart={() => {
+                          beep(430, 0.08, muted)
+                          void act('restart')
+                        }}
+                      />
+                    </>
+                  )}
                   <StatCards scene={scene} />
-                  <YearButton
-                    finished={youFinished}
-                    busy={busy || snap.paused}
-                    now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
-                    nextYearAt={scene.nextYearAt}
-                    yearLockUntil={scene.yearLockUntil}
-                    yearSeconds={snap.room.cycleSeconds}
-                    onPress={() => {
-                      beep(520, 0.08, muted)
-                      void act('year')
-                    }}
-                    onFinish={() => setFinishedSummary(true)}
-                  />
+                  {(youFinished || scene.cash > 0) && (
+                    <YearButton
+                      finished={youFinished}
+                      busy={busy || snap.paused}
+                      now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
+                      nextYearAt={scene.nextYearAt}
+                      yearLockUntil={scene.yearLockUntil}
+                      yearSeconds={snap.room.cycleSeconds}
+                      onPress={() => {
+                        beep(520, 0.08, muted)
+                        void act('year')
+                      }}
+                      onFinish={() => setFinishedSummary(true)}
+                    />
+                  )}
                 </>
               }
             />
@@ -225,20 +235,34 @@ export function PlayScreen() {
 }
 
 function YearButton({
+  finished,
   busy,
   now,
   nextYearAt,
   yearLockUntil,
   yearSeconds,
   onPress,
+  onFinish,
 }: {
+  finished: boolean
   busy: boolean
   now: number
   nextYearAt: number
   yearLockUntil: number
   yearSeconds: number
   onPress: () => void
+  onFinish: () => void
 }) {
+  if (finished) {
+    return (
+      <div className="year-dock">
+        <button type="button" className="btn year-finish" onClick={onFinish}>
+          Kết thúc trò chơi
+          <small>Xem kết quả lượt chơi</small>
+        </button>
+      </div>
+    )
+  }
   const total = Math.max(1, yearSeconds) * 1000
   const left = Math.max(0, nextYearAt - now)
   const ratio = Math.min(1, left / total)
@@ -273,6 +297,40 @@ function YearButton({
           <small>{locked ? Math.ceil(lockLeft / 1000) : seconds}s</small>
         </span>
       </button>
+    </div>
+  )
+}
+
+function FinishedSummary({ snap, onClose }: { snap: Snapshot; onClose: () => void }) {
+  const you = snap.you
+  const succession = you?.succession
+  const value = snap.leaderboard.find((row) => row.teamId === you?.id)?.value ?? 0
+  return (
+    <div className="modal on" role="dialog" aria-modal="true" aria-label="Kết quả lượt chơi">
+      <div className="card finished-summary">
+        <h2>Đã kết thúc lượt chơi</h2>
+        {succession ? (
+          <>
+            <p>{succession.causeText}</p>
+            <p>
+              <b>{succession.outcomeLabel}.</b> {succession.outcomeDetail}
+            </p>
+          </>
+        ) : (
+          <p>Đội đã chốt mốc đặc biệt của lượt chơi.</p>
+        )}
+        <p className="end-sum">
+          Giá trị cuối <b>{vnd(value)}</b> · Hạng {you?.rank ?? '—'}
+        </p>
+        <div className="finished-actions">
+          <button type="button" className="btn s" onClick={onClose}>
+            Xem lại sự kiện
+          </button>
+          <Link className="btn" to="/">
+            Về trang chủ
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

@@ -38,12 +38,12 @@ const HEALTH: {
 ]
 
 const GROUP_REASON: Record<string, string> = {
-  'cong-nghiep-nang': 'Tai nạn tại xưởng {{industry}}',
-  'nong-san': 'Chủ {{factory}} qua đời sau ca đêm',
-  'cong-nghe-cao': 'Chủ {{factory}} đột quỵ giữa ca',
-  'tieu-dung': 'Chủ {{factory}} bệnh nặng',
-  'nang-luong': 'Tai nạn vận hành tại {{factory}}',
-  'ha-tang': 'Tai nạn trên công trường {{factory}}',
+  'cong-nghiep-nang': 'Hội đồng gia tộc chuyển giao quyền điều hành {{industry}}',
+  'nong-san': 'Chủ {{factory}} rút lui sau nhiều năm điều hành',
+  'cong-nghe-cao': 'Nhà sáng lập {{factory}} bàn giao quyền điều hành',
+  'tieu-dung': 'Chủ {{factory}} chuyển quyền cho thế hệ kế nghiệp',
+  'nang-luong': 'Ban điều hành {{factory}} được chuyển giao thế hệ mới',
+  'ha-tang': 'Quyền điều hành công trường {{factory}} được bàn giao',
 }
 
 const GROUP_HEIR: Record<string, string> = {
@@ -56,10 +56,10 @@ const GROUP_HEIR: Record<string, string> = {
 }
 
 const CONTEXT_REASON: { test: RegExp; text: string }[] = [
-  { test: /khủng hoảng/, text: 'Kiệt sức sau cuộc khủng hoảng' },
-  { test: /FDI|nước ngoài/, text: 'Chủ nhà máy mất khi đang đàm phán với đối tác ngoại' },
-  { test: /cổ phần/, text: 'Chủ cũ qua đời giữa lúc chuyển đổi cổ phần' },
-  { test: /hạ tầng còn yếu/, text: 'Tai nạn vì hạ tầng xuống cấp' },
+  { test: /khủng hoảng/, text: 'Hội đồng yêu cầu chuyển giao sau cuộc khủng hoảng' },
+  { test: /FDI|nước ngoài/, text: 'Chủ nhà máy bàn giao quyền điều hành khi mở rộng đối tác ngoại' },
+  { test: /cổ phần/, text: 'Quyền điều hành được chuyển giao trong lúc chuyển đổi cổ phần' },
+  { test: /hạ tầng còn yếu/, text: 'Hội đồng gia tộc quyết định bàn giao vì hạ tầng còn yếu' },
 ]
 
 const CONTEXT_HEIR: { test: RegExp; outcomeType: string; label: string; detail: string; weight: number; multiplier: number }[] = [

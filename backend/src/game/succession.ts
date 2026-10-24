@@ -76,9 +76,13 @@ export function deathStartYear(durationSec: number, cycleSeconds: number) {
   return Math.max(1, Math.floor(Math.max(0, durationSec) / cycle))
 }
 
-/** Base chance begins in year 1 and rises by the configured amount every later year. */
-export function mildDeathChance(year: number, _startYear: number, policy: Pick<SuccessionPolicy, 'baseChance' | 'stepPerYear' | 'maxChance'>) {
-  const steps = Math.max(0, Math.round(year) - 1)
+/**
+ * The base transfer risk stays flat through the initial operating period.
+ * It only rises after that period, keeping the early game legible and giving
+ * teams time to build safeguards before succession pressure compounds.
+ */
+export function mildDeathChance(year: number, startYear: number, policy: Pick<SuccessionPolicy, 'baseChance' | 'stepPerYear' | 'maxChance'>) {
+  const steps = Math.max(0, Math.round(year) - Math.max(1, Math.round(startYear)))
   return Math.min(policy.maxChance, policy.baseChance + steps * policy.stepPerYear)
 }
 
@@ -88,6 +92,11 @@ export function deathChanceFor(year: number, startYear: number, policy: Successi
   let chance = mildDeathChance(year, startYear, policy)
   if (traits.includes('illness')) chance += policy.illnessAdd
   return Math.max(0, Math.min(0.95, chance))
+}
+
+/** Mortality remains materially rarer than a management handover at every point on the curve. */
+export function mortalityChanceFor(year: number, startYear: number, policy: SuccessionPolicy, traits: string[]) {
+  return deathChanceFor(year, startYear, policy, traits) / 2
 }
 
 export function rollHeirMultiplier(row: Pick<HeirRow, 'multiplier' | 'multiplierMin' | 'multiplierMax'>, rng: Rng) {

@@ -20,13 +20,24 @@ export function BudgetPanel({
 }) {
   const bankrupt = scene.cash <= 0
   if (bankrupt) {
+    const canRevive = scene.secondLife === 'available' && scene.stateAidEligible
     return (
       <section className="bankrupt-restart" aria-live="polite">
         <h3>Đã hết vốn vận hành</h3>
-        <p>Nhà máy không thể đầu tư thêm. Bạn có thể khởi động lại từ vốn ban đầu để tiếp tục gỡ vốn trong thời gian còn lại.</p>
-        <button type="button" className="btn" disabled={busy || paused} onClick={onRestart}>
-          Làm lại từ đầu
-        </button>
+        <p>
+          {canRevive
+            ? 'Nhà nước nhận thấy tiềm năng của công ty bạn, đồng ý cấp vốn cho bạn làm lại từ đầu.'
+            : scene.secondLife === 'available'
+              ? 'Khoản hỗ trợ vốn đã được chấp thuận, nhưng chỉ giải ngân nếu công ty phá sản trong đợt chuyển giao quyền điều hành.'
+            : scene.secondLife === 'used'
+              ? 'Công ty đã sử dụng khoản hỗ trợ vốn khởi động lại trong lượt chơi này.'
+              : 'Công ty chưa nhận được quyết định hỗ trợ vốn từ Nhà nước.'}
+        </p>
+        {canRevive && (
+          <button type="button" className="btn" disabled={busy || paused} onClick={onRestart}>
+            Nhận vốn hỗ trợ để làm lại
+          </button>
+        )}
       </section>
     )
   }
@@ -37,8 +48,11 @@ export function BudgetPanel({
         const can = !busy && !paused && scene.cash + 1 >= price
         return (
           <button type="button" className="btn choice" key={line.id} disabled={!can} onClick={() => onInvest(line.id)}>
-            <span className="choice-label">{line.label}</span>
-            <small className="choice-price">Đầu tư {Math.round(price).toLocaleString('vi-VN')} tỷ</small>
+            <img className="choice-art" src={`/assets/investments/${line.id}.png`} alt="" />
+            <span className="choice-copy">
+              <span className="choice-label">{line.label}</span>
+              <small className="choice-price">Đầu tư {Math.round(price).toLocaleString('vi-VN')} tỷ</small>
+            </span>
           </button>
         )
       })}

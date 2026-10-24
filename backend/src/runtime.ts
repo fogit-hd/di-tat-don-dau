@@ -30,6 +30,7 @@ import {
   applyTraitRules,
   deathChanceFor,
   deathStartYear,
+  mortalityChanceFor,
   heirAssets,
   pickHeirOutcome,
   pickSuccessionReason,
@@ -153,6 +154,8 @@ function hydrateState(state: TeamState | null): TeamState | null {
   return {
     ...state,
     centennial: state.centennial ?? null,
+    secondLife: state.secondLife ?? 'locked',
+    stateAidEligible: state.stateAidEligible ?? false,
     traits: state.traits ?? [],
     eventLog: state.eventLog ?? [],
     yearLedger: state.yearLedger ?? [],
@@ -164,6 +167,7 @@ function hydrateState(state: TeamState | null): TeamState | null {
 }
 
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+const SECOND_LIFE_CHANCE_PER_YEAR = 0.025
 
 function rules() {
   return catalog()
@@ -645,7 +649,9 @@ export async function restartTeam(code: string, token: string) {
   if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Không thể làm lại lúc này')
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
-  if (team.state.cash > 0) throw new HttpError(409, 'Chỉ có thể làm lại khi đã hết vốn vận hành')
+  if (team.state.cash > 0) throw new HttpError(409, 'Chỉ có thể nhận vốn hỗ trợ khi đã hết vốn vận hành')
+  if (team.state.secondLife !== 'available') throw new HttpError(409, 'Đội chưa được Nhà nước chấp thuận hỗ trợ vốn hoặc đã dùng quyền này')
+  if (!team.state.stateAidEligible) throw new HttpError(409, 'Vốn hỗ trợ chỉ được giải ngân khi công ty phá sản trong đợt chuyển giao quyền điều hành')
 
   const now = Date.now()
   const old = team.state
@@ -653,6 +659,8 @@ export async function restartTeam(code: string, token: string) {
   const fresh = createState(team.theme, room.startingCapital, rng, rules().balance, now)
   fresh.factoryName = old.factoryName
   fresh.introDone = true
+  fresh.secondLife = 'used'
+  fresh.stateAidEligible = false
   fresh.eventBag = shuffleIds(team.theme.eventIds, rng)
   fresh.yearOpenCash = fresh.cash
   fresh.yearOpenAssets = computeValue(fresh, team.theme, rules().balance)
@@ -660,7 +668,20 @@ export async function restartTeam(code: string, token: string) {
   fresh.yearLockUntil = now
   fresh.seed = hashString(`${room.seed}:${team.id}:restart:${now}`)
   fresh.rng = rng.getState()
-  fresh.log = ['Phá sản: nhà máy được khởi động lại với vốn ban đầu.', ...fresh.log].slice(0, rules().balance.logLimit)
+  fresh.eventLog = [
+    {
+      year: fresh.cycles,
+      eventId: `second-life-used-${now}`,
+      title: 'Nhà nước cấp vốn khởi động lại',
+      body: 'Nhà nước đánh giá công ty có tiềm năng và cấp vốn để làm lại từ đầu. Khoản hỗ trợ này chỉ được sử dụng một lần trong lượt chơi.',
+      icon: 'heart',
+      good: true,
+      effect: 'Được cấp vốn làm lại từ đầu một lần',
+    },
+    ...(old.eventLog ?? []),
+  ].slice(0, 200)
+  fresh.yearLedger = old.yearLedger ?? []
+  fresh.log = ['Nhà nước cấp vốn hỗ trợ để công ty làm lại từ đầu.', ...fresh.log].slice(0, rules().balance.logLimit)
   team.state = fresh
   team.score = null
   team.ending = null
@@ -813,6 +834,24 @@ function centennialAt(room: LiveRoom) {
   return rules().balance.centennialYear || 100
 }
 
+/** A rare public-support decision available only before succession risk starts escalating. */
+function tryGrantSecondLife(room: LiveRoom, team: LiveTeam, rng: ReturnType<typeof makeRng>): YearCause | null {
+  if (!team.state || team.state.secondLife !== 'locked') return null
+  const riskStartsAt = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
+  if (team.state.cycles > riskStartsAt || rng.next() >= SECOND_LIFE_CHANCE_PER_YEAR) return null
+  team.state.secondLife = 'available'
+  rememberSystemEvent(team, {
+    eventId: `second-life-${team.state.cycles}`,
+    title: 'Nhà nước chấp thuận hỗ trợ vốn',
+    body: 'Nhà nước nhận thấy tiềm năng của công ty và đồng ý cấp vốn để làm lại từ đầu nếu công ty mất khả năng thanh toán. Quyền hỗ trợ chỉ có hiệu lực một lần.',
+    icon: 'heart',
+    good: true,
+    effect: 'Được cấp vốn làm lại từ đầu một lần',
+  })
+  team.state.log = ['Sự kiện hiếm: Nhà nước chấp thuận hỗ trợ vốn.', ...team.state.log].slice(0, rules().balance.logLimit)
+  return { kind: 'event', label: 'Nhà nước chấp thuận hỗ trợ vốn', cash: 0, detail: 'Được cấp vốn làm lại từ đầu một lần' }
+}
+
 function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   if (!team.state || !team.theme || team.state.finished) return
   settlePending(room, team, now)
@@ -834,6 +873,8 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
     if (!event || event.trait) continue
     eventCauses.push(applyEvent(team, event, rng, now))
   }
+  const secondLifeCause = tryGrantSecondLife(room, team, rng)
+  if (secondLifeCause) eventCauses.push(secondLifeCause)
   team.state.rng = rng.getState()
   const sharedId = drawn.classWide ? drawn.ids[0] : undefined
   const shared = sharedId ? rules().events.find((item) => item.id === sharedId) : undefined
@@ -849,6 +890,10 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   const celebrate = team.state.cycles >= centennialAt(room) ? grantCentennial(team) : null
   if (celebrate) emitRoom(room.code, 'team:centennial', celebrate)
   if (!team.state.finished) {
+    const death = rollMortality(room, team)
+    if (death) emitSuccession(room.code, death)
+  }
+  if (!team.state.finished) {
     const family = rollFamily(room, team, now)
     if (family.cause) eventCauses.push(family.cause)
     if (!family.retired && !team.state.finished) {
@@ -856,7 +901,7 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
       if (notice) emitSuccession(room.code, notice)
     }
   }
-  if (!team.state.finished) presentYearQuestion(team, now)
+  if (!team.state.finished && team.state.cash > 0) presentYearQuestion(team, now)
   const cashAfter = team.state.cash
   const assetsAfter = team.state.finished ? (team.score ?? computeValue(team.state, team.theme, balance)) : computeValue(team.state, team.theme, balance)
   const extra = team.state.pendingCauses ?? []
@@ -925,11 +970,7 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
     assetsAfter,
     year: team.state.cycles,
   }
-  team.state.finished = true
   team.state.succession = stored
-  team.state.nextYearAt = 0
-  team.state.yearLockUntil = 0
-  team.state.pending = null
   team.state.log = [stored.causeText, ...team.state.log].slice(0, balance.logLimit)
   // A natural succession is not drawn from the ordinary event deck, so make it visible
   // in exactly the same two event lists as any other event.
@@ -937,12 +978,27 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
     rememberSystemEvent(team, {
       eventId: `succession-${team.state.cycles}`,
       title: stored.causeText,
-      body: 'Chủ xưởng đã qua đời. Quyền điều hành và toàn bộ kết quả được chuyển sang người thừa kế.',
+      body: 'Quyền điều hành công ty được chuyển sang thế hệ kế nghiệp.',
       icon: 'heart',
       good: false,
-      effect: `Kết thúc lượt chơi · ${stored.outcomeLabel}`,
+      effect: stored.outcome === 'bankrupt' ? 'Công ty mất khả năng thanh toán' : `Kết thúc lượt chơi · ${stored.outcomeLabel}`,
     })
   }
+  if (stored.outcome === 'bankrupt') {
+    team.state.cash = 0
+    team.state.lastIncome = 0
+    team.state.stateAidEligible = true
+    team.state.nextYearAt = 0
+    team.state.yearLockUntil = 0
+    team.state.pending = null
+    team.score = null
+    team.ending = null
+    return null
+  }
+  team.state.finished = true
+  team.state.nextYearAt = 0
+  team.state.yearLockUntil = 0
+  team.state.pending = null
   team.score = assetsAfter
   team.ending = heir.outcomeType
   void now
@@ -954,6 +1010,48 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
     assetsBefore,
     assetsAfter,
   })
+}
+
+/** A mortality event ends the player's journey; it is distinct from a business succession. */
+function rollMortality(room: LiveRoom, team: LiveTeam): SuccessionNotice | null {
+  if (!team.state || !team.theme || team.state.finished) return null
+  const rng = teamRngOf(team)
+  const policy = rules().successionPolicy
+  const start = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
+  let chance = mortalityChanceFor(team.state.cycles, start, policy, team.state.traits ?? [])
+  if (room.debugForceDeath && team.state.cycles >= start) chance = 1
+  if (rng.next() >= chance) {
+    team.state.rng = rng.getState()
+    return null
+  }
+  const assets = computeValue(team.state, team.theme, rules().balance)
+  const stored: SuccessionResult = {
+    causeText: 'Chủ doanh nghiệp qua đời',
+    outcome: 'steady',
+    outcomeLabel: 'Lượt chơi khép lại',
+    outcomeDetail: 'Người sáng lập qua đời; công ty không chuyển sang một lượt vận hành mới.',
+    assetsBefore: assets,
+    assetsAfter: assets,
+    year: team.state.cycles,
+  }
+  team.state.rng = rng.getState()
+  team.state.finished = true
+  team.state.succession = stored
+  team.state.nextYearAt = 0
+  team.state.yearLockUntil = 0
+  team.state.pending = null
+  team.state.log = [stored.causeText, ...team.state.log].slice(0, rules().balance.logLimit)
+  rememberSystemEvent(team, {
+    eventId: `mortality-${team.state.cycles}`,
+    title: stored.causeText,
+    body: 'Lượt chơi dừng lại vì người sáng lập đã qua đời.',
+    icon: 'heart',
+    good: false,
+    effect: 'Kết thúc lượt chơi',
+  })
+  team.score = assets
+  team.ending = 'death'
+  return successionNotice({ teamId: team.id, year: stored.year, causeText: stored.causeText, outcome: stored.outcome, assetsBefore: assets, assetsAfter: assets })
 }
 
 function grantCentennial(team: LiveTeam): CentennialNotice | null {
@@ -999,7 +1097,7 @@ function rollFamily(room: LiveRoom, team: LiveTeam, now: number): { retired: boo
     rememberEvent(team, event, copy.title, copy.body, 'Nghỉ hưu, chuyển giao ngay')
     const notice = rollSuccession(room, team, now, { causeText: copy.title })
     if (notice) emitSuccession(room.code, notice)
-    return { retired: Boolean(notice), cause: { kind: 'event', label: copy.title, cash: 0 } }
+    return { retired: true, cause: { kind: 'event', label: copy.title, cash: 0 } }
   }
   const before = team.state.cash
   team.state.traits = [...owned, event.trait]
@@ -1470,6 +1568,8 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
   const epl = theme.coefs.epl
   const operating = Math.min(state.machines, state.engineers / Math.max(1, epl))
   const idle = Math.max(0, state.machines - operating)
+  const riskStartsAt = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
+  const nextYear = state.cycles + 1
   return {
     industryId: theme.industryId,
     factoryName: state.factoryName,
@@ -1499,6 +1599,8 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
     nextYearAt: state.nextYearAt,
     yearLockUntil: state.yearLockUntil ?? 0,
     finished: Boolean(state.finished),
+    secondLife: state.secondLife ?? 'locked',
+    stateAidEligible: state.stateAidEligible ?? false,
     succession: state.succession ?? null,
     effects: state.effects.map((effect) => ({
       id: effect.id,
@@ -1528,7 +1630,12 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
     traits: traitViews(state.traits ?? []),
     centennial: state.centennial ?? null,
     pulseYear: state.pulseYear ?? 0,
-    deathChance: deathChanceFor(state.cycles, room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds), rules().successionPolicy, state.traits ?? []),
+    deathChance: mortalityChanceFor(nextYear, riskStartsAt, rules().successionPolicy, state.traits ?? []),
+    nextDeathChance: mortalityChanceFor(nextYear + 1, riskStartsAt, rules().successionPolicy, state.traits ?? []),
+    successionChance: deathChanceFor(nextYear, riskStartsAt, rules().successionPolicy, state.traits ?? []),
+    nextSuccessionChance: deathChanceFor(nextYear + 1, riskStartsAt, rules().successionPolicy, state.traits ?? []),
+    successionRiskStartsAt: riskStartsAt,
+    restructuringChance: state.secondLife === 'locked' && nextYear <= riskStartsAt ? SECOND_LIFE_CHANCE_PER_YEAR : 0,
   }
 }
 

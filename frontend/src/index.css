@@ -61,7 +61,6 @@ h2 { margin: 0.2em 0; color: var(--red); font-size: 1.4rem; }
 .top-main { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: center; }
 .top b, .big-time { color: #ffd9a8; }
 .top-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.death-risk { color: #ffd9a8; font-size: 0.82em; white-space: nowrap; }
 .up { color: #b7f0c8; }
 .down { color: #ffd0c8; }
 .rank { background: #ffe7c2; color: var(--ink); border-radius: 999px; padding: 2px 8px; }
@@ -157,16 +156,19 @@ input {
   color: var(--ink);
   box-shadow: 0 4px 0 #cdb89d;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
   gap: 4px;
 }
+.choice-art { width: 52px; height: 52px; flex: 0 0 52px; object-fit: contain; }
+.choice-copy { min-width: 0; display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 4px; }
 .choice-label { display: block; width: 100%; line-height: 1.32; overflow-wrap: anywhere; }
 .choice-price { display: block; color: #8a5a31; font-size: 0.8em; font-weight: 700; line-height: 1.2; }
 .bankrupt-restart { background: #fff4d6; border: 2px solid #e8503f; border-radius: 14px; padding: 14px; }
 .bankrupt-restart h3 { margin: 0; color: #c7382c; font-size: 1rem; }
 .bankrupt-restart p { margin: 6px 0 12px; color: #684f41; font-size: 0.88rem; }
+.finish-note { background: #fff4d6; border-left: 4px solid #e7a93b; border-radius: 8px; margin: 0 0 10px; padding: 10px 12px; color: #684f41; }
 .top-ended { color: #ffd9a8; font-weight: 800; }
 .start { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: center; min-height: 85vh; }
 .start img, .hero img { width: 100%; border-radius: 16px; }
@@ -300,6 +302,10 @@ input {
 .year-ring { stroke: var(--cream); stroke-linecap: round; }
 .year-btn span { position: relative; display: flex; flex-direction: column; align-items: center; line-height: 1.15; }
 .year-btn small { font-weight: 600; font-size: 0.85rem; }
+.year-finish { width: min(260px, 100%); min-height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.year-finish small { color: #fff4d6; font-size: 0.76rem; font-weight: 600; }
+.finished-summary { max-width: 520px; }
+.finished-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
 .idle-cloud { animation: idle-cloud 18s ease-in-out infinite alternate; }
 .idle-cloud.delay { animation-duration: 26s; }
 .idle-truck { animation: idle-truck 22s linear infinite; }
@@ -365,6 +371,32 @@ input {
 .status-board > div b { font-size: 1.35rem; }
 .status-board .debt, .status-board .debt b, .remain.debt, .remain.debt b { color: #c7382c; }
 .status-board .badge-row { grid-column: 1 / -1; }
+.governance-risk {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(150px, .8fr) minmax(230px, 1.2fr) minmax(220px, 1.5fr);
+  gap: 10px 14px;
+  align-items: center;
+  padding: 11px 12px;
+  background: #fffaf0;
+  border: 1px solid #d9b786;
+  border-left: 5px solid #80512e;
+  border-radius: 13px;
+}
+.governance-risk header { display: grid; gap: 1px; }
+.governance-risk header span, .governance-metrics span { color: #7a6658; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .025em; }
+.governance-risk header b { color: #4f3122; font-size: .98rem; }
+.governance-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.governance-metrics > div { padding: 6px 8px; border-radius: 9px; background: #fff; border: 1px solid #ead8bf; }
+.governance-metrics strong { display: block; color: #8e261e; font-size: 1.05rem; line-height: 1.2; }
+.governance-metrics small { color: #7a6658; font-size: .74rem; }
+.governance-risk > p { margin: 0; color: #634c3e; font-size: .8rem; line-height: 1.35; }
+.restructuring-status { grid-column: 2 / -1; display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: baseline; padding-top: 7px; border-top: 1px solid #ead8bf; font-size: .82rem; }
+.restructuring-status b { color: #4f3122; }
+.restructuring-status span { color: #7a6658; }
+.restructuring-status small { grid-column: 2; color: #1f5c32; font-size: .76rem; }
+.restructuring-status.available { border-top-color: #91c99c; }
+.restructuring-status.used { border-top-color: #cdb89d; }
 .top .debt, .top .debt b { color: #ffb4a8; }
 .badge-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .badge {
@@ -512,6 +544,9 @@ input {
   :root { font-size: 15px; }
   .wrap { padding: 10px; }
   .status-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .governance-risk { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  .governance-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .restructuring-status { grid-column: auto; }
   .scene { border-radius: 14px; }
   .game-content { grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 10px; }
   .game-content .scene { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
@@ -545,6 +580,13 @@ input {
   .game-shell .top { margin: -10px -10px 8px; flex: none; }
   .game-shell .status-board { margin: 0 0 8px; padding: 11px 14px; flex: none; }
   .game-shell .status-board > div b { font-size: 1.16rem; }
+  .game-shell .governance-risk { padding: 8px 10px; gap: 7px 10px; }
+  .game-shell .governance-risk header b { font-size: .88rem; }
+  .game-shell .governance-risk header span, .game-shell .governance-metrics span { font-size: .67rem; }
+  .game-shell .governance-metrics > div { padding: 4px 6px; }
+  .game-shell .governance-metrics strong { font-size: .95rem; }
+  .game-shell .governance-risk > p, .game-shell .restructuring-status { font-size: .72rem; }
+  .game-shell .restructuring-status { padding-top: 5px; }
   .game-shell .game-content { flex: 1; min-height: 0; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); margin-top: 0; }
   .game-shell .game-stage { min-height: 0; grid-template-rows: minmax(0, 1fr) auto; }
   .game-shell .scene { height: auto; min-height: 0; }

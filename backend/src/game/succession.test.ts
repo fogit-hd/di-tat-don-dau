@@ -5,6 +5,7 @@ import {
   companyHealth,
   deathChanceFor,
   deathStartYear,
+  mortalityChanceFor,
   heirAssets,
   mildDeathChance,
   pickHeirOutcome,
@@ -72,7 +73,7 @@ describe('successionChance', () => {
 
 const mild: SuccessionPolicy = {
   baseChance: 0.01,
-  stepPerYear: 0.005,
+  stepPerYear: 0.0025,
   maxChance: 0.3,
   longevityChance: 0.01,
   illnessAdd: 0.1,
@@ -88,17 +89,24 @@ describe('mild death curve', () => {
     expect(deathStartYear(10 * 60, 30)).toBe(20)
   })
 
-  it('uses 1 percent in year one and adds 0.5 point each year, capped at 30', () => {
+  it('holds at 1 percent through the operating period, then adds 0.25 point each year, capped at 30', () => {
     expect(mildDeathChance(1, 15, mild)).toBeCloseTo(0.01)
-    expect(mildDeathChance(2, 15, mild)).toBeCloseTo(0.015)
-    expect(mildDeathChance(15, 15, mild)).toBeCloseTo(0.08)
-    expect(mildDeathChance(80, 15, mild)).toBeCloseTo(0.3)
+    expect(mildDeathChance(2, 15, mild)).toBeCloseTo(0.01)
+    expect(mildDeathChance(15, 15, mild)).toBeCloseTo(0.01)
+    expect(mildDeathChance(16, 15, mild)).toBeCloseTo(0.0125)
+    expect(mildDeathChance(140, 15, mild)).toBeCloseTo(0.3)
   })
 
   it('locks longevity at 1 percent even when another trait would otherwise add risk', () => {
     expect(deathChanceFor(30, 15, mild, ['longevity'])).toBeCloseTo(0.01)
     expect(deathChanceFor(30, 15, mild, ['longevity', 'illness'])).toBeCloseTo(0.01)
     expect(deathChanceFor(1, 15, mild, ['illness'])).toBeCloseTo(0.11)
+  })
+
+  it('keeps mortality below the corresponding succession risk', () => {
+    expect(mortalityChanceFor(15, 15, mild, [])).toBeCloseTo(0.005)
+    expect(mortalityChanceFor(16, 15, mild, [])).toBeCloseTo(0.00625)
+    expect(mortalityChanceFor(16, 15, mild, [])).toBeLessThan(deathChanceFor(16, 15, mild, []))
   })
 })
 

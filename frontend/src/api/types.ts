@@ -91,6 +91,8 @@ export type SceneView = {
   nextYearAt: number
   yearLockUntil: number
   finished: boolean
+  secondLife: 'locked' | 'available' | 'used'
+  stateAidEligible: boolean
   succession: SuccessionView | null
   effects: EffectView[]
   pending: PendingView | null
@@ -102,6 +104,11 @@ export type SceneView = {
   centennial?: CentennialView | null
   pulseYear?: number
   deathChance?: number
+  nextDeathChance?: number
+  successionChance?: number
+  nextSuccessionChance?: number
+  successionRiskStartsAt?: number
+  restructuringChance?: number
   linePrices?: LinePrices
 }
 
