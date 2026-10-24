@@ -902,8 +902,24 @@ html {
 .band { z-index: 4; margin-top: 0; }
 .band::before { top: -62px; height: 94px; background: url('/assets/landing/brush-cream.svg') center bottom / 100% 100% no-repeat; clip-path: none; filter: none; }
 .band::after { display: none; }
-.feat-sec { z-index: 4; margin-top: -12px; padding-top: 48px; }
-.feat-sec::before { top: -72px; height: 103px; background: url('/assets/landing/brush-plum.svg') center bottom / 100% 100% no-repeat; clip-path: none; filter: none; }
+.band { padding-bottom: 96px; } /* 72px divider reach + 24px content clearance. */
+.feat-sec {
+  --divider-color: #210d3a;
+  z-index: 4;
+  margin-top: 0;
+  padding-top: 48px;
+  background: linear-gradient(var(--divider-color) 0 96px, transparent 200px), radial-gradient(ellipse at 50% -30%, #542060, #170c2d 68%);
+}
+.feat-sec::before {
+  top: -72px;
+  height: 103px;
+  background: var(--divider-color);
+  mask: url('/assets/landing/brush-investments-mask.svg') center / 100% 100% no-repeat;
+  clip-path: none;
+  filter: none;
+  box-shadow: none;
+  opacity: 1;
+}
 .feat-sec::after { display: none; }
 .host-strip { z-index: 4; margin-top: -11px; padding-top: 52px; }
 .host-strip::after { top: -63px; height: 91px; background: url('/assets/landing/brush-result.svg') center bottom / 100% 100% no-repeat; filter: none; }

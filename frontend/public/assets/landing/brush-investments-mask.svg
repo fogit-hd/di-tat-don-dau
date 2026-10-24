@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="124" viewBox="0 0 1600 124" preserveAspectRatio="none" fill="none">
+  <!-- Alternate seeded edge; same opaque body and two dry-bristle layers as brush-cream.svg. -->
+  <path d="M0 54C73 35 146 66 231 47C323 26 403 59 498 43C581 28 675 65 755 47C845 27 938 62 1022 40C1110 18 1188 60 1274 41C1370 19 1463 56 1600 37V124H0Z" fill="white"/>
+  <path d="M-20 51C70 35 147 63 226 44M265 41c82-12 145 17 226 0M532 43c85-5 140 19 214 1M790 43c77-15 149 12 222-6M1050 37c81-15 150 18 217 0M1310 34c90-13 181 18 310-2" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".78"/>
+  <path d="M-15 46q58-7 104 3m70-6q42 1 71-5m75-5q51 2 92 8m91-8q37-4 74 1m98 7q53 4 96-5m103-4q43 6 82 2m116-5q54-7 101 1m98-4q47 5 80 0m79-6q66 3 117-1" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+</svg>
