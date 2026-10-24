@@ -250,13 +250,13 @@ export function StartScreen() {
             <img src="/assets/landing/game-logo-header.png" alt="Đi Tắt Đón Đầu" />
           </a>
           <nav className="land-nav" aria-label="Mục lục">
-            <a href="#cach-choi">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v12H8l-4 3V5Zm5 4h6m-6 4h4" /></svg>
-              Cách chơi
+            <a href="#cach-choi" aria-label="Cách chơi">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1m0-14c3-2 6-2 9-1v14c-3-1-6-1-9 1V6Z" /></svg>
+              <span>Cách chơi</span>
             </a>
-            <a href="#tinh-nang">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v4m0 10v4M4.2 6.2l2.9 2.9m9.8 5.8 2.9 2.9M3 12h4m10 0h4M4.2 17.8l2.9-2.9m9.8-5.8 2.9-2.9" /><circle cx="12" cy="12" r="3.5" /></svg>
-              Sự kiện
+            <a href="#tinh-nang" aria-label="Sự kiện">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 10h18m-9 3 .9 2.1 2.3.2-1.8 1.5.6 2.2-2-1.2-2 1.2.6-2.2-1.8-1.5 2.3-.2L12 13Z" /></svg>
+              <span>Sự kiện</span>
             </a>
           </nav>
           <div className="land-actions">
@@ -276,8 +276,10 @@ export function StartScreen() {
           <div className="land-wrap hero-grid">
             <img className="hero-game-art" src="/assets/landing/game-world-canvas.png" alt="Thành phố công nghiệp, nông nghiệp, logistics và cảng biển trong trò chơi" />
             <div className="hero-copy">
-              <h1 id="hero-title" className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</h1>
-              <img className="hero-title-art" src="/assets/landing/hero-title.png" alt="Xây doanh nghiệp. Chốt vận mệnh." />
+              <h1 id="hero-title" className="hero-heading">
+                <span className="hero-heading-first">Xây doanh nghiệp.</span>
+                <span className="hero-heading-last">Chốt vận mệnh.</span>
+              </h1>
               <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
           <div className="hero-join" aria-labelledby="join-title">
             <div className="join-intro">

@@ -995,3 +995,136 @@ html {
 .land-foot { --edge-mask: url('/assets/landing/brush-investments-mask.svg'); }
 .host-strip::after,
 .land-foot::before { content: none; display: none; }
+
+/* Navbar and hero sizing are local to the landing page. */
+.landing { --nav-h: 128px; --hero-tone: #180c2b; }
+.land-bar { height: var(--nav-h); }
+.bar-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: 'logo links cta';
+  height: 100%;
+  min-height: 0;
+  gap: 20px;
+}
+.wordmark { grid-area: logo; justify-self: start; }
+.wordmark img { width: 240px; height: 120px; max-width: 100%; object-fit: contain; transform: none; filter: none; }
+.land-nav { grid-area: links; display: flex; justify-content: center; gap: 16px; margin: 0; }
+.land-nav a { gap: 8px; font-size: .95rem; transition: color 180ms ease, background-color 180ms ease; }
+.land-nav svg { width: 20px; height: 20px; flex: none; }
+.land-nav a:hover { color: #ffce72; }
+.land-nav a:focus-visible { outline: 2px solid #ffce72; outline-offset: 4px; }
+.land-actions { grid-area: cta; justify-self: end; }
+.hero-sec { background: var(--hero-tone); }
+.hero-grid.land-wrap {
+  height: min(calc(100vw * 941 / 1672), calc(100svh - var(--nav-h)));
+  aspect-ratio: auto;
+  min-height: 0;
+  overflow: visible;
+  background: var(--hero-tone);
+  align-items: start;
+}
+.hero-game-art {
+  inset: 0 0 auto auto;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+  background: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 25%), linear-gradient(to top, transparent, #000 18%), linear-gradient(to bottom, transparent, #000 8%);
+  mask-image: linear-gradient(to right, transparent, #000 25%), linear-gradient(to top, transparent, #000 18%), linear-gradient(to bottom, transparent, #000 8%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.hero-grid::after { content: none; }
+.hero-copy {
+  align-self: start;
+  width: min(600px, 52%);
+  max-width: none;
+  margin-left: max(24px, calc((100% - 1280px) / 2));
+  padding: clamp(36px, 7svh, 78px) 0 64px;
+  transform: none;
+  background: none;
+}
+.landing .hero-heading {
+  margin: 0 0 16px;
+  max-width: none;
+  color: #fff1d6;
+  font-size: clamp(1.65rem, 3.1vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -.025em;
+  line-height: 1.12;
+  text-shadow: none;
+}
+.hero-heading > span { display: block; width: fit-content; white-space: nowrap; }
+.hero-heading-first { text-shadow: 0 2px 2px rgba(9, 3, 19, .35); }
+.hero-heading-last {
+  position: relative;
+  margin-top: 4px;
+  padding-bottom: 12px;
+  font-size: 1.25em;
+  color: transparent;
+  background: linear-gradient(#ffe5a0, #f39038);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+.hero-heading-last::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  bottom: -1px;
+  width: 104%;
+  height: 11px;
+  background: #eea143;
+  opacity: .85;
+  -webkit-mask: url('/assets/landing/brush-investments-mask.svg') center / 100% 100% no-repeat;
+  mask: url('/assets/landing/brush-investments-mask.svg') center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.hero-copy .tagline { margin: 0; font-size: clamp(.85rem, 1.08vw, 1rem); max-width: 32em; }
+.hero-join { margin-top: 20px; }
+.hero-join .join-intro { margin-bottom: 10px; }
+
+/* Tonal washes stay inside the existing result overlay and footer. The
+   existing section masks continue to cut these layers with the background. */
+.host-strip::before {
+  background:
+    linear-gradient(to bottom, #170c2d, transparent 120px),
+    linear-gradient(to top, #120a23, transparent 120px),
+    rgba(28, 11, 42, .8);
+  pointer-events: none;
+}
+.land-foot::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(23, 12, 45, .35), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (max-width: 1000px) and (min-width: 768px) {
+  .wordmark img { width: 210px; height: 110px; }
+  .bar-inner { gap: 12px; }
+  .land-nav { gap: 4px; }
+  .land-nav a { padding-inline: 8px; font-size: .85rem; }
+  .hero-copy { padding-top: 6svh; }
+}
+@media (max-width: 767px) {
+  .landing { --nav-h: 80px; }
+  .bar-inner { width: calc(100% - 28px); gap: 8px; }
+  .wordmark img { width: 128px; height: 64px; }
+  .land-nav { display: flex; gap: 0; }
+  .land-nav a { padding: 8px; font-size: .78rem; gap: 5px; }
+  .landing .land-actions .btn { padding-inline: 12px; font-size: .8rem; }
+  .hero-grid.land-wrap { height: auto; min-height: 0; grid-template-rows: auto auto; }
+  .hero-copy { grid-row: 1; width: auto; max-width: none; margin: 0; padding: 36px 24px 24px; }
+  .landing .hero-heading { font-size: clamp(1.65rem, 6.9vw, 2.9rem); }
+  .hero-game-art { grid-row: 2; position: relative; inset: auto; width: 100%; height: auto; max-width: 100%; aspect-ratio: 1672 / 941; margin-bottom: 24px; }
+  .hero-copy .tagline { font-size: .9rem; }
+}
+@media (max-width: 479px) {
+  .land-nav a span { display: none; }
+}
