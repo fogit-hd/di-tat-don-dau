@@ -75,6 +75,7 @@ export function StartScreen() {
   const [loginOpen, setLoginOpen] = useState(false)
   const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
   const loginButton = useRef<HTMLDivElement | null>(null)
+  const roomCodeInput = useRef<HTMLInputElement | null>(null)
   const [joinStep, setJoinStep] = useState<'code' | 'name'>('code')
   const codeFromUrl = readCode(searchParams)
   const [joinCode, setJoinCode] = useState(codeFromUrl)
@@ -251,17 +252,24 @@ export function StartScreen() {
           </a>
           <nav className="land-nav" aria-label="Mục lục">
             <a href="#cach-choi" aria-label="Cách chơi">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1m0-14c3-2 6-2 9-1v14c-3-1-6-1-9 1V6Z" /></svg>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10c2 0 3 2 3.5 4l1 6c.4 2-1.7 3-3 1.5L16 16H8l-2.5 2.5c-1.3 1.5-3.4.5-3-1.5l1-6C4 9 5 7 7 7ZM7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".6" /><circle cx="18" cy="14" r=".6" /></svg>
               <span>Cách chơi</span>
             </a>
             <a href="#tinh-nang" aria-label="Sự kiện">
               <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 10h18m-9 3 .9 2.1 2.3.2-1.8 1.5.6 2.2-2-1.2-2 1.2.6-2.2-1.8-1.5 2.3-.2L12 13Z" /></svg>
               <span>Sự kiện</span>
             </a>
+            <button type="button" aria-label="Chủ phòng" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 6 5 4 4-6 4 6 5-4-2 12H5L3 6Zm3 15h12" /></svg>
+              <span>Chủ phòng</span>
+            </button>
           </nav>
           <div className="land-actions">
             <button type="button" className="btn land-cta" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-              Tạo phòng
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>Tạo phòng
+            </button>
+            <button type="button" className="nav-join" aria-label="Vào phòng" onClick={() => { setJoinStep('code'); window.scrollTo({ top: 0, behavior: 'smooth' }); window.requestAnimationFrame(() => roomCodeInput.current?.focus({ preventScroll: true })) }}>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v16h-6M3 12h12m-5-5 5 5-5 5" /></svg><span>Vào phòng</span>
             </button>
           </div>
         </div>
@@ -277,18 +285,20 @@ export function StartScreen() {
             <img className="hero-game-art" src="/assets/landing/game-world-canvas.png" alt="Thành phố công nghiệp, nông nghiệp, logistics và cảng biển trong trò chơi" />
             <div className="hero-copy">
               <h1 id="hero-title" className="hero-heading">
-                <span className="hero-heading-first">Xây doanh nghiệp.</span>
-                <span className="hero-heading-last">Chốt vận mệnh.</span>
+                <span className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</span>
+                <picture>
+                  <source srcSet="/assets/landing/hero-title.webp" type="image/webp" />
+                  <img className="hero-lettering" src="/assets/landing/hero-title.png" alt="" aria-hidden="true" width="1600" height="669" decoding="async" />
+                </picture>
               </h1>
               <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
-          <div className="hero-join" aria-labelledby="join-title">
-            <div className="join-intro">
-              <span className="join-icon" aria-hidden="true">↳</span>
-              <div>
-                <h2 id="join-title">Vào phòng chơi</h2>
-                <p>Nhập mã phòng của chủ phòng để bắt đầu cùng đội.</p>
-              </div>
-            </div>
+          <div className="hero-join" id="join-title" aria-label="Vào phòng">
+            <div className="hero-cta-row">
+            <button type="button" className="btn hero-create" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3" /><path d="M3 21v-5c0-3 2-4 6-4s6 1 6 4v5M17 4a3 3 0 0 1 0 6m1 3c2 0 3 2 3 4v4" /></svg>
+              Tạo phòng
+              <svg aria-hidden="true" className="cta-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" /></svg>
+            </button>
             {joinStep === 'code' ? (
               <form
                 className="join-form"
@@ -297,9 +307,10 @@ export function StartScreen() {
                   void checkCode()
                 }}
               >
+                <svg className="join-enter" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v16h-6M3 12h12m-5-5 5 5-5 5" /></svg>
                 <label>
                   <span className="sr-only">Mã phòng</span>
-                  <input value={joinCode} maxLength={8} autoCapitalize="characters" placeholder="Nhập mã phòng" onChange={(event) => setJoinCode(event.target.value.toUpperCase())} />
+                  <input ref={roomCodeInput} value={joinCode} maxLength={8} autoCapitalize="characters" placeholder="Nhập mã phòng" onChange={(event) => setJoinCode(event.target.value.toUpperCase())} />
                 </label>
                 <button type="submit" className="btn" disabled={busy}>{busy ? 'Đang kiểm tra…' : 'Vào phòng'}</button>
               </form>
@@ -320,6 +331,8 @@ export function StartScreen() {
                 <button type="button" className="join-change" onClick={() => { setError(''); setJoinStep('code') }}>Đổi mã</button>
               </form>
             )}
+            </div>
+            <p className="join-caption">Nhập mã phòng của chủ phòng để bắt đầu cùng đội.</p>
             {error && <p className="join-error" role="alert">{error}</p>}
           </div>
             </div>
