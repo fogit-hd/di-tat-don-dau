@@ -969,3 +969,29 @@ html {
   .feat:last-child { grid-column: 1 / -1; min-height: auto; }
   .host-strip-inner { align-items: flex-start; flex-direction: column; }
 }
+
+/* Boundaries 3 and 4 cut the section itself, including its original image,
+   overlay and colour. The solid mask begins one pixel inside the brush so
+   the background stays continuous across the two mask layers. */
+.feat-sec { padding-bottom: 96px; }
+.host-strip,
+.land-foot {
+  --edge-h: 96px;
+  margin-top: calc(var(--edge-h) * -.5);
+  padding-top: calc(var(--edge-h) + 24px);
+  -webkit-mask-image: var(--edge-mask), linear-gradient(#000, #000);
+  mask-image: var(--edge-mask), linear-gradient(#000, #000);
+  -webkit-mask-size: calc(100vw + 80px) var(--edge-h), 100% calc(100% - var(--edge-h) + 1px);
+  mask-size: calc(100vw + 80px) var(--edge-h), 100% calc(100% - var(--edge-h) + 1px);
+  -webkit-mask-position: center top, center bottom;
+  mask-position: center top, center bottom;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.host-strip {
+  --edge-mask: url('/assets/landing/brush-cream.svg');
+  padding-bottom: 96px;
+}
+.land-foot { --edge-mask: url('/assets/landing/brush-investments-mask.svg'); }
+.host-strip::after,
+.land-foot::before { content: none; display: none; }
