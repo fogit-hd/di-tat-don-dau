@@ -868,6 +868,58 @@ html {
   filter: drop-shadow(0 -4px 8px rgba(255, 197, 93, .14));
 }
 
+/* Landing pass: real soft brush assets, not geometric zig-zags. */
+.land-nav { margin-left: clamp(30px, 5vw, 84px); }
+.land-nav a { display: inline-flex; align-items: center; gap: 7px; }
+.land-nav svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-copy {
+  transform: translate(10px, clamp(-86px, -6vw, -38px));
+}
+
+.join-strip {
+  position: relative;
+  z-index: 5;
+  margin-top: -22px;
+  padding: 42px 0 32px;
+  color: #28142d;
+  background: #fff3d8;
+}
+.join-strip::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -66px;
+  left: 0;
+  width: 100%;
+  height: 94px;
+  background: url('/assets/landing/brush-cream.svg') center bottom / 100% 100% no-repeat;
+}
+.join-strip-inner { display: grid; grid-template-columns: minmax(230px, .78fr) minmax(400px, 1.22fr); align-items: center; gap: 28px; }
+.join-intro { display: flex; align-items: center; gap: 13px; }
+.join-icon { display: grid; width: 42px; height: 42px; place-items: center; flex: none; border: 2px solid #5b2547; border-radius: 50%; color: #5b2547; font: 900 1.8rem/1 'Baloo 2', sans-serif; transform: rotate(-12deg); }
+.join-intro h2 { margin: 0; color: #301734; font-size: clamp(1.35rem, 2vw, 2rem); line-height: 1; }
+.join-intro p { margin: 6px 0 0; font-size: .86rem; color: #715567; }
+.join-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.join-form label { min-width: 0; }
+.join-form input { width: 100%; min-height: 48px; box-sizing: border-box; border: 2px solid #e5c88f; border-radius: 12px; padding: 10px 15px; color: #2c1930; background: rgba(255,255,255,.76); font: 800 1rem 'Be Vietnam Pro', sans-serif; }
+.join-form .btn { min-height: 48px; white-space: nowrap; }
+.join-name-form { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+.join-room { margin: 0; color: #5e354b; font-size: .82rem; white-space: nowrap; }
+.join-change { border: 0; padding: 8px; color: #6b3151; background: transparent; font: 800 .82rem 'Baloo 2', sans-serif; text-decoration: underline; cursor: pointer; }
+.join-error { grid-column: 2; margin: -3px 0 0; color: #b92330; font-size: .8rem; font-weight: 700; }
+
+/* Distinct, soft painted joins. These use intentionally different brushes. */
+.band { z-index: 4; margin-top: 0; }
+.band::before { top: -62px; height: 94px; background: url('/assets/landing/brush-cream.svg') center bottom / 100% 100% no-repeat; clip-path: none; filter: none; }
+.band::after { display: none; }
+.feat-sec { z-index: 4; margin-top: -12px; padding-top: 48px; }
+.feat-sec::before { top: -72px; height: 103px; background: url('/assets/landing/brush-plum.svg') center bottom / 100% 100% no-repeat; clip-path: none; filter: none; }
+.feat-sec::after { display: none; }
+.host-strip { z-index: 4; margin-top: -11px; padding-top: 52px; }
+.host-strip::after { top: -63px; height: 91px; background: url('/assets/landing/brush-result.svg') center bottom / 100% 100% no-repeat; filter: none; }
+.land-foot { z-index: 4; margin-top: -11px; padding-top: 40px; }
+.land-foot::before { top: -63px; height: 91px; background: url('/assets/landing/brush-plum.svg') center bottom / 100% 100% no-repeat; clip-path: none; filter: none; }
+
 @media (max-width: 800px) {
   .land-nav { display: none; }
   .bar-inner { width: calc(100% - 28px); min-height: 58px; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'logo cta'; }
@@ -876,12 +928,18 @@ html {
   .hero-sec { padding-top: 0; }
   .hero-grid.land-wrap { width: 100%; min-height: 570px; aspect-ratio: auto; border-radius: 0; border-inline: 0; }
   .hero-game-art { object-position: 63% center; }
-  .hero-copy { align-self: end; padding: 28px 18px 34px; max-width: 100%; background: linear-gradient(0deg, rgba(18,9,35,.9), rgba(18,9,35,0)); }
+  .hero-copy { align-self: end; padding: 28px 18px 34px; max-width: 100%; transform: translate(0, 0); background: linear-gradient(0deg, rgba(18,9,35,.9), rgba(18,9,35,0)); }
   .hero-title-art { width: min(520px, 100%); }
   .tagline { font-size: .98rem; max-width: 27em; }
   .hero-actions { margin-top: 18px; }
   .hero-actions > * { flex: 1; }
   .how-grid { padding: 28px 0 32px; }
+  .join-strip { margin-top: -12px; padding: 30px 0 24px; }
+  .join-strip::before { top: -42px; height: 60px; background-size: auto 60px; }
+  .join-strip-inner { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .join-form, .join-name-form { grid-template-columns: minmax(0, 1fr) auto; }
+  .join-room { display: none; }
+  .join-error { grid-column: 1 / -1; }
   .steps { grid-template-columns: minmax(0, 1fr); margin-top: 20px; }
   .step + .step { border-left: 0; border-top: 1px solid #e7cfa6; }
   .feat-sec { padding: 36px 0 40px; }

@@ -71,7 +71,6 @@ export function StartScreen() {
   const [prices, setPrices] = useState({ eng: 1000, mac: 1000, sup: 1000, inf: 1000, grn: 1000 })
   const [priceBase, setPriceBase] = useState(1000)
   const [formula, setFormula] = useState({ divisor: 10, round: 100, min: 500 })
-  const [joinOpen, setJoinOpen] = useState(false)
   const [hostOpen, setHostOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
@@ -152,7 +151,6 @@ export function StartScreen() {
   useEffect(() => {
     const code = readCode(searchParams)
     if (!code) return
-    setJoinOpen(true)
     setJoinCode(code)
     setJoinStep('code')
     void checkCode(code)
@@ -252,15 +250,17 @@ export function StartScreen() {
             <img src="/assets/landing/game-logo-header.png" alt="Đi Tắt Đón Đầu" />
           </a>
           <nav className="land-nav" aria-label="Mục lục">
-            <a href="#cach-choi">Cách chơi</a>
-            <a href="#tinh-nang">Sự kiện</a>
-            <a href="#chu-phong">Chủ phòng</a>
+            <a href="#cach-choi">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v12H8l-4 3V5Zm5 4h6m-6 4h4" /></svg>
+              Cách chơi
+            </a>
+            <a href="#tinh-nang">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v4m0 10v4M4.2 6.2l2.9 2.9m9.8 5.8 2.9 2.9M3 12h4m10 0h4M4.2 17.8l2.9-2.9m9.8-5.8 2.9-2.9" /><circle cx="12" cy="12" r="3.5" /></svg>
+              Sự kiện
+            </a>
           </nav>
           <div className="land-actions">
-            <button type="button" className="btn s" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
-              Vào chơi
-            </button>
-            <button type="button" className="btn land-cta" onClick={() => { setError(''); setJoinOpen(false); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
+            <button type="button" className="btn land-cta" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
               Tạo phòng
             </button>
           </div>
@@ -279,15 +279,51 @@ export function StartScreen() {
               <h1 id="hero-title" className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</h1>
               <img className="hero-title-art" src="/assets/landing/hero-title.png" alt="Xây doanh nghiệp. Chốt vận mệnh." />
               <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
-              <div className="hero-actions">
-                <button type="button" className="btn" onClick={() => { setError(''); setJoinOpen(false); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-                  Tạo phòng <span aria-hidden="true">→</span>
-                </button>
-                <button type="button" className="hero-ghost" onClick={() => { setError(''); setHostOpen(false); setJoinStep('code'); setJoinOpen(true) }}>
-                  Vào phòng
-                </button>
+            </div>
+          </div>
+        </section>
+
+        <section className="join-strip" aria-labelledby="join-title">
+          <div className="land-wrap join-strip-inner">
+            <div className="join-intro">
+              <span className="join-icon" aria-hidden="true">↳</span>
+              <div>
+                <h2 id="join-title">Vào phòng chơi</h2>
+                <p>Nhập mã phòng của chủ phòng để bắt đầu cùng đội.</p>
               </div>
             </div>
+            {joinStep === 'code' ? (
+              <form
+                className="join-form"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void checkCode()
+                }}
+              >
+                <label>
+                  <span className="sr-only">Mã phòng</span>
+                  <input value={joinCode} maxLength={8} autoCapitalize="characters" placeholder="Nhập mã phòng" onChange={(event) => setJoinCode(event.target.value.toUpperCase())} />
+                </label>
+                <button type="submit" className="btn" disabled={busy}>{busy ? 'Đang kiểm tra…' : 'Vào phòng'}</button>
+              </form>
+            ) : (
+              <form
+                className="join-form join-name-form"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void join()
+                }}
+              >
+                <p className="join-room">Phòng <b>{joinCode}</b> đã sẵn sàng.</p>
+                <label>
+                  <span className="sr-only">Tên đội</span>
+                  <input value={team} maxLength={24} autoFocus placeholder="Nhập tên đội" onChange={(event) => setTeam(event.target.value)} />
+                </label>
+                <button type="submit" className="btn" disabled={busy || team.trim().length < 1}>Vào sảnh</button>
+                <button type="button" className="join-change" onClick={() => { setError(''); setJoinStep('code') }}>Đổi mã</button>
+              </form>
+            )}
+            {error && <p className="join-error" role="alert">{error}</p>}
           </div>
         </section>
 
@@ -353,78 +389,6 @@ export function StartScreen() {
           <p className="foot-copy">Trò chơi lớp học về nhà máy gia đình.</p>
         </div>
       </footer>
-      {joinOpen && (
-        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="join-title">
-          <div className="card">
-            <h2 id="join-title">Vào chơi</h2>
-            {joinStep === 'code' ? (
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void checkCode()
-                }}
-              >
-                <p>Nhập mã phòng. Chỉ khi phòng tồn tại mới hỏi tên đội.</p>
-                <label>
-                  Mã phòng
-                  <input
-                    value={joinCode}
-                    maxLength={8}
-                    autoCapitalize="characters"
-                    autoFocus
-                    placeholder="Mã phòng"
-                    onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
-                  />
-                </label>
-                {error && (
-                  <p className="warn" role="alert">
-                    {error}
-                  </p>
-                )}
-                <button type="submit" className="btn big" disabled={busy}>
-                  {busy ? 'Đang kiểm tra…' : 'Kiểm tra mã'}
-                </button>
-              </form>
-            ) : (
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void join()
-                }}
-              >
-                <p>
-                  Phòng <b>{joinCode}</b> đang mở. Nhập tên đội để vào sảnh.
-                </p>
-                <label>
-                  Tên đội
-                  <input value={team} maxLength={24} autoFocus placeholder="Tên đội" onChange={(event) => setTeam(event.target.value)} />
-                </label>
-                {error && (
-                  <p className="warn" role="alert">
-                    {error}
-                  </p>
-                )}
-                <button type="submit" className="btn big" disabled={busy || team.trim().length < 1}>
-                  Vào sảnh
-                </button>
-                <button
-                  type="button"
-                  className="btn s"
-                  onClick={() => {
-                    setError('')
-                    setJoinStep('code')
-                  }}
-                >
-                  Đổi mã
-                </button>
-              </form>
-            )}
-            <button type="button" className="btn s" onClick={() => setJoinOpen(false)}>
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
       {loginOpen && (
         <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="google-login-title">
           <div className="card">
