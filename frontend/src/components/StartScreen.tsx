@@ -274,7 +274,7 @@ export function StartScreen() {
       <main>
         <section className="hero-sec" aria-labelledby="hero-title">
           <div className="land-wrap hero-grid">
-            <img className="hero-game-art" src="/assets/landing/game-world-hero-art.png" alt="Thành phố công nghiệp, nhà máy và các biến cố trong trò chơi" />
+            <img className="hero-game-art" src="/assets/landing/game-world-canvas.png" alt="Thành phố công nghiệp, nông nghiệp, logistics và cảng biển trong trò chơi" />
             <div className="hero-copy">
               <h1 id="hero-title" className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</h1>
               <img className="hero-title-art" src="/assets/landing/hero-title.png" alt="Xây doanh nghiệp. Chốt vận mệnh." />
