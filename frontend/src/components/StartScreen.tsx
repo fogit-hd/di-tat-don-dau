@@ -259,10 +259,6 @@ export function StartScreen() {
               <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 10h18m-9 3 .9 2.1 2.3.2-1.8 1.5.6 2.2-2-1.2-2 1.2.6-2.2-1.8-1.5 2.3-.2L12 13Z" /></svg>
               <span>Sự kiện</span>
             </a>
-            <button type="button" aria-label="Chủ phòng" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 6 5 4 4-6 4 6 5-4-2 12H5L3 6Zm3 15h12" /></svg>
-              <span>Chủ phòng</span>
-            </button>
           </nav>
           <div className="land-actions">
             <button type="button" className="btn land-cta" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
@@ -294,11 +290,6 @@ export function StartScreen() {
               <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
           <div className="hero-join" id="join-title" aria-label="Vào phòng">
             <div className="hero-cta-row">
-            <button type="button" className="btn hero-create" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3" /><path d="M3 21v-5c0-3 2-4 6-4s6 1 6 4v5M17 4a3 3 0 0 1 0 6m1 3c2 0 3 2 3 4v4" /></svg>
-              Tạo phòng
-              <svg aria-hidden="true" className="cta-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" /></svg>
-            </button>
             {joinStep === 'code' ? (
               <form
                 className="join-form"
@@ -332,7 +323,6 @@ export function StartScreen() {
               </form>
             )}
             </div>
-            <p className="join-caption">Nhập mã phòng của chủ phòng để bắt đầu cùng đội.</p>
             {error && <p className="join-error" role="alert">{error}</p>}
           </div>
             </div>
@@ -345,7 +335,6 @@ export function StartScreen() {
               <h2 className="section-title" id="how-title">
                 Cách chơi
               </h2>
-              <p className="deck">Mở trình duyệt trên điện thoại là chơi được. Không cần cài ứng dụng.</p>
             </div>
             <ol className="steps">
               {STEPS.map((step, index) => (
@@ -369,7 +358,6 @@ export function StartScreen() {
               <h2 className="section-title" id="feat-title">
                 5 thẻ đầu tư quyết định hướng đi
               </h2>
-              <p className="deck">Đây là 5 lựa chọn xuất hiện trong phiên chơi. Mỗi thẻ gắn với một hạng mục đầu tư và tác động khác nhau đến doanh nghiệp.</p>
             </div>
             <div className="feat-grid">
               {FEATURES.map((feature) => (
@@ -380,18 +368,6 @@ export function StartScreen() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="host-strip" id="chu-phong" aria-labelledby="host-strip-title">
-          <div className="land-wrap host-strip-inner">
-            <div>
-              <h2 id="host-strip-title">Kết quả phiên chơi</h2>
-              <p>Chủ phòng lưu báo cáo từng đội, xem lại quyết định và bảng xếp hạng của đúng lượt chơi đó.</p>
-            </div>
-            <button type="button" className="hero-ghost light" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-              Tạo phòng ngay
-            </button>
           </div>
         </section>
 

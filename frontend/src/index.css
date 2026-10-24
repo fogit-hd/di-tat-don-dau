@@ -11,6 +11,20 @@
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) #180c2b;
+}
+@supports not (scrollbar-color: auto) {
+  html::-webkit-scrollbar { width: 8px; }
+  html::-webkit-scrollbar-track { background: #180c2b; }
+  html::-webkit-scrollbar-thumb {
+    border: 2px solid #180c2b;
+    border-radius: 999px;
+    background: linear-gradient(var(--gold), #e87831);
+  }
+  html::-webkit-scrollbar-thumb:hover { background: linear-gradient(#ffd77d, #ff9a43); }
+}
 body {
   margin: 0;
   font-family: 'Be Vietnam Pro', sans-serif;

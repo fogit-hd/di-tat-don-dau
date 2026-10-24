@@ -1118,33 +1118,15 @@ html {
 }
 
 /* Canvas lockup: the oversized home link never participates in bar sizing. */
-.landing { --nav-h: 72px; --logo-h: 120px; --logo-overhang: 54px; }
-.bar-inner { position: relative; grid-template-columns: minmax(240px, 1fr) auto minmax(240px, 1fr); }
-.land-bar .wordmark { position: absolute; left: 0; top: 6px; height: var(--logo-h); z-index: 30; }
-.wordmark img { width: 240px; height: var(--logo-h); max-width: none; }
+.landing { --nav-h: 72px; --logo-h: 98px; --logo-overhang: 40px; }
+.bar-inner { position: relative; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); }
+.land-bar .wordmark { position: absolute; left: max(-40px, calc(16px - max(24px, (100vw - 1280px) / 2))); top: 6px; height: var(--logo-h); z-index: 30; }
+.wordmark img { width: 196px; height: var(--logo-h); max-width: none; }
 .land-nav { gap: 6px; }
-.land-nav button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #fff8ec;
-  font: 800 .95rem 'Be Vietnam Pro', sans-serif;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 180ms ease, background-color 180ms ease;
-}
-.land-nav button:hover { color: #ffce72; background: rgba(255,255,255,.06); }
-.land-nav button:focus-visible { outline: 2px solid #ffce72; outline-offset: 4px; }
 .land-actions { gap: 10px; }
 .land-actions svg,
 .hero-cta-row svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.landing .land-actions .land-cta,
-.landing .hero-create {
+.landing .land-actions .land-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1171,14 +1153,12 @@ html {
 }
 .hero-sec { position: relative; }
 .hero-sec::before { content: ''; position: absolute; inset: 0 0 auto; height: 100px; background: linear-gradient(#160c2a, transparent); pointer-events: none; z-index: 1; }
-.hero-copy { width: min(700px, 52%); padding-top: calc(var(--logo-overhang) + 6svh); }
+.hero-copy { width: min(700px, 52%); padding-top: calc(var(--logo-overhang) + 16px); }
 .landing .hero-heading { margin: 0 0 16px; line-height: 0; }
 .hero-heading picture { display: block; }
 .hero-heading .hero-lettering { display: block; width: clamp(300px, 42vw, 640px); max-width: 100%; height: auto; filter: none; }
 .hero-join { max-width: 100%; margin-top: 20px; }
 .hero-cta-row { display: flex; align-items: start; flex-wrap: wrap; gap: 12px; }
-.landing .hero-create { min-height: 60px; padding: 12px 18px; font-size: 1rem; border-radius: 12px; flex: 0 0 190px; white-space: nowrap; }
-.cta-chevron { margin-left: auto; }
 .hero-cta-row .join-form {
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr) auto;
@@ -1199,29 +1179,88 @@ html {
 .join-caption { margin: 12px 0 0; color: #e1cedb; font-size: .78rem; line-height: 1.5; }
 @media (min-width: 768px) and (max-width: 1100px) {
   .bar-inner { grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); }
-  .wordmark img { width: 210px; }
-  .land-nav a span, .land-nav button span { display: none; }
-  .land-nav a, .land-nav button { padding-inline: 9px; }
+  .wordmark img { width: 196px; }
+  .land-nav a span { display: none; }
+  .land-nav a { padding-inline: 9px; }
   .land-actions { gap: 6px; }
   .landing .land-actions .btn, .nav-join { padding-inline: 10px; }
-  .hero-copy { width: min(620px, calc(100% - 48px)); padding-top: calc(var(--logo-overhang) + 28px); padding-bottom: 36px; }
+  .hero-copy { width: min(620px, calc(100% - 48px)); padding-top: calc(var(--logo-overhang) + 16px); padding-bottom: 36px; }
 }
 @media (max-width: 767px) {
-  .landing { --nav-h: 56px; --logo-h: 72px; --logo-overhang: 20px; }
-  .bar-inner { grid-template-columns: minmax(128px, 1fr) auto minmax(0, 1fr); gap: 6px; }
-  .land-bar .wordmark { top: 4px; }
-  .wordmark img { width: 128px; }
+  .landing { --nav-h: 56px; --logo-h: 58px; --logo-overhang: 14px; }
+  .bar-inner { grid-template-columns: minmax(112px, 1fr) auto minmax(112px, 1fr); gap: 6px; }
+  .land-bar .wordmark { top: 4px; left: 2px; }
+  .wordmark img { width: 116px; }
   .land-nav { gap: 0; }
-  .land-nav a, .land-nav button { padding: 6px; font-size: .75rem; gap: 4px; }
+  .land-nav a { padding: 6px; font-size: .75rem; gap: 4px; }
   .land-actions { gap: 5px; }
   .land-actions svg { width: 16px; height: 16px; }
   .landing .land-actions .btn, .nav-join { padding: 7px; min-height: 34px; font-size: .72rem; gap: 3px; }
-  .hero-copy { width: auto; padding: calc(var(--logo-overhang) + 36px) 24px 28px; }
+  .hero-copy { width: auto; padding: calc(var(--logo-overhang) + 16px) 24px 28px; }
   .hero-heading .hero-lettering { width: clamp(300px, 84vw, 640px); }
   .hero-cta-row { flex-direction: column; align-items: stretch; gap: 12px; }
-  .landing .hero-create { flex: auto; width: 100%; }
   .hero-cta-row .join-form { flex: auto; width: 100%; }
 }
 @media (max-width: 600px) {
-  .land-nav a span, .land-nav button span, .nav-join span { display: none; }
+  .land-nav a span, .nav-join span { display: none; }
+}
+
+/* The form border owns focus feedback; the input remains a transparent field. */
+.hero-cta-row .join-form {
+  width: 100%;
+  max-width: 560px;
+  min-height: 64px;
+  padding: 6px;
+  gap: 8px;
+  border: 1px solid #dcc58d;
+  border-radius: 16px;
+  background: #140922;
+  box-shadow: none;
+}
+.hero-cta-row .join-form:focus-within { border-color: #ffd77d; box-shadow: 0 0 0 3px rgba(231,169,59,.4); }
+.feat-sec .section-head { margin-bottom: 16px; }
+.join-enter { margin-left: 6px; }
+.landing .hero-cta-row .join-form input,
+.landing .hero-cta-row .join-form input:focus,
+.landing .hero-cta-row .join-form input:focus-visible {
+  min-width: 0;
+  min-height: 44px;
+  flex: 1;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  outline-offset: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fff1d6;
+  caret-color: var(--gold);
+  font-size: 16px;
+}
+.hero-cta-row .join-form input::placeholder { color: #d5c4b1; opacity: 1; }
+.landing .hero-cta-row .join-form input:-webkit-autofill {
+  -webkit-text-fill-color: #fff1d6;
+  caret-color: var(--gold);
+  background-color: #140922;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.landing .hero-cta-row .join-form .btn {
+  min-height: 44px;
+  padding: 7px 14px;
+  border: 3px solid #702414;
+  border-radius: 10px;
+  background: linear-gradient(#ff833e, #ed361d);
+  box-shadow: inset 0 2px 0 rgba(255,242,205,.45), 0 4px 0 #702414;
+  color: #fff8ec;
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.landing .hero-cta-row .join-form .btn:active { transform: translateY(3px); box-shadow: inset 0 2px 0 rgba(255,242,205,.3), 0 1px 0 #702414; }
+.landing .hero-cta-row .join-form .btn:focus-visible { outline: 2px solid #ffe4a3; outline-offset: 2px; }
+@media (max-width: 359px) {
+  .hero-cta-row .join-form { grid-template-columns: 20px minmax(0, 1fr); }
+  .hero-cta-row .join-form .btn { grid-column: 1 / -1; width: 100%; }
 }
