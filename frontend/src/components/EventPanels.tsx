@@ -1,7 +1,6 @@
 import { useId, useImperativeHandle, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import type { ActiveEffectView, EventLogView, LineView, TraitView, YearChangeView } from '../api/types.ts'
 import { money } from '../lib/format.ts'
-import { EventIcon } from './EventIcon.tsx'
 import { traitDetail } from '../lib/special-status.ts'
 import { currentEventEntries, type EventEntry, type EventGroup } from '../lib/ongoing-events.ts'
 import { EventRows } from './EventOverview.tsx'
@@ -56,32 +55,7 @@ export function EventCardList({
   events: EventLogView[]
   empty: string
 }) {
-  const [open, setOpen] = useState<string | null>(null)
-  if (!events.length) return <p className="quiet">{empty}</p>
-  return (
-    <div className="event-list">
-      {events.map((event, index) => {
-        const key = `${event.eventId}-${event.year}-${index}`
-        return (
-          <button
-            type="button"
-            key={key}
-            className={`event-card${event.good ? ' good' : ' bad'}${open === key ? ' on' : ''}`}
-            onClick={() => setOpen(open === key ? null : key)}
-          >
-            <EventIcon name={event.icon} />
-            <span className="event-copy">
-              <b>{event.title}</b>
-              <span>
-                Năm {event.year} · {event.effect}
-              </span>
-              {open === key && <span className="event-body">{event.body}</span>}
-            </span>
-          </button>
-        )
-      })}
-    </div>
-  )
+  return <EventRows entries={currentEventEntries(events)} empty={empty} />
 }
 
 export function YearTabs({ events, changes }: { events: EventLogView[]; changes: YearChangeView[] }) {
@@ -108,10 +82,12 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
 }
 
 /** One predictable place for the player's next decision and the evidence behind it. */
-export type GameTabsHandle = { showEvents: (group: EventGroup) => void }
+export type GameTabsHandle = { showEvents: (group: EventGroup) => void; showYear: (year: number) => void }
 
 export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, investmentLines, industryId, finished = false, result }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; investmentLines?: LineView[]; industryId?: string; finished?: boolean; result?: ReactNode }) {
   const [tab, setTab] = useState(finished ? 'events' : 'investment')
+  const [yearRequest, setYearRequest] = useState(0)
+  const [requestedYear, setRequestedYear] = useState<number | null>(null)
   const [eventGroup, setEventGroup] = useState<EventGroup>('history')
   const panel = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => { if (panel.current) panel.current.scrollTop = 0 }, [tab, eventGroup])
@@ -120,7 +96,7 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
     setTab('events')
     setEventGroup(group)
     requestAnimationFrame(() => document.getElementById(`${uid}-events`)?.focus({ preventScroll: true }))
-  } }), [uid])
+  }, showYear(year) { setYearRequest(n=>n+1); setRequestedYear(year); setTab('years'); requestAnimationFrame(() => panel.current?.focus({preventScroll:true})) } }), [uid])
   const tabs = [['investment', 'Đầu tư'], ['enterprise', 'Doanh nghiệp'], ['risk', 'Rủi ro'], ['events', 'Lịch sử sự kiện'], ['years', 'Thay đổi từng năm']]
   return (
     <section className="card game-tabs" aria-label="Điều khiển trận chơi">
@@ -138,7 +114,8 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
           document.getElementById(`${uid}-${tabs[next][0]}`)?.focus()
         }}>{label}{id === 'risk' && riskIncreasing && <span className="risk-dot" aria-label="Rủi ro kỳ sau tăng" />}</button>)}
       </div>
-      <div ref={panel} role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-${tab}`} className="game-panel" tabIndex={0}>
+      <div ref={panel} role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-${tab}`} className="game-panel" data-active-tab={tab} tabIndex={0}>
+      <div className="game-tab-transition" key={tab}>
       {tab === 'investment' && (finished ? result : investment)}
       {tab === 'enterprise' && enterprise}
       {tab === 'risk' && risk}
@@ -150,12 +127,13 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
             <button type="button" aria-pressed={eventGroup === 'ongoing'} onClick={() => setEventGroup('ongoing')}>Còn hiệu lực ({ongoing.length})</button>
             <button type="button" aria-pressed={eventGroup === 'history'} onClick={() => setEventGroup('history')}>Lịch sử ({events.length})</button>
           </div>
-          {eventGroup === 'history' ? <EventCardList events={events} empty="Chưa có sự kiện nào." /> : <EventRows entries={eventGroup === 'current' ? currentEventEntries(currentEvents) : ongoing} />}
+          {eventGroup === 'history' ? <EventCardList events={events} empty="Chưa có sự kiện nào." /> : <EventRows key={eventGroup} entries={eventGroup === 'current' ? currentEventEntries(currentEvents) : ongoing} />}
         </div>
       )}
       {tab === 'years' && (
-        <YearLedger changes={changes} lines={investmentLines} industryId={industryId} />
+        <YearLedger key={`${requestedYear ?? "list"}:${yearRequest}`} initialYear={requestedYear} changes={changes} lines={investmentLines} industryId={industryId} />
       )}
+      </div>
       </div>
     </section>
   )

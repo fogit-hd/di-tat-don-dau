@@ -1,3 +1,4 @@
+import type { CompanyBooksView, ProductionForecastView, ProductionReportView } from './production.ts'
 export type Ending = string
 
 export type LineView = {
@@ -21,10 +22,10 @@ export type Anchors = {
 
 export type LinePrices = Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>
 
-export type ActiveEffectView = { eventId: string; label: string; cashPerYear: number; yearsLeft: number; investmentPct?: number }
+export type ActiveEffectView = { id?: string; eventId: string; label: string; cashPerYear: number; yearsLeft: number; investmentPct?: number }
 export type TraitView = { id: string; label: string; detail: string; acquiredYear?: number; eventId?: string; icon?: string; good?: boolean }
-export type EventLogView = { year: number; eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }
-export type YearCauseView = { kind: string; label: string; cash: number; detail?: string; packages?: number }
+export type EventLogView = { instanceId?: string; year: number; eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }
+export type YearCauseView = { kind: string; label: string; cash: number; detail?: string; packages?: number; cashBefore?: number; cashAfter?: number }
 export type YearChangeView = {
   year: number
   cashBefore: number
@@ -32,6 +33,7 @@ export type YearChangeView = {
   assetsBefore: number
   assetsAfter: number
   causes: YearCauseView[]
+  production?: ProductionReportView
 }
 export type CentennialView = { year: number; bonusMultiplier: number; assetsBefore: number; assetsAfter: number }
 export type CentennialNotice = CentennialView & { teamId: string; finished: true }
@@ -43,9 +45,11 @@ export type EffectView = {
   title: string
   body: string
   severity?: number
+  year?: number
   startedAt: number
   endsAt: number
   eventId?: string
+  noticeId?: string
   yearsLeft?: number
   deferred?: boolean
   summary?: string
@@ -112,6 +116,9 @@ export type SceneView = {
   stateAidEligible: boolean
   bankrupt?: boolean
   economyVersion?: number
+  productionForecast?: ProductionForecastView
+  lastProduction?: ProductionReportView
+  companyBooks?: CompanyBooksView
   operatingForecast?: OperatingForecast
   investmentPreviews?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', Partial<Record<1 | 5 | 10 | 'max', InvestmentPreview | null>>>>
   succession: SuccessionView | null

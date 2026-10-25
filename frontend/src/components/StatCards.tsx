@@ -7,7 +7,7 @@ export function StatCards({ scene }: { scene: SceneView }) {
   const items: [PaintedIconName, string, string, string?][] = [
     ['eng', 'Kỹ sư', number(scene.engineers)],
     ['line', 'Dây chuyền', number(scene.machines), `${number(scene.idle)} nhàn`],
-    ['prod', 'Sản phẩm', Math.round(scene.output).toLocaleString('vi-VN'), scene.unit !== 'sản phẩm' ? scene.unit : undefined],
+    ['prod', 'Sản phẩm cộng dồn', Math.round(scene.output).toLocaleString('vi-VN'), scene.unit !== 'sản phẩm' ? scene.unit : undefined],
     ['tech', 'Công nghệ', number(scene.tech)],
     ['sup', 'Phụ trợ', `Cấp ${number(scene.support)}`],
     ['inst', 'Hạ tầng', `Cấp ${number(scene.infra)}`],
@@ -19,7 +19,7 @@ export function StatCards({ scene }: { scene: SceneView }) {
         {items.map(([icon, label, value, secondary]) => (
           <div className="enterprise-stat" key={label}>
             <PaintedIcon name={icon} />
-            <div><span>{label}</span><b>{value}</b>{secondary && <small>{secondary}</small>}</div>
+            <div><span>{label}</span><b><span className="stat-value-pulse" key={value}>{value}</span></b>{secondary && <small>{secondary}</small>}</div>
           </div>
         ))}
       </div>

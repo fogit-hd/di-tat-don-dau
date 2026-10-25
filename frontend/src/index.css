@@ -492,36 +492,6 @@ input {
 }
 .event-card.good .ev-icon { color: #1f5c32; }
 .event-card.bad .ev-icon { color: #c7382c; }
-.ev-icon .flicker, .ev-icon ellipse { fill: currentColor; }
-.ev-icon .drop { animation: ev-drop 0.9s linear infinite; }
-.ev-icon .d2 { animation-delay: 0.25s; }
-.ev-icon .d3 { animation-delay: 0.5s; }
-.ev-icon .flicker { transform-box: fill-box; transform-origin: center; animation: ev-flicker 0.45s ease-in-out infinite; }
-.ev-icon .spin { transform-origin: 16px 16px; animation: spin 6s linear infinite; }
-.ev-icon .coin { animation: ev-coin 1s ease-in-out infinite; }
-.ev-icon .rise { animation: ev-rise 1.1s ease-in-out infinite; }
-.ev-icon .fall { animation: ev-fall 1.1s ease-in-out infinite; }
-.ev-icon .drive { animation: ev-drive 1.3s ease-in-out infinite; }
-.ev-icon .bob { transform-origin: center; animation: bob 1.6s ease-in-out infinite; }
-.ev-icon .sway { transform-origin: 16px 28px; animation: ev-sway 1.8s ease-in-out infinite; }
-.ev-icon .pulse { transform-origin: 16px 16px; animation: ev-pulse 1.2s ease-in-out infinite; }
-.ev-icon .shake { animation: year-shake 0.45s linear infinite; }
-.ev-icon .blink { animation: ev-blink 1s steps(2) infinite; }
-.ev-icon .knock { transform-origin: 8px 16px; animation: ev-knock 0.8s ease-in-out infinite; }
-.ev-icon .wave { animation: ev-wave 1.4s ease-in-out infinite; }
-.ev-icon .bubble { animation: ev-drop 1.2s ease-in infinite reverse; }
-.ev-icon .bolt { fill: currentColor; animation: ev-flicker 0.7s ease-in-out infinite; }
-@keyframes ev-drop { to { transform: translateY(5px); opacity: 0.15; } }
-@keyframes ev-flicker { 50% { opacity: 0.45; transform: scale(0.92); } }
-@keyframes ev-coin { 50% { transform: translateY(-2px); } }
-@keyframes ev-rise { 50% { transform: translateY(-3px); } }
-@keyframes ev-fall { 50% { transform: translateY(3px); } }
-@keyframes ev-drive { 50% { transform: translateX(3px); } }
-@keyframes ev-sway { 50% { transform: rotate(-7deg); } }
-@keyframes ev-pulse { 50% { transform: scale(1.08); } }
-@keyframes ev-blink { 50% { opacity: 0.15; } }
-@keyframes ev-knock { 40% { transform: rotate(-12deg); } }
-@keyframes ev-wave { 50% { transform: translateX(2px); } }
 .fireworks { position: relative; height: 72px; pointer-events: none; }
 .fireworks span {
   position: absolute;

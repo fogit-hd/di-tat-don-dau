@@ -314,7 +314,7 @@ export const ICON_KIND: Record<string, IconKind> = {
   "washing-machine": 'spark',
   "waves": 'water',
   "wheat": 'leaf',
-  "wheat-off": 'leaf',
+  "wheat-off": 'wheat',
   "wifi": 'chip',
   "wind": 'storm',
   "wind-arrow-down": 'storm',
@@ -325,7 +325,9 @@ export const ICON_KIND: Record<string, IconKind> = {
   "zap-off": 'bolt',
 }
 
+export const EVENT_ICON_KINDS: IconKind[] = ['alert','bolt','box','bug','chart','chip','clock','coinsDown','coinsUp','factory','fire','flask','gavel','globe','heart','home','leaf','lock','megaphone','people','plane','rain','school','shield','ship','snow','spark','storm','sun','truck','water','wheat','wrench']
+const canonical=Object.fromEntries(EVENT_ICON_KINDS.map(kind=>[kind.toLowerCase(),kind])) as Record<string,IconKind>
 export function iconKind(name: string): IconKind {
   const key = name.trim().toLowerCase()
-  return ICON_KIND[key] ?? 'spark'
+  return canonical[key] ?? ICON_KIND[key] ?? 'spark'
 }

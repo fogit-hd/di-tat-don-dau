@@ -9,6 +9,8 @@ import { BudgetPanel } from './BudgetPanel.tsx'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
 import { EffectBadges, GameTabs, type GameTabsHandle } from './EventPanels.tsx'
+import { EventMotionPaused } from '../lib/event-motion.ts'
+import { EventAttention } from './EventAttention.tsx'
 import { EventOverview } from './EventOverview.tsx'
 import { currentEventEntries, ongoingEventEntries } from '../lib/ongoing-events.ts'
 import { EventQuizModal } from './EventQuizModal.tsx'
@@ -23,6 +25,7 @@ import './gameplay.css'
 import './responsive-gameplay.css'
 import './painted-frames.css'
 import './enterprise-canvas.css'
+import './transparency-canvas.css'
 
 export function PlayScreen() {
   const { code = '' } = useParams()
@@ -65,8 +68,10 @@ export function PlayScreen() {
     setFormError('')
     try {
       await api(`/api/rooms/${upper}/${path}`, { method: 'POST', body: body ?? {}, playerToken: token })
+      return true
     } catch (err) {
       setFormError(err instanceof ApiError ? err.message : 'Lỗi')
+      return false
     } finally {
       setBusy(false)
     }
@@ -105,7 +110,7 @@ export function PlayScreen() {
   const ongoing = scene ? ongoingEventEntries({ effects: scene.activeEffects ?? [], timed: scene.effects, traits: statuses, events: scene.eventLog ?? [], now: youFinished ? snap?.serverNow ?? now : now }) : []
 
   return (
-    <main className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
+    <EventMotionPaused.Provider value={Boolean(snap?.paused)}><EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
       {snap && status === 'lobby' && (
@@ -148,7 +153,7 @@ export function PlayScreen() {
           <section className="game-content">
             <div className="game-stage">
               <TraitNotice traits={statuses} />
-              <FactoryScene scene={scene} paused={snap.paused} />
+              <FactoryScene scene={scene} paused={snap.paused} onShowYear={year => gameTabs.current?.showYear(year)} />
               <EventOverview current={currentEventEntries(currentEvents)} ongoing={ongoing} onShowAll={group => gameTabs.current?.showEvents(group)} />
             </div>
             <div className="game-workspace">
@@ -181,7 +186,7 @@ export function PlayScreen() {
                           paused={snap.paused}
                           onInvest={(line, quantity) => {
                             beep(660, 0.06, muted)
-                            void act('invest', { line, quantity })
+                            return act('invest', { line, quantity }).then(Boolean)
                           }}
                           onRestart={() => {
                             beep(430, 0.08, muted)
@@ -197,6 +202,7 @@ export function PlayScreen() {
           </section>
             <YearButton
               finished={youFinished}
+              year={scene.cycles}
               suspended={Boolean(scene.bankrupt)}
               busy={busy || snap.paused || Boolean(scene.bankrupt)}
               now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
@@ -227,12 +233,13 @@ export function PlayScreen() {
         />
       )}
       {snap && status === 'ended' && <EndScreen snap={snap} />}
-    </main>
+    </main></EventAttention></EventMotionPaused.Provider>
   )
 }
 
 function YearButton({
   finished,
+  year,
   suspended,
   busy,
   now,
@@ -243,6 +250,7 @@ function YearButton({
   onFinish,
 }: {
   finished: boolean
+  year: number
   suspended: boolean
   busy: boolean
   now: number
@@ -279,6 +287,7 @@ function YearButton({
         aria-label={`${locked ? 'Đang diễn' : 'Sang năm'}, tự chốt sau ${seconds} giây`}
       >
         <YearPerimeter ratio={ratio} />
+        {year > 0 && <span key={year} className="year-settlement-note">Năm {year} · Đã chốt</span>}
         <span>
           {locked ? 'Đang diễn' : 'Sang năm'}
           <small>{seconds}s</small>

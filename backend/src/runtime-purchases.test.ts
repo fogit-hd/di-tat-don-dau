@@ -7,7 +7,7 @@ import { makeRng } from './game/rng'
 import { annualEconomy } from './game/random-economy'
 import type { ThemeDef } from './game/types'
 
-const scenario = vi.hoisted(() => ({ family: false, outcome: 'steady' as 'steady' | 'bankrupt', noRisks: true }))
+const scenario = vi.hoisted(() => ({ family: false, outcome: 'steady' as 'steady' | 'bankrupt', noRisks: true, shared: false, inflation: false }))
 const db = vi.hoisted(() => {
   let sequence = 0
   return {
@@ -20,14 +20,15 @@ vi.mock('./prisma', () => ({ prisma: db }))
 vi.mock('./game/catalog', async () => {
   const { balance } = await import('../prisma/seed/balance')
   const { LINES } = await import('../prisma/seed/rules')
-  return { catalog: () => ({ balance: { ...balance, yearEventChance: 0, familyEventChance: scenario.family ? 2 : 0 }, lines: LINES, themeCount: 64, endings: [], traitCopy: [],
+  return { catalog: () => ({ balance: { ...balance, yearEventChance: scenario.shared ? 2 : 0, inflationBase: scenario.inflation ? .02 : balance.inflationBase, classEventChance: scenario.shared ? 2 : 0, yearMaxEvents: 1, familyEventChance: scenario.family ? 2 : 0 }, lines: LINES, themeCount: 64, endings: [], traitCopy: [],
     familyEvents: scenario.family ? [{ id: 'retirement', trait: 'early_retirement', title: 'Nghỉ hưu sớm', body: '', weight: 1 }] : [],
-    questions: [], events: [], successionReasons: [],
+    questions: [], events: [{ id:'shared-cash',title:'Hỗ trợ chung',body:'Cấp vốn',weight:1,scope:'team',good:true,icon:'coins',visual:'supply_shock',exposure:'any',durationSec:[1,1],outputMul:[1,1],priceMul:[1,1],inflationMul:[1,1],cash:[100,100],yearSpan:1,
+      choice:{timeoutIndex:0,options:[{id:'cash-choice',text:'Nhận',patch:{visual:'none',title:'Lựa chọn nhận tiền',body:'Đã nhận',exposure:'any',durationSec:[1,1],outputMul:[1,1],priceMul:[1,1],inflationMul:[1,1],cash:[50,50]}}]} }], successionReasons: [],
     heirOutcomes: [{ id: 'heir', outcomeType: scenario.outcome, industryId: null, contextId: null, label: scenario.outcome, detail: '', weight: 1, multiplier: scenario.outcome === 'bankrupt' ? 0 : 1, sort: 1 }],
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
 
 })
-import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop } from './runtime'
+import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt } from './runtime'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
 function theme(): ThemeDef {
@@ -50,7 +51,7 @@ async function roomWithTeam() {
 }
 
 describe('room-scoped names and purchases', () => {
-  beforeEach(() => { vi.clearAllMocks(); scenario.family = false; scenario.outcome = 'steady'; scenario.noRisks = true })
+  beforeEach(() => { vi.clearAllMocks(); scenario.family = false; scenario.outcome = 'steady'; scenario.noRisks = true; scenario.shared = false; scenario.inflation = false })
 
   it('publishes the same upgrade draw used for the actual purchase and never rerolls snapshots', async () => {
     const a = await roomWithTeam()
@@ -129,7 +130,7 @@ describe('room-scoped names and purchases', () => {
 
 
 describe('economic lifecycle regressions', () => {
-  beforeEach(() => { vi.clearAllMocks(); scenario.family = false; scenario.outcome = 'steady'; scenario.noRisks = true })
+  beforeEach(() => { vi.clearAllMocks(); scenario.family = false; scenario.outcome = 'steady'; scenario.noRisks = true; scenario.shared = false; scenario.inflation = false })
   async function playing() {
     const a = await roomWithTeam()
     a.room.status = 'playing'
@@ -233,6 +234,70 @@ describe('economic lifecycle regressions', () => {
       expect(after.operatingForecast.pollution).toBeCloseTo(preview.pollution,8)
       expect(after.operatingForecast.delivery).toBeCloseTo(preview.delivery,8)
     }
+  })
+  it('stores the actual production draw and separates inflation without changing total cash', async () => {
+    scenario.inflation=true
+    const a=await playing()
+    await advanceTeamYear(a.code,a.player.playerToken)
+    const row=a.team.state!.yearLedger[0]!
+    const report=row.production!
+    expect(report).toBeDefined()
+    expect(report.output).toBe(a.team.state!.lastOutput)
+    expect(report.revenue-report.opex).toBeCloseTo(report.net,10)
+    expect(row.causes.find(c=>c.kind==='production')!.cash).toBe(report.net)
+    expect(row.causes.filter(c=>c.kind==='inflation').reduce((sum,c)=>sum+c.cash,0)).toBeCloseTo(-report.inflation,10)
+    expect(report.inflation).toBeGreaterThan(0)
+    expect(row.causes.reduce((sum,c)=>sum+c.cash,0)).toBeCloseTo(row.cashAfter-row.cashBefore,8)
+    const copy=JSON.stringify(report)
+    a.team.state!.engineers+=10000
+    a.team.state!.yearLockUntil=0
+    await advanceTeamYear(a.code,a.player.playerToken)
+    expect(JSON.stringify(a.team.state!.yearLedger[1]!.production)).toBe(copy)
+  })
+  it('accounts for question rewards exactly once across the next year boundary', async () => {
+    const a=await playing()
+    a.team.state!.pending={id:'q',kind:'question',phase:'open',title:'',body:'Câu hỏi',options:[{id:'yes',text:'Đúng'}],correctOptionId:'yes',explanation:'',expiresAt:Date.now()+10000}
+    const before=a.team.state!.cash
+    await answerPrompt(a.code,a.player.playerToken,'yes')
+    const reward=a.team.state!.cash-before
+    expect(reward).toBeGreaterThan(0)
+    await expect(answerPrompt(a.code,a.player.playerToken,'yes')).rejects.toMatchObject({status:409})
+    expect(a.team.state!.pendingCauses.filter(c=>c.kind==='quiz')).toHaveLength(1)
+    await advanceTeamYear(a.code,a.player.playerToken)
+    const row=a.team.state!.yearLedger[0]!
+    expect(row.causes.find(c=>c.kind==='quiz')!.cash).toBe(reward)
+    expect(row.causes.reduce((sum,c)=>sum+c.cash,0)).toBeCloseTo(row.cashAfter-row.cashBefore,8)
+  })
+  it('accounts for immediate choice cash on manual and timed-out choices without double counting', async () => {
+    for(const timeout of [false,true]) {
+      const a=await playing()
+      a.team.state!.pending={id:'choice',kind:'choice',phase:'open',title:'',body:'',options:[{id:'cash-choice',text:'Nhận'}],explanation:'',eventId:'shared-cash',expiresAt:timeout?Date.now()-1:Date.now()+10000}
+      if(!timeout) await answerPrompt(a.code,a.player.playerToken,'cash-choice')
+      await advanceTeamYear(a.code,a.player.playerToken)
+      const row=a.team.state!.yearLedger[0]!
+      expect(row.causes.filter(c=>c.label==='Lựa chọn nhận tiền')).toHaveLength(1)
+      expect(row.causes.reduce((sum,c)=>sum+c.cash,0)).toBeCloseTo(row.cashAfter-row.cashBefore,8)
+    }
+  })
+  it('queues shared event cash in the receiving team ledger, not the originating team twice', async () => {
+    scenario.shared=true
+    const a=await playing()
+    a.room.status='lobby'
+    const joined=await joinRoom(a.code,'Đội thứ hai')
+    a.room.status='playing'
+    const other=a.room.teams.find(t=>t.id===joined.teamId)!
+    other.theme=theme();other.state=createState(other.theme,10000,makeRng(4),balance);other.state.introDone=true;other.state.yearOpenCash=10000
+    a.team.theme!.eventIds=['shared-cash']
+    const before=other.state.cash
+    await advanceTeamYear(a.code,a.player.playerToken)
+    const received=other.state.cash-before
+    expect(received).toBeGreaterThan(0)
+    expect(other.state.pendingCauses.filter(c=>c.label==='Hỗ trợ chung')).toHaveLength(1)
+    scenario.shared=false
+    await advanceTeamYear(a.code,joined.playerToken)
+    const row=other.state.yearLedger[0]!
+    expect(row.causes.filter(c=>c.label==='Hỗ trợ chung')).toHaveLength(1)
+    expect(row.causes.reduce((sum,c)=>sum+c.cash,0)).toBeCloseTo(row.cashAfter-row.cashBefore,8)
   })
   it('uses exactly the same projection for discounted bulk buys, including unaffordable previews', async () => {
     const a = await playing()

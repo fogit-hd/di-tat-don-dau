@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { currentEventEntries, ongoingEventEntries } from '../frontend/src/lib/ongoing-events.ts';
+import { EVENT_ICON_KINDS, ICON_KIND, iconKind } from '../frontend/src/components/icon-kind.ts';
+const folder='frontend/public/assets/ui/event-loops-v1';
+const manifest=JSON.parse(fs.readFileSync(`${folder}/manifest.json`,'utf8'));
+assert.equal(EVENT_ICON_KINDS.length,33);
+for(const kind of EVENT_ICON_KINDS) {
+ assert.equal(iconKind(kind),kind);
+ assert.equal(iconKind(kind.toUpperCase()),kind);
+ assert(manifest.icons[kind]);assert(fs.existsSync(`${folder}/${kind}.gif`));assert(fs.existsSync(`${folder}/${kind}-poster.webp`));
+}
+assert.equal(iconKind('cloud-rain'),'rain');assert.equal(iconKind('wheat-off'),'wheat');assert.equal(iconKind('unknown-future-icon'),'spark');
+const seed=JSON.parse(fs.readFileSync('backend/prisma/seed/industries.seed.json','utf8'));
+const rawIcons=[...new Set(seed.industries.flatMap(i=>i.events.map(e=>e.icon)))];
+const unknown=rawIcons.filter(name=>!(name in ICON_KIND)&&!EVENT_ICON_KINDS.some(kind=>kind.toLowerCase()===name.toLowerCase()));
+for(const icon of rawIcons)assert(manifest.icons[iconKind(icon)]);
+const event={year:4,eventId:'rain',title:'Mưa',body:'',icon:'rain',good:false,effect:'Sản lượng -10%'};
+const older={...event,eventId:'older',year:3};
+const identified={...event,instanceId:'persistent-id'};assert.equal(currentEventEntries([identified])[0].key,currentEventEntries([{...event,instanceId:'another'},identified])[1].key);
+const before=currentEventEntries([event,older]);
+const after=currentEventEntries([{...event,eventId:'new'},event,older]);
+assert.equal(before[0].key,after[1].key);assert.equal(before[1].key,after[2].key);
+assert.equal(currentEventEntries([event,event])[1].key,currentEventEntries([event,event,event])[2].key);
+const effect={id:'runtime-rain',eventId:'rain',visual:'rain',title:'Mưa',body:'',year:4,yearsLeft:2,startedAt:0,endsAt:0,deferred:true,economic:true,summary:'Sản lượng -10%'};
+const upcoming=ongoingEventEntries({effects:[],timed:[effect],traits:[],events:[event],now:10});
+assert.equal(upcoming[0].noticeKey,before[0].noticeKey);
+assert.equal(upcoming[0].remaining,'Áp dụng từ năm kế tiếp · kéo dài 2 năm');
+const active=ongoingEventEntries({effects:[],timed:[{...effect,deferred:false}],traits:[],events:[event],now:20});
+assert.equal(active[0].remaining,'Còn 2 năm');assert.equal(active[0].key,upcoming[0].key);
+assert(!active[0].remaining.includes('giây'));
+console.log(JSON.stringify({passed:true,canonicalAnimatedIcons:33,industries:seed.industries.length,seedIconNames:rawIcons.length,unknownSeedAliases:unknown,stableEventKeys:true,unreadIdentityAcrossPanels:true,economicDurationsInYears:true},null,2));

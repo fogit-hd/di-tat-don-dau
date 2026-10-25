@@ -112,7 +112,7 @@ export function invest(
   next.cash -= amount
   next.pendingCauses = [
     ...(state.pendingCauses ?? []),
-    { kind: 'investment', label: spec?.label || line, cash: -amount, packages,
+    { kind: 'investment', label: spec?.label || line, cash: -amount, packages, cashBefore: state.cash, cashAfter: next.cash,
       detail: `${packages} gói · hiệu quả ${(efficiency * 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 })}% · giá gốc ${money(investmentValue * packages)} · thực chi ${money(amount)}`,
     },
   ]
@@ -190,6 +190,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   const production = net - infl
   s.cash = s.cash + production + cashPerYear
   s.yearParts = { production, ongoing: cashPerYear, interest }
+  s.cycleReport = { ...plan, year: s.cycles + 1, unit: theme.unit, inflation: infl, inflationRate: inflRate, interest, ongoing: cashPerYear }
   s.cumulativeOutput += output
   s.cumulativeRevenue += revenue
   s.lastIncome = net - infl + cashPerYear
@@ -212,8 +213,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   return s
 }
 
-export function computeValue(state: TeamState, theme: ThemeDef, balance: Balance): number {
-  if (isBankrupt(state)) return 0
+export function companyBooks(state: TeamState, theme: ThemeDef, balance: Balance) {
   const epl = theme.coefs.epl
   const util = state.machines > 0 ? clamp(state.engineers / (state.machines * epl), 0, 1) : 0
   const engValue = state.engineers * (1 / balance.engPerTy) * balance.engBook * (1 + state.tech * balance.engTechBook)
@@ -223,7 +223,13 @@ export function computeValue(state: TeamState, theme: ThemeDef, balance: Balance
   const grnValue = state.green * balance.grnBook
   const brand = state.cumulativeRevenue * balance.brandShare
   const penalty = state.pollution * balance.pollutionPenalty + state.dependency * balance.dependencyPenalty
-  return Math.max(0, Math.round(state.cash + engValue + macValue + supValue + infValue + grnValue + brand - penalty))
+  const total = isBankrupt(state) ? 0 : Math.max(0, Math.round(state.cash + engValue + macValue + supValue + infValue + grnValue + brand - penalty))
+  return { cash: state.cash, workforce: engValue, machines: macValue, support: supValue, infra: infValue, green: grnValue,
+    brand, pollutionPenalty: state.pollution * balance.pollutionPenalty, dependencyPenalty: state.dependency * balance.dependencyPenalty, total }
+}
+
+export function computeValue(state: TeamState, theme: ThemeDef, balance: Balance): number {
+  return companyBooks(state,theme,balance).total
 }
 
 export function computeEnding(state: TeamState, theme: ThemeDef, endings: EndingRule[], balance: Balance): string {

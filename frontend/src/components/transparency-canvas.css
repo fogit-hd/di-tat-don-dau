@@ -1,0 +1,170 @@
+/* Approved gameplay transparency canvas: parchment reports, receipts and nonblocking motion. */
+.gameplay.game-shell .operation-icon { width:26px; height:26px; display:block; flex:none; }
+.gameplay.game-shell button:focus-visible,.gameplay.game-shell summary:focus-visible { outline:2px solid #ffe19a; outline-offset:2px; }
+.gameplay.game-shell .game-panel button:focus-visible,.gameplay.game-shell .game-panel summary:focus-visible,.gameplay.game-shell .factory-report :focus-visible { outline-color:#8d421d; }
+.gameplay.game-shell .game-tab-transition { min-width:0; animation:game-tab-enter 160ms ease-out; }
+.gameplay.game-shell .game-tab-transition:has(> .investment-toolbar) > .meta { display:none; }
+.gameplay.game-shell .game-tablist button,.gameplay.game-shell .report-tabs button { transition:color 160ms,background-color 160ms,border-color 160ms; }
+.gameplay.game-shell .factory-scene.scene { display:block; flex:none; height:clamp(260px,38vh,360px); max-height:none; aspect-ratio:auto; padding:7px; border-width:2px; perspective:1000px; }
+.gameplay.game-shell .factory-photo { position:relative; height:100%; overflow:hidden; border-radius:4px; animation:report-face-enter 220ms ease-out; }
+.gameplay.game-shell .factory-photo img { width:100%; height:100%; object-fit:cover; }
+.gameplay.game-shell .factory-photo-caption { position:absolute; bottom:0; left:0; right:0; padding:6px 8px; text-align:center; color:#472313; background:#f9e7bcd9; font:13px/1.3 Cambria,Georgia,serif; }
+.gameplay.game-shell .factory-report-toggle { position:absolute; z-index:2; top:12px; left:13px; min-height:44px; padding:4px 10px; display:flex; align-items:center; gap:6px; color:#ffedc0; background:linear-gradient(#651b22,#3d1019); border:1px solid #b47724; border-radius:5px; box-shadow:inset 0 0 0 2px #e7b861; font:700 15px/1.2 Cambria,Georgia,serif; cursor:pointer; }
+.gameplay.game-shell .factory-report { height:100%; background:radial-gradient(ellipse at 30% 10%,#fff8e5,#eddbb3); color:#442418; display:flex; flex-direction:column; overflow:hidden; border-radius:4px; padding:5px 8px; animation:report-face-enter 220ms ease-out; }
+.gameplay.game-shell .factory-report > header { min-height:46px; padding-left:128px; display:flex; flex-direction:column; justify-content:center; gap:2px; }
+.gameplay.game-shell .factory-report h3 { margin:0; color:#4e2417; font:700 20px/1.1 Cambria,Georgia,serif; }
+.gameplay.game-shell .factory-report header small { font:12px/1.2 Cambria,Georgia,serif; color:#80613d; }
+.gameplay.game-shell .report-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; margin:4px 0 6px; flex:none; }
+.gameplay.game-shell .report-tabs button { min-width:0; min-height:36px; border:1px solid #bb8c44; border-radius:4px; background:#f2e0b9; color:#4b291c; font:700 14px/1.2 Cambria,Georgia,serif; cursor:pointer; white-space:nowrap; }
+.gameplay.game-shell .report-tabs button[aria-selected=true] { color:#fff1cf; background:linear-gradient(#bc4218,#781d1b); border-color:#ce8d28; box-shadow:inset 0 0 0 1px #ffe29a; }
+.gameplay.game-shell .report-tab-content { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#bb7b28 #ebd8ae; animation:game-tab-enter 160ms ease-out; padding:0 3px 5px; font:13px/1.4 Cambria,Georgia,serif; }
+.gameplay.game-shell .report-output-result { display:flex; align-items:center; gap:9px; border:1px solid #cfb079; border-radius:5px; background:#fff2d8; padding:8px; margin:1px 0 7px; }
+.gameplay.game-shell .report-output-result > .painted-icon { width:40px; height:42px; }
+.gameplay.game-shell .report-output-result > div { min-width:0; }
+.gameplay.game-shell .report-output-result small { display:block; color:#7c6040; font-size:12px; }
+.gameplay.game-shell .report-output-result strong { display:block; font:700 22px/1.15 Cambria,Georgia,serif; color:#315831; overflow-wrap:anywhere; }
+.gameplay.game-shell .report-output-result strong span { font-size:14px; }
+.gameplay.game-shell .report-capacity { display:flex; align-items:center; justify-content:center; gap:8px; font-weight:700; }
+.gameplay.game-shell .report-capacity .operation-icon { width:22px; height:22px; }
+.gameplay.game-shell .report-equation { padding:6px; margin:6px 0; background:#e7cb903d; border-bottom:1px solid #d5b37a; font-size:14px; }
+.gameplay.game-shell .report-factor { display:flex; justify-content:space-between; gap:10px; margin:5px 0; }
+.gameplay.game-shell .report-factor b { flex:none; }
+.gameplay.game-shell .report-delivery { display:flex; align-items:center; gap:6px; padding:6px; background:#e1dcbf; border-radius:4px; }
+.gameplay.game-shell .report-delivery > .painted-icon { width:30px; height:28px; }
+.gameplay.game-shell .report-history-link { display:flex; align-items:center; justify-content:center; gap:6px; background:none; color:#774021; text-decoration:underline; border:0; padding:8px 3px; min-height:36px; width:100%; cursor:pointer; font:700 13px/1.3 Cambria,Georgia,serif; }
+.gameplay.game-shell .report-history-link .operation-icon { width:18px; height:18px; }
+.gameplay.game-shell .forecast-conditions { margin:6px 0; color:#7e684b; font-size:12px; font-style:italic; }
+.gameplay.game-shell .report-effect { margin:0 0 7px; border-bottom:1px solid #d9be90; padding:5px 0; }
+.gameplay.game-shell .report-effect b,.gameplay.game-shell .report-effect small { display:block; }
+.gameplay.game-shell .report-effect small { color:#846843; }
+.gameplay.game-shell .report-effect p { margin:3px 0; }
+.gameplay.game-shell .finance-lines { margin:6px 0; }
+.gameplay.game-shell .finance-lines > div { display:flex; align-items:baseline; justify-content:space-between; gap:12px; border-bottom:1px solid #d9bd8d88; padding:6px 0; }
+.gameplay.game-shell .finance-lines dt { flex:1; min-width:0; color:#5b3c25; }
+.gameplay.game-shell .finance-lines dd { flex:none; max-width:60%; margin:0; text-align:right; font-weight:700; overflow-wrap:anywhere; }
+.gameplay.game-shell .finance-emphasis { background:#f8e9c8; }
+.gameplay.game-shell .finance-total { border-top:1px solid #b68540; font-size:19px; font-weight:700; }
+.gameplay.game-shell .finance-note { margin:7px 0; font:12px/1.4 Cambria,Georgia,serif; color:#7a6346; }
+.gameplay.game-shell .production-receipt { padding:10px 12px; background:#fdf2d7; border:1px solid #d9bd88; margin:6px 0; }
+.gameplay.game-shell .production-receipt h4 { display:flex; align-items:center; gap:8px; margin:0 0 10px; font:700 22px/1.2 Cambria,Georgia,serif; }
+.gameplay.game-shell .production-receipt h4 .painted-icon { width:40px; height:36px; }
+.gameplay.game-shell .production-receipt h5 { font:700 18px/1.2 Cambria,Georgia,serif; margin:10px 0 5px; }
+.gameplay.game-shell .cash-opening,.gameplay.game-shell .cash-closing { display:grid; grid-template-columns:40px minmax(0,1fr) auto; align-items:center; gap:10px; min-height:48px; padding:6px 0; font:18px/1.25 Cambria,Georgia,serif; }
+.gameplay.game-shell .cash-opening .painted-icon,.gameplay.game-shell .cash-closing .painted-icon { width:34px; height:32px; }
+.gameplay.game-shell .cash-closing { border-top:1px solid #bb914e; margin-top:8px; font-weight:700; font-size:22px; }
+.gameplay.game-shell .cash-ledger .production-ledger-item > details > summary { display:grid; grid-template-columns:40px minmax(0,1fr) auto 16px; gap:10px; align-items:center; padding:8px 0; cursor:pointer; list-style:none; }
+.gameplay.game-shell .production-ledger-item > details > summary::marker { display:none; }
+.gameplay.game-shell .production-ledger-item summary .painted-icon { width:38px; height:38px; }
+.gameplay.game-shell .production-ledger-item summary small { display:block; font-weight:400; color:#7b6243; font-size:13px; line-height:1.3; margin-top:4px; }
+.gameplay.game-shell .production-ledger-item summary strong { white-space:nowrap; font:700 22px/1.2 Cambria,Georgia,serif; }
+.gameplay.game-shell .cash-reconciliation { display:flex; align-items:center; gap:10px; padding:10px; border:1px solid #b59b66; border-radius:5px; margin:10px 0; font:15px/1.3 Cambria,Georgia,serif; }
+.gameplay.game-shell .cash-reconciliation p { margin:3px 0 0; font-size:13px; }
+.gameplay.game-shell .cash-reconciliation.mismatch { background:#ffe5a5; border-color:#d79b31; color:#8b3b17; }
+.gameplay.game-shell .cash-reconciliation.matched { background:#e2e6cc; color:#385839; border-color:#a1b17f; }
+.gameplay.game-shell .cash-precision { font:12px/1.4 Cambria,Georgia,serif; color:#7c6343; }
+.gameplay.game-shell .noncash-effects { border-top:1px solid #d2b17b; padding-top:8px; margin-top:10px; }
+.gameplay.game-shell .noncash-effects h4 { font:700 17px/1.2 Cambria,Georgia,serif; margin:3px 0 8px; }
+.gameplay.game-shell .year-expanded { animation:receipt-enter 180ms ease-out; }
+.gameplay.game-shell .purchase-feedback { grid-column:2/-1; font:12px/1.3 Cambria,Georgia,serif; padding:3px 0; }
+.gameplay.game-shell .purchase-feedback.confirmed { color:#2d652c; animation:confirmed-value 320ms ease-out; }
+.gameplay.game-shell .purchase-feedback.failed { color:#a23d20; }
+.gameplay.game-shell .purchase-confirmed { animation:purchase-confirmed 320ms ease-out; }
+.gameplay.game-shell .investment-buy:active:not(:disabled) { transform:translateY(2px); }
+.gameplay.game-shell .stat-value-pulse { display:inline-block; animation:confirmed-value 320ms ease-out; }
+.gameplay.game-shell .event-arriving { animation:event-arrive 240ms ease-out; }
+.gameplay.game-shell .event-exiting { animation:event-exit 180ms ease-in forwards; pointer-events:none; }
+.gameplay.game-shell .event-new-badge { display:inline-block; padding:1px 5px; margin-left:5px; border-radius:4px; background:#f0d38c; color:#874520; font:700 11px/1.3 Cambria,Georgia,serif; vertical-align:middle; }
+.gameplay.game-shell .event-unread-count { font-size:12px; }
+.gameplay.game-shell .year-btn > .year-settlement-note { position:absolute; inset:auto auto 5px 12px; padding:0; font-size:11px; line-height:1.2; opacity:0; pointer-events:none; animation:year-settlement 400ms ease-out; }
+@keyframes game-tab-enter { from { opacity:.3; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes report-face-enter { from { opacity:.2; transform:rotateY(-7deg); transform-origin:left center; } to { opacity:1; transform:rotateY(0); transform-origin:left center; } }
+@keyframes receipt-enter { from { opacity:.4; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+@keyframes confirmed-value { from { color:#9e661e; } to { color:inherit; } }
+@keyframes purchase-confirmed { 35% { box-shadow:inset 0 0 0 2px #cfaa4c; } }
+@keyframes event-arrive { from { opacity:.3; transform:translateY(8px); } 55% { box-shadow:inset 0 0 0 2px #d8ad43; } to { opacity:1; transform:translateY(0); } }
+@keyframes event-exit { to { opacity:0; transform:translateY(-4px); } }
+@keyframes year-settlement { 0%,80% { opacity:1; } 100% { opacity:0; } }
+@media(max-width:1100px) {
+  .gameplay.game-shell .factory-report h3 { font-size:17px; }
+  .gameplay.game-shell .factory-report header small { font-size:11px; }
+  .gameplay.game-shell .factory-report > header { padding-left:116px; }
+  .gameplay.game-shell .factory-report-toggle { padding:4px 7px; font-size:14px; }
+  .gameplay.game-shell .report-output-result strong { font-size:19px; }
+  .gameplay.game-shell .report-output-result > .painted-icon { width:34px; height:34px; }
+  .gameplay.game-shell .cash-opening,.gameplay.game-shell .cash-closing { grid-template-columns:30px minmax(0,1fr) auto; gap:6px; font-size:16px; }
+}
+@media(max-width:699px) {
+  .gameplay.game-shell .factory-scene.scene { display:block; height:clamp(165px,25svh,220px); min-height:0; padding:5px; }
+  .gameplay.game-shell .factory-report { padding:3px 6px; }
+  .gameplay.game-shell .factory-report-toggle { top:8px; left:9px; min-height:44px; }
+  .gameplay.game-shell .factory-report > header { min-height:43px; }
+  .gameplay.game-shell .factory-report h3 { font-size:17px; }
+  .gameplay.game-shell .report-tabs { margin:3px 0; }
+  .gameplay.game-shell .report-tabs button { min-height:32px; font-size:13px; }
+  .gameplay.game-shell .report-tab-content { font-size:12px; }
+  .gameplay.game-shell .report-output-result { padding:5px; margin-bottom:5px; }
+  .gameplay.game-shell .report-output-result strong { font-size:18px; }
+  .gameplay.game-shell .cash-ledger .production-ledger-item > details > summary { grid-template-columns:27px minmax(0,1fr) auto 13px; gap:5px; }
+  .gameplay.game-shell .production-ledger-item summary strong { font-size:17px; }
+  .gameplay.game-shell .production-ledger-item summary small { font-size:11px; }
+  .gameplay.game-shell .production-ledger-item summary .painted-icon { width:27px; height:28px; }
+  .gameplay.game-shell .production-receipt { padding:6px; font-size:13px; }
+  .gameplay.game-shell .production-receipt h4 { font-size:18px; }
+  .gameplay.game-shell .finance-total { font-size:16px; }
+  .gameplay.game-shell .finance-lines dd { max-width:54%; }
+  .gameplay.game-shell .event-unread-count { font-size:10px; }
+}
+@media(max-height:600px) and (min-width:700px) { .gameplay.game-shell .factory-scene.scene { height:170px; } }
+@media(prefers-reduced-motion:reduce) {
+  .gameplay.game-shell .game-tab-transition,.gameplay.game-shell .factory-report,.gameplay.game-shell .factory-photo,
+  .gameplay.game-shell .report-tab-content,.gameplay.game-shell .year-expanded,.gameplay.game-shell .purchase-confirmed,
+  .gameplay.game-shell .purchase-feedback,.gameplay.game-shell .stat-value-pulse,.gameplay.game-shell .event-row,
+  .gameplay.game-shell .year-btn > .year-settlement-note { animation:none; transition:none; }
+  .gameplay.game-shell .event-exiting { visibility:hidden; }
+}
+
+@media(max-width:699px) {
+  .gameplay.game-shell .game-tab-transition .investment-toolbar .canvas-heading,
+  .gameplay.game-shell .game-tab-transition:has(> .investment-toolbar) > .canvas-caption { display:none; }
+  .gameplay.game-shell .game-tab-transition .investment-toolbar { padding-bottom:4px; margin-bottom:5px; }
+  .gameplay.game-shell .event-overview { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px; }
+  .gameplay.game-shell .event-overview-heading { grid-column:1; grid-row:1; grid-template-columns:1fr 1.2fr; padding:0; }
+  .gameplay.game-shell .event-overview-heading > h2 { display:none; }
+  .gameplay.game-shell .event-overview > .event-rows { grid-column:1/-1; grid-row:2; }
+  .gameplay.game-shell .event-overview .event-row:nth-child(n+2) { display:none; }
+  .gameplay.game-shell .event-show-all { grid-column:2; grid-row:1; margin:0; min-height:30px; padding:3px 5px; font-size:11px; gap:4px; }
+  .gameplay.game-shell .event-show-all .event-unread-count { display:none; }
+}
+
+.gameplay.game-shell .year-production-aside { min-width:0; }
+@media(min-width:1200px) {
+  .gameplay.game-shell .year-expanded.has-production { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:14px; }
+  .gameplay.game-shell .year-expanded.has-production .cash-register { order:2; min-width:0; }
+  .gameplay.game-shell .year-expanded.has-production .year-production-aside { order:1; }
+  .gameplay.game-shell .year-production-aside .production-receipt { margin:0; padding:8px; font:12px/1.3 Cambria,Georgia,serif; }
+  .gameplay.game-shell .year-production-aside .production-receipt h4 { font-size:19px; }
+  .gameplay.game-shell .year-production-aside .finance-lines > div { padding:5px 0; }
+  .gameplay.game-shell .has-production .cash-opening,.gameplay.game-shell .has-production .cash-closing { font-size:17px; gap:5px; }
+  .gameplay.game-shell .has-production .production-ledger-item summary strong,.gameplay.game-shell .has-production .ledger-group-row > b { font-size:17px; }
+  .gameplay.game-shell .has-production .production-ledger-item summary small { font-size:11px; }
+  .gameplay.game-shell .has-production .cash-ledger .production-ledger-item > details > summary { grid-template-columns:30px minmax(0,1fr) auto 13px; gap:5px; }
+  .gameplay.game-shell .has-production .cash-reconciliation { padding:7px; font-size:13px; }
+}
+
+/* Painted GIFs replace the old CSS-animated event SVGs. Decode only visible, unpaused loops. */
+.gameplay.game-shell .event-loop,.event-loop { position:relative; display:inline-block; flex:none; animation:none!important; line-height:0; vertical-align:middle; }
+.event-loop > img { display:block; width:100%; height:100%; object-fit:contain; animation:none!important; user-select:none; -webkit-user-drag:none; }
+.event-loop > img.event-context-art { position:absolute; width:46%; height:46%; bottom:-2%; left:-3%; }
+.gameplay.game-shell .event-row { grid-template-columns:36px minmax(0,1fr) minmax(45px,26%) 10px; }
+.gameplay.game-shell .event-row .event-loop { width:36px; height:36px; }
+.gameplay.game-shell .event-detail-dialog .event-loop { width:96px; height:96px; }
+@media(max-width:699px) {
+  .gameplay.game-shell .event-row,.gameplay.game-shell .event-overview .event-row { grid-template-columns:28px minmax(0,1fr) minmax(44px,22%) 10px; }
+  .gameplay.game-shell .event-row .event-loop { width:28px; height:28px; }
+}
+
+.gameplay.game-shell .event-overview-heading button,.gameplay.game-shell .event-group-controls button { transition:color 160ms,background-color 160ms,border-color 160ms; }
+.gameplay.game-shell .event-detail-dialog[open] { animation:game-tab-enter 160ms ease-out; }
+.gameplay.game-shell .ledger-entry-details[open] > summary .disclosure-arrow,.gameplay.game-shell .production-ledger-item > details[open] > summary .disclosure-arrow { transform:rotate(180deg); }
+.gameplay.game-shell .transaction-balances { display:block; color:#7a6547; font-weight:400; margin-top:3px; }
+@media(prefers-reduced-motion:reduce) { .gameplay.game-shell .event-detail-dialog[open],.gameplay.game-shell .event-overview-heading button,.gameplay.game-shell .event-group-controls button { animation:none;transition:none; } }

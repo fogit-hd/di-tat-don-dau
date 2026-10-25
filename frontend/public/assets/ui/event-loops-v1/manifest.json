@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "format": "gif",
+  "size": 96,
+  "frames": 72,
+  "fps": 25,
+  "durationMs": 2880,
+  "loop": 0,
+  "icons": {
+    "rain": {
+      "gif": "rain.gif",
+      "poster": "rain-poster.webp",
+      "master": "rain.svg",
+      "bytes": 233374,
+      "frames": 72,
+      "loop": 0
+    },
+    "storm": {
+      "gif": "storm.gif",
+      "poster": "storm-poster.webp",
+      "master": "storm.svg",
+      "bytes": 233381,
+      "frames": 72,
+      "loop": 0
+    },
+    "sun": {
+      "gif": "sun.gif",
+      "poster": "sun-poster.webp",
+      "master": "sun.svg",
+      "bytes": 174400,
+      "frames": 72,
+      "loop": 0
+    },
+    "fire": {
+      "gif": "fire.gif",
+      "poster": "fire-poster.webp",
+      "master": "fire.svg",
+      "bytes": 198466,
+      "frames": 72,
+      "loop": 0
+    },
+    "water": {
+      "gif": "water.gif",
+      "poster": "water-poster.webp",
+      "master": "water.svg",
+      "bytes": 220834,
+      "frames": 72,
+      "loop": 0
+    },
+    "snow": {
+      "gif": "snow.gif",
+      "poster": "snow-poster.webp",
+      "master": "snow.svg",
+      "bytes": 247042,
+      "frames": 72,
+      "loop": 0
+    },
+    "leaf": {
+      "gif": "leaf.gif",
+      "poster": "leaf-poster.webp",
+      "master": "leaf.svg",
+      "bytes": 214635,
+      "frames": 72,
+      "loop": 0
+    },
+    "wheat": {
+      "gif": "wheat.gif",
+      "poster": "wheat-poster.webp",
+      "master": "wheat.svg",
+      "bytes": 253638,
+      "frames": 72,
+      "loop": 0
+    },
+    "bug": {
+      "gif": "bug.gif",
+      "poster": "bug-poster.webp",
+      "master": "bug.svg",
+      "bytes": 213819,
+      "frames": 72,
+      "loop": 0
+    },
+    "box": {
+      "gif": "box.gif",
+      "poster": "box-poster.webp",
+      "master": "box.svg",
+      "bytes": 416164,
+      "frames": 72,
+      "loop": 0
+    },
+    "coinsUp": {
+      "gif": "coinsUp.gif",
+      "poster": "coinsUp-poster.webp",
+      "master": "coinsUp.svg",
+      "bytes": 247325,
+      "frames": 72,
+      "loop": 0
+    },
+    "coinsDown": {
+      "gif": "coinsDown.gif",
+      "poster": "coinsDown-poster.webp",
+      "master": "coinsDown.svg",
+      "bytes": 265197,
+      "frames": 72,
+      "loop": 0
+    },
+    "truck": {
+      "gif": "truck.gif",
+      "poster": "truck-poster.webp",
+      "master": "truck.svg",
+      "bytes": 231967,
+      "frames": 72,
+      "loop": 0
+    },
+    "plane": {
+      "gif": "plane.gif",
+      "poster": "plane-poster.webp",
+      "master": "plane.svg",
+      "bytes": 130615,
+      "frames": 72,
+      "loop": 0
+    },
+    "ship": {
+      "gif": "ship.gif",
+      "poster": "ship-poster.webp",
+      "master": "ship.svg",
+      "bytes": 170733,
+      "frames": 72,
+      "loop": 0
+    },
+    "factory": {
+      "gif": "factory.gif",
+      "poster": "factory-poster.webp",
+      "master": "factory.svg",
+      "bytes": 216364,
+      "frames": 72,
+      "loop": 0
+    },
+    "bolt": {
+      "gif": "bolt.gif",
+      "poster": "bolt-poster.webp",
+      "master": "bolt.svg",
+      "bytes": 149426,
+      "frames": 72,
+      "loop": 0
+    },
+    "people": {
+      "gif": "people.gif",
+      "poster": "people-poster.webp",
+      "master": "people.svg",
+      "bytes": 257353,
+      "frames": 72,
+      "loop": 0
+    },
+    "chart": {
+      "gif": "chart.gif",
+      "poster": "chart-poster.webp",
+      "master": "chart.svg",
+      "bytes": 224210,
+      "frames": 72,
+      "loop": 0
+    },
+    "chip": {
+      "gif": "chip.gif",
+      "poster": "chip-poster.webp",
+      "master": "chip.svg",
+      "bytes": 311572,
+      "frames": 72,
+      "loop": 0
+    },
+    "flask": {
+      "gif": "flask.gif",
+      "poster": "flask-poster.webp",
+      "master": "flask.svg",
+      "bytes": 217577,
+      "frames": 72,
+      "loop": 0
+    },
+    "wrench": {
+      "gif": "wrench.gif",
+      "poster": "wrench-poster.webp",
+      "master": "wrench.svg",
+      "bytes": 170382,
+      "frames": 72,
+      "loop": 0
+    },
+    "globe": {
+      "gif": "globe.gif",
+      "poster": "globe-poster.webp",
+      "master": "globe.svg",
+      "bytes": 217295,
+      "frames": 72,
+      "loop": 0
+    },
+    "home": {
+      "gif": "home.gif",
+      "poster": "home-poster.webp",
+      "master": "home.svg",
+      "bytes": 295307,
+      "frames": 72,
+      "loop": 0
+    },
+    "shield": {
+      "gif": "shield.gif",
+      "poster": "shield-poster.webp",
+      "master": "shield.svg",
+      "bytes": 321086,
+      "frames": 72,
+      "loop": 0
+    },
+    "alert": {
+      "gif": "alert.gif",
+      "poster": "alert-poster.webp",
+      "master": "alert.svg",
+      "bytes": 260947,
+      "frames": 72,
+      "loop": 0
+    },
+    "gavel": {
+      "gif": "gavel.gif",
+      "poster": "gavel-poster.webp",
+      "master": "gavel.svg",
+      "bytes": 181379,
+      "frames": 72,
+      "loop": 0
+    },
+    "heart": {
+      "gif": "heart.gif",
+      "poster": "heart-poster.webp",
+      "master": "heart.svg",
+      "bytes": 259242,
+      "frames": 72,
+      "loop": 0
+    },
+    "school": {
+      "gif": "school.gif",
+      "poster": "school-poster.webp",
+      "master": "school.svg",
+      "bytes": 251261,
+      "frames": 72,
+      "loop": 0
+    },
+    "lock": {
+      "gif": "lock.gif",
+      "poster": "lock-poster.webp",
+      "master": "lock.svg",
+      "bytes": 257122,
+      "frames": 72,
+      "loop": 0
+    },
+    "megaphone": {
+      "gif": "megaphone.gif",
+      "poster": "megaphone-poster.webp",
+      "master": "megaphone.svg",
+      "bytes": 228643,
+      "frames": 72,
+      "loop": 0
+    },
+    "clock": {
+      "gif": "clock.gif",
+      "poster": "clock-poster.webp",
+      "master": "clock.svg",
+      "bytes": 238455,
+      "frames": 72,
+      "loop": 0
+    },
+    "spark": {
+      "gif": "spark.gif",
+      "poster": "spark-poster.webp",
+      "master": "spark.svg",
+      "bytes": 140040,
+      "frames": 72,
+      "loop": 0
+    }
+  },
+  "source": "AI generated painted atlases; deterministic periodic SVG motion; global-palette GIF encoding"
+}

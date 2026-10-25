@@ -1,3 +1,4 @@
+import type { ProductionReport } from './production'
 export type Line = 'eng' | 'mac' | 'sup' | 'inf' | 'grn'
 export type Ending = string
 export type Exposure = 'machines' | 'engineers' | 'cash' | 'pollution' | 'any'
@@ -95,6 +96,7 @@ export type Effect = {
   icon?: string
   good?: boolean
   eventId?: string
+  noticeId?: string
   summary?: string
   year?: number
   /**
@@ -133,10 +135,10 @@ export type SuccessionResult = {
   year: number
 }
 
-export type CauseKind = 'production' | 'investment' | 'event' | 'ongoing' | 'interest' | 'centennial' | 'insurance'
+export type CauseKind = 'production' | 'investment' | 'event' | 'ongoing' | 'interest' | 'centennial' | 'insurance' | 'inflation' | 'quiz'
 
 /** A ledger item may change cash immediately, or describe a percentage effect which applies later. */
-export type YearCause = { kind: CauseKind; label: string; cash: number; detail?: string; packages?: number }
+export type YearCause = { kind: CauseKind; label: string; cash: number; detail?: string; packages?: number; cashBefore?: number; cashAfter?: number }
 
 export type YearChange = {
   year: number
@@ -145,9 +147,11 @@ export type YearChange = {
   assetsBefore: number
   assetsAfter: number
   causes: YearCause[]
+  production?: ProductionReport
 }
 
 export type EventLogItem = {
+  instanceId?: string
   year: number
   eventId: string
   title: string
@@ -214,6 +218,7 @@ export type TeamState = {
   yearOpenCash: number
   yearOpenAssets: number
   yearParts?: YearParts
+  cycleReport?: ProductionReport
   pulseYear: number
   nextPromptAt: number
   introDone: boolean

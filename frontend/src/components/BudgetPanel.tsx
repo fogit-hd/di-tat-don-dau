@@ -1,5 +1,5 @@
 import type { InvestmentPreview, SceneView } from '../api/types.ts'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Icon } from './Icons.tsx'
 import { investmentArt } from '../lib/art.ts'
 import { money } from '../lib/format.ts'
@@ -19,10 +19,18 @@ export function BudgetPanel({
   prices?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>
   busy: boolean
   paused: boolean
-  onInvest: (line: 'eng' | 'mac' | 'sup' | 'inf' | 'grn', quantity: 1 | 5 | 10 | 'max') => void
+  onInvest: (line: 'eng' | 'mac' | 'sup' | 'inf' | 'grn', quantity: 1 | 5 | 10 | 'max') => Promise<boolean>
   onRestart: () => void
 }) {
   const [quantity, setQuantity] = useState<1 | 5 | 10 | 'max'>(1)
+  const purchaseSequence = useRef(0)
+  const [feedback, setFeedback] = useState<{line:string; phase:'sending'|'confirmed'|'failed'; version:number; gain:string} | null>(null)
+  async function purchase(line: SceneView['lines'][number]['id'], gain: string) {
+    const version = ++purchaseSequence.current
+    setFeedback({line,phase:'sending',version,gain})
+    const ok = await onInvest(line,quantity)
+    if (version === purchaseSequence.current) setFeedback({line,phase:ok?'confirmed':'failed',version,gain})
+  }
   const bankrupt = scene.bankrupt ?? (scene.stateAidEligible && scene.succession?.outcome === 'bankrupt')
   if (bankrupt) {
     const canRevive = scene.secondLife === 'available' && scene.stateAidEligible
@@ -65,7 +73,7 @@ export function BudgetPanel({
         const info = upgradeInfo(scene, line.id)
         const benefit = preview ? previewInfo(scene, line.id, preview) : null
         return (
-          <article className="btn choice investment-card" key={line.id}>
+          <article className={`btn choice investment-card${feedback?.line === line.id ? ` purchase-${feedback.phase}` : ''}`} key={line.id}>
             <UpgradeArt key={`${scene.industryId}-${line.id}`} industry={scene.industryId} line={line.id} />
             <div className="choice-copy">
               <h4 className="choice-label">{line.label}</h4>
@@ -76,9 +84,10 @@ export function BudgetPanel({
               {benefit ? <><strong>{benefit.gain}</strong><small>{benefit.change}</small></> : <small>{info.current}</small>}
               <small>Hiệu quả năm nay: {Math.round((scene.upgradeEfficiency?.[line.id] ?? 1) * 100)}%</small>
             </div>
-            <button type="button" className="choice-price investment-buy" disabled={!can} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => onInvest(line.id, quantity)}>
-              Đầu tư ×{count}<b>{money(total)}</b>
+            <button type="button" className="choice-price investment-buy" disabled={!can} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => void purchase(line.id,benefit?.gain || line.label)}>
+              {feedback?.line === line.id && feedback.phase === 'sending' ? 'Đang gửi…' : `Đầu tư ×${count}`}<b>{money(total)}</b>
             </button>
+            {feedback?.line === line.id && <span key={feedback.version+feedback.phase} className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Chờ máy chủ xác nhận':feedback.phase==='confirmed'?'Đã nâng cấp · Máy chủ đã xác nhận':'Chưa nâng cấp · xem lỗi ở trên'}</span>}
             {preview && <details className="investment-projection"><summary>Xem tác động khi Sang năm</summary>
               <p>{benefit?.detail}</p>
               <p>Lãi/lỗ sản xuất ước tính: {money(scene.operatingForecast?.net ?? 0)} → {money(preview.net)}/năm (chưa trừ lạm phát, lãi nợ).</p>

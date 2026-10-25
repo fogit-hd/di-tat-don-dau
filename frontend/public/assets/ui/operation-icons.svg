@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="paper" x2=".8" y2="1"><stop stop-color="#fff4d5"/><stop offset="1" stop-color="#d8b26b"/></linearGradient>
+    <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#ffe59b"/><stop offset="1" stop-color="#b36b26"/></linearGradient>
+  </defs>
+  <symbol id="report" viewBox="0 0 48 48">
+    <g stroke="#63381b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path fill="url(#paper)" d="M8 8 31 7l2 34-26 1z"/><path fill="url(#gold)" d="M15 4h10l1 8H14z"/>
+      <path d="m13 18 13-1M13 24h7m-7 6h7"/><circle fill="#fff1c9" cx="31" cy="29" r="9"/>
+      <path stroke-width="5" d="m37 36 7 8"/><path fill="url(#gold)" d="M26 32v-4h3v4m2 0v-7h3v7"/>
+    </g>
+  </symbol>
+  <symbol id="back" viewBox="0 0 48 48"><path fill="url(#gold)" stroke="#63381b" stroke-width="2" stroke-linejoin="round" d="m22 7-17 17 17 17v-11h20V18H22z"/></symbol>
+  <symbol id="verified" viewBox="0 0 48 48"><path fill="#567c45" stroke="#3e552e" stroke-width="2" d="m24 3 18 6-1 19-6 10-11 7-12-7-6-10L6 9z"/><path fill="none" stroke="#fff2cf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m13 24 8 8 15-17"/></symbol>
+  <symbol id="warning" viewBox="0 0 48 48"><path fill="url(#gold)" stroke="#88401d" stroke-width="2" stroke-linejoin="round" d="M24 4 45 42H3z"/><path stroke="#6f2c18" stroke-width="4" stroke-linecap="round" d="M24 16v12m0 7v1"/></symbol>
+  <symbol id="arrow" viewBox="0 0 48 48"><path fill="url(#gold)" stroke="#854b1f" stroke-width="2" stroke-linejoin="round" d="M4 19h24V9l16 15-16 15V29H4z"/></symbol>
+  <symbol id="chevron" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m13 17 11 13 11-13"/></symbol>
+</svg>

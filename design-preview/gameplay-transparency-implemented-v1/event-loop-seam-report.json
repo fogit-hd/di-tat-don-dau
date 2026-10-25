@@ -1,0 +1,266 @@
+[
+  {
+    "icon": "rain",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0819,
+    "ordinaryStepP90": 0.1628,
+    "passed": true
+  },
+  {
+    "icon": "storm",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0737,
+    "ordinaryStepP90": 0.184,
+    "passed": true
+  },
+  {
+    "icon": "sun",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.8158,
+    "ordinaryStepP90": 1.0586,
+    "passed": true
+  },
+  {
+    "icon": "fire",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.6919,
+    "ordinaryStepP90": 0.6977,
+    "passed": true
+  },
+  {
+    "icon": "water",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.001,
+    "ordinaryStepP90": 0.0403,
+    "passed": true
+  },
+  {
+    "icon": "snow",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 1.2083,
+    "ordinaryStepP90": 1.4703,
+    "passed": true
+  },
+  {
+    "icon": "leaf",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.9911,
+    "ordinaryStepP90": 0.9281,
+    "passed": true
+  },
+  {
+    "icon": "wheat",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 1.4095,
+    "ordinaryStepP90": 1.6246,
+    "passed": true
+  },
+  {
+    "icon": "bug",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.3779,
+    "ordinaryStepP90": 0.4243,
+    "passed": true
+  },
+  {
+    "icon": "box",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.2541,
+    "passed": true
+  },
+  {
+    "icon": "coinsUp",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0409,
+    "ordinaryStepP90": 0.2074,
+    "passed": true
+  },
+  {
+    "icon": "coinsDown",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0326,
+    "ordinaryStepP90": 0.1269,
+    "passed": true
+  },
+  {
+    "icon": "truck",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.6471,
+    "ordinaryStepP90": 0.5358,
+    "passed": true
+  },
+  {
+    "icon": "plane",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.3167,
+    "ordinaryStepP90": 0.3678,
+    "passed": true
+  },
+  {
+    "icon": "ship",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.4034,
+    "ordinaryStepP90": 0.3922,
+    "passed": true
+  },
+  {
+    "icon": "factory",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.0914,
+    "passed": true
+  },
+  {
+    "icon": "bolt",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.1408,
+    "passed": true
+  },
+  {
+    "icon": "people",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.3581,
+    "ordinaryStepP90": 0.4681,
+    "passed": true
+  },
+  {
+    "icon": "chart",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0412,
+    "ordinaryStepP90": 0.044,
+    "passed": true
+  },
+  {
+    "icon": "chip",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.1092,
+    "ordinaryStepP90": 0.2559,
+    "passed": true
+  },
+  {
+    "icon": "flask",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0685,
+    "ordinaryStepP90": 0.0659,
+    "passed": true
+  },
+  {
+    "icon": "wrench",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.9095,
+    "ordinaryStepP90": 0.9452,
+    "passed": true
+  },
+  {
+    "icon": "globe",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.1839,
+    "passed": true
+  },
+  {
+    "icon": "home",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.0988,
+    "passed": true
+  },
+  {
+    "icon": "shield",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.214,
+    "passed": true
+  },
+  {
+    "icon": "alert",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.2044,
+    "passed": true
+  },
+  {
+    "icon": "gavel",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.667,
+    "ordinaryStepP90": 0.9125,
+    "passed": true
+  },
+  {
+    "icon": "heart",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.7735,
+    "ordinaryStepP90": 0.7276,
+    "passed": true
+  },
+  {
+    "icon": "school",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.1315,
+    "passed": true
+  },
+  {
+    "icon": "lock",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.2026,
+    "passed": true
+  },
+  {
+    "icon": "megaphone",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0258,
+    "ordinaryStepP90": 0.0837,
+    "passed": true
+  },
+  {
+    "icon": "clock",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.3478,
+    "ordinaryStepP90": 0.4208,
+    "passed": true
+  },
+  {
+    "icon": "spark",
+    "frames": 72,
+    "durationMs": 2880,
+    "seamMAE": 0.0,
+    "ordinaryStepP90": 0.182,
+    "passed": true
+  }
+]

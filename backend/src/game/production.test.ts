@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { balance } from '../../prisma/seed/balance'
 import { LINES } from '../../prisma/seed/rules'
 import { applyPatch, createState, invest, patchFromEvent, runCycle } from './engine'
-import { isBankrupt, logisticsBenefits, pollutionPricePenalty, productionPlan, supplyBenefits } from './production'
+import { isBankrupt, logisticsBenefits, pollutionPricePenalty, productionPlan, productionForecast, supplyBenefits } from './production'
 import { makeRng } from './rng'
 import type { EventDef, ThemeDef } from './types'
 
@@ -101,5 +101,37 @@ describe('economy v2 production and upgrade roles', () => {
     expect(isBankrupt({...fresh(),cash:0})).toBe(false)
     expect(runCycle(s,theme,makeRng(1),1000,balance)).toBe(s)
     expect(invest(s,'sup',1000,balance,LINES).ok).toBe(false)
+  })
+})
+
+
+describe('production audit and conditional forecasts',()=>{
+  it('forecasts legal whole-percent draw bounds without advancing RNG or mutating state',()=>{
+    const state=fresh(),before=JSON.stringify(state)
+    const b={...balance,outputNoiseMin:.973,outputNoiseMax:1.027,priceNoiseMin:.981,priceNoiseMax:1.019}
+    const forecast=productionForecast(state,theme,b,1000)
+    expect(forecast.range.outputNoiseMin).toBe(.98);expect(forecast.range.outputNoiseMax).toBe(1.02)
+    expect(forecast.range.priceNoiseMin).toBe(.99);expect(forecast.range.priceNoiseMax).toBe(1.01)
+    for(let seed=1;seed<=100;seed++) {
+      const result=runCycle(state,theme,makeRng(seed),1000,b)
+      expect(result.lastOutput).toBeGreaterThanOrEqual(forecast.range.outputMin-1e-8)
+      expect(result.lastOutput).toBeLessThanOrEqual(forecast.range.outputMax+1e-8)
+      expect(result.cycleReport!.net).toBeGreaterThanOrEqual(forecast.range.netMin-1e-8)
+      expect(result.cycleReport!.net).toBeLessThanOrEqual(forecast.range.netMax+1e-8)
+    }
+    expect(JSON.stringify(state)).toBe(before)
+  })
+  it('captures independent output and price factors and retains every settled cost and cash part',()=>{
+    const state={...fresh(),cash:-200,effects:[{id:'rain',visual:'rain',title:'Mưa',body:'',severity:1,startedAt:0,endsAt:1,outputMul:.9,priceMul:.8,inflationMul:1,revenueMul:.95,costMul:1.1,cashPerYear:50,yearsLeft:2}]}
+    const result=runCycle(state,theme,makeRng(80),1000,balance)
+    const r=result.cycleReport!
+    expect(r.appliedEffects[0]!.outputMul).toBe(.9)
+    expect(r.theoreticalOutput*r.outputMul*r.outputNoise).toBeCloseTo(r.output,9)
+    expect(r.sold*r.price*r.revenueMul).toBeCloseTo(r.revenue,9)
+    expect(r.inputCost+r.logisticsCost+r.otherCost+r.idleCost).toBeCloseTo(r.opex,9)
+    expect(result.cash-state.cash).toBeCloseTo(r.net-r.inflation+r.interest+r.ongoing,9)
+    expect(r.inflation).toBe(0);expect(r.interest).toBeLessThan(0)
+    state.effects[0]!.outputMul=.4
+    expect(r.appliedEffects[0]!.outputMul).toBe(.9)
   })
 })

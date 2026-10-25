@@ -6,6 +6,7 @@ import {
   applyPatch,
   computeEnding,
   computeValue,
+  companyBooks,
   createState,
   closeYearEffects,
   drawEvent,
@@ -25,7 +26,7 @@ import {
   stepOf,
 } from './game/engine'
 import { LINES } from './game/engine'
-import { isBankrupt, productionPlan } from './game/production'
+import { isBankrupt, productionPlan, productionForecast } from './game/production'
 import { investmentPreviews } from './game/investment-preview'
 import { introFactoryName } from './game/intro'
 import { money, moneyTemplate } from './game/money'
@@ -726,6 +727,7 @@ export async function answerPrompt(code: string, token: string, optionId: string
       const cash = Math.round(balance.quizCash * rng.range(.8, 1.2))
       const engineers = Math.round(balance.quizEngineers * rng.range(.8, 1.2))
       team.state.cash += cash
+      team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'quiz', label: 'Thưởng trả lời đúng', cash, cashBefore: team.state.cash - cash, cashAfter: team.state.cash, detail: `Câu hỏi: ${pending.body} · +${engineers} kỹ sư` }]
       team.state.engineers += engineers
       team.state.rng = rng.getState()
       pending.note = fillText(moneyTemplate(balance.logs.quizCorrect, { cash }), {
@@ -884,6 +886,7 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   team.state.pendingCauses = []
   team.state = openYearEffects(team.state, now)
   team.state = runCycle(team.state, team.theme, rng, now, balance)
+  const production = team.state.cycleReport
   const parts = team.state.yearParts ?? { production: 0, ongoing: 0, interest: 0 }
   team.state = closeYearEffects(team.state, now)
   const eventCauses: YearCause[] = []
@@ -903,7 +906,8 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
     for (const other of room.teams) {
       if (other.id === team.id || !other.state || !other.theme || other.state.finished || isBankrupt(other.state)) continue
       const otherRng = teamRngOf(other)
-      applyEvent(other, shared, otherRng, now)
+      const sharedCause = applyEvent(other, shared, otherRng, now)
+      other.state.pendingCauses = [...(other.state.pendingCauses ?? []), sharedCause]
       other.state.rng = otherRng.getState()
       other.state.log = [`Cả lớp: ${shared.title}`, ...other.state.log].slice(0, balance.logLimit)
     }
@@ -930,14 +934,15 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   const causes: YearCause[] = [
     ...investCauses,
     ...(parts.interest ? [{ kind: 'interest' as const, label: 'Lãi nợ', cash: parts.interest }] : []),
-    { kind: 'production', label: 'Sản xuất', cash: parts.production },
+    { kind: 'production', label: production ? 'Lãi sản xuất' : 'Sản xuất (đã trừ lạm phát)', cash: production?.net ?? parts.production },
+    ...(production?.inflation ? [{ kind: 'inflation' as const, label: 'Lạm phát', cash: -production.inflation }] : []),
     ...(parts.ongoing ? [{ kind: 'ongoing' as const, label: 'Khoản kéo dài', cash: parts.ongoing }] : []),
     ...eventCauses,
     ...extra,
     ...(celebrate ? [{ kind: 'centennial' as const, label: 'Doanh nghiệp trăm năm', cash: 0 }] : []),
   ]
   team.state.yearLedger = [
-    { year: team.state.cycles, cashBefore, cashAfter, assetsBefore, assetsAfter, causes },
+    { year: team.state.cycles, cashBefore, cashAfter, assetsBefore, assetsAfter, causes, production },
     ...(team.state.yearLedger ?? []),
   ].slice(0, 120)
   team.state.yearOpenCash = team.state.cash
@@ -1016,7 +1021,7 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
     team.state.lastIncome = 0
     team.state.lastOutput = 0
     team.state.effects = []
-    team.state.pendingCauses = [...team.state.pendingCauses, { kind: 'event', label: 'Phá sản khi chuyển giao', cash: -lostCash }]
+    team.state.pendingCauses = [...team.state.pendingCauses, { kind: 'event', label: 'Phá sản khi chuyển giao', cash: -lostCash, cashBefore: lostCash, cashAfter: 0 }]
     team.state.stateAidEligible = true
     team.state.finished = team.state.secondLife !== 'available'
     team.state.nextYearAt = 0
@@ -1060,7 +1065,7 @@ function rollMortality(room: LiveRoom, team: LiveTeam): SuccessionNotice | null 
   const payout = (team.state.traits ?? []).includes('life_insurance')
     ? Math.round((rules().balance.lifeInsuranceCash || 0) * (team.theme.scaleFactor || 1) * annualEconomy(team.state).insurance) : 0
   team.state.cash += payout
-  if (payout) team.state.pendingCauses = [...team.state.pendingCauses, { kind: 'insurance', label: 'Bảo hiểm nhân thọ', cash: payout }]
+  if (payout) team.state.pendingCauses = [...team.state.pendingCauses, { kind: 'insurance', label: 'Bảo hiểm nhân thọ', cash: payout, cashBefore: team.state.cash - payout, cashAfter: team.state.cash }]
   const finalAssets = computeValue(team.state, team.theme, rules().balance)
   const stored: SuccessionResult = {
     causeText: 'Chủ doanh nghiệp qua đời',
@@ -1166,12 +1171,13 @@ function presentYearQuestion(team: LiveTeam, now: number) {
 
 function rememberEvent(team: LiveTeam, event: EventDef, title: string, body: string, effect: string) {
   rememberSystemEvent(team, { eventId: event.id, title, body, icon: event.icon || event.visual, good: event.good, effect })
+  return team.state?.eventLog[0]?.instanceId
 }
 
 function rememberSystemEvent(team: LiveTeam, event: { eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }) {
   if (!team.state) return
   team.state.eventLog = [
-    { year: team.state.cycles, ...event },
+    { year: team.state.cycles, instanceId: nid(10), ...event },
     ...(team.state.eventLog ?? []),
   ].slice(0, 200)
 }
@@ -1192,11 +1198,13 @@ function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof make
     latest.eventId = event.id
     latest.year = team.state.cycles
   }
-  rememberEvent(team, event, copy.title, copy.body, latest?.summary || copy.title)
+  const noticeId = rememberEvent(team, event, copy.title, copy.body, latest?.summary || copy.title)
+  if (latest) latest.noticeId = noticeId
   return {
     kind: 'event',
     label: copy.title,
     cash: team.state.cash - before,
+    cashBefore: before, cashAfter: team.state.cash,
     // For example, "sản lượng -10%" is meaningful even though it has no immediate cash movement.
     detail: latest?.summary || copy.title,
   }
@@ -1294,7 +1302,9 @@ function openEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeR
     }
     return
   }
+  const cashBeforeEvent = team.state.cash
   team.state = applyPatch(team.state, patchFromEvent(event, copy.title, copy.body), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
+  team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'event', label: copy.title, cash: team.state.cash - cashBeforeEvent, cashBefore: cashBeforeEvent, cashAfter: team.state.cash, detail: team.state.effects[0]?.summary || copy.body }]
   if (!team.state.pending) {
     team.state.pending = {
       id: `e-${event.id}-${team.id}-${now}`,
@@ -1325,7 +1335,9 @@ function resolveChoice(team: LiveTeam, optionId: string, now: number) {
     title: fillText(option.patch.title, team.theme.vars),
     body: fillText(option.patch.body, team.theme.vars),
   }
+  const cashBeforeChoice = team.state.cash
   team.state = applyPatch(team.state, patch, rng, now, `choice-${option.id}-${now}`, rules().balance)
+  team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'event', label: patch.title, cash: team.state.cash - cashBeforeChoice, cashBefore: cashBeforeChoice, cashAfter: team.state.cash, detail: team.state.effects[0]?.summary || patch.body }]
   team.state.rng = rng.getState()
   team.state.pending = {
     ...pending,
@@ -1563,7 +1575,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       centennial: team.state?.centennial ?? null,
       traits: traitViews(team.state?.traits ?? [], team.state?.eventLog, team.state),
       score: team.score,
-      scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team, room) : null,
+      scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team, room, Date.now(), false) : null,
     })),
     leaderboard,
     you: self
@@ -1601,7 +1613,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
   }
 }
 
-function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
+function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistory = true) {
   const state = team.state!
   const theme = team.theme!
   const epl = theme.coefs.epl
@@ -1640,8 +1652,11 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
     finished: Boolean(state.finished),
     bankrupt: isBankrupt(state),
     economyVersion: 2,
+    companyBooks: { ...companyBooks(state, theme, rules().balance), reportedValue: valueOf(team) },
+    lastProduction: state.cycleReport,
+    productionForecast: state.finished || isBankrupt(state) ? undefined : productionForecast(openYearEffects(state, now + 1), theme, annualBalance(state, rules().balance), now + 1),
     operatingForecast: productionPlan(openYearEffects(state, now + 1), theme, annualBalance(state, rules().balance), now + 1),
-    investmentPreviews: state.finished || isBankrupt(state) ? undefined : investmentPreviews(state, theme, rules().balance, annualBalance(state, rules().balance), linesOf(theme), room.linePrices, room.step, now),
+    investmentPreviews: !includeHistory || state.finished || isBankrupt(state) ? undefined : investmentPreviews(state, theme, rules().balance, annualBalance(state, rules().balance), linesOf(theme), room.linePrices, room.step, now),
     secondLife: state.secondLife ?? 'locked',
     stateAidEligible: state.stateAidEligible ?? false,
     succession: state.succession ?? null,
@@ -1651,9 +1666,11 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
       title: effect.title,
       body: effect.body,
       severity: effect.severity || 1,
+      year: effect.year,
       startedAt: effect.startedAt,
       endsAt: effect.endsAt,
       eventId: effect.eventId,
+      noticeId: effect.noticeId,
       yearsLeft: effect.yearsLeft ?? 0,
       deferred: Boolean(effect.defer),
       summary: effect.summary,
@@ -1666,7 +1683,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
     pending: publicPending(state.pending),
     introDone: state.introDone,
     eventLog: state.eventLog ?? [],
-    yearChanges: state.yearLedger ?? [],
+    yearChanges: includeHistory ? state.yearLedger ?? [] : [],
     linePrices: Object.fromEntries(
       LINES.map((line) => [line, investmentPrice(state, room.linePrices?.[line] ?? room.step, now)]),
     ),
@@ -1679,6 +1696,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now()) {
     activeEffects: (state.effects ?? [])
       .filter((effect) => !effect.defer && ((effect.cashPerYear ?? 0) !== 0 || (effect.investmentMul ?? 1) !== 1) && (effect.yearsLeft ?? 0) > 0)
       .map((effect) => ({
+        id: effect.id,
         eventId: effect.eventId || effect.id,
         label: effect.title,
         cashPerYear: Math.round((effect.cashPerYear || 0) * 100) / 100,
