@@ -36,6 +36,7 @@ import {
   type Viewer,
 } from './runtime'
 import type { Line } from './game/types'
+import { introRequestSchema } from './game/intro'
 import { startDbKeepAlive } from './db/keep-alive'
 import { loadEnv } from './load-env'
 import { requireHostUser, signInGoogle } from './auth'
@@ -240,8 +241,9 @@ app.post('/api/rooms/:code/end', async (req, res, next) => {
 app.post('/api/rooms/:code/intro', async (req, res, next) => {
   try {
     const code = param(req.params.code)
-    const body = z.object({ factoryName: z.string().max(40) }).parse(req.body)
-    res.json(await withRoom(code, () => confirmIntro(code, playerToken(req), body.factoryName)))
+    const body = introRequestSchema.safeParse(req.body)
+    if (!body.success) throw new HttpError(400, body.error.issues[0]?.message || 'Tên nhà máy không hợp lệ')
+    res.json(await withRoom(code, () => confirmIntro(code, playerToken(req), body.data.factoryName)))
   } catch (error) {
     next(error)
   }
@@ -259,8 +261,8 @@ app.post('/api/rooms/:code/year', async (req, res, next) => {
 app.post('/api/rooms/:code/invest', async (req, res, next) => {
   try {
     const code = param(req.params.code)
-    const body = z.object({ line: z.enum(['eng', 'mac', 'sup', 'inf', 'grn']) }).parse(req.body)
-    res.json(await withRoom(code, () => investLine(code, playerToken(req), body.line as Line)))
+    const body = z.object({ line: z.enum(['eng', 'mac', 'sup', 'inf', 'grn']), quantity: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal('max')]).default(1) }).parse(req.body)
+    res.json(await withRoom(code, () => investLine(code, playerToken(req), body.line as Line, body.quantity)))
   } catch (error) {
     next(error)
   }

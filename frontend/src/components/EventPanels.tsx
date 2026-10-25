@@ -1,10 +1,12 @@
-import { useId, useImperativeHandle, useState, type ReactNode, type Ref } from 'react'
-import type { ActiveEffectView, EventLogView, TraitView, YearChangeView } from '../api/types.ts'
-import { vnd } from '../lib/format.ts'
+import { useId, useImperativeHandle, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
+import type { ActiveEffectView, EventLogView, LineView, TraitView, YearChangeView } from '../api/types.ts'
+import { money } from '../lib/format.ts'
 import { EventIcon } from './EventIcon.tsx'
 import { traitDetail } from '../lib/special-status.ts'
 import { currentEventEntries, type EventEntry, type EventGroup } from '../lib/ongoing-events.ts'
 import { EventRows } from './EventOverview.tsx'
+import { PaintedIcon, TraitIcon } from './PaintedIcon.tsx'
+import { YearLedger } from './YearLedger.tsx'
 
 export function EffectBadges({
   effects,
@@ -17,12 +19,13 @@ export function EffectBadges({
   centennial: boolean
   pulse: boolean
 }) {
-  const [open, setOpen] = useState<string | null>(null)
+  const [open, setOpen] = useState<string | null>(() => traits[0]?.id ?? null)
   const selectedTrait = traits.find(trait => trait.id === open)
-  if (!effects.length && !traits.length && !centennial) return null
   return (
-    <div className="badge-row">
-      {centennial && <span className="badge good">Bách niên</span>}
+    <section className="enterprise-perks" aria-label="Đặc quyền đang có">
+      <h4>Đặc quyền đang có <span>({traits.length + (centennial ? 1 : 0)})</span></h4>
+      <div className="perk-list">
+      {centennial && <span className="perk-chip"><PaintedIcon name="centennial" />Bách niên</span>}
       {effects.map((effect) => {
         const isPriceOnly = effect.cashPerYear === 0 && Boolean(effect.investmentPct)
         const isGood = isPriceOnly ? (effect.investmentPct ?? 0) < 0 : effect.cashPerYear >= 0
@@ -30,17 +33,19 @@ export function EffectBadges({
           <span key={effect.eventId} className={`badge${isGood ? ' good' : ' bad'}${pulse && !isGood ? ' pulse' : ''}`}>
             {isPriceOnly
               ? `Giá đầu tư ${effect.investmentPct! > 0 ? '+' : ''}${effect.investmentPct}%, còn ${effect.yearsLeft} năm`
-              : `${effect.cashPerYear > 0 ? '+' : ''}${effect.cashPerYear.toLocaleString('vi-VN')} tỷ/năm, còn ${effect.yearsLeft} năm`}
+              : `${effect.cashPerYear > 0 ? '+' : ''}${money(effect.cashPerYear)}/năm, còn ${effect.yearsLeft} năm`}
           </span>
         )
       })}
       {traits.map((trait) => (
-        <button type="button" key={trait.id} className={`badge trait${open === trait.id ? ' on' : ''}`} onClick={() => setOpen(open === trait.id ? null : trait.id)}>
-          {trait.label}
+        <button type="button" key={trait.id} title={trait.label} className={`perk-chip${open === trait.id ? ' on' : ''}`} aria-pressed={open === trait.id} aria-controls="selected-perk-detail" onClick={() => setOpen(open === trait.id ? null : trait.id)}>
+          <TraitIcon id={trait.id} /><span>{trait.label}</span>
         </button>
       ))}
-      {selectedTrait && <p className="trait-note">{traitDetail(selectedTrait)}</p>}
-    </div>
+      </div>
+      {selectedTrait && <div className="perk-detail" id="selected-perk-detail"><TraitIcon id={selectedTrait.id} /><div><b>{selectedTrait.label}</b><p>{traitDetail(selectedTrait)}</p></div></div>}
+      {traits.length > 0 ? <p className="perk-help">Chọn đặc quyền để xem tác dụng.</p> : !centennial && <p className="perk-help">Chưa có đặc quyền nào.</p>}
+    </section>
   )
 }
 
@@ -96,25 +101,7 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
           <EventCardList events={events} empty="Chưa có sự kiện nào." />
         </div>
       ) : (
-        <div role="tabpanel" className="year-ledger">
-          {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
-          {changes.map((row) => (
-            <article key={row.year} className="year-row">
-              <header>
-                <b>Năm {row.year}</b>
-                <span>
-                  Tiền {signed(row.cashBefore)} → {signed(row.cashAfter)}
-                </span>
-                <span>
-                  Tài sản {vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}
-                </span>
-              </header>
-              <ul>
-                {row.causes.map((cause, index) => <LedgerCause key={`${row.year}-${cause.kind}-${index}`} cause={cause} />)}
-              </ul>
-            </article>
-          ))}
-        </div>
+        <div role="tabpanel"><YearLedger changes={changes} /></div>
       )}
     </section>
   )
@@ -123,9 +110,11 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
 /** One predictable place for the player's next decision and the evidence behind it. */
 export type GameTabsHandle = { showEvents: (group: EventGroup) => void }
 
-export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, finished = false, result }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; finished?: boolean; result?: ReactNode }) {
+export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, investmentLines, industryId, finished = false, result }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; investmentLines?: LineView[]; industryId?: string; finished?: boolean; result?: ReactNode }) {
   const [tab, setTab] = useState(finished ? 'events' : 'investment')
   const [eventGroup, setEventGroup] = useState<EventGroup>('history')
+  const panel = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => { if (panel.current) panel.current.scrollTop = 0 }, [tab, eventGroup])
   const uid = useId()
   useImperativeHandle(ref, () => ({ showEvents(group) {
     setTab('events')
@@ -149,7 +138,7 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
           document.getElementById(`${uid}-${tabs[next][0]}`)?.focus()
         }}>{label}{id === 'risk' && riskIncreasing && <span className="risk-dot" aria-label="Rủi ro kỳ sau tăng" />}</button>)}
       </div>
-      <div role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-${tab}`} className="game-panel" tabIndex={0}>
+      <div ref={panel} role="tabpanel" id={`${uid}-panel`} aria-labelledby={`${uid}-${tab}`} className="game-panel" tabIndex={0}>
       {tab === 'investment' && (finished ? result : investment)}
       {tab === 'enterprise' && enterprise}
       {tab === 'risk' && risk}
@@ -165,58 +154,9 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
         </div>
       )}
       {tab === 'years' && (
-        <div className="year-ledger tab-panel">
-          {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
-          {changes.map((row) => (
-            <article key={row.year} className="year-row">
-              <header>
-                <b>Năm {row.year}</b>
-                <span>Tiền {signed(row.cashBefore)} → {signed(row.cashAfter)}</span>
-                <span>Tài sản {vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}</span>
-              </header>
-              <ul>
-                {row.causes.map((cause, index) => <LedgerCause key={`${row.year}-${cause.kind}-${index}`} cause={cause} />)}
-              </ul>
-            </article>
-          ))}
-        </div>
+        <YearLedger changes={changes} lines={investmentLines} industryId={industryId} />
       )}
       </div>
     </section>
   )
-}
-
-function LedgerCause({ cause }: { cause: YearChangeView['causes'][number] }) {
-  const hasImmediateCash = Math.abs(cause.cash) >= 0.5
-  const hasNonCashImpact = !hasImmediateCash && (Boolean(cause.detail) || cause.kind === 'event')
-  return (
-    <li className={hasNonCashImpact ? 'non-cash-cause' : ''}>
-      <span>
-        <strong>{causeLabel(cause.kind)} · {cause.label}</strong>
-        {cause.detail && cause.detail !== cause.label && <small>{cause.detail}</small>}
-      </span>
-      {hasImmediateCash ? (
-        <b className={cause.cash < 0 ? 'down' : 'up'}>{signed(cause.cash)}</b>
-      ) : hasNonCashImpact ? (
-        <em>{cause.detail ? 'Tác động theo chỉ số' : 'Tác động phi tiền mặt'}</em>
-      ) : null}
-    </li>
-  )
-}
-
-function signed(value: number) {
-  const rounded = Math.round(value)
-  const text = `${rounded > 0 ? '+' : ''}${rounded.toLocaleString('vi-VN')} tỷ`
-  return text
-}
-
-function causeLabel(kind: string) {
-  if (kind === 'production') return 'Sản xuất'
-  if (kind === 'investment') return 'Đầu tư'
-  if (kind === 'event') return 'Sự kiện'
-  if (kind === 'ongoing') return 'Khoản kéo dài'
-  if (kind === 'interest') return 'Lãi nợ'
-  if (kind === 'insurance') return 'Bảo hiểm'
-  if (kind === 'centennial') return 'Trăm năm'
-  return kind
 }

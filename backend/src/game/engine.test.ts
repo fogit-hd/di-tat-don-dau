@@ -10,6 +10,7 @@ import {
   drawQuestion,
   eventCopy,
   invest,
+  investmentPrice,
   openYearEffects,
   patchFromEvent,
   runCycle,
@@ -107,6 +108,80 @@ function fresh(capital = 10000, seed = 7) {
 }
 
 describe('economy', () => {
+  it('randomizes legacy fixed impacts, preserves signs and shows the exact percentage applied', () => {
+    const prices = new Set<number>()
+    const spans = new Set<number>()
+    for (let seed = 1; seed <= 50; seed++) {
+      const patched = applyPatch(fresh(), { visual: 'boom', title: 'Ưu đãi', body: '', exposure: 'any', durationSec: [1,1], outputMul: [1,1], priceMul: [1,1], inflationMul: [1,1], revenuePct: [10,10], costPct: [-10,-10], investmentPct: [-10,-10], cashPerYear: [80,80], yearSpan: 2 }, makeRng(seed), 100, 'offer', balance)
+      const effect = patched.effects[0]!
+      prices.add(effect.investmentMul!); spans.add(effect.yearsLeft!)
+      expect(effect.outputMul).toBe(1); expect(effect.priceMul).toBe(1); expect(effect.inflationMul).toBe(1)
+      expect(effect.revenueMul).toBeGreaterThanOrEqual(1.08); expect(effect.revenueMul).toBeLessThanOrEqual(1.12)
+      expect(effect.costMul).toBeGreaterThanOrEqual(.88); expect(effect.costMul).toBeLessThanOrEqual(.92)
+      expect(effect.cashPerYear).toBeGreaterThanOrEqual(64); expect(effect.cashPerYear).toBeLessThanOrEqual(96)
+      expect(effect.endsAt).toBeGreaterThan(effect.startedAt)
+      const shown = Number(effect.summary!.match(/giá đầu tư (-?[\d,]+)%/)![1]!.replace(',', '.'))
+      expect(effect.investmentMul).toBeCloseTo(1 + shown / 100, 10)
+    }
+    expect(prices.size).toBeGreaterThan(2); expect(spans.size).toBeGreaterThan(1)
+  })
+  it.each(['eng', 'mac', 'sup', 'inf', 'grn'] as const)('bulk %s equals repeated packages including rounding and capped relief', line => {
+    const state = fresh()
+    state.dependency = 50; state.pollution = 50
+    let repeated = state
+    for (let i = 0; i < 5; i++) {
+      const result = invest(repeated, line, 900, balance, lines, 1000)
+      if (!result.ok) throw new Error(result.error)
+      repeated = result.state
+    }
+    const bulk = invest(state, line, 4500, balance, lines, 1000, 5)
+    if (!bulk.ok) throw new Error(bulk.error)
+    expect(bulk.state.pendingCauses?.at(-1)?.packages).toBe(5)
+    for (const key of ['cash', 'engineers', 'machines', 'support', 'infra', 'green', 'dependency', 'pollution'] as const) {
+      expect(bulk.state[key]).toBeCloseTo(repeated[key], 8)
+    }
+  })
+  it.each(['eng', 'mac', 'sup', 'inf', 'grn'] as const)('keeps the %s package unchanged under discounts and surcharges', (line) => {
+    for (const basePrice of [1000, 1500]) {
+      const standard = invest(fresh(), line, basePrice, balance, lines)
+      expect(standard.ok).toBe(true)
+      if (!standard.ok) throw new Error(standard.error)
+      for (const multiplier of [0.5, 0.9, 1, 1.15, 1.5]) {
+        const paid = Math.round(basePrice * multiplier)
+        const result = invest(fresh(), line, paid, balance, lines, basePrice)
+        expect(result.ok).toBe(true)
+        if (!result.ok) throw new Error(result.error)
+        for (const key of ['engineers', 'machines', 'support', 'infra', 'green', 'dependency', 'pollution'] as const) {
+          expect(result.state[key]).toBe(standard.state[key])
+        }
+        expect(result.state.cash).toBe(10000 - paid)
+        expect(result.state.pendingCauses?.at(-1)?.cash).toBe(-paid)
+      }
+    }
+  })
+
+  it('charges the discounted invoice even when cash is below the undiscounted package value', () => {
+    const state = fresh(900)
+    const result = invest(state, 'sup', 900, balance, lines, 1000)
+    expect(result.ok).toBe(true)
+    if (result.ok) { expect(result.state.cash).toBe(0); expect(result.state.support).toBe(1000 / balance.assetPerTy) }
+    expect(state.cash).toBe(900)
+    expect(state.support).toBe(0)
+    expect(invest(fresh(1000), 'sup', 1150, balance, lines, 1000).ok).toBe(false)
+  })
+
+  it('preserves one nominal package with stacked pricing effects and ignores deferred/expired pricing', () => {
+    const state = fresh()
+    const effect = { id: 'discount', visual: 'none', title: 'Giảm giá', body: '', severity: 1, startedAt: 0, endsAt: 100, outputMul: 1, priceMul: 1, inflationMul: 1, investmentMul: 0.9, yearsLeft: 2, defer: false }
+    state.effects = [effect, { ...effect, id: 'surcharge', investmentMul: 1.15 }]
+    expect(investmentPrice(state, 1000, 10000)).toBe(1035)
+    const bought = invest(state, 'sup', investmentPrice(state, 1000, 10000), balance, lines, 1000)
+    expect(bought.ok && bought.state.support).toBe(1000 / balance.assetPerTy)
+    state.effects = [{ ...effect, defer: true }, { ...effect, id: 'expired', yearsLeft: 0 }]
+    expect(investmentPrice(state, 1000, 10000)).toBe(1000)
+    for (const value of [0, -1000, Infinity, NaN]) expect(invest(fresh(), 'sup', 900, balance, lines, value).ok).toBe(false)
+  })
+
   it('lets cash go negative and charges the database interest rate', () => {
     const state = fresh()
     state.cash = -1000
@@ -240,7 +315,10 @@ describe('economy', () => {
     const sameYear = runCycle(drawn, theme, makeRng(5), 10_000, balance)
     expect(sameYear.cumulativeRevenue).toBeCloseTo(calm.cumulativeRevenue, 5)
     expect(drawn.cash).toBeCloseTo(10000, 5)
-    expect(drawn.effects[0]).toMatchObject({ yearsLeft: 2, defer: true })
+    const span = drawn.effects[0]!.yearsLeft!
+    expect(span).toBeGreaterThanOrEqual(1)
+    expect(span).toBeLessThanOrEqual(3)
+    expect(drawn.effects[0]?.defer).toBe(true)
     const opened = openYearEffects(sameYear, 600_000)
     const hit = runCycle(opened, theme, makeRng(5), 600_000, balance)
     const calmSecond = runCycle(calm, theme, makeRng(5), 600_000, balance)
@@ -248,10 +326,15 @@ describe('economy', () => {
     const calmDelta = calmSecond.cumulativeRevenue - calm.cumulativeRevenue
     expect(hitDelta).toBeLessThan(calmDelta * 0.6)
     const still = closeYearEffects(hit, 600_000)
-    expect(still.effects[0]?.yearsLeft).toBe(1)
-    expect(still.effects[0]?.defer).toBe(false)
-    const again = runCycle(openYearEffects(still, 1_200_000), theme, makeRng(5), 1_200_000, balance)
-    expect(closeYearEffects(again, 1_200_000).effects).toHaveLength(0)
+    let remaining = still
+    if (span > 1) {
+      expect(still.effects[0]?.yearsLeft).toBe(span - 1)
+      expect(still.effects[0]?.defer).toBe(false)
+    }
+    for (let year = 1; year < span; year++) {
+      remaining = closeYearEffects(runCycle(openYearEffects(remaining, 600_000 * (year + 1)), theme, makeRng(5), 600_000 * (year + 1), balance), 600_000 * (year + 1))
+    }
+    expect(remaining.effects).toHaveLength(0)
   })
 
   it('cuts assets once when the event is drawn', () => {
@@ -277,7 +360,10 @@ describe('economy', () => {
       'flood',
       balance,
     )
-    expect(next.cash).toBeCloseTo(8000, 5)
-    expect(next.engineers).toBeCloseTo(160, 5)
+    expect(next.cash).toBeGreaterThanOrEqual(7600)
+    expect(next.cash).toBeLessThanOrEqual(8400)
+    expect(next.engineers / state.engineers).toBeCloseTo(next.cash / state.cash, 8)
+    const loss = Number(next.effects[0]!.summary!.match(/tài sản (-?[\d,]+)%/)![1]!.replace(',', '.'))
+    expect(next.cash).toBeCloseTo(state.cash * (1 + loss / 100), 8)
   })
 })

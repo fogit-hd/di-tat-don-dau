@@ -317,6 +317,7 @@ export function StartScreen() {
                 <label>
                   <span className="sr-only">Tên đội</span>
                   <input value={team} maxLength={24} autoFocus placeholder="Nhập tên đội" onChange={(event) => setTeam(event.target.value)} />
+                  <small>{team.length}/24 ký tự</small>
                 </label>
                 <button type="submit" className="btn" disabled={busy || team.trim().length < 1}>Vào sảnh</button>
                 <button type="button" className="join-change" onClick={() => { setError(''); setJoinStep('code') }}>Đổi mã</button>
@@ -402,6 +403,7 @@ export function StartScreen() {
               <label>
                 Tên
                 <input value={hostName} maxLength={40} onChange={(event) => setHostName(event.target.value)} />
+                <small>{hostName.length}/40 ký tự</small>
               </label>
               <div className="settings">
                 <label>
@@ -409,7 +411,7 @@ export function StartScreen() {
                   <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
                 </label>
                 <label>
-                  Vốn (tỷ)
+                  Vốn (triệu VNĐ)
                   <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => changeCapital(Number(event.target.value))} />
                 </label>
                 <label>
@@ -436,7 +438,7 @@ export function StartScreen() {
                   ] as const
                 ).map(([id, label]) => (
                   <label key={id}>
-                    Giá {label}
+                    Giá {label} (triệu VNĐ)
                     <input
                       type="number"
                       min={100}

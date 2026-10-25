@@ -1,32 +1,37 @@
+import { PollutionDetails } from './BudgetPanel.tsx'
 import type { SceneView } from '../api/types.ts'
-import { Icon } from './Icons.tsx'
+import { CanvasHeading, PaintedIcon, type PaintedIconName } from './PaintedIcon.tsx'
 
 export function StatCards({ scene }: { scene: SceneView }) {
-  const items: [string, string, string][] = [
-    ['eng', 'Kỹ sư', scene.engineers.toLocaleString('vi-VN')],
-    ['line', 'Dây chuyền', `${scene.machines.toFixed(1)} (${scene.idle.toFixed(1)} nhàn)`],
-    ['prod', 'Sản phẩm', `${Math.round(scene.output).toLocaleString('vi-VN')} ${scene.unit}`],
-    ['tech', 'Trình độ công nghệ', scene.tech.toFixed(1)],
-    ['sup', 'Công nghiệp phụ trợ', `Cấp ${scene.support.toFixed(1)}`],
-    ['inst', 'Hạ tầng – thể chế', `Cấp ${scene.infra.toFixed(1)}`],
+  const number = (value: number) => value.toLocaleString('vi-VN', { maximumFractionDigits: 1 })
+  const items: [PaintedIconName, string, string, string?][] = [
+    ['eng', 'Kỹ sư', number(scene.engineers)],
+    ['line', 'Dây chuyền', number(scene.machines), `${number(scene.idle)} nhàn`],
+    ['prod', 'Sản phẩm', Math.round(scene.output).toLocaleString('vi-VN'), scene.unit !== 'sản phẩm' ? scene.unit : undefined],
+    ['tech', 'Công nghệ', number(scene.tech)],
+    ['sup', 'Phụ trợ', `Cấp ${number(scene.support)}`],
+    ['inst', 'Hạ tầng', `Cấp ${number(scene.infra)}`],
   ]
   return (
     <>
-      <div className="stats" id="stats">
-        {items.map(([icon, label, value]) => (
-          <div className="stat" key={label}>
-            <Icon name={icon} />
-            {label}
-            <b>{value}</b>
+      <CanvasHeading>Doanh nghiệp</CanvasHeading>
+      <div className="enterprise-stats" id="stats">
+        {items.map(([icon, label, value, secondary]) => (
+          <div className="enterprise-stat" key={label}>
+            <PaintedIcon name={icon} />
+            <div><span>{label}</span><b>{value}</b>{secondary && <small>{secondary}</small>}</div>
           </div>
         ))}
       </div>
-      <div className="meter" title="Ô nhiễm">
-        <span style={{ width: `${Math.max(4, Math.min(100, scene.pollution))}%` }} />
+      <div className="enterprise-environment">
+        <PaintedIcon name="environment" />
+        <div><p><b>Ô nhiễm {Math.round(scene.pollution)}</b><span>Công nghệ sạch · Cấp {number(scene.green)}</span></p>
+          <div className="environment-meter" role="meter" aria-label="Ô nhiễm" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.max(0, Math.min(100, Math.round(scene.pollution)))}>
+            <span style={{ width: `${Math.max(0, Math.min(100, scene.pollution))}%` }} />
+          </div>
+        </div>
       </div>
-      <p className="meter-label">
-        Ô nhiễm {Math.round(scene.pollution)} · {scene.lines.find((line) => line.id === 'grn')?.label ?? 'xử lý'} cấp {scene.green.toFixed(1)}
-      </p>
+      <PollutionDetails scene={scene} />
     </>
   )
 }

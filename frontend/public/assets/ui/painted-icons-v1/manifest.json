@@ -1,0 +1,8 @@
+{
+  "style": "Hand-painted ink and watercolor, matched to the approved enterprise/history canvas",
+  "format": "transparent WebP raster atlases; rendered through SVG viewport wrappers",
+  "sourceSize": [1254, 1254],
+  "enterprise.webp": ["eng", "line", "prod", "tech", "sup", "inst", "environment", "investment", "family_fund", "heir_abroad", "heir_trained", "inheritance_dispute", "longevity", "illness", "life_insurance", "state-aid"],
+  "utility.webp": ["enterprise", "coins", "centennial", "history"],
+  "viewportMapping": "frontend/src/components/PaintedIcon.tsx"
+}

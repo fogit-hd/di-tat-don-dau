@@ -22,6 +22,7 @@ import { TraitNotice } from './TraitNotice.tsx'
 import './gameplay.css'
 import './responsive-gameplay.css'
 import './painted-frames.css'
+import './enterprise-canvas.css'
 
 export function PlayScreen() {
   const { code = '' } = useParams()
@@ -77,6 +78,7 @@ export function PlayScreen() {
         <h1>Vào phòng {upper}</h1>
         <p className="lead">Mỗi điện thoại là một đội. Không cần tài khoản.</p>
         <input value={name} maxLength={24} placeholder="Tên đội (ví dụ: Nhóm 3)" onChange={(event) => setName(event.target.value)} />
+        <small>{name.length}/24 ký tự</small>
         {formError && <p className="warn">{formError}</p>}
         <button type="button" className="btn big" disabled={busy || name.trim().length < 1} onClick={() => void join()}>
           Vào sảnh
@@ -111,7 +113,7 @@ export function PlayScreen() {
           <h1>Phòng {snap.room.code}</h1>
           <p className="lead">
             Xin chào <b>{snap.you?.teamName}</b>. Đợi {snap.room.hostName} bắt đầu. Đồng hồ {Math.round(snap.room.durationSec / 60)} phút, vốn{' '}
-            {snap.room.startingCapital.toLocaleString('vi-VN')} tỷ.
+            {vnd(snap.room.startingCapital)}.
           </p>
           <ul className="waitlist">
             {snap.teams.map((team) => (
@@ -124,7 +126,7 @@ export function PlayScreen() {
       {snap && scene && theme && (status === 'playing' || status === 'paused') && !scene.introDone && (
         <>
           <p className="lead center">Đồng hồ đang chạy · ⏱ {clock(snap.paused ? (snap.room.remainingMs ?? 0) : (snap.room.endsAt ?? now) - now)}</p>
-          <ThemeIntro theme={{ ...theme, factoryName: scene.factoryName }} busy={busy} onBegin={(factoryName) => void act('intro', { factoryName })} />
+          <ThemeIntro key={`${upper}-${snap.you?.id}-${theme.id}`} theme={{ ...theme, factoryName: scene.factoryName }} busy={busy} error={formError} onBegin={(factoryName) => void act('intro', { factoryName })} />
         </>
       )}
       {snap && showGame && scene && (
@@ -162,6 +164,8 @@ export function PlayScreen() {
                 currentEvents={currentEvents}
                 ongoing={ongoing}
                 changes={scene.yearChanges ?? []}
+                investmentLines={scene.lines}
+                industryId={scene.industryId}
                 investment={
                   <>
                     {youFinished ? (
@@ -175,9 +179,9 @@ export function PlayScreen() {
                           prices={scene.linePrices ?? snap.room.linePrices}
                           busy={busy}
                           paused={snap.paused}
-                          onInvest={(line) => {
+                          onInvest={(line, quantity) => {
                             beep(660, 0.06, muted)
-                            void act('invest', { line })
+                            void act('invest', { line, quantity })
                           }}
                           onRestart={() => {
                             beep(430, 0.08, muted)
@@ -193,7 +197,8 @@ export function PlayScreen() {
           </section>
             <YearButton
               finished={youFinished}
-              busy={busy || snap.paused || scene.cash <= 0}
+              suspended={Boolean(scene.bankrupt)}
+              busy={busy || snap.paused || Boolean(scene.bankrupt)}
               now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
               nextYearAt={scene.nextYearAt}
               yearLockUntil={scene.yearLockUntil}
@@ -228,6 +233,7 @@ export function PlayScreen() {
 
 function YearButton({
   finished,
+  suspended,
   busy,
   now,
   nextYearAt,
@@ -237,6 +243,7 @@ function YearButton({
   onFinish,
 }: {
   finished: boolean
+  suspended: boolean
   busy: boolean
   now: number
   nextYearAt: number
@@ -255,6 +262,7 @@ function YearButton({
       </div>
     )
   }
+  if (suspended) return <div className="year-dock"><button type="button" className="btn year-finish" disabled>Chờ tái cơ cấu<small>Nhận vốn hỗ trợ trong tab Đầu tư</small></button></div>
   const total = Math.max(1, yearSeconds) * 1000
   const left = Math.max(0, nextYearAt - now)
   const ratio = Math.min(1, left / total)
@@ -268,12 +276,12 @@ function YearButton({
         className="year-btn"
         disabled={busy || locked}
         onClick={onPress}
-        aria-label={locked ? `Đang diễn, còn ${Math.ceil(lockLeft / 1000)} giây` : `Sang năm, còn ${seconds} giây`}
+        aria-label={`${locked ? 'Đang diễn' : 'Sang năm'}, tự chốt sau ${seconds} giây`}
       >
         <YearPerimeter ratio={ratio} />
         <span>
           {locked ? 'Đang diễn' : 'Sang năm'}
-          <small>{locked ? Math.ceil(lockLeft / 1000) : seconds}s</small>
+          <small>{seconds}s</small>
         </span>
       </button>
     </div>

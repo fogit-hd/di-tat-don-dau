@@ -9,8 +9,6 @@ export function GovernanceRiskCard({ scene }: { scene: SceneView }) {
   const followingRisk = scene.nextDeathChance ?? nextRisk
   const nextSuccession = scene.successionChance ?? 0.01
   const followingSuccession = scene.nextSuccessionChance ?? nextSuccession
-  const nextYear = scene.cycles + 1
-  const riskStartsAt = scene.successionRiskStartsAt ?? nextYear
   const deathChange = followingRisk - nextRisk
   const successionChange = followingSuccession - nextSuccession
   const restructuring = scene.secondLife === 'available'
@@ -38,10 +36,9 @@ export function GovernanceRiskCard({ scene }: { scene: SceneView }) {
         </div>
       </div>
       <p>
-        {nextYear <= riskStartsAt
-          ? `Mức cơ sở được giữ ổn định đến hết năm ${riskStartsAt}. Tử vong luôn thấp hơn kế nghiệp.`
-          : 'Tử vong tăng 0,125 điểm phần trăm, còn kế nghiệp tăng 0,25 điểm phần trăm mỗi năm; trường thọ vẫn giới hạn rủi ro.'}
+        Sau năm {scene.successionRiskStartsAt ?? 1}, tử vong tăng 0,2 điểm %/năm, kế nghiệp tăng 0,25 điểm %/năm, đến giới hạn thông thường 2% và 4%. Bạo bệnh có thể vượt giới hạn này. Tử vong luôn thấp hơn kế nghiệp; Trường thọ giữ mức rủi ro thấp.
       </p>
+      {scene.annualConditions && <p>Điều kiện kỳ chốt tới: cơ hội bốc sự kiện đầu tiên {percent(scene.annualConditions.eventChance)} · sự kiện gia đình {percent(scene.annualConditions.familyChance)} · lãi nợ {percent(scene.annualConditions.interestRate)}/năm.</p>}
       <div className={`restructuring-status ${scene.secondLife}`}>
         <b>Chương trình hỗ trợ vốn khởi động lại</b>
         <span>{restructuring}</span>

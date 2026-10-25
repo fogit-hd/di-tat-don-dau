@@ -1,4 +1,7 @@
 import { shuffle, type Rng } from './rng'
+import { isBankrupt, productionPlan, supplyBenefits } from './production'
+import { money, moneyTemplate } from './money'
+import { wholeRate, rollWholeMultiplier, rollWholeRate } from './percent'
 import type {
   Balance,
   Effect,
@@ -46,7 +49,7 @@ export function createState(theme: ThemeDef, capital: number, rng: Rng, balance:
     lastIncome: 0,
     lastOutput: 0,
     effects: [],
-    log: [fillText(balance.logs.start, { cash: cash.toLocaleString('vi-VN') })],
+    log: [moneyTemplate(balance.logs.start, { cash })],
     seenQuestions: [],
     seenEvents: [],
     eventBag: [],
@@ -79,9 +82,16 @@ export function invest(
   amount: number,
   balance: Balance,
   lines: LineDef[],
+  investmentValue = amount,
+  packages = 1,
+  efficiency = 1,
 ): { ok: true; state: TeamState } | { ok: false; error: string } {
+  if (isBankrupt(state) || state.finished) return { ok: false, error: 'Doanh nghiệp đã dừng hoạt động' }
   if (!LINES.includes(line)) return { ok: false, error: 'Hướng đầu tư không hợp lệ' }
   if (!Number.isFinite(amount) || amount <= 0) return { ok: false, error: 'Số tiền không hợp lệ' }
+  if (!Number.isFinite(investmentValue) || investmentValue <= 0) return { ok: false, error: 'Giá trị đầu tư không hợp lệ' }
+  if (!Number.isSafeInteger(packages) || packages < 1) return { ok: false, error: 'Số gói không hợp lệ' }
+  if (!Number.isFinite(efficiency) || efficiency <= 0) return { ok: false, error: 'Hiệu quả đầu tư không hợp lệ' }
   if (state.cash + 1e-6 < amount) return { ok: false, error: 'Không đủ vốn' }
   const next: TeamState = {
     ...state,
@@ -91,8 +101,9 @@ export function invest(
     seenEvents: state.seenEvents.slice(),
   }
   const spec = lines.find((item) => item.id === line)
-  const hired = Math.round(amount * balance.engPerTy)
-  const added = amount / balance.assetPerTy
+  // Events change the invoice, not the size of the purchased upgrade package.
+  const hired = Math.round(investmentValue * balance.engPerTy * efficiency) * packages
+  const added = investmentValue / balance.assetPerTy * efficiency * packages
   const entry = fillText(spec?.log || 'Đầu tư {{line}}.', {
     line,
     hired: hired.toLocaleString('vi-VN'),
@@ -101,11 +112,13 @@ export function invest(
   next.cash -= amount
   next.pendingCauses = [
     ...(state.pendingCauses ?? []),
-    { kind: 'investment', label: spec?.label || line, cash: -amount },
+    { kind: 'investment', label: spec?.label || line, cash: -amount, packages,
+      detail: `${packages} gói · hiệu quả ${(efficiency * 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 })}% · giá gốc ${money(investmentValue * packages)} · thực chi ${money(amount)}`,
+    },
   ]
   if (line === 'eng') {
     next.engineers += hired
-    next.dependency = Math.max(0, next.dependency - balance.engDependencyRelief)
+    next.dependency = Math.max(0, next.dependency - balance.engDependencyRelief * packages * efficiency)
   } else if (line === 'mac') {
     next.machines += added
   } else if (line === 'sup') {
@@ -114,7 +127,7 @@ export function invest(
     next.infra += added
   } else {
     next.green += added
-    next.pollution = Math.max(0, next.pollution - balance.greenPollutionRelief)
+    next.pollution = Math.max(0, next.pollution - balance.greenPollutionRelief * packages * efficiency)
   }
   next.log = [entry, ...next.log].slice(0, balance.logLimit)
   return { ok: true, state: next }
@@ -150,6 +163,7 @@ function effectFactors(effects: Effect[], now: number) {
 }
 
 export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: number, balance: Balance): TeamState {
+  if (state.finished || isBankrupt(state)) return state
   const s: TeamState = {
     ...state,
     effects: state.effects.filter((effect) => effect.defer || (effect.yearsLeft ?? 0) > 0 || effect.endsAt > now),
@@ -158,40 +172,20 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
     seenEvents: state.seenEvents.slice(),
     pending: state.pending,
   }
-  const epl = theme.coefs.epl
-  const operating = Math.min(s.machines, s.engineers / epl)
-  const idle = Math.max(0, s.machines - operating)
-  const noise = balance.outputNoiseMin + rng.next() * (balance.outputNoiseMax - balance.outputNoiseMin)
-  const priceNoise = balance.priceNoiseMin + rng.next() * (balance.priceNoiseMax - balance.priceNoiseMin)
-  const { outputMul, priceMul, inflationMul, revenueMul, costMul, cashPerYear } = effectFactors(s.effects, now)
-  s.tech += operating * balance.techPerOperating + s.engineers * balance.techPerEngineer
-  const techFactor = 1 + s.tech * theme.coefs.tech
-  const supFactor = 1 + s.support * theme.coefs.support
-  const infFactor = 1 + s.infra * theme.coefs.infra
-  const emit = operating * theme.coefs.emission * balance.emissionScale
-  const scrub = s.green * balance.greenScrub + s.infra * balance.infraScrub
-  s.pollution = clamp(s.pollution * balance.pollutionRetain + emit - scrub, 0, 100)
-  const pollFactor = 1 - Math.max(0, s.pollution - balance.pollutionPriceStart) / balance.pollutionPriceSpan
-  const output =
-    operating *
-    theme.coefs.baseOutput *
-    techFactor *
-    supFactor *
-    infFactor *
-    pollFactor *
-    noise *
-    outputMul
-  const price = theme.coefs.basePrice * priceNoise * priceMul * pollFactor
-  const revenue = Math.max(0, output * price * revenueMul)
-  const opex = (operating * theme.coefs.opex + idle * theme.coefs.idleCost) * costMul
-  const net = revenue - opex
+  const noise = rollWholeMultiplier(balance.outputNoiseMin, balance.outputNoiseMax, rng)
+  const priceNoise = rollWholeMultiplier(balance.priceNoiseMin, balance.priceNoiseMax, rng)
+  const { inflationMul, cashPerYear } = effectFactors(s.effects, now)
+  const plan = productionPlan(s, theme, balance, now, noise, priceNoise)
+  const { operating, idle, output, revenue, net } = plan
+  s.tech = plan.tech
+  s.pollution = plan.pollution
   let interest = 0
   if (s.cash < 0 && balance.debtInterest) {
     interest = s.cash * balance.debtInterest
     s.cash += interest
   }
-  const inflRate =
-    balance.inflationBase * inflationMul * (balance.inflationNoiseMin + rng.next() * (balance.inflationNoiseMax - balance.inflationNoiseMin))
+  const inflRate = rollWholeRate(
+    balance.inflationBase * inflationMul * rollWholeMultiplier(balance.inflationNoiseMin, balance.inflationNoiseMax, rng), rng)
   const infl = Math.max(0, s.cash) * inflRate
   const production = net - infl
   s.cash = s.cash + production + cashPerYear
@@ -205,7 +199,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   if (operating > balance.dependencyEaseOperating && idle < operating * balance.dependencyEaseIdleRatio) {
     s.dependency = Math.max(0, s.dependency * balance.dependencyEaseMul)
   }
-  const line = fillText(balance.logs.cycle, {
+  const line = fillText(moneyTemplate(balance.logs.cycle, { income: Math.round(net - infl + cashPerYear) }), {
     cycle: String(s.cycles),
     operating: operating.toFixed(1),
     idle: idle.toFixed(1),
@@ -219,6 +213,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
 }
 
 export function computeValue(state: TeamState, theme: ThemeDef, balance: Balance): number {
+  if (isBankrupt(state)) return 0
   const epl = theme.coefs.epl
   const util = state.machines > 0 ? clamp(state.engineers / (state.machines * epl), 0, 1) : 0
   const engValue = state.engineers * (1 / balance.engPerTy) * balance.engBook * (1 + state.tech * balance.engTechBook)
@@ -275,8 +270,15 @@ export function exposureOf(state: TeamState, exposure: Exposure, balance: Balanc
 
 function roll(rng: Rng, range: Range | undefined, fallback: number) {
   if (!range) return fallback
-  return rng.range(range[0], range[1])
+  const [min, max] = range
+  if (min !== max) return rng.range(min, max)
+  // A point range in legacy event data is a baseline, not a fixed outcome.
+  if (min === fallback) return min
+  return fallback + (min - fallback) * rng.range(.8, 1.2)
 }
+
+const roundImpact = (value: number) => Math.round(value)
+const percentText = (value: number) => Math.round(value).toLocaleString('vi-VN')
 
 function scaleMul(mul: number, exposure: number, balance: Balance) {
   return 1 + (mul - 1) * clamp(exposure, balance.exposureScaleMin, balance.exposureScaleMax)
@@ -290,6 +292,8 @@ export function applyPatch(
   id: string,
   balance: Balance,
 ): TeamState {
+  const protection = patch.supplyShock ? supplyBenefits(state.support).disruptionProtection : 0
+  const operatingProtection = patch.supplyShock === 'investment' ? 0 : protection
   const exposure = exposureOf(state, patch.exposure, balance)
   const next: TeamState = {
     ...state,
@@ -299,11 +303,11 @@ export function applyPatch(
     seenEvents: state.seenEvents.slice(),
   }
   const cash = roll(rng, patch.cash, 0) * exposure
-  const cashPct = roll(rng, patch.cashPct, 0) * exposure
+  const cashPct = Math.max(-1, wholeRate(roll(rng, patch.cashPct, 0) * exposure))
   const engineersAdd = roll(rng, patch.engineersAdd, 0) * exposure
-  const engineersPct = roll(rng, patch.engineersPct, 0) * exposure
+  const engineersPct = Math.max(-1, wholeRate(roll(rng, patch.engineersPct, 0) * exposure))
   const machinesAdd = roll(rng, patch.machinesAdd, 0) * exposure
-  const machinesPct = roll(rng, patch.machinesPct, 0) * exposure
+  const machinesPct = Math.max(-1, wholeRate(roll(rng, patch.machinesPct, 0) * exposure))
   const tech = roll(rng, patch.tech, 0) * exposure
   const support = roll(rng, patch.support, 0) * exposure
   const pollution = roll(rng, patch.pollution, 0) * exposure
@@ -315,7 +319,7 @@ export function applyPatch(
   next.support = Math.max(0, next.support + support)
   next.pollution = clamp(next.pollution + pollution, 0, 100)
   next.dependency = Math.max(0, next.dependency + dependency)
-  const assetsPct = patch.assetsPct ? roll(rng, patch.assetsPct, 0) : 0
+  const assetsPct = Math.max(-100, roundImpact(patch.assetsPct ? roll(rng, patch.assetsPct, 0) : 0))
   if (assetsPct) {
     const factor = 1 + assetsPct / 100
     next.cash = next.cash * factor
@@ -325,33 +329,41 @@ export function applyPatch(
     next.infra = Math.max(0, next.infra * factor)
     next.green = Math.max(0, next.green * factor)
   }
-  const revenuePct = patch.revenuePct ? roll(rng, patch.revenuePct, 0) : 0
-  const costPct = patch.costPct ? roll(rng, patch.costPct, 0) : 0
-  const perYear = patch.cashPerYear ? roll(rng, patch.cashPerYear, 0) : 0
-  const investmentPct = patch.investmentPct ? roll(rng, patch.investmentPct, 0) : 0
-  const outputMul = scaleMul(roll(rng, patch.outputMul, 1), exposure, balance)
-  const priceMul = scaleMul(roll(rng, patch.priceMul, 1), exposure, balance)
-  const inflationMul = scaleMul(roll(rng, patch.inflationMul, 1), exposure, balance)
-  const yearSpan = Math.max(0, Math.round(patch.yearSpan ?? 0))
-  const duration = Math.round(roll(rng, patch.durationSec, 60))
+  const revenueDraw = patch.revenuePct ? roll(rng, patch.revenuePct, 0) : 0
+  const revenuePct = Math.max(-95, roundImpact(revenueDraw * (revenueDraw < 0 ? 1 - operatingProtection : 1)))
+  const costDraw = patch.costPct ? roll(rng, patch.costPct, 0) : 0
+  const costPct = Math.max(-95, roundImpact(costDraw * (costDraw > 0 ? 1 - operatingProtection : 1)))
+  const perYear = roundImpact(patch.cashPerYear ? roll(rng, patch.cashPerYear, 0) : 0)
+  const investmentDraw = patch.investmentPct ? roll(rng, patch.investmentPct, 0) : 0
+  const investmentPct = Math.max(-95, roundImpact(investmentDraw * (investmentDraw > 0 ? 1 - protection : 1)))
+  const factor = (value: number) => Math.max(0, wholeRate(value))
+  const outputDraw = scaleMul(roll(rng, patch.outputMul, 1), exposure, balance)
+  const outputMul = factor(1 + (outputDraw - 1) * (outputDraw < 1 ? 1 - operatingProtection : 1))
+  const priceMul = factor(scaleMul(roll(rng, patch.priceMul, 1), exposure, balance))
+  const inflationMul = factor(scaleMul(roll(rng, patch.inflationMul, 1), exposure, balance))
+  const authoredYears = Math.max(0, Math.round(patch.yearSpan ?? 0))
+  const yearSpan = authoredYears ? rng.int(Math.max(1, Math.floor(authoredYears * .8)), Math.ceil(authoredYears * 1.2)) : 0
+  const duration = Math.max(1, Math.round(patch.durationSec ? rng.range(...patch.durationSec) : 60))
   const shownFor = Math.max(duration, yearSpan * 180)
   const bits = [fillText(balance.logs.event, { title: patch.title })]
   if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
-  if (Math.abs(engineersPct) > 0.01) bits.push(`kỹ sư ${Math.round(engineersPct * 100)}%`)
+  if (engineersPct) bits.push(`kỹ sư ${percentText(engineersPct * 100)}%`)
   if (Math.abs(machinesAdd) > 0.05) bits.push(`dây chuyền ${machinesAdd > 0 ? '+' : ''}${machinesAdd.toFixed(1)}`)
-  if (Math.abs(machinesPct) > 0.01) bits.push(`dây chuyền ${Math.round(machinesPct * 100)}%`)
-  if (Math.abs(cash) > 20) bits.push(`vốn ${Math.round(cash).toLocaleString('vi-VN')} tỷ`)
-  if (revenuePct) bits.push(`doanh thu ${Math.round(revenuePct)}%`)
-  if (costPct) bits.push(`chi phí ${Math.round(costPct)}%`)
-  if (assetsPct) bits.push(`tài sản ${Math.round(assetsPct)}%`)
-  if (perYear) bits.push(`mỗi năm ${Math.round(perYear).toLocaleString('vi-VN')} tỷ`)
-  if (investmentPct) bits.push(`giá đầu tư ${investmentPct > 0 ? '+' : ''}${Math.round(investmentPct)}%`)
-  if (Math.abs(outputMul - 1) > 0.005) bits.push(`sản lượng ${outputMul >= 1 ? '+' : ''}${Math.round((outputMul - 1) * 100)}%`)
-  if (Math.abs(priceMul - 1) > 0.005) bits.push(`giá bán ${priceMul >= 1 ? '+' : ''}${Math.round((priceMul - 1) * 100)}%`)
-  if (Math.abs(inflationMul - 1) > 0.005) bits.push(`lạm phát ${inflationMul >= 1 ? '+' : ''}${Math.round((inflationMul - 1) * 100)}%`)
+  if (machinesPct) bits.push(`dây chuyền ${percentText(machinesPct * 100)}%`)
+  if (cashPct) bits.push(`tiền mặt ${percentText(cashPct * 100)}%`)
+  if (Math.abs(cash) > 20) bits.push(`vốn ${money(cash)}`)
+  if (revenuePct) bits.push(`doanh thu ${percentText(revenuePct)}%`)
+  if (costPct) bits.push(`chi phí ${percentText(costPct)}%`)
+  if (assetsPct) bits.push(`tài sản ${percentText(assetsPct)}%`)
+  if (perYear) bits.push(`mỗi năm ${money(perYear)}`)
+  if (investmentPct) bits.push(`giá đầu tư ${investmentPct > 0 ? '+' : ''}${percentText(investmentPct)}%`)
+  if (outputMul !== 1) bits.push(`sản lượng ${outputMul >= 1 ? '+' : ''}${percentText((outputMul - 1) * 100)}%`)
+  if (priceMul !== 1) bits.push(`giá bán ${priceMul >= 1 ? '+' : ''}${percentText((priceMul - 1) * 100)}%`)
+  if (inflationMul !== 1) bits.push(`lạm phát ${inflationMul >= 1 ? '+' : ''}${percentText((inflationMul - 1) * 100)}%`)
   if (tech) bits.push(`công nghệ ${tech > 0 ? '+' : ''}${Math.round(tech)}`)
   if (support) bits.push(`hỗ trợ ${support > 0 ? '+' : ''}${Math.round(support)}`)
   if (pollution) bits.push(`ô nhiễm ${pollution > 0 ? '+' : ''}${Math.round(pollution)}`)
+  if (protection) bits.push(`phụ trợ giảm ${Math.round(protection * 100)}% mức bất lợi của cú sốc đầu vào`)
   if (dependency) bits.push(`phụ thuộc ${dependency > 0 ? '+' : ''}${Math.round(dependency)}`)
   const effect: Effect = {
     id,
@@ -390,6 +402,9 @@ export function patchFromEvent(event: EventDef, title: string, body: string): Ef
     title,
     body,
     exposure: event.exposure,
+    // Composite variants add an input-price shock to another event (e.g. rain).
+    // Do not shield unrelated weather damage from that base event.
+    supplyShock: /(?:^|[.-])input-shortage$/.test(event.id) ? 'investment' : event.visual === 'supply_shock' ? true : undefined,
     durationSec: event.durationSec,
     outputMul: event.outputMul,
     priceMul: event.priceMul,
@@ -445,7 +460,9 @@ export function fillText(template: string, vars: Record<string, string>) {
 export function eventCopy(event: EventDef, theme: ThemeDef) {
   const variant = narrationFor(event, theme) ?? event.variants?.[theme.industryId]
   const title = fillText(variant?.title ?? event.title, theme.vars)
-  const body = fillText(variant?.body ?? event.body, theme.vars)
+  let body = fillText(variant?.body ?? event.body, theme.vars)
+  if (event.trait === 'longevity') body = 'Trường thọ giữ rủi ro ở mức thấp, không tăng theo năm. Xem tỷ lệ cụ thể trong tab Rủi ro.'
+  if (event.trait === 'illness') body = 'Bạo bệnh làm tăng rủi ro. Mức ảnh hưởng được bốc một lần cho đội, xem số cụ thể trong tab Rủi ro.'
   return { title, body }
 }
 

@@ -24,7 +24,7 @@ export type LinePrices = Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>
 export type ActiveEffectView = { eventId: string; label: string; cashPerYear: number; yearsLeft: number; investmentPct?: number }
 export type TraitView = { id: string; label: string; detail: string; acquiredYear?: number; eventId?: string; icon?: string; good?: boolean }
 export type EventLogView = { year: number; eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }
-export type YearCauseView = { kind: string; label: string; cash: number; detail?: string }
+export type YearCauseView = { kind: string; label: string; cash: number; detail?: string; packages?: number }
 export type YearChangeView = {
   year: number
   cashBefore: number
@@ -69,6 +69,16 @@ export type PendingView = {
   note: string
 }
 
+export type OperatingForecast = {
+  operating: number; idle: number; staffMissing: number; idleCost: number;
+  inputDiscount: number; disruptionProtection: number; logisticsDiscount: number; delivery: number;
+  retainedPollution: number; emissions: number; treatment: number; pollution: number; pricePenalty: number;
+  currentValuePenalty: number; valuePenalty: number; net: number;
+}
+export type InvestmentPreview = {
+  count: number; total: number; gain: number; levelAfter: number; pollutionNowAfter: number;
+} & Pick<OperatingForecast, 'operating' | 'idle' | 'staffMissing' | 'idleCost' | 'inputDiscount' | 'disruptionProtection' | 'logisticsDiscount' | 'delivery' | 'treatment' | 'pollution' | 'pricePenalty' | 'net'>
+
 export type SceneView = {
   industryId: string
   factoryName: string
@@ -100,6 +110,10 @@ export type SceneView = {
   finished: boolean
   secondLife: 'locked' | 'available' | 'used'
   stateAidEligible: boolean
+  bankrupt?: boolean
+  economyVersion?: number
+  operatingForecast?: OperatingForecast
+  investmentPreviews?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', Partial<Record<1 | 5 | 10 | 'max', InvestmentPreview | null>>>>
   succession: SuccessionView | null
   effects: EffectView[]
   pending: PendingView | null
@@ -117,6 +131,8 @@ export type SceneView = {
   successionRiskStartsAt?: number
   restructuringChance?: number
   linePrices?: LinePrices
+  upgradeEfficiency?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>
+  annualConditions?: { eventChance: number; familyChance: number; interestRate: number }
 }
 
 export type ThemeView = {
@@ -142,6 +158,7 @@ export type SuccessionView = {
   outcome: HeirOutcome
   outcomeLabel: string
   outcomeDetail: string
+  multiplier?: number
   assetsBefore: number
   assetsAfter: number
   year: number

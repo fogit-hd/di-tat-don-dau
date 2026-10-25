@@ -27,7 +27,7 @@ export function CentennialReveal({
         <p className="eyebrow">Bách niên</p>
         <h2>Doanh nghiệp trăm năm</h2>
         <p>
-          <b>{teamName}</b> chạm năm {notice.year}. Tài sản thưởng ×{notice.bonusMultiplier}.
+          <b>{teamName}</b> chạm năm {notice.year}. Tài sản tăng thêm {Math.round((notice.bonusMultiplier - 1) * 100)}%.
         </p>
         <p className="asset-count">
           {vnd(notice.assetsBefore)} → <b>{vnd(notice.assetsAfter)}</b>

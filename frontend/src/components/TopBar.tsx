@@ -1,5 +1,5 @@
 import type { SceneView, Snapshot } from '../api/types.ts'
-import { clock, vnd } from '../lib/format.ts'
+import { clock, money, vnd } from '../lib/format.ts'
 import { EventIcon } from './EventIcon.tsx'
 
 export function TopBar({
@@ -34,7 +34,7 @@ export function TopBar({
           <span className="hud-year">Năm {scene.cycles}</span>
           {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span className="hud-clock">⏱ {clock(remaining)}</span>}
           <span className={income >= 0 ? 'up' : 'down'}>
-            {income >= 0 ? '+' : ''}{Math.round(income).toLocaleString('vi-VN')} tỷ/năm
+            {income >= 0 ? '+' : ''}{money(income)}/năm
           </span>
           <span className="rank">Hạng {rank}</span>
           <button type="button" className="btn s" onClick={onMute} aria-label={muted ? 'Bật tiếng' : 'Tắt tiếng'}>

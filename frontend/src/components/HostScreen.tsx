@@ -98,7 +98,7 @@ export function HostScreen() {
                 <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
               </label>
               <label>
-                Vốn (tỷ)
+                Vốn (triệu VNĐ)
                 <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => setCapital(Number(event.target.value))} />
               </label>
               <label>
@@ -125,7 +125,7 @@ export function HostScreen() {
                 ] as const
               ).map(([id, label]) => (
                 <label key={id}>
-                  Giá {label}
+                  Giá {label} (triệu VNĐ)
                   <input
                     type="number"
                     min={100}

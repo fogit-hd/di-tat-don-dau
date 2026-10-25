@@ -127,6 +127,7 @@ export type SuccessionResult = {
   outcome: 'bankrupt' | 'squander' | 'steady' | 'prosper' | 'double'
   outcomeLabel: string
   outcomeDetail: string
+  multiplier?: number
   assetsBefore: number
   assetsAfter: number
   year: number
@@ -135,7 +136,7 @@ export type SuccessionResult = {
 export type CauseKind = 'production' | 'investment' | 'event' | 'ongoing' | 'interest' | 'centennial' | 'insurance'
 
 /** A ledger item may change cash immediately, or describe a percentage effect which applies later. */
-export type YearCause = { kind: CauseKind; label: string; cash: number; detail?: string }
+export type YearCause = { kind: CauseKind; label: string; cash: number; detail?: string; packages?: number }
 
 export type YearChange = {
   year: number
@@ -203,6 +204,7 @@ export type TeamState = {
   finished: boolean
   secondLife: 'locked' | 'available' | 'used'
   stateAidEligible: boolean
+  bankrupt?: boolean
   succession: SuccessionResult | null
   centennial: CentennialResult | null
   traits: string[]
@@ -235,6 +237,7 @@ export type QuestionDef = {
 }
 
 export type EffectPatch = {
+  supplyShock?: true | 'investment'
   visual: string
   title: string
   body: string

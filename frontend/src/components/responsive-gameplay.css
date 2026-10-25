@@ -1,4 +1,9 @@
 /* Approved responsive canvas: compact HUD, bounded event preview and one content scroller. */
+.gameplay.game-shell .investment-quantity { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; margin-bottom:6px; }
+.gameplay.game-shell .investment-quantity button { min-width:0; min-height:36px; padding:5px; border:1px solid #d6a447; border-radius:6px; background:#4a1824; color:#fff1d6; font-family:inherit; font-size:13px; font-weight:700; line-height:1.2; cursor:pointer; }
+.gameplay.game-shell .investment-quantity button[aria-pressed="true"] { background:#b83f12; border-color:#ffe292; }
+.gameplay.game-shell .investment-quantity button:disabled { opacity:.5; cursor:default; }
+.gameplay.game-shell .investment-help { margin:0 0 6px; color:#754322; font-size:11px; }
 .gameplay.game-shell { padding:10px; gap:8px; }
 .gameplay.game-shell .top { min-height:0; padding:8px 12px; }
 .gameplay.game-shell .game-content { grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr); gap:10px; }
@@ -230,3 +235,5 @@
   .gameplay.game-shell .event-overview .event-row:nth-child(n+2) { display:none; }
   .gameplay.game-shell .trait-status-strip { height:26px; }
 }
+/* Keep the complete price and unit together inside the narrow painted price plaque. */
+.gameplay.game-shell .choice-price b { white-space:nowrap; font-size:clamp(11px,1vw,14px); letter-spacing:-.2px; }

@@ -1,5 +1,13 @@
+// Stored economy values are millions of VND; changing display units never changes purchasing power.
+export function money(value: number) {
+  const millions = Math.round(value * 100) / 100
+  return Math.abs(millions) >= 1000
+    ? `${(millions / 1000).toLocaleString('vi-VN', { maximumFractionDigits: 3 })} tỷ`
+    : `${millions.toLocaleString('vi-VN', { maximumFractionDigits: 2 })} triệu`
+}
+
 export function vnd(value: number) {
-  return `${Math.round(value).toLocaleString('vi-VN')} tỷ VNĐ`
+  return `${money(value)} VNĐ`
 }
 
 export function clock(ms: number) {

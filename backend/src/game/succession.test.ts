@@ -2,11 +2,14 @@ import { describe, expect, it } from 'vitest'
 import { makeRng } from './rng'
 import {
   applyTraitRules,
+  balanceHeirWeights,
   companyHealth,
   deathChanceFor,
   deathStartYear,
   mortalityChanceFor,
   heirAssets,
+  heirOutcomeDetail,
+  HEIR_MULTIPLIER_RANGES,
   mildDeathChance,
   pickHeirOutcome,
   pickSuccessionReason,
@@ -105,12 +108,54 @@ describe('mild death curve', () => {
 
   it('keeps mortality below the corresponding succession risk', () => {
     expect(mortalityChanceFor(15, 15, mild, [])).toBeCloseTo(0.005)
-    expect(mortalityChanceFor(16, 15, mild, [])).toBeCloseTo(0.00625)
+    expect(mortalityChanceFor(16, 15, mild, [])).toBeCloseTo(0.007)
     expect(mortalityChanceFor(16, 15, mild, [])).toBeLessThan(deathChanceFor(16, 15, mild, []))
   })
 })
 
 describe('heir multiplier ranges', () => {
+  it('does not leave old equal min/max loss and gain multipliers fixed', () => {
+    const draws = Array.from({ length: 30 }, (_, seed) => rollHeirMultiplier({ outcomeType: 'squander', multiplier: .65, multiplierMin: .65, multiplierMax: .65 }, makeRng(seed + 1)))
+    expect(new Set(draws).size).toBeGreaterThan(20)
+    for (const value of draws) { expect(value).toBeGreaterThanOrEqual(.4); expect(value).toBeLessThanOrEqual(.9) }
+  })
+  it.each(['squander', 'prosper', 'double'] as const)('randomizes legacy %s rows with missing bounds', outcomeType => {
+    const [min, max] = HEIR_MULTIPLIER_RANGES[outcomeType]
+    const draws = Array.from({ length: 64 }, (_, seed) => rollHeirMultiplier({ outcomeType, multiplier: (min + max) / 2, multiplierMin: null, multiplierMax: null }, makeRng(seed + 1)))
+    expect(new Set(draws).size).toBeGreaterThan(25)
+    for (const value of draws) {
+      expect(value).toBeGreaterThanOrEqual(min)
+      expect(value).toBeLessThanOrEqual(max)
+      expect(value * 100).toBeCloseTo(Math.round(value * 100), 6)
+    }
+  })
+
+  it('displays the exact rolled loss and uses it to calculate assets', () => {
+    const rng = makeRng(1)
+    rng.next = () => 0.2092
+    const multiplier = rollHeirMultiplier({ outcomeType: 'squander', multiplier: 0.65 }, rng)
+    expect(multiplier).toBe(0.5)
+    expect(heirOutcomeDetail(multiplier)).toBe('Người thừa kế làm mất 50% tài sản.')
+    expect(heirAssets(100000, multiplier)).toBe(50000)
+    const saved = JSON.parse(JSON.stringify({ multiplier, outcomeDetail: heirOutcomeDetail(multiplier) }))
+    expect(saved.multiplier).toBe(multiplier)
+    expect(saved.outcomeDetail).toContain('50%')
+  })
+
+  it('shows the actual gain and distinguishes growth percent from the final multiplier', () => {
+    expect(heirOutcomeDetail(1.49)).toContain('tăng thêm 49%')
+    expect(heirOutcomeDetail(2.49)).toContain('tăng thêm 149% (tài sản sau bằng 249%')
+    expect(heirOutcomeDetail(1)).toContain('thay đổi 0%')
+    expect(heirOutcomeDetail(0)).toContain('mất 100%')
+  })
+
+  it('respects explicit configured ranges and keeps only bankruptcy/steady deterministic by default', () => {
+    const rng = makeRng(1)
+    rng.next = () => 0.5
+    expect(rollHeirMultiplier({ outcomeType: 'squander', multiplier: 0.65, multiplierMin: .6, multiplierMax: .7 }, rng)).toBe(.65)
+    expect(rollHeirMultiplier({ outcomeType: 'bankrupt', multiplier: .9 }, rng)).toBe(0)
+    expect(rollHeirMultiplier({ outcomeType: 'steady', multiplier: .9 }, rng)).toBe(1)
+  })
   it('rolls inside the seeded range and stays put when the range is a point', () => {
     const rng = makeRng(4)
     const rolled = rollHeirMultiplier({ multiplier: 0.65, multiplierMin: 0.4, multiplierMax: 0.9 }, rng)
@@ -216,3 +261,22 @@ function tally(health: { reserveRatio: number; debtRatio: number }) {
   }
   return seen
 }
+
+
+describe('rare extreme inheritance outcomes', () => {
+  it('keeps both ruin and 2–3x windfalls rare with equal base rows, and preserves protective perks', () => {
+    const rows=heirs.map(row=>({...row,weight:1}))
+    const balanced=balanceHeirWeights(rows)
+    const counts: Record<string,number>={}
+    const rng=makeRng(2041)
+    for(let i=0;i<20000;i++) {
+      const picked=pickHeirOutcome(balanced,'chip-ban-dan','khoi-nghiep',rng,null,[])!
+      counts[picked.outcomeType]=(counts[picked.outcomeType]??0)+1
+    }
+    expect(counts.bankrupt!/20000).toBeLessThan(.03)
+    expect(counts.double!/20000).toBeLessThan(.03)
+    expect(counts.steady!/20000).toBeGreaterThan(.55)
+    expect(applyTraitRules(balanced,['family_fund'],{family_fund:{outcome:'bankrupt',set:0}}).find(r=>r.outcomeType==='bankrupt')!.weight).toBe(0)
+    expect(rows[0]!.weight).toBe(1)
+  })
+})

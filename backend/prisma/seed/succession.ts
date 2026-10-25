@@ -1,5 +1,8 @@
 import type { PrismaClient } from '@prisma/client'
 import { loadOfficialFile, slugify } from './official'
+import { HEIR_MULTIPLIER_RANGES } from '../../src/game/succession'
+
+const RANGES: Record<string, [number, number]> = HEIR_MULTIPLIER_RANGES
 
 const ODDS = [
   { minYear: 1, chance: 0 },
@@ -70,20 +73,12 @@ const CONTEXT_HEIR: { test: RegExp; outcomeType: string; label: string; detail: 
   { test: /trọng điểm/, outcomeType: 'double', label: 'Nhân đôi', detail: 'Dự án trọng điểm làm tài sản tăng gấp đôi.', weight: 1.8, multiplier: 2 },
 ]
 
-const RANGES: Record<string, [number, number]> = {
-  bankrupt: [0, 0],
-  squander: [0.4, 0.9],
-  steady: [1, 1],
-  prosper: [1.2, 2],
-  double: [2, 3],
-}
-
 const HEIRS = [
   { outcomeType: 'bankrupt', label: 'Phá sản', detail: 'Người thừa kế làm tan nhà máy. Tài sản về 0.', weight: 1, multiplier: 0, sort: 1 },
   { outcomeType: 'squander', label: 'Phá gia chi tử', detail: 'Người thừa kế làm mất từ 10% đến 60% tài sản.', weight: 1, multiplier: 0.65, sort: 2 },
-  { outcomeType: 'steady', label: 'Giữ nguyên', detail: 'Người thừa kế giữ nhà máy như cũ.', weight: 1, multiplier: 1, sort: 3 },
+  { outcomeType: 'steady', label: 'Kế nghiệp', detail: 'Người thừa kế giữ nhà máy như cũ.', weight: 1, multiplier: 1, sort: 3 },
   { outcomeType: 'prosper', label: 'Phát đạt', detail: 'Người thừa kế làm tài sản tăng thêm từ 20% đến 100%.', weight: 1, multiplier: 1.6, sort: 4 },
-  { outcomeType: 'double', label: 'Gặp may', detail: 'Người thừa kế nhân tài sản từ 2 đến 3 lần.', weight: 1, multiplier: 2.5, sort: 5 },
+  { outcomeType: 'double', label: 'May mắn', detail: 'Người thừa kế nhân tài sản từ 2 đến 3 lần.', weight: 1, multiplier: 2.5, sort: 5 },
 ]
 
 export async function seedSuccession(prisma: PrismaClient) {

@@ -1,7 +1,15 @@
 import type { Rng } from './rng'
+import { rollWholeMultiplier } from './percent'
 
 export const HEIR_OUTCOMES = ['bankrupt', 'squander', 'steady', 'prosper', 'double'] as const
 export type HeirOutcome = (typeof HEIR_OUTCOMES)[number]
+export const HEIR_MULTIPLIER_RANGES: Record<HeirOutcome, [number, number]> = {
+  bankrupt: [0, 0],
+  squander: [0.4, 0.9],
+  steady: [1, 1],
+  prosper: [1.2, 2],
+  double: [2, 3],
+}
 
 export type OddsPoint = { minYear: number; chance: number }
 
@@ -96,14 +104,41 @@ export function deathChanceFor(year: number, startYear: number, policy: Successi
 
 /** Mortality remains materially rarer than a management handover at every point on the curve. */
 export function mortalityChanceFor(year: number, startYear: number, policy: SuccessionPolicy, traits: string[]) {
-  return deathChanceFor(year, startYear, policy, traits) / 2
+  if (traits.includes('longevity')) return Math.max(0, Math.min(.95, policy.longevityChance / 2))
+  return deathChanceFor(year, startYear, {
+    ...policy,
+    baseChance: policy.baseChance / 2,
+    stepPerYear: .002, // +0.2 percentage points/year, independent of the succession increment.
+    maxChance: policy.maxChance / 2,
+    illnessAdd: policy.illnessAdd / 2,
+  }, traits)
 }
 
-export function rollHeirMultiplier(row: Pick<HeirRow, 'multiplier' | 'multiplierMin' | 'multiplierMax'>, rng: Rng) {
-  const min = row.multiplierMin ?? row.multiplier
-  const max = row.multiplierMax ?? row.multiplier
-  if (!(max > min)) return min
-  return min + rng.next() * (max - min)
+export function rollHeirMultiplier(row: Pick<HeirRow, 'multiplier' | 'multiplierMin' | 'multiplierMax'> & Partial<Pick<HeirRow, 'outcomeType'>>, rng: Rng) {
+  // Older database rows have no bounds. Use the outcome's range instead of a fixed midpoint.
+  const fallback = row.outcomeType ? HEIR_MULTIPLIER_RANGES[row.outcomeType] : undefined
+  const min = row.multiplierMin ?? fallback?.[0] ?? row.multiplier
+  const max = row.multiplierMax ?? fallback?.[1] ?? row.multiplier
+  if (!(max > min)) {
+    if (min === 0 || min === 1) return min
+    const [low, high] = fallback ?? [Math.min(min * .8, min * 1.2), Math.max(min * .8, min * 1.2)]
+    return rollWholeMultiplier(low, high, rng)
+  }
+  return rollWholeMultiplier(min, max, rng)
+}
+
+export function heirOutcomeDetail(multiplier: number) {
+  const percent = Math.round(Math.abs(multiplier - 1) * 100).toLocaleString('vi-VN')
+  if (multiplier === 0) return 'Người thừa kế làm mất 100% tài sản. Tài sản còn lại bằng 0.'
+  if (multiplier === 1) return 'Người thừa kế giữ nguyên tài sản (thay đổi 0%).'
+  if (multiplier < 1) return `Người thừa kế làm mất ${percent}% tài sản.`
+  return `Người thừa kế làm tài sản tăng thêm ${percent}% (tài sản sau bằng ${Math.round(multiplier * 100).toLocaleString('vi-VN')}% ban đầu).`
+}
+
+/** Relative to the old equally weighted outcomes; applied once before perk modifiers. */
+export function balanceHeirWeights<T extends { outcomeType: HeirOutcome; weight: number }>(rows: T[]): T[] {
+  const weights: Record<HeirOutcome, number> = { bankrupt: 2, squander: 13, steady: 60, prosper: 23, double: 2 }
+  return rows.map(row => ({ ...row, weight: row.weight * weights[row.outcomeType] }))
 }
 
 export function applyTraitRules<T extends { outcomeType: string; weight: number }>(
