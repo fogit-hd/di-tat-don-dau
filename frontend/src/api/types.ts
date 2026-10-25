@@ -80,7 +80,7 @@ export type OperatingForecast = {
   currentValuePenalty: number; valuePenalty: number; net: number;
 }
 export type InvestmentPreview = {
-  count: number; total: number; gain: number; levelAfter: number; pollutionNowAfter: number;
+  machineProgress?: number; nextPrice?: number; count: number; total: number; gain: number; levelAfter: number; pollutionNowAfter: number;
 } & Pick<OperatingForecast, 'operating' | 'idle' | 'staffMissing' | 'idleCost' | 'inputDiscount' | 'disruptionProtection' | 'logisticsDiscount' | 'delivery' | 'treatment' | 'pollution' | 'pricePenalty' | 'net'>
 
 export type SceneView = {
@@ -110,17 +110,25 @@ export type SceneView = {
   lines: LineView[]
   anchors: Anchors | null
   nextYearAt: number
+  promptYearPausedAt?: number
+  machineProgress?: number
   yearLockUntil: number
   finished: boolean
   secondLife: 'locked' | 'available' | 'used'
   stateAidEligible: boolean
   bankrupt?: boolean
+  crewRequired?: number
+  basePrices?: Partial<Record<'eng'|'mac'|'sup'|'inf'|'grn',number>>
+  workerSkill?: number
+  machineQuality?: number
+  condition?: number
+  companyUpgrades?: {kind:'training'|'modernization'|'maintenance';level:number;levelAfter:number;price:number;locked:boolean;reason:string;outputBefore:number;outputAfter:number;netBefore:number;netAfter:number;conditionBefore:number;conditionAfter:number}[]
   economyVersion?: number
   productionForecast?: ProductionForecastView
   lastProduction?: ProductionReportView
   companyBooks?: CompanyBooksView
   operatingForecast?: OperatingForecast
-  investmentPreviews?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', Partial<Record<1 | 5 | 10 | 'max', InvestmentPreview | null>>>>
+  investmentPreviews?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', Partial<Record<1 | 5 | 10 | 'max' | 'crew', InvestmentPreview | null>>>>
   succession: SuccessionView | null
   effects: EffectView[]
   pending: PendingView | null

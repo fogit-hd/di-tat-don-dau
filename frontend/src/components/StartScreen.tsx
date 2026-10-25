@@ -68,9 +68,7 @@ export function StartScreen() {
   const [capital, setCapital] = useState(10000)
   const [cycle, setCycle] = useState(60)
   const [yearMin, setYearMin] = useState(5)
-  const [prices, setPrices] = useState({ eng: 1000, mac: 1000, sup: 1000, inf: 1000, grn: 1000 })
-  const [priceBase, setPriceBase] = useState(1000)
-  const [formula, setFormula] = useState({ divisor: 10, round: 100, min: 500 })
+  const [prices, setPrices] = useState({ eng: 50, mac: 200, sup: 75, inf: 100, grn: 60 })
   const [hostOpen, setHostOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
@@ -158,30 +156,13 @@ export function StartScreen() {
   }, [searchParams])
 
   useEffect(() => {
-    void api<{ yearMinSeconds: number; stepDivisor: number; stepRound: number; stepMin: number; lines: { id: string; label: string }[] }>('/api/setup')
+    void api<{ investmentBasePrices?: typeof prices; yearMinSeconds: number; stepDivisor: number; stepRound: number; stepMin: number; lines: { id: string; label: string }[] }>('/api/setup')
       .then((setup) => {
         setYearMin(setup.yearMinSeconds)
-        setFormula({ divisor: setup.stepDivisor, round: setup.stepRound, min: setup.stepMin })
-        const price = Math.max(setup.stepMin, Math.round(10000 / setup.stepDivisor / setup.stepRound) * setup.stepRound)
-        setPriceBase(price)
-        setPrices({ eng: price, mac: price, sup: price, inf: price, grn: price })
+        if(setup.investmentBasePrices)setPrices(setup.investmentBasePrices)
       })
       .catch(() => undefined)
   }, [])
-
-  function priceFor(capitalValue: number) {
-    return Math.max(formula.min, Math.round(capitalValue / formula.divisor / formula.round) * formula.round)
-  }
-
-  function changeCapital(value: number) {
-    const nextDefault = priceFor(value)
-    setPrices((current) => {
-      const untouched = (Object.values(current) as number[]).every((price) => price === priceBase)
-      return untouched ? { eng: nextDefault, mac: nextDefault, sup: nextDefault, inf: nextDefault, grn: nextDefault } : current
-    })
-    setPriceBase(nextDefault)
-    setCapital(value)
-  }
 
   async function checkCode(code = joinCode) {
     const next = code.trim().toUpperCase()
@@ -412,7 +393,7 @@ export function StartScreen() {
                 </label>
                 <label>
                   Vốn (triệu VNĐ)
-                  <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => changeCapital(Number(event.target.value))} />
+                  <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => setCapital(Number(event.target.value))} />
                 </label>
                 <label>
                   Giây mỗi năm
@@ -424,24 +405,24 @@ export function StartScreen() {
                 </label>
               </div>
               <div className="config-section">
-                <h3>Giá đầu tư mỗi lần bấm</h3>
-                <p>Giá này áp dụng chung cho tất cả đội trong phòng.</p>
+                <h3>Điều chỉnh mức giá toàn phòng</h3>
+                <p>Đây là giá tham chiếu để điều chỉnh toàn phòng. Mỗi ngành có giá riêng; giá mua tăng theo quy mô.</p>
               </div>
               <div className="settings price-grid" aria-label="Giá đầu tư">
                 {(
                   [
-                    ['eng', 'Đào tạo'],
-                    ['mac', 'Dây chuyền'],
+                    ['eng', 'Tuyển công nhân'],
+                    ['mac', 'Cụm sản xuất'],
                     ['sup', 'Phụ trợ'],
                     ['inf', 'Hạ tầng'],
                     ['grn', 'Công nghệ sạch'],
                   ] as const
                 ).map(([id, label]) => (
                   <label key={id}>
-                    Giá {label} (triệu VNĐ)
+                    Giá tham chiếu {label} (triệu VNĐ)
                     <input
                       type="number"
-                      min={100}
+                      min={1}
                       max={100000}
                       value={prices[id]}
                       onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}

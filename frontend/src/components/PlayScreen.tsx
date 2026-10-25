@@ -9,7 +9,6 @@ import { BudgetPanel } from './BudgetPanel.tsx'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
 import { EffectBadges, GameTabs, type GameTabsHandle } from './EventPanels.tsx'
-import { EventMotionPaused } from '../lib/event-motion.ts'
 import { EventAttention } from './EventAttention.tsx'
 import { EventOverview } from './EventOverview.tsx'
 import { currentEventEntries, ongoingEventEntries } from '../lib/ongoing-events.ts'
@@ -110,7 +109,7 @@ export function PlayScreen() {
   const ongoing = scene ? ongoingEventEntries({ effects: scene.activeEffects ?? [], timed: scene.effects, traits: statuses, events: scene.eventLog ?? [], now: youFinished ? snap?.serverNow ?? now : now }) : []
 
   return (
-    <EventMotionPaused.Provider value={Boolean(snap?.paused)}><EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
+    <EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main data-economy-model={scene?.economyVersion} className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
       {snap && status === 'lobby' && (
@@ -131,7 +130,7 @@ export function PlayScreen() {
       {snap && scene && theme && (status === 'playing' || status === 'paused') && !scene.introDone && (
         <>
           <p className="lead center">Đồng hồ đang chạy · ⏱ {clock(snap.paused ? (snap.room.remainingMs ?? 0) : (snap.room.endsAt ?? now) - now)}</p>
-          <ThemeIntro key={`${upper}-${snap.you?.id}-${theme.id}`} theme={{ ...theme, factoryName: scene.factoryName }} busy={busy} error={formError} onBegin={(factoryName) => void act('intro', { factoryName })} />
+          <ThemeIntro key={`${upper}-${snap.you?.id}-${theme.id}`} theme={{ ...theme, factoryName: scene.factoryName }} crewRequired={scene.economyVersion===3?scene.crewRequired:undefined} busy={busy} error={formError} onBegin={(factoryName) => void act('intro', { factoryName })} />
         </>
       )}
       {snap && showGame && scene && (
@@ -188,6 +187,7 @@ export function PlayScreen() {
                             beep(660, 0.06, muted)
                             return act('invest', { line, quantity }).then(Boolean)
                           }}
+                          onUpgrade={(upgrade)=>act('company-upgrade',{upgrade}).then(Boolean)}
                           onRestart={() => {
                             beep(430, 0.08, muted)
                             void act('restart')
@@ -204,8 +204,8 @@ export function PlayScreen() {
               finished={youFinished}
               year={scene.cycles}
               suspended={Boolean(scene.bankrupt)}
-              busy={busy || snap.paused || Boolean(scene.bankrupt)}
-              now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
+              busy={busy || snap.paused || Boolean(scene.bankrupt) || Boolean(scene.pending)}
+              now={scene.promptYearPausedAt ?? (snap.paused && snap.frozenNow ? snap.frozenNow : now)}
               nextYearAt={scene.nextYearAt}
               yearLockUntil={scene.yearLockUntil}
               yearSeconds={snap.room.cycleSeconds}
@@ -223,17 +223,19 @@ export function PlayScreen() {
       {snap && showGame && finishedSummary && <FinishedSummary snap={snap} onClose={() => setFinishedSummary(false)} />}
       {snap && scene?.pending && status !== 'ended' && !youFinished && (
         <EventQuizModal
+          key={scene.pending.id}
           pending={scene.pending}
-          busy={busy}
+          busy={busy || snap.paused}
+          now={snap.paused && snap.frozenNow ? snap.frozenNow : now}
           onAnswer={(optionId) => {
             beep(optionId ? 880 : 200, 0.12, muted)
-            void act('answer', { optionId })
+            void act('answer', { optionId, pendingId: scene.pending?.id })
           }}
           onDismiss={() => void act('dismiss', {})}
         />
       )}
       {snap && status === 'ended' && <EndScreen snap={snap} />}
-    </main></EventAttention></EventMotionPaused.Provider>
+    </main></EventAttention>
   )
 }
 

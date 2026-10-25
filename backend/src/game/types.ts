@@ -224,6 +224,14 @@ export type TeamState = {
   introDone: boolean
   factoryName: string
   pending: Pending | null
+  promptYearPausedAt?: number
+  machineProgress?: number
+  productionVersion?: 3
+  crewSize?: number
+  companyProfile?: {crew:number;prices:Record<Line,number>}
+  workerSkill?: number
+  machineQuality?: number
+  investmentCounts?: Partial<Record<Line,number>>
   rng: number
   seed: number
 }

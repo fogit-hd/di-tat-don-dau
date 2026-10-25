@@ -1,0 +1,9 @@
+Tool: built-in Image Gen; transparent_background: true.
+Edit references: the corresponding approved sheets 01–07 in ../static-event-icons-v3/.
+
+Production extraction brief:
+Preserve exactly the twelve approved hand-painted subjects, poses, colors, material textures and the 4-column × 3-row ordering. Remove only the canvas header, all labels and parchment background. Export twelve separate, complete silhouettes on genuine transparent alpha, with clear transparent gutters. No scenes behind the objects, no extra symbols or arrows, no new interpretation, no text. Keep all props, smoke, droplets, highlights and visible object edges intact.
+
+The first three independent, seed-description-driven trial sheets were rejected before application because they introduced scenic backgrounds and too many props. Only the seven edits of approved canvases listed in provenance.json were exported into runtime assets. An additional background-removal attempt on sheet 06 was reviewed but not used; the original alpha sheet was suitable when composited correctly.
+
+Export: scripts/extract-approved-event-icons.py groups complete alpha silhouettes and detached details, then fits each into 240px inside a 256px transparent image. The contact sheets show the actual exports over cream. There are no label tiles or canvas paper backgrounds in runtime assets.

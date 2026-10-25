@@ -4,6 +4,7 @@ export type ProductionEffect = {
 }
 export type ProductionPlanView = {
   engineers: number; machines: number; engineersPerMachine: number; operating: number; idle: number; staffMissing: number;
+  workerBonus?: number; machineBonus?: number; conditionFactor?: number;
   baseOutput: number; techFactor: number; theoreticalOutput: number; outputNoise: number; priceNoise: number;
   outputMul: number; priceMul: number; revenueMul: number; costMul: number;
   output: number; sold: number; delivery: number; basePrice: number; price: number; pricePenalty: number;

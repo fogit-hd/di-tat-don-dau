@@ -2,21 +2,25 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {eventCatalog,root} from './event-art-catalog.mjs';
-import {eventArtwork} from '../frontend/src/lib/event-art.ts';
+import {eventArtwork,fallbackEventArt} from '../frontend/src/lib/event-art.ts';
 import {currentEventEntries,ongoingEventEntries} from '../frontend/src/lib/ongoing-events.ts';
 
-const catalog=eventCatalog(),folder=path.join(root,'frontend/public/assets/ui/event-scenes-v2');
+const catalog=eventCatalog(),folder=path.join(root,'frontend/public/assets/ui/static-events-v3');
+const manifest=JSON.parse(fs.readFileSync(path.join(folder,'manifest.json'),'utf8'));
+assert.equal(manifest.artworks.length,84);
+assert.equal(new Set(manifest.artworks.map(art=>art.id)).size,84);
+for(const art of manifest.artworks)assert(fs.existsSync(path.join(folder,art.file)),art.id);
 let expanded=0;
 for(const entry of catalog.entries){
  const result=eventArtwork(entry.id,entry.title,entry.body);
  assert(result,entry.id);assert.equal(result.id,entry.id);
- for(const suffix of ['.gif','-poster.webp','.svg'])assert(fs.existsSync(path.join(folder,entry.id+suffix)),entry.id+suffix);
+ assert(fs.existsSync(path.join(folder,path.basename(result.base)+'.webp')),entry.id);
+ assert(!result.context,'No pasted context symbols');
  if(entry.source==='industry'){
   expanded++;
   for(const context of catalog.contexts){
    const variant=eventArtwork(`${entry.id}--${context.id}`,`${entry.title} · ${context.title}`,entry.body);
-   assert(variant);assert.equal(variant.id,entry.id);assert(variant.context.endsWith(`context-${context.id}`));
-   for(const suffix of ['.gif','-poster.webp'])assert(fs.existsSync(path.join(folder,`context-${context.id}${suffix}`)));
+   assert(variant);assert.equal(variant.id,entry.id);assert.equal(variant.base,result.base);assert(!variant.context);
    expanded++;
   }
  }
@@ -41,15 +45,16 @@ const event={year:3,eventId:'trai-cay-say-01--port-delay',title:'Ùn tắc cửa
 assert.equal(currentEventEntries([event])[0].eventId,event.eventId);
 const effect={id:'runtime-effect',eventId:event.eventId,title:event.title,icon:event.icon,visual:'market_crash',economic:true,yearsLeft:2,body:'',startedAt:1,endsAt:10000,year:3};
 assert.equal(ongoingEventEntries({effects:[],timed:[effect],traits:[],events:[event],now:50})[0].eventId,event.eventId);
-const actions=new Map(catalog.entries.map(e=>[e.id,e.action]));
-assert.equal(actions.get('trai-cay-say-03'),'rain'); // "giảm" must not match "giả".
-assert.equal(actions.get('chip-ban-dan-18'),'cyber');
-assert.equal(actions.get('man-hinh-20'),'strike');
-const byId=new Map(catalog.entries.map(e=>[e.id,e]));
-assert.equal(byId.get('may-cong-cu-07').subject,'press');
-assert.equal(byId.get('xe-dien-03').subject,'errorcode');
-assert.equal(byId.get('trai-cay-say-09').country,null);
-assert.equal(byId.get('may-cong-cu-10').country,null);
-assert.equal(byId.get('my-pham-10').country,null);
-assert.notEqual(byId.get('gao-07').resource,'battery');
-console.log(JSON.stringify({passed:true,industryOriginals:1280,generalOriginals:100,familyOriginals:8,narrationVariants:8,systemScenes:9,contextLayers:7,expandedIndustryCases:expanded,mappedSceneRecords:catalog.entries.length,randomPercentSharesArtwork:true,unknownIdsFallBack:true},null,2));
+assert(eventArtwork('fam-bao-benh').base.endsWith('/illness'));
+assert(eventArtwork('fam-truong-tho').base.endsWith('/longevity'));
+assert(eventArtwork('fam-nghi-huu').base.endsWith('/retirement'));
+assert(eventArtwork('mortality-33').base.endsWith('/mortality'));
+assert(eventArtwork('may-cong-cu-03').base.endsWith('/industry-cnc'));
+assert(eventArtwork('may-cong-cu-07').base.endsWith('/new-machinery'));
+assert(eventArtwork('tec-may-hong').base.endsWith('/cnc-breakdown')); // Máy chủ lực is not a server.
+assert(eventArtwork('trai-cay-say-04--green-support','Gói mua sắm xanh được duyệt').base.endsWith('/context-green-support'));
+assert(eventArtwork('trai-cay-say-16').base.endsWith('/industry-food-dryer'));
+assert(eventArtwork('chip-ban-dan-02').base.endsWith('/order-auto-chips'));
+assert(fallbackEventArt('heart','Chủ xưởng Bạo bệnh').endsWith('/illness'));
+assert(fallbackEventArt('sun','Trường thọ').endsWith('/longevity'));
+console.log(JSON.stringify({passed:true,paintedStaticIllustrations:84,industryOriginals:1280,generalOriginals:100,familyOriginals:8,narrationVariants:8,systemScenes:9,contextVariants:7,expandedIndustryCases:expanded,mappedSceneRecords:catalog.entries.length,randomPercentSharesArtwork:true,noContextOverlays:true,unknownIdsFallBack:true},null,2));

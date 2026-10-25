@@ -19,6 +19,8 @@ export function PaintedIcon({ name, className = '' }: { name: PaintedIconName; c
 }
 
 export function TraitIcon({ id }: { id: string }) {
+  const portraits: Record<string,string> = {family_fund:'family-fund',heir_abroad:'returning-graduate',heir_trained:'training',inheritance_dispute:'inheritance-dispute',longevity:'longevity',illness:'illness',life_insurance:'life-insurance','state-aid':'state-support'}
+  if(portraits[id])return <img className="painted-icon" src={`/assets/ui/static-events-v3/${portraits[id]}.webp`} alt="" aria-hidden="true" width="256" height="256" decoding="async" draggable={false} />
   return <PaintedIcon name={id in BOUNDS ? id as PaintedIconName : 'history'} />
 }
 

@@ -3,7 +3,7 @@ import type { SceneView } from '../api/types.ts'
 import { factoryArt } from '../lib/art.ts'
 import { money } from '../lib/format.ts'
 import { CostRows } from './ProductionDetails.tsx'
-import { figure, rate, signedMoney } from '../lib/production-format.ts'
+import { count, figure, rate, signedMoney } from '../lib/production-format.ts'
 import { OperationIcon } from './OperationIcon.tsx'
 import { PaintedIcon } from './PaintedIcon.tsx'
 
@@ -28,14 +28,15 @@ export function FactoryScene({ scene, paused, dim = false, onShowYear }: { scene
         }}>{label}</button>)}</div>
         <div className="report-tab-content" key={tab} role="tabpanel" id={`${uid}-report-panel`} aria-labelledby={`${uid}-${tab}`} tabIndex={0}>
           {tab==='output' && <>
-            <div className="report-output-result"><PaintedIcon name="prod" /><div><small>Sản lượng tạo ra / năm</small><strong>{figure(range.outputMin)}–{figure(range.outputMax)} <span>{scene.unit}</span></strong></div></div>
-            <div className="report-capacity"><span>{figure(plan.engineers,0)} kỹ sư</span><OperationIcon name="arrow" /><span>{figure(plan.operating)} / {figure(plan.machines)} máy chạy</span></div>
-            {plan.staffMissing>0 && <p className="investment-warning">Còn thiếu {figure(plan.staffMissing,0)} kỹ sư · {figure(plan.idle)} máy nhàn.</p>}
-            <p className="report-equation">{figure(plan.operating,4)} máy × {figure(plan.baseOutput,4)} × {figure(plan.techFactor,4)} = <b>{figure(plan.theoreticalOutput,4)} {scene.unit}</b></p>
+            <div className="report-output-result"><PaintedIcon name="prod" /><div><small>Sản lượng tạo ra / năm</small><strong>{count(range.outputMin)}–{count(range.outputMax)} <span>{scene.unit}</span></strong></div></div>
+            <div className="report-capacity"><span>{count(plan.engineers)} công nhân</span><OperationIcon name="arrow" /><span>{count(plan.operating)} / {count(plan.machines)} cụm đang vận hành</span></div>
+            {plan.staffMissing>0 && <p className="investment-warning">Còn thiếu {count(plan.staffMissing)} công nhân · {count(plan.idle)} cụm chờ đủ nhân lực.</p>}
+            <p className="report-equation">{count(plan.operating)} cụm × {figure(plan.baseOutput,4)} × {figure(plan.techFactor,4)} ≈ <b>{count(plan.theoreticalOutput)} {scene.unit}</b></p>
+            {scene.economyVersion===3 && <p className="finance-note">Định mức {plan.engineersPerMachine} công nhân/cụm · Tay nghề ×{figure(plan.workerBonus??1,2)} · Thiết bị ×{figure(plan.machineBonus??1,2)} · Tình trạng {rate(plan.conditionFactor??1)}. Công nghệ tích lũy tối đa cấp 3.</p>}
             {plan.appliedEffects.filter(e=>e.outputMul!==1).map(e=><p className="report-factor" key={e.id}>{e.title}<b>×{figure(e.outputMul,4)} ({rate(e.outputMul-1)})</b></p>)}
             <p className="report-factor">Dao động sản xuất<b>{rate(range.outputNoiseMin)}–{rate(range.outputNoiseMax)}</b></p>
-            <p className="report-delivery"><PaintedIcon name="inst" /><span>Bán được {rate(plan.delivery)}: <b>{figure(range.soldMin)}–{figure(range.soldMax)} {scene.unit}</b></span></p>
-            <details><summary>Công thức và đơn vị</summary><p>Cần {figure(plan.engineersPerMachine,0)} kỹ sư/máy. Năng suất gốc {figure(plan.baseOutput)} {scene.unit}/máy. Hệ số công nghệ kỳ tới {figure(plan.techFactor,4)}. Các hiệu ứng sản lượng nhân với nhau: tổng hệ số ×{figure(plan.outputMul,4)}. Ví dụ −10% và −20% tương đương ×0,9×0,8 = ×0,72 (giảm 28%).</p><p>Sản lượng tạo ra khác lượng bán được. Tổng sản phẩm cộng dồn hiện tại: {figure(scene.output)} {scene.unit}.</p></details>
+            <p className="report-delivery"><PaintedIcon name="inst" /><span>Bán được {rate(plan.delivery)}: <b>{count(range.soldMin)}–{count(range.soldMax)} {scene.unit}</b></span></p>
+            <details><summary>Công thức và đơn vị</summary><p>Chỉ tính máy đã lắp hoàn chỉnh và đủ người vận hành. Sản phẩm tạo ra và lượng bán được làm tròn xuống sau khi áp dụng các hệ số.</p><p>Cần {figure(plan.engineersPerMachine,0)} công nhân/cụm. Năng suất gốc {figure(plan.baseOutput)} {scene.unit}/máy. Hệ số công nghệ kỳ tới {figure(plan.techFactor,4)}. Các hiệu ứng sản lượng nhân với nhau: tổng hệ số ×{figure(plan.outputMul,4)}. Ví dụ −10% và −20% tương đương ×0,9×0,8 = ×0,72 (giảm 28%).</p><p>Sản lượng tạo ra khác lượng bán được. Tổng sản phẩm cộng dồn hiện tại: {count(scene.output)} {scene.unit}.</p></details>
           </>}
           {tab==='finance' && <>
             <div className="report-output-result"><PaintedIcon name="coins" /><div><small>Lãi/lỗ sản xuất dự kiến</small><strong>{money(range.netMin)} – {money(range.netMax)}</strong></div></div>

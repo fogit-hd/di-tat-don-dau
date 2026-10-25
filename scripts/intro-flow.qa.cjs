@@ -10,6 +10,7 @@ const industry = JSON.parse(fs.readFileSync('backend/prisma/seed/industries.seed
 const labels = industry.investLabels;
 const scene = {industryId:industry.slug, factoryName:'Đại Việt Chế biến trái cây sấy',art:'',unit:'sản phẩm',engineers:4705,machines:5.3,operating:3.4,idle:1.9,util:.64,tech:6.8,support:2,infra:4.9,green:7.9,pollution:0,output:1303,cash:11076,value:35852,trajectory:'build',lastIncome:1338,lastOutput:1303,cycles:22,log:[],dirs:[],lines:[['eng',labels.nhanLuc],['mac',labels.mayMoc],['sup',labels.phuTro],['inf',labels.haTang],['grn','Công nghệ sạch']].map(([id,label])=>({id,label,hint:''})),anchors:null,nextYearAt:now+46000,yearLockUntil:0,finished:false,secondLife:'locked',stateAidEligible:false,succession:null,effects:[],pending:null,introDone:true,eventLog:[{year:22,eventId:'rain',title:'Mất mùa vì mưa',body:'Mưa lớn làm giảm nguồn nguyên liệu và tăng chi phí.',icon:'rain',good:false,effect:'chi phí +13%'}],yearChanges:[{year:22,cashBefore:9738,cashAfter:11076,assetsBefore:32000,assetsAfter:35852,causes:[{kind:'production',label:'Sản xuất',cash:1338}]}],activeEffects:[{eventId:'one',label:'Nguồn đầu vào bị siết',cashPerYear:0,yearsLeft:2,investmentPct:15},{eventId:'two',label:'Nhà cung cấp trong nước vào chuỗi',cashPerYear:0,yearsLeft:2,investmentPct:-12},{eventId:'three',label:'Gói mua sắm xanh được duyệt',cashPerYear:0,yearsLeft:2,investmentPct:-10}],traits:[],deathChance:.025,nextDeathChance:.02625,successionChance:.05,nextSuccessionChance:.0525,successionRiskStartsAt:10};
 const snap={serverNow:now,paused:false,frozenNow:null,room:{code:'QA1234',hostName:'QA',status:'playing',durationSec:900,startingCapital:10000,cycleSeconds:60,yearMinSeconds:5,step:1000,endsAt:now+652000,remainingMs:null,countdownEndsAt:null,cycleStartedAt:now,cycleElapsedMs:0,questionStats:[]},endings:{},teams:[],leaderboard:[],you:{id:'one',teamName:'Đại Việt',rank:1,correct:0,answered:0,finished:false,succession:null,theme:{id:'one',industryId:industry.slug,industryName:industry.name,name:'Xưởng trái cây',unit:'sản phẩm',role:industry.role,mission:'',factoryName:scene.factoryName,dirs:[],regionName:'',scaleName:'',contextName:'',art:''},scene},role:'player'};
+scene.machines=5;scene.machineProgress=.3;scene.operating=3;scene.idle=2;
 scene.upgradeEfficiency={eng:1.10,mac:.97,sup:1.07,inf:.94,grn:1.08};scene.annualConditions={eventChance:.57,familyChance:.05,interestRate:.08};
 scene.deathChance=.015;scene.nextDeathChance=.017;scene.successionChance=.03;scene.nextSuccessionChance=.0325;
 scene.traits=[{id:'family_fund',label:'Quỹ gia tộc',detail:'Ngăn phá sản khi chuyển giao quyền điều hành.',good:true},{id:'heir_abroad',label:'Con du học về nước',detail:'Tăng cơ hội người thừa kế giúp doanh nghiệp phát triển.',good:true}];
@@ -21,7 +22,10 @@ scene.yearChanges=[
 const defaultFactoryName='Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)';
 scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factoryName=defaultFactoryName;
 (async()=>{
- const {createState,openYearEffects,runCycle}=await import('../backend/src/game/engine.ts');
+ const {COMPANY_UPGRADES,companyUpgradePreview,upgradeCompany}=await import('../backend/src/game/company-upgrades.ts');
+ const {industryEconomy}=await import('../backend/src/game/industry-economy.ts');
+ const {investmentQuote}=await import('../backend/src/game/investment-pricing.ts');
+ const {createState,openYearEffects,runCycle,invest,computeValue}=await import('../backend/src/game/engine.ts');
  const {balance}=await import('../backend/prisma/seed/balance.ts');
  const {investmentPreviews}=await import('../backend/src/game/investment-preview.ts');
  const {productionPlan,productionForecast}=await import('../backend/src/game/production.ts');
@@ -30,21 +34,33 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  const target=(balance.priceCapitalBase+1400/balance.engPerTy)*balance.priceRevenueShare;
  const modelTheme={...snap.you.theme,lines:scene.lines,coefs:{epl:1400,tech:.12,support:.08,infra:.08,emission:1,baseOutput:10,basePrice:target/10,opex:target*.3,idleCost:34},start:{cashMul:1,engineers:730,machines:.4,pollution:4,dependency:0,condition:1},eventIds:[]};
  let modelSeed=1;while(annualEconomy({seed:modelSeed,cycles:scene.cycles}).upgrade.sup!==1.07)modelSeed++;
+ let snapshotModel;let basePrices={eng:1000,mac:1000,sup:1000,inf:1000,grn:1000};let discounted=true;let useV3=false;
  function syncEconomy(){
   const time=Date.now();
-  const model={...createState(modelTheme,10000,makeRng(modelSeed),balance),...scene,seed:modelSeed,
-   effects:[{id:'discount',visual:'none',title:'Ưu đãi',body:'',severity:1,startedAt:0,endsAt:1,outputMul:1,priceMul:1,inflationMul:1,yearsLeft:2,investmentMul:.9}]};
-  scene.economyVersion=2;scene.upgradeEfficiency=annualEconomy(model).upgrade;
+  const model={...createState(modelTheme,10000,makeRng(modelSeed),balance),...scene,productionVersion:useV3?3:undefined,seed:modelSeed,
+   effects:discounted?[{id:'discount',visual:'none',title:'Ưu đãi',body:'',severity:1,startedAt:0,endsAt:1,outputMul:1,priceMul:1,inflationMul:1,yearsLeft:2,investmentMul:.9}]:[]};
+  snapshotModel=model;
+  scene.economyVersion=useV3?3:2;
+  if(useV3){
+    scene.lines=scene.lines.map(line=>({...line,label:line.id==='eng'?'Tuyển công nhân':line.id==='mac'?'Mở cụm sản xuất':line.label}));
+    scene.crewRequired=industryEconomy(scene.industryId).crew;scene.crewSize=scene.crewRequired;model.crewSize=scene.crewSize;
+    const capacity=productionPlan(model,modelTheme,annualBalance(model,balance),time);
+    scene.operating=capacity.operating;scene.idle=capacity.idle;scene.value=computeValue(model,modelTheme,balance);
+    scene.companyUpgrades=COMPANY_UPGRADES.map(kind=>companyUpgradePreview(model,modelTheme,annualBalance(model,balance),kind,time));
+  }
+  scene.upgradeEfficiency=annualEconomy(model).upgrade;
   scene.productionForecast=productionForecast(openYearEffects(model,time+1),modelTheme,annualBalance(model,balance),time+1);
   scene.operatingForecast=productionPlan(openYearEffects(model,time+1),modelTheme,annualBalance(model,balance),time+1);
-  scene.investmentPreviews=investmentPreviews(model,modelTheme,balance,annualBalance(model,balance),scene.lines,{eng:1000,mac:1000,sup:1000,inf:1000,grn:1000},1000,time);
+  scene.investmentPreviews=investmentPreviews(model,modelTheme,balance,annualBalance(model,balance),scene.lines,basePrices,50,time);
+  scene.linePrices=Object.fromEntries(scene.lines.map(line=>[line.id,investmentQuote(model,line.id,basePrices[line.id],1,time).price]));
  }
  syncEconomy();
  const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH || undefined,ignoreDefaultArgs:['--hide-scrollbars']});
  const context=await browser.newContext();
- const page=await context.newPage();await page.setViewportSize({width:360,height:800});let introAttempts=0; page.setDefaultTimeout(10000); const errors=[];const requests=[]; const sockets=[];
+ const page=await context.newPage();await page.setViewportSize({width:360,height:800});let introAttempts=0; page.setDefaultTimeout(10000); const errors=[];const requests=[];const eventImageRequests=[];const sockets=[];
  const capture=async(file)=>{for(let attempt=0;attempt<3;attempt++){try{await page.screenshot({path:file,animations:'disabled'});return;}catch(error){if(attempt===2)throw error;await page.waitForTimeout(250);}}};
  page.on('pageerror',e=>errors.push(String(e)));
+ page.on('request',request=>{if(/assets\/ui\/(static-events-v3|event-scenes-v2|event-loops-v1)/.test(request.url()))eventImageRequests.push(request.url());});
  await page.addInitScript(()=>localStorage.setItem('player:QA1234','qa-token'));
  await page.routeWebSocket('**/socket.io/**',ws=>{
   sockets.push(ws);
@@ -56,10 +72,17 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
    if(url.pathname.startsWith('/api/')){
     if(url.pathname==='/api/setup')return route.fulfill({json:{yearMinSeconds:5,stepDivisor:10,stepRound:100,stepMin:500,lines:[]}});
     const body=route.request().postDataJSON();requests.push({url:url.pathname,body});
+    if(url.pathname.endsWith('/company-upgrade')){
+      const result=upgradeCompany(snapshotModel,modelTheme,annualBalance(snapshotModel,balance),body.upgrade,Date.now());
+      if(!result.ok)return route.fulfill({status:400,json:{error:result.error}});
+      Object.assign(scene,{cash:result.state.cash,workerSkill:result.state.workerSkill,machineQuality:result.state.machineQuality,condition:result.state.condition});syncEconomy();
+      sockets.forEach(ws=>ws.send('42'+JSON.stringify(['snapshot',snap])));
+    }
     if(url.pathname.endsWith('/invest')){
-      const price=scene.linePrices[body.line];const count=body.quantity==='max'?Math.floor(scene.cash/price):body.quantity;
-      if(count<1||scene.cash<price*count)return route.fulfill({status:400,json:{error:'Không đủ vốn'}});
-      scene.cash-=price*count;if(body.line==='sup')scene.support+=count*scene.upgradeEfficiency.sup;syncEconomy();
+      const quote=investmentQuote(snapshotModel,body.line,basePrices[body.line],body.quantity,Date.now());
+      const result=invest(snapshotModel,body.line,quote.total,balance,scene.lines,basePrices[body.line],quote.count,scene.upgradeEfficiency[body.line]);
+      if(!result.ok)return route.fulfill({status:400,json:{error:result.error}});
+      Object.assign(scene,{cash:result.state.cash,support:result.state.support,machines:result.state.machines,engineers:result.state.engineers,machineProgress:result.state.machineProgress,condition:result.state.condition,green:result.state.green,infra:result.state.infra,investmentCounts:result.state.investmentCounts});syncEconomy();
       sockets.forEach(ws=>ws.send('42'+JSON.stringify(['snapshot',snap])));
     }
     if(url.pathname.endsWith('/intro')){
@@ -96,24 +119,24 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  await capture('.tmp/intro-success-and-discount.png');
  const sizes=[[390,844],[768,1024],[1440,900]];
  for(const [width,height] of sizes){
-   await page.setViewportSize({width,height});scene.cash=10000;scene.support=1;scene.yearLockUntil=Date.now()+5000;scene.nextYearAt=Date.now()+60000;await update();
+   await page.setViewportSize({width,height});scene.cash=10000;scene.support=1;scene.investmentCounts={};scene.yearLockUntil=Date.now()+5000;scene.nextYearAt=Date.now()+60000;await update();
    await page.getByRole('button',{name:'×1',exact:true}).click();
    const timer=await page.locator('.year-btn small').innerText();assert(Number.parseInt(timer)>50,`Must show year timer, not 5-second lock: ${timer}`);
    assert((await page.locator('.hud-value').first().innerText()).includes('10 tỷ'));
-   await page.getByRole('button',{name:'×5',exact:true}).click();assert((await upgrade.innerText()).includes('4,5 tỷ'));
-   await upgrade.click();await page.waitForFunction(()=>document.querySelector('.hud-value')?.textContent.includes('5,5 tỷ'));
+   await page.getByRole('button',{name:'×5',exact:true}).click();assert((await upgrade.innerText()).includes('4,68 tỷ'));
+   await upgrade.click();await page.waitForFunction(()=>document.querySelector('.hud-value')?.textContent.includes('5,32 tỷ'));
    assert.equal(requests.filter(r=>r.url.endsWith('/invest')).at(-1).body.quantity,5);assert(Math.abs(scene.support-6.35)<1e-8);
-   await page.getByRole('button',{name:'Tối đa',exact:true}).click();assert((await upgrade.innerText()).includes('5,4 tỷ'));
-   await upgrade.click();await page.waitForFunction(()=>document.querySelector('.hud-value')?.textContent.includes('100 triệu'));
-   assert(Math.abs(scene.support-12.77)<1e-8);assert.equal(scene.cash,100);
+   await page.getByRole('button',{name:'Tối đa',exact:true}).click();assert((await upgrade.innerText()).includes('5,13 tỷ'));
+   await upgrade.click();await page.waitForFunction(()=>document.querySelector('.hud-value')?.textContent.includes('190 triệu'));
+   assert(Math.abs(scene.support-11.7)<1e-8);assert.equal(scene.cash,190);
    await page.getByRole('button',{name:'×1',exact:true}).click();assert(await upgrade.isDisabled());
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Horizontal overflow at ${width}`);
-   scene.cash=10000;scene.support=1;scene.yearLockUntil=0;scene.factoryName='Đại Việt Chế biến trái cây sấy';await update();
+   scene.cash=10000;scene.support=1;scene.investmentCounts={};scene.yearLockUntil=0;scene.factoryName='Đại Việt Chế biến trái cây sấy';await update();
    await page.getByRole('button',{name:'×5',exact:true}).click();
    assert((await page.locator('.investment-card').nth(2).innerText()).includes('107%'));
    assert.equal(await page.locator('.choice-result strong').count(),5);
    const order=await page.evaluate(()=>document.querySelector('#dirs').getBoundingClientRect().top < document.querySelector('.investment-footnote').getBoundingClientRect().top);assert(order,'Receipts must precede footnote on mobile');
-   const card=page.locator('.investment-card').nth(1);await card.locator('summary').click();assert((await card.innerText()).includes('kỹ sư'));await card.locator('summary').click();
+   const card=page.locator('.investment-card').nth(1);await card.locator('summary').click();assert((await card.innerText()).includes('công nhân'));await card.locator('summary').click();
    await capture(`.tmp/economy-bulk-${width}.png`);
    await page.getByRole('button',{name:'×1',exact:true}).click();
    await page.locator('.game-panel').evaluate(el=>{el.scrollTop=0});
@@ -183,7 +206,7 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
   await page.getByRole('button',{name:/^Năm 6/}).click();
   await page.locator('.cash-reconciliation.matched').waitFor();
   const productionRow=page.locator('.production-ledger-item');await productionRow.locator('summary').first().click();
-  assert((await page.locator('.production-receipt').innerText()).includes('19,2528'));
+  assert((await page.locator('.production-receipt').innerText()).includes('Sản lượng thực tế'));
   await capture(`.tmp/transparency-receipt-${width}.png`);
   await productionRow.locator('summary').first().click();
   await page.getByRole('button',{name:/^Năm 5/}).click();
@@ -198,9 +221,10 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  await page.locator('.event-new-badge').first().waitFor();
  await page.locator('.event-overview .event-row').filter({hasText:eventBefore.title}).click();
  await page.locator('.event-detail-dialog[open]').waitFor();
- assert.equal(await page.locator('.event-detail-dialog[open] .event-loop').getAttribute('data-event-art'),'trai-cay-say-01');
- await page.waitForFunction(()=>[...document.querySelectorAll('.event-detail-dialog[open] .event-loop img')].every(img=>img.naturalWidth===96));
- assert((await page.locator('.event-detail-dialog[open] .event-context-art').getAttribute('src')).includes('/event-scenes-v2/context-port-delay'));
+ assert.equal(await page.locator('.event-detail-dialog[open] .event-static').getAttribute('data-event-art'),'trai-cay-say-01');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.event-detail-dialog[open] .event-static img')].every(img=>img.naturalWidth===256));
+ assert.equal(await page.locator('.event-context-art').count(),0);
+ assert((await page.locator('.event-detail-dialog[open] .event-static img').getAttribute('src')).includes('/static-events-v3/port-congestion.webp'));
  for(const [width,height]of sizes){await page.setViewportSize({width,height});await page.waitForTimeout(250);await capture(`.tmp/event-specific-dialog-${width}.png`);}
  await page.locator('.event-detail-dialog[open]').getByRole('button',{name:'Đóng',exact:true}).click();
  assert.equal(await page.locator('.event-overview .event-row').filter({hasText:eventBefore.title}).locator('.event-new-badge').count(),0);
@@ -211,33 +235,89 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  await page.getByText('Kỳ sau: 3,25% (+0,25%)',{exact:true}).waitFor();
  await capture('.tmp/random-risk-1440.png');
  await page.getByRole('tab',{name:'Đầu tư',exact:true}).click();
- const playingIcon=page.locator('.event-overview .event-loop[data-playing="true"] img').first();await playingIcon.waitFor();
- await page.waitForFunction(()=>[...document.querySelectorAll('.event-overview .event-loop[data-playing="true"] img')].some(el=>el.naturalWidth===96));
- assert((await playingIcon.getAttribute('src')).endsWith('.gif'));
- assert((await playingIcon.getAttribute('src')).includes('/event-scenes-v2/trai-cay-say-01.gif'));
- assert.equal(await playingIcon.evaluate(el=>getComputedStyle(el).animationName),'none');
- const gifFrameBefore=await playingIcon.screenshot();await page.waitForTimeout(350);const gifFrameAfter=await playingIcon.screenshot();assert(!gifFrameBefore.equals(gifFrameAfter),'The GIF must actually animate in Chromium');
- await playingIcon.evaluate(el=>{window.gifNode=el;window.gifMutations=0;window.gifObserver=new MutationObserver(list=>{window.gifMutations+=list.filter(m=>m.attributeName==='src').length});window.gifObserver.observe(el,{attributes:true});});
+ const staticIcon=page.locator('.event-overview .event-static img').first();await staticIcon.waitFor();
+ await page.waitForFunction(()=>[...document.querySelectorAll('.event-overview .event-static img')].some(el=>el.naturalWidth===256));
+ const stableSrc=await staticIcon.getAttribute('src');assert(stableSrc.endsWith('.webp'));assert(stableSrc.includes('/static-events-v3/'));
+ const before=await staticIcon.screenshot();await page.waitForTimeout(350);const after=await staticIcon.screenshot();assert(before.equals(after),'Event artwork is a static painting');
+ await staticIcon.evaluate(el=>{window.artNode=el;window.artMutations=0;window.artObserver=new MutationObserver(list=>{window.artMutations+=list.filter(m=>m.attributeName==='src').length});window.artObserver.observe(el,{attributes:true});});
  for(let tick=0;tick<3;tick++)await update();
- assert(await playingIcon.evaluate(el=>window.gifNode===el));assert.equal(await page.evaluate(()=>window.gifMutations),0);await page.evaluate(()=>window.gifObserver.disconnect());
- await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.querySelectorAll('.event-loop[data-playing="true"]').length===0);
- assert((await page.locator('.event-overview .event-loop img').first().getAttribute('src')).endsWith('-poster.webp'));
+ assert(await staticIcon.evaluate(el=>window.artNode===el));assert.equal(await page.evaluate(()=>window.artMutations),0);await page.evaluate(()=>window.artObserver.disconnect());
+ await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await staticIcon.getAttribute('src'),stableSrc);
  await page.emulateMedia({reducedMotion:'no-preference'});
- snap.paused=true;snap.frozenNow=Date.now();await update();assert.equal(await page.locator('.event-loop[data-playing="true"]').count(),0);
+ snap.paused=true;snap.frozenNow=Date.now();await update();assert.equal(await staticIcon.getAttribute('src'),stableSrc);
  snap.paused=false;snap.frozenNow=null;await update();
  const savedEvents=scene.eventLog;
  const {EVENT_ICON_KINDS}=await import('../frontend/src/components/icon-kind.ts');
- scene.eventLog=EVENT_ICON_KINDS.map((kind,index)=>({year:scene.cycles,eventId:'gif-'+kind,title:'Sự kiện '+kind,body:'Kiểm tra biểu tượng có đúng loại.',icon:kind,good:index%2===0,effect:'Hiệu ứng minh họa'}));await update();
+ scene.eventLog=EVENT_ICON_KINDS.map((kind,index)=>({year:scene.cycles,eventId:'static-'+kind,title:'Sự kiện '+kind,body:'Kiểm tra biểu tượng có đúng loại.',icon:kind,good:index%2===0,effect:'Hiệu ứng minh họa'}));await update();
  await page.getByRole('tab',{name:'Lịch sử sự kiện',exact:true}).click();
- assert.equal(await page.locator('.game-panel .event-loop').count(),33);
- const lastLoop=page.locator('.game-panel .event-loop').last();assert.equal(await lastLoop.getAttribute('data-playing'),'false');
- await lastLoop.scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.game-panel .event-loop')].at(-1)?.getAttribute('data-playing')==='true');
- await page.waitForTimeout(150);assert.equal(await lastLoop.getAttribute('data-playing'),'true');
- assert((await lastLoop.locator('img').getAttribute('src')).endsWith('wrench.gif'));
- assert.equal(await page.locator('.game-panel .event-loop').first().getAttribute('data-playing'),'false');
+ assert.equal(await page.locator('.game-panel .event-static').count(),33);
+ const lastIcon=page.locator('.game-panel .event-static').last();await lastIcon.scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>[...document.querySelectorAll('.game-panel .event-static img')].at(-1)?.naturalWidth===256);
+ assert((await lastIcon.locator('img').getAttribute('src')).endsWith('cnc-breakdown.webp'));
  scene.eventLog=savedEvents;await update();await page.getByRole('tab',{name:'Đầu tư',exact:true}).click();
  assert.equal(await page.locator('.event-unread-count').count(),0,'Removed history records must not leave inaccessible unread badges');
  for(const [width,height] of sizes){await page.setViewportSize({width,height});await page.waitForTimeout(250);await capture(`.tmp/event-specific-gameplay-${width}.png`);}
+ // Approved canvas: show representative paintings in history, compact rows and manual detail.
+ scene.eventLog=[
+ {year:12,eventId:'fam-bao-benh',title:'Chủ xưởng bạo bệnh',body:'Chủ xưởng mang bệnh nặng.',icon:'heart',good:false,effect:'Tăng rủi ro · xem chi tiết'},
+ {year:12,eventId:'tec-may-hong',title:'Một máy chủ lực hỏng giữa ca',body:'Phải chờ phụ tùng. Các chuyền khác vẫn chạy.',icon:'wrench',good:false,effect:'Sản lượng -10%'},
+ {year:11,eventId:'second-life-11',title:'Nhà nước chấp thuận hỗ trợ vốn',body:'Chương trình hỗ trợ vốn khởi động lại.',icon:'home',good:true,effect:'Đã chấp thuận · chưa giải ngân'},
+ {year:11,eventId:'nat-mua-lon',title:'Mưa lớn',body:'Mưa lớn ảnh hưởng đến sản xuất.',icon:'rain',good:false,effect:'Sản lượng -10%'},
+ {year:10,eventId:'trai-cay-say-04--green-support',title:'Gói mua sắm xanh được duyệt',body:'Giảm giá đầu tư.',icon:'leaf',good:true,effect:'Giá đầu tư -10%'}];
+ await update();assert.equal(await page.locator('.event-detail-dialog[open]').count(),0,'Incoming events never open a modal');
+ for(const [width,height] of sizes){
+  await page.setViewportSize({width,height});await page.getByRole('tab',{name:'Lịch sử sự kiện',exact:true}).click();
+  await page.locator('.game-panel .event-row').first().scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>[...document.querySelectorAll('.game-panel .event-static img')].slice(0,2).every(img=>img.naturalWidth===256));
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No horizontal page scroll');
+  await capture(`.tmp/static-canvas-history-${width}.png`);
+  await page.locator('.game-panel .event-row').first().click();await page.locator('.event-detail-dialog[open]').waitFor();
+  await page.waitForFunction(()=>document.querySelector('.event-detail-dialog[open] img')?.naturalWidth===256);
+  assert((await page.locator('.event-detail-dialog[open] img').getAttribute('src')).endsWith('/illness.webp'));
+  const dialogBox=await page.locator('.event-detail-dialog[open]').boundingBox();assert(dialogBox.x>=0&&dialogBox.y>=0&&dialogBox.x+dialogBox.width<=width);
+  await capture(`.tmp/static-canvas-detail-${width}.png`);
+  await page.locator('.event-detail-dialog[open]').getByRole('button',{name:'Đóng',exact:true}).click();
+ }
+ assert(eventImageRequests.length>0);assert(eventImageRequests.every(url=>url.includes('/static-events-v3/')&&url.endsWith('.webp')),'Only static approved artwork requested');
+ // New default ladder and construction progress use the same real backend quotation.
+ basePrices={eng:50,mac:200,sup:75,inf:100,grn:60};discounted=false;scene.investmentCounts={};scene.cash=10000;
+ snap.room.step=50;snap.room.linePrices=basePrices;await update();
+ await page.getByRole('tab',{name:'Đầu tư',exact:true}).click();await page.getByRole('button',{name:'×1',exact:true}).click();
+ assert((await page.locator('.investment-buy').nth(0).innerText()).includes('50 triệu'));
+ assert((await page.locator('.investment-buy').nth(1).innerText()).includes('200 triệu'));
+ await page.locator('.investment-buy').nth(0).click();await page.waitForFunction(()=>document.querySelector('.investment-buy')?.textContent.includes('51 triệu'));
+ assert.equal(scene.cash,9950);assert(Number.isInteger(scene.engineers));
+ for(const [width,height]of sizes){await page.setViewportSize({width,height});await capture(`.tmp/rebalanced-investment-${width}.png`);}
+ const heldAt=Date.now();scene.nextYearAt=heldAt+60000;scene.promptYearPausedAt=heldAt;scene.pending={id:'question-held',kind:'question',phase:'open',title:'Câu hỏi',body:'Câu hỏi đang mở; đồng hồ năm phải dừng.',options:[{id:'yes',text:'Đáp án kiểm tra'}],explanation:'',expiresAt:heldAt+50000};await update();
+ await page.setViewportSize({width:390,height:844});assert((await page.locator('#mbody').innerText()).includes('Đồng hồ Sang năm đang tạm dừng'));
+ assert(await page.locator('.year-btn').isDisabled());const timer=await page.locator('.year-btn small').innerText();await page.waitForTimeout(1200);assert.equal(await page.locator('.year-btn small').innerText(),timer);
+ await capture('.tmp/question-year-paused-390.png');await page.getByRole('button',{name:'A. Đáp án kiểm tra',exact:true}).click();assert.equal(requests.findLast(r=>r.url.endsWith('/answer')).body.pendingId,'question-held');
+ scene.pending=null;delete scene.promptYearPausedAt;await update();
+ // New production model: actual per-industry prices, crew recruitment, quality and maintenance.
+ useV3=true;discounted=false;basePrices=industryEconomy(scene.industryId).prices;
+ const zero=createState(modelTheme,10000,makeRng(modelSeed),balance);
+ Object.assign(scene,{...zero,introDone:true,nextYearAt:Date.now()+60000,factoryName:'Doanh nghiệp trái cây sấy',industryId:industry.slug,unit:'sản phẩm',cash:10000,lines:scene.lines,activeEffects:[],traits:[],eventLog:[]});await update();
+ await page.getByRole('tab',{name:'Đầu tư',exact:true}).click();await page.getByRole('button',{name:'×1',exact:true}).click();
+ assert((await page.locator('.investment-buy').nth(0).innerText()).includes('40 triệu'));
+ assert((await page.locator('.investment-buy').nth(1).innerText()).includes('220 triệu'));
+ assert.equal(scene.engineers,0);assert.equal(scene.machines,0);assert.equal(scene.operating,0);
+ for(const [width,height]of sizes){await page.setViewportSize({width,height});await capture(`.tmp/company-v3-start-${width}.png`);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+ await page.getByRole('button',{name:/Tuyển đủ tổ/}).click();await page.waitForFunction(()=>document.querySelector('.investment-help')?.textContent.includes('Đang vận hành'));
+ assert.equal(scene.engineers,5);assert.equal(requests.findLast(r=>r.url.endsWith('/invest')).body.quantity,'crew');
+ await page.locator('.investment-buy').nth(1).click();await page.waitForFunction(()=>!document.querySelector('.investment-start-guide'));
+ assert.equal(scene.machines,1);assert.equal(scene.operating,1);assert.equal(scene.machineProgress,0);
+ for(let i=0;i<2;i++){
+  await page.locator('.investment-buy').nth(1).click();await page.getByRole('button',{name:/Tuyển đủ tổ/}).click();
+ }
+ assert.equal(scene.operating,3);assert.equal(scene.engineers,15);assert.equal(scene.machines,3);
+ await page.locator('.company-upgrades-panel[open]').waitFor();
+ const beforeSkill=scene.companyUpgrades.find(u=>u.kind==='training');
+ await page.locator('.company-upgrades .investment-buy').nth(0).click();await page.waitForTimeout(300);
+ assert.equal(scene.workerSkill,1);assert(scene.productionForecast.expected.output>beforeSkill.outputBefore);
+ await page.locator('.company-upgrades .investment-buy').nth(1).click();await page.waitForTimeout(300);assert.equal(scene.machineQuality,1);
+ scene.condition=.75;await update();await page.locator('.company-upgrades .investment-buy').nth(2).click();await page.waitForTimeout(300);assert.equal(scene.condition,1);
+ for(const [width,height]of sizes){await page.setViewportSize({width,height});await page.locator('.company-upgrades-panel').scrollIntoViewIfNeeded();await capture(`.tmp/company-v3-quality-${width}.png`);}
+ assert(!/nhàn|1[.,]400/.test(await page.locator('.company-upgrades-panel').innerText()));
  const succession={causeText:'Chuyển giao quyền điều hành',outcome:'squander',outcomeLabel:'Phá gia chi tử',outcomeDetail:'Người thừa kế làm mất 50% tài sản.',multiplier:.5,assetsBefore:100000,assetsAfter:50000,year:22};
  snap.you.finished=true;snap.you.succession=succession;scene.finished=true;scene.succession=succession;scene.value=50000;scene.nextYearAt=0;
  scene.eventLog=[{year:22,eventId:'succession-22',title:'Chuyển giao quyền điều hành',body:succession.outcomeDetail,icon:'heart',good:false,effect:succession.outcomeDetail}];
@@ -255,7 +335,7 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  assert.equal(await page.locator('.wordmark img').evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),false);
  assert.equal(await page.locator('p').first().evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),true);
  assert.deepEqual(errors,[]);
- console.log(JSON.stringify({passed:true,defaultNameLength:defaultFactoryName.length,maxLength:256,errorVisible:true,enterSubmits:true,invoice:900,bulkAndMax:true,yearCountdownConsistent:true,widths:sizes.map(s=>s[0]),successionLossVisible:'50%',sameAfterReload:true,enterpriseCanvas:true,groupedYearLedger:true,economyV2Receipts:true,pollutionExplainer:true,zeroCashCanProduce:true,bankruptcyStopsTimer:true,gifLoops:33,gifNodeStableAcrossClocks:true,reducedMotionStatic:true,pausedStatic:true,offscreenIconsStatic:true,imageDraggingBlocked:true,imageContextMenuBlocked:true,textContextMenuPreserved:true,errors},null,2));
+ console.log(JSON.stringify({passed:true,defaultNameLength:defaultFactoryName.length,maxLength:256,errorVisible:true,enterSubmits:true,invoice:900,bulkAndMax:true,yearCountdownConsistent:true,widths:sizes.map(s=>s[0]),successionLossVisible:'50%',sameAfterReload:true,enterpriseCanvas:true,groupedYearLedger:true,economyV2Receipts:true,pollutionExplainer:true,zeroCashCanProduce:true,bankruptcyStopsTimer:true,companyV3ZeroStart:true,industrySpecificPrices:true,crewRecruitment:true,qualityAndMaintenance:true,staticFallbacks:33,staticOnlyNetwork:true,canvasHistoryAndDetailWidths:sizes.map(s=>s[0]),staticNodeStableAcrossClocks:true,reducedMotionStatic:true,pausedStatic:true,imageDraggingBlocked:true,imageContextMenuBlocked:true,textContextMenuPreserved:true,errors},null,2));
  await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
 

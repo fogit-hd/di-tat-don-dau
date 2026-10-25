@@ -16,7 +16,7 @@ import {
   runCycle,
 } from './engine'
 import { makeRng } from './rng'
-import type { EventDef, LineDef, QuestionDef, ThemeDef } from './types'
+import type { EventDef, LineDef, QuestionDef, ThemeDef, TeamState } from './types'
 
 const lines: LineDef[] = LINES.map(({ id, label, hint, log }) => ({ id, label, hint, log }))
 const capital = balance.priceCapitalBase + 1400 / balance.engPerTy
@@ -103,8 +103,8 @@ const flood: EventDef = {
   machinesPct: [-0.18, -0.08],
 }
 
-function fresh(capital = 10000, seed = 7) {
-  return createState(theme, capital, makeRng(seed), balance)
+function fresh(capital = 10000, seed = 7): TeamState {
+  return {...createState(theme, capital, makeRng(seed), balance),productionVersion:undefined,engineers:Math.round(theme.start.engineers),machines:Math.floor(theme.start.machines),machineProgress:theme.start.machines%1,tech:balance.startTech,pollution:theme.start.pollution,dependency:theme.start.dependency,condition:theme.start.condition}
 }
 
 describe('economy', () => {

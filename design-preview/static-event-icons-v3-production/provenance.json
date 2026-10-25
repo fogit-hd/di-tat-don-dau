@@ -1,0 +1,45 @@
+[
+  {
+    "key": "01-nature",
+    "file": "01-nature.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-51f2f924-f1c4-4c73-9c7b-a1af33455a71.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-01-nature.png"
+  },
+  {
+    "key": "02-technology",
+    "file": "02-technology.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-2bc0241a-af1b-4497-b003-9ab159c9036e.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-02-technology.png"
+  },
+  {
+    "key": "05-people-family",
+    "file": "05-people-family.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-713f19ee-cc1a-421a-808e-6b5fea5a09d7.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-05-people-family.png"
+  },
+  {
+    "key": "03-logistics",
+    "file": "03-logistics.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-65057a27-7ccb-48dd-94e6-2775bd7b5c00.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-03-logistics.png"
+  },
+  {
+    "key": "04-market-policy",
+    "file": "04-market-policy.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-dfbecbfd-21f8-46f2-9ebf-7e11bce70247.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-04-market-policy.png"
+  },
+  {
+    "key": "06-contexts-outcomes",
+    "file": "06-contexts-outcomes.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-117cf60f-0fa0-48c2-a376-4d39f23d64c3.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-06-contexts-outcomes.png",
+    "alphaSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-c0ecfd15-57a1-4f46-8b5a-08e3e1348ca8.png"
+  },
+  {
+    "key": "07-industry-examples",
+    "file": "07-industry-examples.png",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-992f4438-4447-43dd-956d-f7ef31814c48.png",
+    "destination": "design-preview/static-event-icons-v3-production/atlases/approved-07-industry-examples.png"
+  }
+]

@@ -22,11 +22,11 @@ export function HostScreen() {
   const [cycle, setCycle] = useState(60)
   const [yearMin, setYearMin] = useState(5)
   const [prices, setPrices] = useState<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>({
-    eng: 1000,
-    mac: 1000,
-    sup: 1000,
-    inf: 1000,
-    grn: 1000,
+    eng: 50,
+    mac: 200,
+    sup: 75,
+    inf: 100,
+    grn: 60,
   })
   const [primed, setPrimed] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -111,24 +111,24 @@ export function HostScreen() {
               </label>
             </div>
             <div className="config-section host-config-section">
-              <h2>Giá đầu tư mỗi lần bấm</h2>
-              <p>Áp dụng chung cho mọi đội. Có thể chỉnh trước khi bắt đầu.</p>
+              <h2>Điều chỉnh mức giá toàn phòng</h2>
+              <p>Các ô dưới là giá tham chiếu để điều chỉnh toàn phòng. Giá thực tế khác nhau theo ngành và tăng theo quy mô.</p>
             </div>
             <div className="settings price-grid" aria-label="Giá đầu tư">
               {(
                 [
-                  ['eng', 'Đào tạo'],
-                  ['mac', 'Dây chuyền'],
+                  ['eng', 'Tuyển công nhân'],
+                  ['mac', 'Cụm sản xuất'],
                   ['sup', 'Phụ trợ'],
                   ['inf', 'Hạ tầng'],
                   ['grn', 'Công nghệ sạch'],
                 ] as const
               ).map(([id, label]) => (
                 <label key={id}>
-                  Giá {label} (triệu VNĐ)
+                  Giá tham chiếu {label} (triệu VNĐ)
                   <input
                     type="number"
-                    min={100}
+                    min={1}
                     max={100000}
                     value={prices[id]}
                     onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}

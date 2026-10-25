@@ -28,7 +28,7 @@ vi.mock('./game/catalog', async () => {
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
 
 })
-import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt } from './runtime'
+import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick } from './runtime'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
 function theme(): ThemeDef {
@@ -41,7 +41,7 @@ function theme(): ThemeDef {
   }
 }
 async function roomWithTeam() {
-  const created = await createRoom({ hostUserId: 'host', hostName: 'Chủ phòng', durationMin: 15, startingCapital: 10000, linePrices: { sup: 1000 } })
+  const created = await createRoom({ hostUserId: 'host', hostName: 'Chủ phòng', durationMin: 15, startingCapital: 10000, linePrices: { sup: 750 } })
   const player = await joinRoom(created.code, 'Đội trùng tên')
   const room = getRoom(created.code)!
   const team = room.teams[0]!
@@ -64,7 +64,7 @@ describe('room-scoped names and purchases', () => {
     buildSnapshot(a.room, viewer)
     expect(a.team.state!.rng).toBe(rngBefore)
     await investLine(a.code, a.player.playerToken, 'sup')
-    expect(a.team.state?.support).toBeCloseTo(before.upgradeEfficiency.sup, 8)
+    expect(a.team.state?.support).toBe(1)
     const after = buildSnapshot(a.room, viewer).you!.scene!
     expect(after.upgradeEfficiency).toEqual(before.upgradeEfficiency)
     expect(after.deathChance).toBe(before.deathChance)
@@ -99,7 +99,7 @@ describe('room-scoped names and purchases', () => {
     a.team.state!.effects = [{ id: 'discount', visual: 'none', title: 'Ưu đãi', body: '', severity: 1, startedAt: 0, endsAt: 1, outputMul: 1, priceMul: 1, inflationMul: 1, yearsLeft: 2, investmentMul: .9 }]
     await investLine(a.code, a.player.playerToken, 'sup')
     expect(a.team.state?.cash).toBe(9100)
-    expect(a.team.state?.support).toBeCloseTo(1000 / balance.assetPerTy * annualEconomy(a.team.state!).upgrade.sup, 8)
+    expect(a.team.state?.support).toBeCloseTo(1, 8)
     expect(a.team.state?.pendingCauses?.at(-1)).toMatchObject({ kind: 'investment', cash: -900 })
     expect(b.team.state?.cash).toBe(10000)
     expect(b.team.state?.support).toBe(0)
@@ -110,21 +110,21 @@ describe('room-scoped names and purchases', () => {
     a.room.status = 'playing'
     await confirmIntro(a.code, a.player.playerToken, factoryName)
     a.team.state!.effects = [{ id: 'discount', visual: 'none', title: 'Ưu đãi', body: '', severity: 1, startedAt: 0, endsAt: 1, outputMul: 1, priceMul: 1, inflationMul: 1, yearsLeft: 2, investmentMul: .9 }]
-    const perPackage = 1000 / balance.assetPerTy * annualEconomy(a.team.state!).upgrade.sup
+    const perPackage = 1
     await investLine(a.code, a.player.playerToken, 'sup', 5)
-    expect(a.team.state?.cash).toBe(5500)
+    expect(a.team.state?.cash).toBe(5140)
     expect(a.team.state?.support).toBeCloseTo(5 * perPackage, 8)
     await expect(investLine(a.code, a.player.playerToken, 'sup', 10)).rejects.toMatchObject({ status: 400 })
-    expect(a.team.state?.cash).toBe(5500)
+    expect(a.team.state?.cash).toBe(5140)
     expect(a.team.state?.support).toBeCloseTo(5 * perPackage, 8)
     await investLine(a.code, a.player.playerToken, 'sup', 'max')
-    expect(a.team.state?.cash).toBe(100)
-    expect(a.team.state?.support).toBeCloseTo(11 * perPackage, 8)
+    expect(a.team.state?.cash).toBe(604)
+    expect(a.team.state?.support).toBeCloseTo(9 * perPackage, 8)
     await expect(investLine(a.code, a.player.playerToken, 'sup', 'max')).rejects.toMatchObject({ status: 400 })
-    a.team.state!.cash = 10000
+    a.team.state!.cash = 20000
     await investLine(a.code, a.player.playerToken, 'sup', 10)
-    expect(a.team.state?.cash).toBe(1000)
-    expect(a.team.state?.support).toBeCloseTo(21 * perPackage, 8)
+    expect(a.team.state?.cash).toBe(4520)
+    expect(a.team.state?.support).toBeCloseTo(19 * perPackage, 8)
   })
 })
 
@@ -226,7 +226,7 @@ describe('economic lifecycle regressions', () => {
       const viewer={role:'player' as const,code:a.code,teamId:a.player.teamId}
       const before=buildSnapshot(a.room,viewer).you!.scene!
       const preview=before.investmentPreviews![line][quantity]!
-      expect(preview.count).toBe(quantity==='max'?20:quantity)
+      if(quantity==='max'){expect(preview.total).toBeLessThanOrEqual(20000);expect(preview.total+preview.nextPrice).toBeGreaterThan(20000)}else expect(preview.count).toBe(quantity)
       await investLine(a.code,a.player.playerToken,line,quantity)
       const after=buildSnapshot(a.room,viewer).you!.scene!
       expect(after.cash).toBe(20000-preview.total)
@@ -263,6 +263,7 @@ describe('economic lifecycle regressions', () => {
     expect(reward).toBeGreaterThan(0)
     await expect(answerPrompt(a.code,a.player.playerToken,'yes')).rejects.toMatchObject({status:409})
     expect(a.team.state!.pendingCauses.filter(c=>c.kind==='quiz')).toHaveLength(1)
+    await dismissPrompt(a.code,a.player.playerToken)
     await advanceTeamYear(a.code,a.player.playerToken)
     const row=a.team.state!.yearLedger[0]!
     expect(row.causes.find(c=>c.kind==='quiz')!.cash).toBe(reward)
@@ -315,4 +316,35 @@ describe('economic lifecycle regressions', () => {
     expect(view().investmentPreviews!.mac.max).toBe(null)
     await expect(investLine(a.code, a.player.playerToken, 'mac', 10)).rejects.toMatchObject({ status:400 })
   })
+})
+
+
+describe('question protects the team year clock',()=>{
+ it('does not replace an unanswered question at 60 seconds; resumes only after its result closes',async()=>{
+  const a=await roomWithTeam();a.room.status='playing';await confirmIntro(a.code,a.player.playerToken,factoryName)
+  const start=Date.now();a.room.endsAt=start+900000
+  a.team.state!.nextYearAt=start+60000
+  a.team.state!.pending={id:'original',kind:'question',phase:'open',title:'Câu hỏi',body:'Chưa trả lời',options:[{id:'yes',text:'Đúng'}],correctOptionId:'yes',explanation:'',expiresAt:start+50000}
+  tick(a.room,start)
+  await expect(advanceTeamYear(a.code,a.player.playerToken)).rejects.toMatchObject({status:409})
+  tick(a.room,start+50000)
+  expect(a.team.state!.pending).toMatchObject({id:'original',phase:'resolved'})
+  tick(a.room,start+60000)
+  expect(a.team.state!.cycles).toBe(0);expect(a.team.state!.pending!.id).toBe('original')
+  expect(a.room.answers.filter(r=>r.questionId==='original')).toHaveLength(1)
+  tick(a.room,start+62000)
+  expect(a.team.state!.pending).toBeNull();expect(a.team.state!.nextYearAt).toBe(start+122000)
+  expect(a.room.endsAt).toBe(start+900000)
+  tick(a.room,start+121999);expect(a.team.state!.cycles).toBe(0)
+  tick(a.room,start+122000);expect(a.team.state!.cycles).toBe(1)
+ })
+ it('rejects a late answer without paying any reward',async()=>{
+  const a=await roomWithTeam();a.room.status='playing';await confirmIntro(a.code,a.player.playerToken,factoryName)
+  a.team.state!.pending={id:'expired',kind:'question',phase:'open',title:'',body:'',options:[{id:'yes',text:'Đúng'}],correctOptionId:'yes',explanation:'',expiresAt:Date.now()-1}
+  const cash=a.team.state!.cash
+  await expect(answerPrompt(a.code,a.player.playerToken,'yes','stale-question')).rejects.toMatchObject({status:409})
+  await expect(answerPrompt(a.code,a.player.playerToken,'not-in-options','expired')).rejects.toMatchObject({status:400})
+  await expect(answerPrompt(a.code,a.player.playerToken,'yes')).rejects.toMatchObject({status:409})
+  expect(a.team.state!.cash).toBe(cash);expect(a.team.state!.pending!.phase).toBe('resolved')
+ })
 })

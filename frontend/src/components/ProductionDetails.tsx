@@ -1,6 +1,6 @@
 import { money } from '../lib/format.ts'
 import type { ProductionPlanView, ProductionReportView } from '../api/production.ts'
-import { figure, rate, signedMoney } from '../lib/production-format.ts'
+import { count, figure, rate, signedMoney } from '../lib/production-format.ts'
 import { PaintedIcon } from './PaintedIcon.tsx'
 
 
@@ -9,7 +9,7 @@ export function CostRows({ plan }: { plan: ProductionPlanView }) {
     <div><dt>Nguyên liệu {plan.inputDiscount > 0 && <small>(phụ trợ giảm {rate(plan.inputDiscount)})</small>}</dt><dd>{signedMoney(-plan.inputCost)}</dd></div>
     <div><dt>Logistics {plan.logisticsDiscount > 0 && <small>(hạ tầng giảm {rate(plan.logisticsDiscount)})</small>}</dt><dd>{signedMoney(-plan.logisticsCost)}</dd></div>
     <div><dt>Chi phí khác</dt><dd>{signedMoney(-plan.otherCost)}</dd></div>
-    <div><dt>Máy nhàn · {figure(plan.idle)} dây chuyền</dt><dd>{signedMoney(-plan.idleCost)}</dd></div>
+    <div><dt>Chờ đủ nhân lực · {count(plan.idle)} cụm</dt><dd>{signedMoney(-plan.idleCost)}</dd></div>
   </dl>
 }
 
@@ -18,12 +18,15 @@ export function ProductionDetails({ report }: { report: ProductionReportView }) 
   return <div className="production-receipt">
     <h4><PaintedIcon name="line" /> Sản xuất năm {report.year} · Đã chốt</h4>
     <dl className="finance-lines">
-      <div><dt>Máy thực chạy / sở hữu</dt><dd>{figure(report.operating)} / {figure(report.machines)}</dd></div>
-      <div><dt>Sản lượng nền sau công nghệ</dt><dd>{figure(report.theoreticalOutput, 4)} {report.unit}</dd></div>
+      <div><dt>Cụm đang vận hành / sở hữu</dt><dd>{count(report.operating)} / {count(report.machines)}</dd></div>
+      {report.workerBonus!=null && <div><dt>Năng suất do tay nghề</dt><dd>×{figure(report.workerBonus,4)}</dd></div>}
+      {report.machineBonus!=null && <div><dt>Năng suất do thiết bị</dt><dd>×{figure(report.machineBonus,4)}</dd></div>}
+      {report.conditionFactor!=null && <div><dt>Tình trạng thiết bị</dt><dd>{rate(report.conditionFactor)}</dd></div>}
+      <div><dt>Sản lượng nền sau năng suất</dt><dd>{count(report.theoreticalOutput)} {report.unit}</dd></div>
       {report.appliedEffects.filter(e => e.outputMul !== 1).map(e => <div key={e.id}><dt>{e.title}</dt><dd>×{figure(e.outputMul, 4)} ({rate(e.outputMul - 1)})</dd></div>)}
       <div><dt>Dao động sản xuất đã bốc</dt><dd>{rate(report.outputNoise)}</dd></div>
-      <div className="finance-emphasis"><dt>Sản lượng thực tế</dt><dd>{figure(report.output, 4)} {report.unit}</dd></div>
-      <div><dt>Bán được · {rate(report.delivery)}</dt><dd>{figure(report.sold, 4)} {report.unit}</dd></div>
+      <div className="finance-emphasis"><dt>Sản lượng thực tế</dt><dd>{count(report.output)} {report.unit}</dd></div>
+      <div><dt>Bán được · {rate(report.delivery)}</dt><dd>{count(report.sold)} {report.unit}</dd></div>
       <div><dt>Giá gốc / {report.unit}</dt><dd>{money(report.basePrice)}</dd></div>
       <div><dt>Dao động giá đã bốc</dt><dd>{rate(report.priceNoise)}</dd></div>
       {report.priceMul !== 1 && <div><dt>Hệ số giá từ sự kiện</dt><dd>×{figure(report.priceMul, 4)}</dd></div>}

@@ -151,16 +151,45 @@
   .gameplay.game-shell .has-production .cash-reconciliation { padding:7px; font-size:13px; }
 }
 
-/* Painted GIFs replace the old CSS-animated event SVGs. Decode only visible, unpaused loops. */
-.gameplay.game-shell .event-loop,.event-loop { position:relative; display:inline-block; flex:none; animation:none!important; line-height:0; vertical-align:middle; }
-.event-loop > img { display:block; width:100%; height:100%; object-fit:contain; animation:none!important; user-select:none; -webkit-user-drag:none; }
-.event-loop > img.event-context-art { position:absolute; width:46%; height:46%; bottom:-2%; left:-3%; }
-.gameplay.game-shell .event-row { grid-template-columns:36px minmax(0,1fr) minmax(45px,26%) 10px; }
-.gameplay.game-shell .event-row .event-loop { width:36px; height:36px; }
-.gameplay.game-shell .event-detail-dialog .event-loop { width:96px; height:96px; }
+/* Approved canvas 08: complete static paintings, parchment rows and a manual detail card. */
+.event-static { display:inline-block; flex:none; animation:none!important; line-height:0; vertical-align:middle; }
+.event-static > img { display:block; width:100%; height:100%; object-fit:contain; animation:none!important; user-select:none; -webkit-user-drag:none; }
+.gameplay.game-shell .event-row { grid-template-columns:64px minmax(0,1fr) minmax(48px,17%) 12px; gap:10px; min-height:84px; padding:8px 10px; margin-bottom:4px; border:1px solid #cfb17a; border-image:none; border-radius:6px; background:linear-gradient(110deg,#fff7e4,#f5e4bf); }
+.gameplay.game-shell .event-row .event-static { width:64px; height:64px; }
+.gameplay.game-shell .event-row-copy b { font:700 17px/1.25 Cambria,Georgia,serif; }
+.gameplay.game-shell .event-row-copy > span { font:400 14px/1.35 Cambria,Georgia,serif; }
+.gameplay.game-shell .event-row small { grid-column:auto; grid-row:auto; font:400 12px/1.3 Cambria,Georgia,serif; text-align:right; }
+.gameplay.game-shell .event-row .event-chevron { grid-column:auto; grid-row:auto; }
+.gameplay.game-shell .event-row:focus-visible { outline:3px solid #d58a24; outline-offset:-3px; }
+.gameplay.game-shell .event-row:hover:not(:disabled) { background:#fff3d1; }
+.gameplay.game-shell .event-overview .event-row { grid-template-columns:56px minmax(0,1fr) minmax(44px,18%) 10px; min-height:72px; padding:5px 7px; gap:7px; }
+.gameplay.game-shell .event-overview .event-row .event-static { width:56px; height:56px; }
+.gameplay.game-shell .event-overview .event-row-copy b { font-size:15px; }
+.gameplay.game-shell .event-overview .event-row-copy > span { font-size:12px; }
+.gameplay.game-shell .event-group-controls button { min-height:40px; background:#f3dfb2; color:#542616; font:700 15px/1.2 Cambria,Georgia,serif; }
+.gameplay.game-shell .event-group-controls button[aria-pressed=true],.gameplay.game-shell .event-overview-heading button[aria-pressed=true] { background:linear-gradient(#85221f,#4e101c); color:#ffe6a0; }
+.gameplay.game-shell .event-detail-dialog { width:min(440px,calc(100vw - 24px)); text-align:center; background:#fff0d1; }
+.gameplay.game-shell .event-detail-dialog .event-static { width:192px; height:192px; margin:0 auto 8px; }
+.gameplay.game-shell .event-detail-dialog h2 { margin:0 0 9px; font-size:24px; }
+.gameplay.game-shell .event-detail-dialog p { font:400 15px/1.5 Cambria,Georgia,serif; }
+.gameplay.game-shell .event-detail-dialog .btn { width:min(100%,240px); margin:16px auto 0; background:linear-gradient(#ff992b 0%,#ec6a0b 15%,#ba3f05 100%); font:700 20px/1.2 Cambria,Georgia,serif; color:#fff2cd; }
+@media(max-width:1100px) {
+  .gameplay.game-shell .event-row-copy b { font-size:15px; }
+  .gameplay.game-shell .event-row-copy > span { font-size:12px; }
+}
 @media(max-width:699px) {
-  .gameplay.game-shell .event-row,.gameplay.game-shell .event-overview .event-row { grid-template-columns:28px minmax(0,1fr) minmax(44px,22%) 10px; }
-  .gameplay.game-shell .event-row .event-loop { width:28px; height:28px; }
+  .gameplay.game-shell .event-row,.gameplay.game-shell .event-overview .event-row { grid-template-columns:48px minmax(0,1fr) minmax(36px,17%) 10px; gap:6px; min-height:62px; padding:5px; }
+  .gameplay.game-shell .event-row .event-static,.gameplay.game-shell .event-overview .event-row .event-static { width:48px; height:48px; }
+  .gameplay.game-shell .event-row-copy b,.gameplay.game-shell .event-overview .event-row-copy b { font-size:13px; }
+  .gameplay.game-shell .event-row-copy b { white-space:normal; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+  .gameplay.game-shell .event-row-copy > span,.gameplay.game-shell .event-overview .event-row-copy > span { font-size:11px; }
+  .gameplay.game-shell .event-row small,.gameplay.game-shell .event-overview .event-row small { grid-column:3; grid-row:1; font-size:10px; }
+  .gameplay.game-shell .event-row .event-chevron,.gameplay.game-shell .event-overview .event-row .event-chevron { grid-column:4; grid-row:1; }
+  .gameplay.game-shell .event-overview .event-row:nth-child(2) { display:grid; }
+  .gameplay.game-shell .event-group-controls button { font-size:12px; }
+  .gameplay.game-shell .event-detail-dialog { padding:18px; }
+  .gameplay.game-shell .event-detail-dialog .event-static { width:176px; height:176px; }
+  .gameplay.game-shell .event-detail-dialog h2 { font-size:21px; }
 }
 
 .gameplay.game-shell .event-overview-heading button,.gameplay.game-shell .event-group-controls button { transition:color 160ms,background-color 160ms,border-color 160ms; }
@@ -168,3 +197,25 @@
 .gameplay.game-shell .ledger-entry-details[open] > summary .disclosure-arrow,.gameplay.game-shell .production-ledger-item > details[open] > summary .disclosure-arrow { transform:rotate(180deg); }
 .gameplay.game-shell .transaction-balances { display:block; color:#7a6547; font-weight:400; margin-top:3px; }
 @media(prefers-reduced-motion:reduce) { .gameplay.game-shell .event-detail-dialog[open],.gameplay.game-shell .event-overview-heading button,.gameplay.game-shell .event-group-controls button { animation:none;transition:none; } }
+
+/* The new company model reuses the approved painted controls and single content scroller. */
+.gameplay.game-shell .investment-start-guide { padding:9px 11px; margin:0 0 8px; border:1px solid #c5994c; border-left:4px solid #c45b15; background:#fff0c9; color:#5a321b; font:14px/1.4 Cambria,Georgia,serif; }
+.gameplay.game-shell .investment-start-guide p { margin:4px 0; }
+.gameplay.game-shell .investment-start-guide small { font-size:12px; }
+.gameplay.game-shell .recruit-crew { grid-column:2/-1; justify-self:start; padding:6px 9px; min-height:36px; background:#581823; color:#ffe8af; border:1px solid #bd8d3e; border-radius:4px; font:700 13px Cambria,Georgia,serif; cursor:pointer; }
+.gameplay.game-shell .recruit-crew:disabled { opacity:.5; cursor:default; }
+.gameplay.game-shell .quality-upgrade-art { width:56px; height:56px; }
+.gameplay.game-shell .company-upgrades { margin:8px 0; }
+@media(max-width:699px) { .gameplay.game-shell .quality-upgrade-art { width:40px; height:40px; } .gameplay.game-shell .recruit-crew { font-size:12px; } }
+
+.gameplay.game-shell .company-upgrades-panel { margin:12px 0; border-top:1px solid #c7a269; padding-top:10px; }
+.gameplay.game-shell .company-upgrades-panel > summary { cursor:pointer; font:700 20px/1.3 Cambria,Georgia,serif; color:#6b311d; padding:5px 0; }
+.gameplay.game-shell .enterprise-quality { display:flex; gap:8px 14px; flex-wrap:wrap; padding:8px 0; font:14px Cambria,Georgia,serif; }
+.gameplay.game-shell .enterprise-quality small { flex-basis:100%; font-size:12px; color:#725333; }
+
+@media(max-width:699px) { .gameplay.game-shell[data-economy-model="3"] .factory-scene.scene { height:clamp(100px,15svh,140px); } .gameplay.game-shell .company-upgrades-panel > summary { font-size:16px; } }
+
+.gameplay.game-shell .starter-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+.gameplay.game-shell .starter-actions button { min-width:0; min-height:44px; padding:7px; background:linear-gradient(#e98720,#a83a0c); color:#fff0c9; border:1px solid #b77828; border-radius:5px; font:700 14px/1.2 Cambria,Georgia,serif; cursor:pointer; }
+.gameplay.game-shell .starter-actions button:disabled { opacity:.5; cursor:default; }
+@media(max-width:699px) { .gameplay.game-shell .starter-actions button { font-size:12px; } }

@@ -2,6 +2,7 @@ import type { InvestmentPreview, SceneView } from '../api/types.ts'
 import { useRef, useState } from 'react'
 import { Icon } from './Icons.tsx'
 import { investmentArt } from '../lib/art.ts'
+import { count as wholeCount } from '../lib/production-format.ts'
 import { money } from '../lib/format.ts'
 import { CanvasHeading, PaintedIcon } from './PaintedIcon.tsx'
 
@@ -13,22 +14,26 @@ export function BudgetPanel({
   paused,
   onInvest,
   onRestart,
+  onUpgrade,
 }: {
   scene: SceneView
   step: number
   prices?: Partial<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>
   busy: boolean
   paused: boolean
-  onInvest: (line: 'eng' | 'mac' | 'sup' | 'inf' | 'grn', quantity: 1 | 5 | 10 | 'max') => Promise<boolean>
+  onInvest: (line: 'eng' | 'mac' | 'sup' | 'inf' | 'grn', quantity: 1 | 5 | 10 | 'max' | 'crew') => Promise<boolean>
+  onUpgrade?: (kind: 'training'|'modernization'|'maintenance')=>Promise<boolean>
   onRestart: () => void
 }) {
+  const modern=scene.economyVersion===3
+  const crew=scene.crewRequired??scene.productionForecast?.expected.engineersPerMachine??1
   const [quantity, setQuantity] = useState<1 | 5 | 10 | 'max'>(1)
   const purchaseSequence = useRef(0)
   const [feedback, setFeedback] = useState<{line:string; phase:'sending'|'confirmed'|'failed'; version:number; gain:string} | null>(null)
-  async function purchase(line: SceneView['lines'][number]['id'], gain: string) {
+  async function purchase(line: SceneView['lines'][number]['id'], gain: string, selected: 1|5|10|'max'|'crew' = quantity) {
     const version = ++purchaseSequence.current
     setFeedback({line,phase:'sending',version,gain})
-    const ok = await onInvest(line,quantity)
+    const ok = await onInvest(line,selected)
     if (version === purchaseSequence.current) setFeedback({line,phase:ok?'confirmed':'failed',version,gain})
   }
   const bankrupt = scene.bankrupt ?? (scene.stateAidEligible && scene.succession?.outcome === 'bankrupt')
@@ -60,14 +65,20 @@ export function BudgetPanel({
     <div className="investment-quantity" role="group" aria-label="Số gói đầu tư">
       {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
     </div></div>
-    <p className="canvas-caption">Chọn số gói để xem trước kết quả nhận được.</p>
+    <p className="canvas-caption">{modern ? `1 cụm cần ${crew} công nhân · Mỗi lần tuyển nhận 1 người, mở cụm nhận 1 cụm hoàn chỉnh.` : 'Chọn số gói để xem trước kết quả nhận được.'}</p>
+    {!modern && <p className="investment-help">Lượt chơi này dùng cơ chế trước. Cơ chế cụm sản xuất theo ngành áp dụng khi bắt đầu lượt chơi mới.</p>}
+    {modern && scene.operating===0 && <div className="investment-start-guide"><b>Khởi động 1 cụm · Cần {crew} công nhân</b><p>Đã có {scene.machines} cụm · {Math.min(scene.engineers,crew)}/{crew} người cho tổ đầu tiên.</p><div className="starter-actions">
+      <button type="button" disabled={busy||paused||scene.machines>0||!scene.investmentPreviews?.mac?.[1]||scene.cash<scene.investmentPreviews.mac[1].total} onClick={()=>void purchase('mac','Mở cụm đầu tiên',1)}>{scene.machines>0?'Đã có cụm đầu tiên':`Mở 1 cụm · ${money(scene.investmentPreviews?.mac?.[1]?.total??0)}`}</button>
+      <button type="button" disabled={busy||paused||scene.engineers>=crew||!scene.investmentPreviews?.eng?.crew||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>{scene.engineers>=crew?'Đã đủ tổ công nhân':`Tuyển ${scene.investmentPreviews?.eng?.crew?.count??crew} người · ${money(scene.investmentPreviews?.eng?.crew?.total??0)}`}</button>
+    </div></div>}
+    {modern && <p className="investment-help">Đang vận hành: {scene.operating} cụm · Chờ đủ nhân lực: {scene.idle} cụm.</p>}
     {scene.cash <= 0 && <p className="investment-warning">{scene.cash < 0 ? 'Công ty đang có dư nợ; lãi nợ được tính mỗi năm.' : 'Tiền mặt đã hết.'} Bạn vẫn có thể Sang năm để sản xuất; hết tiền mặt chưa phải phá sản.</p>}
     {quantity === 'max' && <p className="investment-help">Mua tối đa số gói đủ tiền, có thể không còn vốn vận hành.</p>}
     <div id="dirs" className="choices">
       {scene.lines.map((line) => {
         const price = prices?.[line.id] ?? step
-        const count = quantity === 'max' ? Math.max(0, Math.floor(scene.cash / price)) : quantity
         const preview = scene.investmentPreviews?.[line.id]?.[quantity]
+        const count = preview?.count ?? (quantity === 'max' ? 0 : quantity)
         const total = preview?.total ?? price * count
         const can = !busy && !paused && count > 0 && scene.cash + 1e-6 >= total
         const info = upgradeInfo(scene, line.id)
@@ -82,20 +93,32 @@ export function BudgetPanel({
             </div>
             <div className="choice-result">
               {benefit ? <><strong>{benefit.gain}</strong><small>{benefit.change}</small></> : <small>{info.current}</small>}
-              <small>Hiệu quả năm nay: {Math.round((scene.upgradeEfficiency?.[line.id] ?? 1) * 100)}%</small>
+              {!modern && <small>Hiệu quả năm nay: {Math.round((scene.upgradeEfficiency?.[line.id] ?? 1) * 100)}%</small>}
             </div>
             <button type="button" className="choice-price investment-buy" disabled={!can} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => void purchase(line.id,benefit?.gain || line.label)}>
               {feedback?.line === line.id && feedback.phase === 'sending' ? 'Đang gửi…' : `Đầu tư ×${count}`}<b>{money(total)}</b>
             </button>
+            {modern && line.id==='eng' && scene.investmentPreviews?.eng?.crew && <button type="button" className="recruit-crew" disabled={busy||paused||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>Tuyển đủ tổ: +{scene.investmentPreviews.eng.crew.count} người · {money(scene.investmentPreviews.eng.crew.total)}</button>}
             {feedback?.line === line.id && <span key={feedback.version+feedback.phase} className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Chờ máy chủ xác nhận':feedback.phase==='confirmed'?'Đã nâng cấp · Máy chủ đã xác nhận':'Chưa nâng cấp · xem lỗi ở trên'}</span>}
             {preview && <details className="investment-projection"><summary>Xem tác động khi Sang năm</summary>
-              <p>{benefit?.detail}</p>
+              <p>{benefit?.detail}</p><p>Giá gói kế tiếp: {money(preview.nextPrice ?? price)}. Giá tăng theo số gói đã mua; mua nhiều cộng giá từng nấc.</p>
               <p>Lãi/lỗ sản xuất ước tính: {money(scene.operatingForecast?.net ?? 0)} → {money(preview.net)}/năm (chưa trừ lạm phát, lãi nợ).</p>
             </details>}
           </article>
         )
       })}
     </div>
+    {modern && <details className="company-upgrades-panel" open={scene.operating>=3}><summary>Chất lượng & bảo dưỡng · 3 lựa chọn{(scene.condition??1)<.99?' · Có thể bảo dưỡng':''}</summary><p className="investment-help">Đào tạo và cải tiến mở khi có 3 cụm đang vận hành. Mỗi lần tăng 1 cấp, tối đa cấp 5; bảo dưỡng phục hồi tình trạng thiết bị.</p>
+    <div className="choices company-upgrades">{scene.companyUpgrades?.map(upgrade=>{
+      const label={training:'Đào tạo tay nghề',modernization:'Cải tiến thiết bị',maintenance:'Bảo dưỡng thiết bị'}[upgrade.kind]
+      return <article className={`btn choice investment-card${feedback?.line===upgrade.kind?` purchase-${feedback.phase}`:''}`} key={upgrade.kind}>
+        <PaintedIcon name={upgrade.kind==='training'?'eng':upgrade.kind==='modernization'?'tech':'investment'} className="quality-upgrade-art" />
+        <div className="choice-copy"><h4 className="choice-label">{label}</h4><span className="choice-benefit">{upgrade.kind==='training'?'+5% năng suất gốc/cấp tay nghề':upgrade.kind==='modernization'?'+8% năng suất gốc/cấp thiết bị':'Khôi phục tình trạng thiết bị về 100%'}</span><small>{upgrade.kind==='maintenance'?`Tình trạng: ${Math.round(upgrade.conditionBefore*100)}%`:`Cấp ${upgrade.level} → ${Math.min(5,upgrade.levelAfter)}`}</small>{upgrade.locked&&<small className="investment-warning">{upgrade.reason}</small>}</div>
+        <div className="choice-result"><strong>{wholeCount(upgrade.outputBefore)} → {wholeCount(upgrade.outputAfter)} sản phẩm/năm</strong><small>Lãi sản xuất: {money(upgrade.netBefore)} → {money(upgrade.netAfter)}/năm</small></div>
+        <button type="button" className="choice-price investment-buy" disabled={busy||paused||upgrade.locked||scene.cash<upgrade.price} onClick={async()=>{const version=++purchaseSequence.current;setFeedback({line:upgrade.kind,phase:'sending',version,gain:label});const ok=await onUpgrade?.(upgrade.kind);if(version===purchaseSequence.current)setFeedback({line:upgrade.kind,phase:ok?'confirmed':'failed',version,gain:label})}}>{upgrade.kind==='maintenance'?'Bảo dưỡng':'Nâng 1 cấp'}<b>{money(upgrade.price)}</b></button>
+        {feedback?.line===upgrade.kind && <span className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Đang nâng cấp…':feedback.phase==='confirmed'?'Đã nâng cấp · Chỉ số đã cập nhật':'Chưa nâng cấp · Xem lỗi ở trên'}</span>}
+      </article>
+    })}</div></details>}
     <p className="investment-footnote"><PaintedIcon name="history" /> Chỉ số tăng ngay khi mua · Sản xuất khi Sang năm. Ước tính giữ nguyên các hiệu ứng đã biết; chưa tính sự kiện mới và dao động sản xuất.</p>
     <PollutionDetails scene={scene} />
     </>
@@ -104,14 +127,14 @@ export function BudgetPanel({
 
 /** Explanations only: the server remains the authority for investment quantities. */
 function upgradeBrief(line: SceneView['lines'][number]['id']) {
-  return { eng: 'Bổ sung kỹ sư vận hành', mac: 'Tăng năng lực sản xuất', sup: 'Giảm chi phí đầu vào · chống thiếu nguồn cung', inf: 'Giảm phí logistics · tăng tỷ lệ hàng bán được', grn: 'Giảm ô nhiễm · bảo vệ giá bán' }[line]
+  return { eng: 'Bổ sung công nhân vận hành', mac: 'Tăng năng lực sản xuất', sup: 'Giảm chi phí đầu vào · chống thiếu nguồn cung', inf: 'Giảm phí logistics · tăng tỷ lệ hàng bán được', grn: 'Giảm ô nhiễm · bảo vệ giá bán' }[line]
 }
 
 function upgradeInfo(scene: SceneView, line: SceneView['lines'][number]['id']) {
   const number = (n: number) => n.toLocaleString('vi-VN', { maximumFractionDigits: 1 })
   switch (line) {
-    case 'eng': return { effect: 'Bổ sung kỹ sư để vận hành dây chuyền; giảm phụ thuộc công nghệ.', current: `Hiện có ${number(scene.engineers)} kỹ sư · ${number(scene.idle)} dây chuyền nhàn` }
-    case 'mac': return { effect: 'Thêm dây chuyền sản xuất. Cần đủ kỹ sư để đưa máy vào vận hành.', current: `Hiện có ${number(scene.machines)} dây chuyền · ${number(scene.operating)} đang chạy` }
+    case 'eng': return { effect: 'Bổ sung công nhân để vận hành cụm sản xuất; giảm phụ thuộc công nghệ.', current: `Hiện có ${wholeCount(scene.engineers)} công nhân · ${wholeCount(scene.idle)} cụm chờ đủ nhân lực` }
+    case 'mac': return { effect: 'Thêm cụm sản xuất. Cần đủ công nhân để đưa máy vào vận hành.', current: `Hiện có ${wholeCount(scene.machines)} cụm sản xuất · ${wholeCount(scene.operating)} đang chạy` }
     case 'sup': return { effect: 'Giảm chi phí nguyên liệu và mức bất lợi khi nguồn cung bị siết.', current: `Phụ trợ hiện tại: cấp ${number(scene.support)}` }
     case 'inf': return { effect: 'Giảm phí vận chuyển, kho bãi và tăng tỷ lệ hàng bán được.', current: `Hạ tầng hiện tại: cấp ${number(scene.infra)}` }
     case 'grn': return { effect: 'Nâng công nghệ sạch, giảm ô nhiễm và bảo vệ giá bán.', current: `Công nghệ sạch cấp ${number(scene.green)} · Ô nhiễm ${number(scene.pollution)}` }
@@ -123,12 +146,12 @@ const percent = (n: number) => `${(n * 100).toLocaleString('vi-VN', { maximumFra
 function previewInfo(scene: SceneView, line: SceneView['lines'][number]['id'], p: InvestmentPreview) {
   const base = scene.operatingForecast
   switch (line) {
-    case 'eng': return { gain: `+${number(p.gain)} kỹ sư`, change: `${number(scene.engineers)} → ${number(p.levelAfter)} người`,
-      warning: scene.idle < .01 ? 'Hiện đủ người chạy máy; tuyển thêm chủ yếu chuẩn bị cho máy mới.' : undefined,
-      detail: `Máy chạy ${number(base?.operating ?? scene.operating)} → ${number(p.operating)}. Sau mua còn thiếu ${number(p.staffMissing)} kỹ sư để chạy hết máy; nhân lực còn giúp tích lũy công nghệ và giảm phụ thuộc.` }
-    case 'mac': return { gain: `+${number(p.gain)} dây chuyền`, change: `${number(scene.machines)} → ${number(p.levelAfter)} dây chuyền`,
-      warning: p.staffMissing > 0 ? `Còn thiếu ${number(p.staffMissing)} kỹ sư; ${number(p.idle)} máy nhàn.` : 'Đủ nhân lực vận hành toàn bộ máy.',
-      detail: `Máy thực chạy ${number(base?.operating ?? scene.operating)} → ${number(p.operating)}. Chi phí máy nhàn: ${money(p.idleCost)}/năm. Thêm máy không bảo đảm tăng lãi nếu thiếu người.` }
+    case 'eng': return { gain: `+${wholeCount(p.gain)} công nhân`, change: `${wholeCount(scene.engineers)} → ${wholeCount(p.levelAfter)} người`,
+      warning: scene.machines>0 && scene.idle < .01 ? 'Hiện đủ người cho các cụm; tuyển thêm để chuẩn bị mở rộng.' : undefined,
+      detail: `Cụm đang vận hành ${wholeCount(base?.operating ?? scene.operating)} → ${wholeCount(p.operating)}. Sau mua còn thiếu ${wholeCount(p.staffMissing)} công nhân để chạy hết máy; nhân lực chưa phân công không tạo thêm sản phẩm; đào tạo tay nghề nằm ở nhóm nâng cấp chất lượng.` }
+    case 'mac': return { gain: p.gain>0 ? `+${wholeCount(p.gain)} cụm sản xuất` : `Lắp đặt ${Math.floor((p.machineProgress??0)*100)}%`, change: `${wholeCount(scene.machines)} → ${wholeCount(p.levelAfter)} cụm`,
+      warning: p.staffMissing > 0 ? `Còn thiếu ${wholeCount(p.staffMissing)} công nhân; ${wholeCount(p.idle)} cụm chờ đủ nhân lực.` : 'Đủ nhân lực vận hành toàn bộ cụm.',
+      detail: `Cụm đang vận hành ${wholeCount(base?.operating ?? scene.operating)} → ${wholeCount(p.operating)}. Chi phí cụm chờ đủ nhân lực: ${money(p.idleCost)}/năm. Mở thêm cụm không bảo đảm tăng lãi nếu thiếu người.` }
     case 'sup': return { gain: `Giảm ${percent(p.inputDiscount)} phí đầu vào`, change: `${percent(base?.inputDiscount ?? 0)} → ${percent(p.inputDiscount)}`, warning: undefined,
       detail: `Phụ trợ cấp ${number(scene.support)} → ${number(p.levelAfter)}. Chỉ giảm phần chi phí nguyên liệu, không giảm toàn bộ chi phí. Giảm ${percent(p.disruptionProtection)} mức bất lợi của sự kiện thiếu nguồn cung mới (tối đa 50%); không xóa hiệu ứng cũ.` }
     case 'inf': return { gain: `Bán được ${percent(p.delivery)} sản lượng`, change: `${percent(base?.delivery ?? .9)} → ${percent(p.delivery)}`, warning: undefined,

@@ -1,0 +1,70 @@
+{
+  "status": "awaiting-user-approval",
+  "reference": "Approved first hand-painted icon sheets, not event-scenes-v2",
+  "images": [
+    {
+      "board": "nature",
+      "file": "01-nature.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-315947a1-9267-4fff-bd05-6d15f3e19f3a.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "technology",
+      "file": "02-technology.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-91a2c6ee-0569-41b0-a641-6ab91f19f293.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "logistics",
+      "file": "03-logistics.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-63f9c148-8a8b-4e25-b209-87d3df046f62.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "economy",
+      "file": "04-market-policy.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-81886ec9-bd82-41f3-96e3-6311031f5cd4.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "people",
+      "file": "05-people-family.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-f559d90c-f88c-448c-a6eb-3b859b7dd1d6.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "outcomes",
+      "file": "06-contexts-outcomes.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-ae6f30e9-accd-46d6-8e66-e598a8838011.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "industries",
+      "file": "07-industry-examples.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-225db736-20f2-42c0-9531-36cd2d17e62e.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    },
+    {
+      "board": "placement",
+      "file": "08-in-game-preview.png",
+      "generatedSource": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-0b1842c8-1630-487f-b247-ce236a25901c.png",
+      "method": "built-in image_gen",
+      "stage": "approval-only",
+      "format": "static PNG"
+    }
+  ]
+}

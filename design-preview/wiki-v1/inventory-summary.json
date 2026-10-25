@@ -1,0 +1,24 @@
+{
+  "industries": 64,
+  "industryRoots": 1280,
+  "industryExpanded": 10240,
+  "generalRoots": 100,
+  "generalNarrations": 8,
+  "family": 8,
+  "inventoryRows": 10348,
+  "flags": {
+    "GOOD_LABEL_MIXED_IMPACT": 1938,
+    "FIXED_CASH_WITHOUT_OPERATING_GATE": 1544,
+    "ASSET_PERCENT_INTEGER_ROUNDING": 1448,
+    "NO_ECONOMIC_EFFECT": 13,
+    "FRACTIONAL_CLUSTER_REWARD": 11
+  },
+  "effectKeys": {
+    "revenuePct": 662,
+    "years": 1280,
+    "cashPerYear": 193,
+    "costPct": 463,
+    "assetsPct": 181
+  },
+  "unmappedArt": []
+}

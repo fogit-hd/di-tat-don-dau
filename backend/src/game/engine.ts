@@ -1,3 +1,4 @@
+import {industryEconomy} from './industry-economy'
 import { shuffle, type Rng } from './rng'
 import { isBankrupt, productionPlan, supplyBenefits } from './production'
 import { money, moneyTemplate } from './money'
@@ -24,9 +25,8 @@ export function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n))
 }
 
-export function stepOf(capital: number, balance: Balance) {
-  const raw = Math.round(capital / balance.stepDivisor / balance.stepRound) * balance.stepRound
-  return Math.max(balance.stepMin, raw)
+export function stepOf(_capital: number, _balance: Balance) {
+  return 50
 }
 
 export function createState(theme: ThemeDef, capital: number, rng: Rng, balance: Balance, now = 0): TeamState {
@@ -34,15 +34,22 @@ export function createState(theme: ThemeDef, capital: number, rng: Rng, balance:
   const cash = Math.round(capital * start.cashMul)
   return {
     cash,
-    engineers: start.engineers,
-    machines: start.machines,
+    engineers: 0,
+    machines: 0,
+    machineProgress: 0,
+    productionVersion: 3,
+    crewSize: industryEconomy(theme.industryId).crew,
+    companyProfile: {crew:industryEconomy(theme.industryId).crew,prices:{...industryEconomy(theme.industryId).prices}},
+    workerSkill: 0,
+    machineQuality: 0,
+    investmentCounts: {},
     support: 0,
     infra: 0,
     green: 0,
-    tech: balance.startTech,
-    pollution: start.pollution,
+    tech: 0,
+    pollution: 0,
     dependency: start.dependency,
-    condition: start.condition,
+    condition: 1,
     cumulativeOutput: 0,
     cumulativeRevenue: 0,
     cycles: 0,
@@ -102,14 +109,17 @@ export function invest(
   }
   const spec = lines.find((item) => item.id === line)
   // Events change the invoice, not the size of the purchased upgrade package.
-  const hired = Math.round(investmentValue * balance.engPerTy * efficiency) * packages
-  const added = investmentValue / balance.assetPerTy * efficiency * packages
-  const entry = fillText(spec?.log || 'Đầu tư {{line}}.', {
+  const modern = state.productionVersion===3
+  const hired = modern ? packages : Math.round(investmentValue * balance.engPerTy * efficiency) * packages
+  const added = modern ? packages : investmentValue / balance.assetPerTy * efficiency * packages
+  const entry = modern && line==='eng' ? `Tuyển thêm ${packages} công nhân.` : modern && line==='mac' ? `Mở thêm ${packages} cụm sản xuất.` : fillText(spec?.log || 'Đầu tư {{line}}.', {
     line,
     hired: hired.toLocaleString('vi-VN'),
-    added: added.toFixed(1),
+    added: line==='mac' ? String(Math.floor(state.machines+(state.machineProgress??0)+added+1e-9)-Math.floor(state.machines)) : added.toFixed(1),
   })
   next.cash -= amount
+  next.engineers = Math.max(0,Math.round(next.engineers))
+  next.investmentCounts = {...state.investmentCounts,[line]:(state.investmentCounts?.[line]??0)+packages}
   next.pendingCauses = [
     ...(state.pendingCauses ?? []),
     { kind: 'investment', label: spec?.label || line, cash: -amount, packages, cashBefore: state.cash, cashAfter: next.cash,
@@ -120,7 +130,10 @@ export function invest(
     next.engineers += hired
     next.dependency = Math.max(0, next.dependency - balance.engDependencyRelief * packages * efficiency)
   } else if (line === 'mac') {
-    next.machines += added
+    if(modern)next.condition=(state.machines*state.condition+packages)/(state.machines+packages)
+    const capacity = next.machines + (next.machineProgress??0) + added
+    next.machines = state.productionVersion===3 ? Math.round(capacity) : Math.floor(capacity+1e-9)
+    next.machineProgress = state.productionVersion===3 ? 0 : Math.max(0,capacity-next.machines)
   } else if (line === 'sup') {
     next.support += added
   } else if (line === 'inf') {
@@ -191,36 +204,39 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   s.cash = s.cash + production + cashPerYear
   s.yearParts = { production, ongoing: cashPerYear, interest }
   s.cycleReport = { ...plan, year: s.cycles + 1, unit: theme.unit, inflation: infl, inflationRate: inflRate, interest, ongoing: cashPerYear }
-  s.cumulativeOutput += output
+  s.engineers = Math.max(0,Math.round(s.engineers))
+  s.cumulativeOutput = Math.floor(s.cumulativeOutput)+output
   s.cumulativeRevenue += revenue
   s.lastIncome = net - infl + cashPerYear
   s.lastOutput = output
   s.cycles += 1
-  s.condition *= balance.conditionDecay
+  if(s.productionVersion!==3 || operating>0)s.condition = Math.max(s.productionVersion===3?.6:0,s.condition*balance.conditionDecay)
   if (operating > balance.dependencyEaseOperating && idle < operating * balance.dependencyEaseIdleRatio) {
     s.dependency = Math.max(0, s.dependency * balance.dependencyEaseMul)
   }
   const line = fillText(moneyTemplate(balance.logs.cycle, { income: Math.round(net - infl + cashPerYear) }), {
     cycle: String(s.cycles),
-    operating: operating.toFixed(1),
-    idle: idle.toFixed(1),
+    operating: String(operating),
+    idle: String(idle),
     output: Math.round(output).toLocaleString('vi-VN'),
     unit: theme.unit,
     income: Math.round(net - infl + cashPerYear).toLocaleString('vi-VN'),
   })
-  s.log = [line, ...s.log].slice(0, balance.logLimit)
+  const reportLine=s.productionVersion===3 ? `Năm ${s.cycles}: ${operating} cụm đang vận hành; ${idle} cụm chờ đủ nhân lực; sản lượng ${output} ${theme.unit}; lãi sản xuất ${money(s.lastIncome)}.` : line
+  s.log = [reportLine, ...s.log].slice(0, balance.logLimit)
   s.rng = rng.getState()
   return s
 }
 
 export function companyBooks(state: TeamState, theme: ThemeDef, balance: Balance) {
-  const epl = theme.coefs.epl
+  const epl = state.productionVersion===3?industryEconomy(theme.industryId,state.companyProfile).crew:theme.coefs.epl
   const util = state.machines > 0 ? clamp(state.engineers / (state.machines * epl), 0, 1) : 0
-  const engValue = state.engineers * (1 / balance.engPerTy) * balance.engBook * (1 + state.tech * balance.engTechBook)
-  const macValue = state.machines * balance.assetPerTy * (balance.macBookBase + balance.macBookUtil * util) * state.condition
-  const supValue = state.support * balance.supBook
-  const infValue = state.infra * balance.infBook
-  const grnValue = state.green * balance.grnBook
+  const modern=state.productionVersion===3
+  const engValue = state.engineers * (modern ? industryEconomy(theme.industryId,state.companyProfile).prices.eng*(1+(state.workerSkill??0)*.05) : (1/balance.engPerTy)) * balance.engBook * (1 + state.tech * balance.engTechBook)
+  const macValue = (state.machines+(state.machineProgress??0)) * (modern?industryEconomy(theme.industryId,state.companyProfile).prices.mac*(1+(state.machineQuality??0)*.08):balance.assetPerTy) * (balance.macBookBase + balance.macBookUtil * util) * state.condition
+  const supValue = state.support * (modern?industryEconomy(theme.industryId,state.companyProfile).prices.sup*.9:balance.supBook)
+  const infValue = state.infra * (modern?industryEconomy(theme.industryId,state.companyProfile).prices.inf*.86:balance.infBook)
+  const grnValue = state.green * (modern?industryEconomy(theme.industryId,state.companyProfile).prices.grn*.84:balance.grnBook)
   const brand = state.cumulativeRevenue * balance.brandShare
   const penalty = state.pollution * balance.pollutionPenalty + state.dependency * balance.dependencyPenalty
   const total = isBankrupt(state) ? 0 : Math.max(0, Math.round(state.cash + engValue + macValue + supValue + infValue + grnValue + brand - penalty))
@@ -233,12 +249,12 @@ export function computeValue(state: TeamState, theme: ThemeDef, balance: Balance
 }
 
 export function computeEnding(state: TeamState, theme: ThemeDef, endings: EndingRule[], balance: Balance): string {
-  const epl = theme.coefs.epl
+  const epl = state.productionVersion===3?industryEconomy(theme.industryId,state.companyProfile).crew:theme.coefs.epl
   const ratio = state.machines <= balance.machineFloor ? 0 : state.engineers / (state.machines * epl)
   const ordered = endings.slice().sort((a, b) => a.sort - b.sort)
   for (const rule of ordered) {
     if (rule.isDefault) continue
-    const produced = state.cumulativeOutput > theme.coefs.baseOutput * rule.productionMul
+    const produced = state.cumulativeOutput > (state.productionVersion===3?100:theme.coefs.baseOutput) * rule.productionMul
     if (rule.requiresProduction && !produced) continue
     if (rule.minRatio != null && ratio < rule.minRatio) continue
     if (rule.maxRatio != null && ratio >= rule.maxRatio) continue
@@ -256,7 +272,7 @@ export function exposureOf(state: TeamState, exposure: Exposure, balance: Balanc
   }
   if (exposure === 'engineers') {
     return clamp(
-      balance.exposureEngineersBase + state.engineers / balance.exposureEngineersDiv,
+      balance.exposureEngineersBase + state.engineers / (state.productionVersion===3?30:balance.exposureEngineersDiv),
       balance.exposureEngineersMin,
       balance.exposureEngineersMax,
     )
@@ -298,7 +314,7 @@ export function applyPatch(
   id: string,
   balance: Balance,
 ): TeamState {
-  const protection = patch.supplyShock ? supplyBenefits(state.support).disruptionProtection : 0
+  const protection = patch.supplyShock ? supplyBenefits(state.support,state.productionVersion===3).disruptionProtection : 0
   const operatingProtection = patch.supplyShock === 'investment' ? 0 : protection
   const exposure = exposureOf(state, patch.exposure, balance)
   const next: TeamState = {
@@ -319,9 +335,11 @@ export function applyPatch(
   const pollution = roll(rng, patch.pollution, 0) * exposure
   const dependency = roll(rng, patch.dependency, 0) * exposure
   next.cash = next.cash + cash + next.cash * cashPct
-  next.engineers = Math.max(0, next.engineers * (1 + engineersPct) + engineersAdd)
-  next.machines = Math.max(0, next.machines * (1 + machinesPct) + machinesAdd)
-  next.tech = Math.max(0, next.tech + tech)
+  next.engineers = Math.max(0, Math.round(next.engineers * (1 + engineersPct) + engineersAdd))
+  const capacity = Math.max(0,(next.machines+(next.machineProgress??0))*(1+machinesPct)+machinesAdd)
+  next.machines = state.productionVersion===3 ? Math.round(capacity) : Math.floor(capacity+1e-9)
+  next.machineProgress = state.productionVersion===3 ? 0 : Math.max(0,capacity-next.machines)
+  next.tech = Math.min(state.productionVersion===3?3:Infinity,Math.max(0, next.tech + tech))
   next.support = Math.max(0, next.support + support)
   next.pollution = clamp(next.pollution + pollution, 0, 100)
   next.dependency = Math.max(0, next.dependency + dependency)
@@ -329,8 +347,10 @@ export function applyPatch(
   if (assetsPct) {
     const factor = 1 + assetsPct / 100
     next.cash = next.cash * factor
-    next.engineers = Math.max(0, next.engineers * factor)
-    next.machines = Math.max(0, next.machines * factor)
+    next.engineers = Math.max(0, Math.round(next.engineers * factor))
+    const capacity = (next.machines+(next.machineProgress??0))*factor
+    next.machines = state.productionVersion===3 ? Math.round(capacity) : Math.floor(capacity+1e-9)
+    next.machineProgress = state.productionVersion===3 ? 0 : Math.max(0,capacity-next.machines)
     next.support = Math.max(0, next.support * factor)
     next.infra = Math.max(0, next.infra * factor)
     next.green = Math.max(0, next.green * factor)
@@ -352,10 +372,17 @@ export function applyPatch(
   const duration = Math.max(1, Math.round(patch.durationSec ? rng.range(...patch.durationSec) : 60))
   const shownFor = Math.max(duration, yearSpan * 180)
   const bits = [fillText(balance.logs.event, { title: patch.title })]
-  if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
-  if (engineersPct) bits.push(`kỹ sư ${percentText(engineersPct * 100)}%`)
-  if (Math.abs(machinesAdd) > 0.05) bits.push(`dây chuyền ${machinesAdd > 0 ? '+' : ''}${machinesAdd.toFixed(1)}`)
-  if (machinesPct) bits.push(`dây chuyền ${percentText(machinesPct * 100)}%`)
+  if(state.productionVersion===3 && (engineersAdd || engineersPct)) {
+    const delta=next.engineers-state.engineers
+    bits.push(`công nhân ${delta>0?'+':''}${delta} người${engineersPct?` (${percentText(engineersPct*100)}% trước làm tròn)`:''}`)
+  } else {
+    if (Math.abs(engineersAdd) > 1) bits.push(`kỹ sư ${engineersAdd > 0 ? '+' : ''}${Math.round(engineersAdd)}`)
+    if (engineersPct) bits.push(`kỹ sư ${percentText(engineersPct*100)}%`)
+  }
+  const machineDelta=next.machines-Math.floor(state.machines)
+  if(machineDelta)bits.push(`${state.productionVersion===3?'cụm sản xuất':'dây chuyền'} ${machineDelta>0?'+':''}${machineDelta}`)
+  if(Math.abs(machinesAdd)>0.05 && next.machineProgress)bits.push(`tiến độ lắp đặt ${Math.floor(next.machineProgress*100)}%`)
+  if (machinesPct) bits.push(`${state.productionVersion===3?'cụm sản xuất':'dây chuyền'} ${percentText(machinesPct * 100)}%`)
   if (cashPct) bits.push(`tiền mặt ${percentText(cashPct * 100)}%`)
   if (Math.abs(cash) > 20) bits.push(`vốn ${money(cash)}`)
   if (revenuePct) bits.push(`doanh thu ${percentText(revenuePct)}%`)

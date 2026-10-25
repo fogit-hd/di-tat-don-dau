@@ -1,0 +1,846 @@
+{
+  "version": 3,
+  "format": "static WebP",
+  "artworks": [
+    {
+      "id": "rain",
+      "sheet": "01-nature",
+      "slot": 0,
+      "file": "rain.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "storm",
+      "sheet": "01-nature",
+      "slot": 1,
+      "file": "storm.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "sun",
+      "sheet": "01-nature",
+      "slot": 2,
+      "file": "sun.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "fire",
+      "sheet": "01-nature",
+      "slot": 3,
+      "file": "fire.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "flood",
+      "sheet": "01-nature",
+      "slot": 4,
+      "file": "flood.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "snow",
+      "sheet": "01-nature",
+      "slot": 5,
+      "file": "snow.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "seedling",
+      "sheet": "01-nature",
+      "slot": 6,
+      "file": "seedling.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "wheat",
+      "sheet": "01-nature",
+      "slot": 7,
+      "file": "wheat.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "pest",
+      "sheet": "01-nature",
+      "slot": 8,
+      "file": "pest.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "chemical-spill",
+      "sheet": "01-nature",
+      "slot": 9,
+      "file": "chemical-spill.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "earthquake",
+      "sheet": "01-nature",
+      "slot": 10,
+      "file": "earthquake.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "drought",
+      "sheet": "01-nature",
+      "slot": 11,
+      "file": "drought.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "cnc-breakdown",
+      "sheet": "02-technology",
+      "slot": 0,
+      "file": "cnc-breakdown.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "power-failure",
+      "sheet": "02-technology",
+      "slot": 1,
+      "file": "power-failure.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "server-overheat",
+      "sheet": "02-technology",
+      "slot": 2,
+      "file": "server-overheat.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "robot",
+      "sheet": "02-technology",
+      "slot": 3,
+      "file": "robot.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "cyberattack",
+      "sheet": "02-technology",
+      "slot": 4,
+      "file": "cyberattack.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "lost-design",
+      "sheet": "02-technology",
+      "slot": 5,
+      "file": "lost-design.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "wafer-defect",
+      "sheet": "02-technology",
+      "slot": 6,
+      "file": "wafer-defect.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "research",
+      "sheet": "02-technology",
+      "slot": 7,
+      "file": "research.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "new-machinery",
+      "sheet": "02-technology",
+      "slot": 8,
+      "file": "new-machinery.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "extinguished-fire",
+      "sheet": "02-technology",
+      "slot": 9,
+      "file": "extinguished-fire.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "network-failure",
+      "sheet": "02-technology",
+      "slot": 10,
+      "file": "network-failure.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "patent",
+      "sheet": "02-technology",
+      "slot": 11,
+      "file": "patent.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "material-shortage",
+      "sheet": "03-logistics",
+      "slot": 0,
+      "file": "material-shortage.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "supplier-truck",
+      "sheet": "03-logistics",
+      "slot": 1,
+      "file": "supplier-truck.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "port-congestion",
+      "sheet": "03-logistics",
+      "slot": 2,
+      "file": "port-congestion.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "unloading",
+      "sheet": "03-logistics",
+      "slot": 3,
+      "file": "unloading.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "export-order",
+      "sheet": "03-logistics",
+      "slot": 4,
+      "file": "export-order.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "truck-breakdown",
+      "sheet": "03-logistics",
+      "slot": 5,
+      "file": "truck-breakdown.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "bridge",
+      "sheet": "03-logistics",
+      "slot": 6,
+      "file": "bridge.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "cold-storage",
+      "sheet": "03-logistics",
+      "slot": 7,
+      "file": "cold-storage.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "air-freight",
+      "sheet": "03-logistics",
+      "slot": 8,
+      "file": "air-freight.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "customs",
+      "sheet": "03-logistics",
+      "slot": 9,
+      "file": "customs.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "material-price",
+      "sheet": "03-logistics",
+      "slot": 10,
+      "file": "material-price.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "warehouse",
+      "sheet": "03-logistics",
+      "slot": 11,
+      "file": "warehouse.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "new-contract",
+      "sheet": "04-market-policy",
+      "slot": 0,
+      "file": "new-contract.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "cancelled-contract",
+      "sheet": "04-market-policy",
+      "slot": 1,
+      "file": "cancelled-contract.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "market-recovery",
+      "sheet": "04-market-policy",
+      "slot": 2,
+      "file": "market-recovery.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "price-decline",
+      "sheet": "04-market-policy",
+      "slot": 3,
+      "file": "price-decline.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "tax-increase",
+      "sheet": "04-market-policy",
+      "slot": 4,
+      "file": "tax-increase.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "tax-relief",
+      "sheet": "04-market-policy",
+      "slot": 5,
+      "file": "tax-relief.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "state-support",
+      "sheet": "04-market-policy",
+      "slot": 6,
+      "file": "state-support.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "credit-tightening",
+      "sheet": "04-market-policy",
+      "slot": 7,
+      "file": "credit-tightening.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "joint-venture",
+      "sheet": "04-market-policy",
+      "slot": 8,
+      "file": "joint-venture.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "new-standard",
+      "sheet": "04-market-policy",
+      "slot": 9,
+      "file": "new-standard.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "environment-inspection",
+      "sheet": "04-market-policy",
+      "slot": 10,
+      "file": "environment-inspection.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "land-expansion",
+      "sheet": "04-market-policy",
+      "slot": 11,
+      "file": "land-expansion.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "training",
+      "sheet": "05-people-family",
+      "slot": 0,
+      "file": "training.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "departing-engineer",
+      "sheet": "05-people-family",
+      "slot": 1,
+      "file": "departing-engineer.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "strike",
+      "sheet": "05-people-family",
+      "slot": 2,
+      "file": "strike.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "safety",
+      "sheet": "05-people-family",
+      "slot": 3,
+      "file": "safety.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "illness",
+      "sheet": "05-people-family",
+      "slot": 4,
+      "file": "illness.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "longevity",
+      "sheet": "05-people-family",
+      "slot": 5,
+      "file": "longevity.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "retirement",
+      "sheet": "05-people-family",
+      "slot": 6,
+      "file": "retirement.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "handover",
+      "sheet": "05-people-family",
+      "slot": 7,
+      "file": "handover.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "inheritance-dispute",
+      "sheet": "05-people-family",
+      "slot": 8,
+      "file": "inheritance-dispute.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "family-fund",
+      "sheet": "05-people-family",
+      "slot": 9,
+      "file": "family-fund.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "returning-graduate",
+      "sheet": "05-people-family",
+      "slot": 10,
+      "file": "returning-graduate.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "life-insurance",
+      "sheet": "05-people-family",
+      "slot": 11,
+      "file": "life-insurance.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-input-shortage",
+      "sheet": "06-contexts-outcomes",
+      "slot": 0,
+      "file": "context-input-shortage.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-local-supplier",
+      "sheet": "06-contexts-outcomes",
+      "slot": 1,
+      "file": "context-local-supplier.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-port-delay",
+      "sheet": "06-contexts-outcomes",
+      "slot": 2,
+      "file": "context-port-delay.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-green-support",
+      "sheet": "06-contexts-outcomes",
+      "slot": 3,
+      "file": "context-green-support.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-credit-tightening",
+      "sheet": "06-contexts-outcomes",
+      "slot": 4,
+      "file": "context-credit-tightening.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-tech-transfer",
+      "sheet": "06-contexts-outcomes",
+      "slot": 5,
+      "file": "context-tech-transfer.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "context-new-standard",
+      "sheet": "06-contexts-outcomes",
+      "slot": 6,
+      "file": "context-new-standard.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "mortality",
+      "sheet": "06-contexts-outcomes",
+      "slot": 7,
+      "file": "mortality.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "bankruptcy",
+      "sheet": "06-contexts-outcomes",
+      "slot": 8,
+      "file": "bankruptcy.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "inheritance-loss",
+      "sheet": "06-contexts-outcomes",
+      "slot": 9,
+      "file": "inheritance-loss.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "inheritance-steady",
+      "sheet": "06-contexts-outcomes",
+      "slot": 10,
+      "file": "inheritance-steady.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "inheritance-growth",
+      "sheet": "06-contexts-outcomes",
+      "slot": 11,
+      "file": "inheritance-growth.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-cnc",
+      "sheet": "07-industry-examples",
+      "slot": 0,
+      "file": "industry-cnc.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-wafer",
+      "sheet": "07-industry-examples",
+      "slot": 1,
+      "file": "industry-wafer.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-wood-saw",
+      "sheet": "07-industry-examples",
+      "slot": 2,
+      "file": "industry-wood-saw.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-food-dryer",
+      "sheet": "07-industry-examples",
+      "slot": 3,
+      "file": "industry-food-dryer.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-water-pipe",
+      "sheet": "07-industry-examples",
+      "slot": 4,
+      "file": "industry-water-pipe.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "industry-port-hook",
+      "sheet": "07-industry-examples",
+      "slot": 5,
+      "file": "industry-port-hook.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-auto-chips",
+      "sheet": "07-industry-examples",
+      "slot": 6,
+      "file": "order-auto-chips.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-medicine",
+      "sheet": "07-industry-examples",
+      "slot": 7,
+      "file": "order-medicine.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-garments",
+      "sheet": "07-industry-examples",
+      "slot": 8,
+      "file": "order-garments.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-coffee",
+      "sheet": "07-industry-examples",
+      "slot": 9,
+      "file": "order-coffee.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-batteries",
+      "sheet": "07-industry-examples",
+      "slot": 10,
+      "file": "order-batteries.webp",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "order-solar",
+      "sheet": "07-industry-examples",
+      "slot": 11,
+      "file": "order-solar.webp",
+      "size": [
+        256,
+        256
+      ]
+    }
+  ]
+}

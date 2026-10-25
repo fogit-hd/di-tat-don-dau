@@ -3,3 +3,5 @@ export const figure = (n: number, digits = 2) => n.toLocaleString('vi-VN', { max
 export const rate = (n: number) => `${figure(n * 100)}%`
 export const signedMoney = (n: number) => `${n > 0 ? '+' : ''}${money(Object.is(n, -0) ? 0 : n)}`
 
+
+export const count = (n: number) => Math.max(0,Math.floor(n+1e-9)).toLocaleString('vi-VN')

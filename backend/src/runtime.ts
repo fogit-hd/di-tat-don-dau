@@ -1,3 +1,7 @@
+import {industryEconomy,companyEventPatch} from './game/industry-economy'
+import { COMPANY_UPGRADES, companyUpgradePreview, upgradeCompany, type CompanyUpgrade } from './game/company-upgrades'
+import { INVESTMENT_BASE_PRICES, investmentQuote } from './game/investment-pricing'
+import { pauseYearForPrompt, resumeYearAfterPrompt } from './game/prompt-clock'
 import { randomBytes, createHash } from 'crypto'
 import type { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
@@ -153,7 +157,7 @@ export function linePricesOf(raw: unknown, fallback: number): Record<Line, numbe
   const prices = {} as Record<Line, number>
   for (const id of LINES) {
     const value = row[id]
-    prices[id] = typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.round(value) : Math.round(fallback)
+    prices[id] = typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.round(value) : INVESTMENT_BASE_PRICES[id]
   }
   return prices
 }
@@ -162,6 +166,11 @@ function hydrateState(state: TeamState | null): TeamState | null {
   if (!state) return null
   return {
     ...state,
+    engineers: Math.max(0,Math.round(state.engineers)),
+    machines: Math.max(0,Math.floor(state.machines)),
+    machineProgress: (state.machineProgress??0)+Math.max(0,state.machines-Math.floor(state.machines)),
+    cumulativeOutput: Math.max(0,Math.floor(state.cumulativeOutput)),
+    lastOutput: Math.max(0,Math.floor(state.lastOutput)),
     centennial: state.centennial ?? null,
     secondLife: state.secondLife ?? 'locked',
     stateAidEligible: state.stateAidEligible ?? false,
@@ -266,8 +275,8 @@ export async function bootRooms() {
       startingCapital: row.startingCapital,
       cycleSeconds: row.cycleSeconds,
       yearMinSeconds: row.yearMinSeconds,
-      step: row.step,
-      linePrices: linePricesOf(row.linePrices, row.step),
+      step: 50,
+      linePrices: row.step!==50 && Object.values(linePricesOf(row.linePrices,row.step)).every(value=>value===row.step) ? {...INVESTMENT_BASE_PRICES} : linePricesOf(row.linePrices,50),
       debugDeathYear: meta.debugDeathYear ?? null,
       debugCentennialYear: meta.debugCentennialYear ?? null,
       debugForceDeath: Boolean(meta.debugForceDeath),
@@ -592,6 +601,7 @@ export async function resumeRoom(code: string, token: string) {
   for (const team of room.teams) {
     if (!team.state) continue
     team.state.nextPromptAt += delta
+    if (team.state.promptYearPausedAt!=null) team.state.promptYearPausedAt += delta
     if (team.state.nextYearAt) team.state.nextYearAt += delta
     if (team.state.yearLockUntil) team.state.yearLockUntil += delta
     if (team.state.pending) team.state.pending.expiresAt += delta
@@ -637,7 +647,18 @@ export async function confirmIntro(code: string, token: string, factoryName: str
   return { ok: true }
 }
 
-export async function investLine(code: string, token: string, line: Line, quantity: 1 | 5 | 10 | 'max' = 1) {
+function teamInvestmentLines(team: LiveTeam) {
+  const lines=linesOf(team.theme!)
+  return team.state?.productionVersion===3 ? lines.map(line=>({...line,hint:line.label,label:line.id==='eng'?'Tuyển công nhân':line.id==='mac'?'Mở cụm sản xuất':line.label})) : lines
+}
+
+function teamBasePrices(team: LiveTeam, room: LiveRoom) {
+  if(team.state?.productionVersion!==3 || !team.theme)return room.linePrices
+  const own=industryEconomy(team.theme.industryId,team.state.companyProfile).prices
+  return Object.fromEntries(LINES.map(line=>[line,Math.max(1,Math.round(own[line]*(room.linePrices[line]/INVESTMENT_BASE_PRICES[line])))])) as Record<Line,number>
+}
+
+export async function investLine(code: string, token: string, line: Line, quantity: 1 | 5 | 10 | 'max' | 'crew' = 1) {
   const room = requireRoom(code)
   const team = findTeam(room, token)
   if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Chưa tới lượt đầu tư')
@@ -645,18 +666,27 @@ export async function investLine(code: string, token: string, line: Line, quanti
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
-  const basePrice = room.linePrices?.[line] ?? room.step
-  const price = investmentPrice(team.state, basePrice, Date.now())
-  if (![1, 5, 10, 'max'].includes(quantity)) throw new HttpError(400, 'Mức đầu tư không hợp lệ')
-  const packages = quantity === 'max' ? Math.floor(team.state.cash / price) : quantity
+  const basePrice = teamBasePrices(team,room)[line] ?? room.step
+  const quote = investmentQuote(team.state,line,basePrice,quantity,Date.now())
+  if (![1, 5, 10, 'max','crew'].includes(quantity) || (quantity==='crew' && line!=='eng')) throw new HttpError(400, 'Mức đầu tư không hợp lệ')
+  const packages = quote.count
   if (!Number.isSafeInteger(packages) || packages < 1) throw new HttpError(400, 'Không đủ vốn')
   const efficiency = annualEconomy(team.state).upgrade[line]
-  const result = invest(team.state, line, price * packages, rules().balance, linesOf(team.theme), basePrice, packages, efficiency)
+  const result = invest(team.state, line, quote.total, rules().balance, teamInvestmentLines(team), basePrice, packages, efficiency)
   if (!result.ok) throw new HttpError(400, result.error)
   team.state = result.state
   await persist(room)
   push(room.code)
   return { ok: true, cash: team.state.cash }
+}
+
+export async function investCompanyUpgrade(code: string, token: string, kind: CompanyUpgrade) {
+  const room=requireRoom(code);const team=findTeam(room,token)
+  if(room.status!=='playing'||!team.state||!team.theme||!team.state.introDone)throw new HttpError(409,'Chưa thể nâng cấp lúc này')
+  if(team.state.productionVersion!==3)throw new HttpError(409,'Nâng cấp này dành cho lượt chơi theo mô hình mới')
+  const result=upgradeCompany(team.state,team.theme,annualBalance(team.state,rules().balance),kind,Date.now())
+  if(!result.ok)throw new HttpError(400,result.error)
+  team.state=result.state;await persist(room);push(room.code);return {ok:true}
 }
 
 /** Lets a bankrupt team re-enter the same industry without resetting the room or other teams. */
@@ -707,14 +737,18 @@ export async function restartTeam(code: string, token: string) {
   return { ok: true, cash: fresh.cash }
 }
 
-export async function answerPrompt(code: string, token: string, optionId: string) {
+export async function answerPrompt(code: string, token: string, optionId: string, pendingId?: string) {
   const room = requireRoom(code)
   const team = findTeam(room, token)
+  if(room.status!=='playing')throw new HttpError(409,'Phòng chưa chạy hoặc đang tạm dừng')
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa chơi')
   const pending = team.state.pending
   if (!pending || pending.phase !== 'open') throw new HttpError(409, 'Không có câu hỏi đang mở')
+  if(pendingId && pendingId!==pending.id)throw new HttpError(409,'Câu hỏi đã thay đổi; hãy xem lại câu hiện tại')
+  if(!pending.options.some(option=>option.id===optionId))throw new HttpError(400,'Đáp án không thuộc câu hỏi hiện tại')
   if (pending.kind !== 'question' && pending.kind !== 'choice') throw new HttpError(409, 'Sự kiện này chỉ cần đóng')
   const now = Date.now()
+  if(now>=pending.expiresAt){expirePrompt(room,team,now);await persist(room);push(room.code);throw new HttpError(409,'Câu hỏi đã hết thời gian trả lời')}
   if (pending.kind === 'question') {
     const correct = optionId === pending.correctOptionId
     pending.phase = 'resolved'
@@ -724,13 +758,13 @@ export async function answerPrompt(code: string, token: string, optionId: string
     pending.expiresAt = now + balance.questionResolvedMs
     if (correct) {
       const rng = teamRngOf(team)
-      const cash = Math.round(balance.quizCash * rng.range(.8, 1.2))
-      const engineers = Math.round(balance.quizEngineers * rng.range(.8, 1.2))
+      const cash = Math.round((team.state.productionVersion===3?40:balance.quizCash) * rng.range(.8, 1.2))
+      const engineers = team.state.productionVersion===3 ? 0 : Math.round(balance.quizEngineers * rng.range(.8, 1.2))
       team.state.cash += cash
       team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'quiz', label: 'Thưởng trả lời đúng', cash, cashBefore: team.state.cash - cash, cashAfter: team.state.cash, detail: `Câu hỏi: ${pending.body} · +${engineers} kỹ sư` }]
       team.state.engineers += engineers
       team.state.rng = rng.getState()
-      pending.note = fillText(moneyTemplate(balance.logs.quizCorrect, { cash }), {
+      pending.note = team.state.productionVersion===3 ? `Đúng. Thưởng ${money(cash)}; nhân lực được tuyển trong tab Đầu tư.` : fillText(moneyTemplate(balance.logs.quizCorrect, { cash }), {
         cash: String(cash),
         engineers: String(engineers),
       })
@@ -764,6 +798,7 @@ export async function dismissPrompt(code: string, token: string) {
   if (pending.kind === 'question' && pending.phase === 'open') throw new HttpError(409, 'Hãy chọn một đáp án')
   if (pending.kind === 'choice' && pending.phase === 'open') throw new HttpError(409, 'Hãy chọn một phương án')
   team.state.pending = null
+  resumeYearAfterPrompt(team.state,Date.now())
   await persist(room)
   push(room.code)
   return { ok: true }
@@ -845,6 +880,7 @@ export async function advanceTeamYear(code: string, token: string) {
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
   const now = Date.now()
+  if(team.state.pending?.kind==='question')throw new HttpError(409,'Hãy hoàn tất câu hỏi trước khi sang năm')
   if (team.state.yearLockUntil && now < team.state.yearLockUntil) throw new HttpError(409, 'Năm này chưa diễn xong')
   advanceYear(room, team, now)
   await persist(room)
@@ -1151,7 +1187,7 @@ function rollFamily(room: LiveRoom, team: LiveTeam, now: number): { retired: boo
 }
 
 function presentYearQuestion(team: LiveTeam, now: number) {
-  if (!team.state || !team.theme || team.state.finished) return
+  if (!team.state || !team.theme || team.state.finished || team.state.pending) return
   const rng = teamRngOf(team)
   let question = drawQuestion(team.state, rules().questions, rng)
   if (!question && team.state.seenQuestions.length) {
@@ -1166,6 +1202,7 @@ function presentYearQuestion(team: LiveTeam, now: number) {
   const pending = presentQuestion(question, team.theme, rng, now, rules().balance.questionOpenMs)
   pending.title = 'Câu hỏi đề tài thuyết trình'
   team.state.pending = pending
+  pauseYearForPrompt(team.state,now)
   team.state.rng = rng.getState()
 }
 
@@ -1189,7 +1226,7 @@ function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof make
   const factor = team.theme.scaleFactor || 1
   const patch = patchFromEvent(event, copy.title, copy.body)
   if (patch.cashPerYear) patch.cashPerYear = scaleRange(patch.cashPerYear, factor)
-  team.state = applyPatch(team.state, patch, rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
+  team.state = applyPatch(team.state, companyEventPatch(team.state,team.theme,patch), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
   const latest = team.state.effects[0]
   if (latest) {
     latest.severity = event.severity || 1
@@ -1269,6 +1306,7 @@ function openTeamPrompt(room: LiveRoom, team: LiveTeam, now: number) {
   if (fallbackQuestion) {
     team.state.seenQuestions = [...team.state.seenQuestions, fallbackQuestion.id]
     team.state.pending = presentQuestion(fallbackQuestion, team.theme, rng, now, balance.questionOpenMs)
+    pauseYearForPrompt(team.state,now)
   } else if (event) {
     openEvent(team, event, rng, now, false)
   } else {
@@ -1303,7 +1341,7 @@ function openEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeR
     return
   }
   const cashBeforeEvent = team.state.cash
-  team.state = applyPatch(team.state, patchFromEvent(event, copy.title, copy.body), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
+  team.state = applyPatch(team.state, companyEventPatch(team.state,team.theme,patchFromEvent(event, copy.title, copy.body)), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
   team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'event', label: copy.title, cash: team.state.cash - cashBeforeEvent, cashBefore: cashBeforeEvent, cashAfter: team.state.cash, detail: team.state.effects[0]?.summary || copy.body }]
   if (!team.state.pending) {
     team.state.pending = {
@@ -1336,7 +1374,7 @@ function resolveChoice(team: LiveTeam, optionId: string, now: number) {
     body: fillText(option.patch.body, team.theme.vars),
   }
   const cashBeforeChoice = team.state.cash
-  team.state = applyPatch(team.state, patch, rng, now, `choice-${option.id}-${now}`, rules().balance)
+  team.state = applyPatch(team.state, companyEventPatch(team.state,team.theme,patch), rng, now, `choice-${option.id}-${now}`, rules().balance)
   team.state.pendingCauses = [...(team.state.pendingCauses ?? []), { kind: 'event', label: patch.title, cash: team.state.cash - cashBeforeChoice, cashBefore: cashBeforeChoice, cashAfter: team.state.cash, detail: team.state.effects[0]?.summary || patch.body }]
   team.state.rng = rng.getState()
   team.state.pending = {
@@ -1452,11 +1490,11 @@ function expirePrompt(room: LiveRoom, team: LiveTeam, now: number) {
       room.answers.push(rec)
       room.unsavedAnswers.push(rec)
     }
-  } else team.state!.pending = null
+  } else {team.state!.pending = null;resumeYearAfterPrompt(team.state!,now)}
   return true
 }
 
-function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
+export function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
   if (room.status === 'countdown' && room.countdownEndsAt && now >= room.countdownEndsAt) {
     beginPlay(room, now)
     return 'dirty'
@@ -1469,11 +1507,13 @@ function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
   let dirty = false
   for (const team of room.teams) {
     if (!team.state?.introDone || !team.theme) continue
-    if (!team.state.finished && !isBankrupt(team.state) && team.state.nextYearAt && now >= team.state.nextYearAt) {
+    if(team.state.pending?.kind==='question')pauseYearForPrompt(team.state,now)
+    if (expirePrompt(room, team, now)) dirty = true
+    if (!team.state.pending && team.state.promptYearPausedAt!=null){resumeYearAfterPrompt(team.state,now);dirty=true}
+    if (!team.state.pending && !team.state.finished && !isBankrupt(team.state) && team.state.nextYearAt && now >= team.state.nextYearAt) {
       advanceYear(room, team, now)
       dirty = true
     }
-    if (expirePrompt(room, team, now)) dirty = true
   }
   if (dirty) return 'dirty'
   if (now - room.lastClockPush >= 1000) {
@@ -1616,9 +1656,9 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
 function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistory = true) {
   const state = team.state!
   const theme = team.theme!
-  const epl = theme.coefs.epl
-  const operating = Math.min(state.machines, state.engineers / Math.max(1, epl))
-  const idle = Math.max(0, state.machines - operating)
+  const epl = state.productionVersion===3?industryEconomy(theme.industryId,state.companyProfile).crew:theme.coefs.epl
+  const operating = Math.min(Math.floor(state.machines),Math.floor(Math.round(state.engineers)/Math.max(1,epl)))
+  const idle = Math.max(0,Math.floor(state.machines)-operating)
   const riskStartsAt = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
   const nextYear = state.cycles + 1
   return {
@@ -1627,7 +1667,8 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     art: theme.art,
     unit: theme.unit,
     engineers: Math.round(state.engineers),
-    machines: state.machines,
+    machines: Math.floor(state.machines),
+    machineProgress: state.machineProgress??0,
     operating,
     idle,
     util: state.machines > 0 ? operating / state.machines : 0,
@@ -1636,27 +1677,34 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     infra: state.infra,
     green: state.green,
     pollution: state.pollution,
-    output: state.cumulativeOutput,
+    output: Math.floor(state.cumulativeOutput),
     cash: state.cash,
     value: valueOf(team),
     trajectory: state.cycles < 2 ? 'build' : computeEnding(state, theme, rules().endings, rules().balance),
     lastIncome: state.lastIncome,
-    lastOutput: state.lastOutput,
+    lastOutput: Math.floor(state.lastOutput),
     cycles: state.cycles,
     log: state.log,
     dirs: theme.dirs,
-    lines: linesOf(theme),
+    lines: teamInvestmentLines(team),
     anchors: theme.anchors,
     nextYearAt: state.nextYearAt,
+    promptYearPausedAt: state.promptYearPausedAt,
     yearLockUntil: state.yearLockUntil ?? 0,
     finished: Boolean(state.finished),
     bankrupt: isBankrupt(state),
-    economyVersion: 2,
+    economyVersion: state.productionVersion===3?3:2,
+    crewRequired: epl,
+    basePrices: teamBasePrices(team,room),
+    workerSkill: state.workerSkill??0,
+    machineQuality: state.machineQuality??0,
+    condition: state.condition,
+    companyUpgrades: state.productionVersion===3 && !state.finished && !isBankrupt(state) ? COMPANY_UPGRADES.map(kind=>companyUpgradePreview(state,theme,annualBalance(state,rules().balance),kind,now+1)) : [],
     companyBooks: { ...companyBooks(state, theme, rules().balance), reportedValue: valueOf(team) },
     lastProduction: state.cycleReport,
     productionForecast: state.finished || isBankrupt(state) ? undefined : productionForecast(openYearEffects(state, now + 1), theme, annualBalance(state, rules().balance), now + 1),
     operatingForecast: productionPlan(openYearEffects(state, now + 1), theme, annualBalance(state, rules().balance), now + 1),
-    investmentPreviews: !includeHistory || state.finished || isBankrupt(state) ? undefined : investmentPreviews(state, theme, rules().balance, annualBalance(state, rules().balance), linesOf(theme), room.linePrices, room.step, now),
+    investmentPreviews: !includeHistory || state.finished || isBankrupt(state) ? undefined : investmentPreviews(state, theme, rules().balance, annualBalance(state, rules().balance), teamInvestmentLines(team), teamBasePrices(team,room), room.step, now),
     secondLife: state.secondLife ?? 'locked',
     stateAidEligible: state.stateAidEligible ?? false,
     succession: state.succession ?? null,
@@ -1685,7 +1733,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     eventLog: state.eventLog ?? [],
     yearChanges: includeHistory ? state.yearLedger ?? [] : [],
     linePrices: Object.fromEntries(
-      LINES.map((line) => [line, investmentPrice(state, room.linePrices?.[line] ?? room.step, now)]),
+      LINES.map((line) => [line, investmentQuote(state,line,teamBasePrices(team,room)[line] ?? INVESTMENT_BASE_PRICES[line],1,now).price]),
     ),
     upgradeEfficiency: annualEconomy(state).upgrade,
     annualConditions: {
@@ -1757,6 +1805,7 @@ export function lobbyView(room: LiveRoom) {
 export function publicSetup() {
   const balance = rules().balance
   return {
+    investmentBasePrices: INVESTMENT_BASE_PRICES,
     yearSeconds: balance.yearSeconds,
     yearMinSeconds: balance.yearMinSeconds,
     stepDivisor: balance.stepDivisor,

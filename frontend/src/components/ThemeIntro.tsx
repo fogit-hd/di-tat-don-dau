@@ -8,10 +8,12 @@ export function ThemeIntro({
   busy,
   onBegin,
   error,
+  crewRequired,
 }: {
   theme: ThemeView
   busy: boolean
   onBegin: (factoryName: string) => void
+  crewRequired?: number
   error?: string
 }) {
   const [name, setName] = useState(() => theme.factoryName.trim().slice(0, FACTORY_NAME_MAX_LENGTH))
@@ -28,7 +30,7 @@ export function ThemeIntro({
             <b>Bạn là:</b> {theme.role}
           </p>
           <p>
-            <b>Bạn đang làm gì:</b> {theme.mission}
+            <b>Bạn đang làm gì:</b> {crewRequired ? `Bạn khởi đầu với 0 công nhân và 0 cụm sản xuất. Tuyển đủ ${crewRequired} công nhân và mở một cụm để tạo sản phẩm.` : theme.mission}
           </p>
           <p>
             <label htmlFor="intro-factory-name"><b>Nhà máy của bạn tên là:</b></label>

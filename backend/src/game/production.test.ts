@@ -4,7 +4,7 @@ import { LINES } from '../../prisma/seed/rules'
 import { applyPatch, createState, invest, patchFromEvent, runCycle } from './engine'
 import { isBankrupt, logisticsBenefits, pollutionPricePenalty, productionPlan, productionForecast, supplyBenefits } from './production'
 import { makeRng } from './rng'
-import type { EventDef, ThemeDef } from './types'
+import type { EventDef, ThemeDef, TeamState } from './types'
 
 const target = (balance.priceCapitalBase + 1400 / balance.engPerTy) * balance.priceRevenueShare
 const theme: ThemeDef = {
@@ -13,8 +13,8 @@ const theme: ThemeDef = {
   coefs:{epl:1400, tech:.12,support:.08,infra:.08,emission:1,baseOutput:10,basePrice:target/10,opex:target*.3,idleCost:34},
   start:{cashMul:1,engineers:2800,machines:2,pollution:0,dependency:0,condition:1},
 }
-const fresh = () => createState(theme,10000,makeRng(1),balance)
-const plan = (state = fresh()) => productionPlan(state, theme, balance, 1000)
+const fresh = (): TeamState => ({...createState(theme,10000,makeRng(1),balance),productionVersion:undefined,engineers:theme.start.engineers,machines:theme.start.machines,machineProgress:0,tech:balance.startTech})
+const plan = (state: TeamState = fresh()) => productionPlan(state, theme, balance, 1000)
 describe('economy v2 production and upgrade roles', () => {
   it('reduces price once at high pollution without reducing physical output', () => {
     const clean = plan(); const dirty = plan({...fresh(),pollution:100})
@@ -46,7 +46,7 @@ describe('economy v2 production and upgrade roles', () => {
     const upgraded=invest(s,'mac',1000,balance,LINES)
     expect(upgraded.ok).toBe(true); if(!upgraded.ok)return
     const after=plan(upgraded.state)
-    expect(after.staffMissing).toBe(1230)
+    expect(after.staffMissing).toBe(670)
     expect(after.idleCost).toBeGreaterThan(0)
     expect(after.net).toBeLessThan(plan(s).net)
     const staffed=invest(upgraded.state,'eng',2000,balance,LINES)
@@ -126,7 +126,7 @@ describe('production audit and conditional forecasts',()=>{
     const result=runCycle(state,theme,makeRng(80),1000,balance)
     const r=result.cycleReport!
     expect(r.appliedEffects[0]!.outputMul).toBe(.9)
-    expect(r.theoreticalOutput*r.outputMul*r.outputNoise).toBeCloseTo(r.output,9)
+    expect(Math.floor(r.theoreticalOutput*r.outputMul*r.outputNoise+1e-9)).toBe(r.output)
     expect(r.sold*r.price*r.revenueMul).toBeCloseTo(r.revenue,9)
     expect(r.inputCost+r.logisticsCost+r.otherCost+r.idleCost).toBeCloseTo(r.opex,9)
     expect(result.cash-state.cash).toBeCloseTo(r.net-r.inflation+r.interest+r.ongoing,9)

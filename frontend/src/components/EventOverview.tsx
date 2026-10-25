@@ -59,7 +59,7 @@ export function EventOverview({ current, ongoing, onShowAll }: { current: EventE
       <button type="button" aria-pressed={activeGroup === 'current'} onClick={() => setGroup('current')}>Năm nay <b>{current.length}</b></button>
       <button type="button" aria-pressed={activeGroup === 'ongoing'} onClick={() => setGroup('ongoing')}>Còn hiệu lực <b>{ongoing.length}</b></button>
     </div>
-    <EventRows key={activeGroup} compact entries={entries.slice(0, 3)} empty={activeGroup === 'current' ? 'Năm nay chưa có sự kiện.' : 'Chưa có sự kiện nào đang diễn ra.'} />
+    <EventRows key={activeGroup} compact entries={entries.slice(0, 2)} empty={activeGroup === 'current' ? 'Năm nay chưa có sự kiện.' : 'Chưa có sự kiện nào đang diễn ra.'} />
     <button type="button" className="event-show-all" onClick={() => onShowAll(activeGroup)}>Xem tất cả ({current.length + ongoing.length}){attention.unread.size>0&&<span className="event-unread-count"> · {attention.unread.size} chưa xem</span>}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg></button>
   </section>
 }

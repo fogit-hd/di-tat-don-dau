@@ -6,6 +6,7 @@ import { ZodError, z } from 'zod'
 import {
   HttpError,
   answerPrompt,
+  investCompanyUpgrade,
   bootRooms,
   buildSnapshot,
   confirmIntro,
@@ -261,7 +262,7 @@ app.post('/api/rooms/:code/year', async (req, res, next) => {
 app.post('/api/rooms/:code/invest', async (req, res, next) => {
   try {
     const code = param(req.params.code)
-    const body = z.object({ line: z.enum(['eng', 'mac', 'sup', 'inf', 'grn']), quantity: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal('max')]).default(1) }).parse(req.body)
+    const body = z.object({ line: z.enum(['eng', 'mac', 'sup', 'inf', 'grn']), quantity: z.union([z.literal(1), z.literal(5), z.literal(10), z.literal('max'), z.literal('crew')]).default(1) }).parse(req.body)
     res.json(await withRoom(code, () => investLine(code, playerToken(req), body.line as Line, body.quantity)))
   } catch (error) {
     next(error)
@@ -277,11 +278,19 @@ app.post('/api/rooms/:code/restart', async (req, res, next) => {
   }
 })
 
+app.post('/api/rooms/:code/company-upgrade', async(req,res,next)=>{
+  try {
+    const code=param(req.params.code)
+    const body=z.object({upgrade:z.enum(['training','modernization','maintenance'])}).parse(req.body)
+    res.json(await withRoom(code,()=>investCompanyUpgrade(code,playerToken(req),body.upgrade)))
+  } catch(error) { next(error) }
+})
+
 app.post('/api/rooms/:code/answer', async (req, res, next) => {
   try {
     const code = param(req.params.code)
-    const body = z.object({ optionId: z.string().min(1).max(40) }).parse(req.body)
-    res.json(await withRoom(code, () => answerPrompt(code, playerToken(req), body.optionId)))
+    const body = z.object({ optionId: z.string().min(1).max(40), pendingId: z.string().min(1).max(200).optional() }).parse(req.body)
+    res.json(await withRoom(code, () => answerPrompt(code, playerToken(req), body.optionId, body.pendingId)))
   } catch (error) {
     next(error)
   }
