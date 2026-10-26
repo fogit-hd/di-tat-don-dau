@@ -1,0 +1,95 @@
+{
+  "brief": "Use case: ui-mockup. Create a polished readable HIGH FIDELITY approval canvas for Vietnamese browser strategy game Đi Tắt Đón Đầu. Match the reference's painterly burgundy wine-red enamel, warm cream parchment, engraved GOLD frames, rich handpainted watercolor/gouache game icons, readable Vietnamese serif lettering. A coherent restrained ornate industrial board-game aesthetic, distinct from modern SaaS. Full screen composition, generous breathing room, clean information hierarchy, no microscopic text, no stock photos, no emoji, no neon, no fake browser chrome. This is design preview only, not code. Include small footer outside UI 'BẢN DUYỆT · SỐ LIỆU MINH HỌA'. All Vietnamese diacritics correct. Prefer landscape1536x1024 or larger. Reference image1 gives approved in-game art style, reference image2 public style. Do not copy reference contents. No extra features, no export buttons, no readiness toggles. No huge factory photograph.",
+  "references": [
+    "C:/Users/PHONG/Desktop/Coding_Proj/chip-game/design-preview/static-event-icons-v3/08-in-game-preview.png",
+    "C:/Users/PHONG/Desktop/Coding_Proj/chip-game/design-preview/landing-wiki-v2/02-landing-final.png"
+  ],
+  "initial": [
+    [
+      "01-player-results",
+      "Design PLAYER END-OF-GAME RESULTS, one large desktop screen on left occupying 70% and one complete portrait390px phone on right. Both same content, no internal scrolling in overview. Header 'Kết quả của đội' with modest trophy illustration and compact factory-port thumbnail, team 'ABC', industry 'Cảng biển và logistics · Hải Phòng' ellipsis-friendly. Primary number '37,843 tỷ VNĐ' caption 'Giá trị doanh nghiệp'. Clearly subordinate three small stats 'Hạng 1 / 2', '30 năm', '19 câu đúng'. One calm outcome strip 'Chuyển giao · Giữ nguyên tài sản (0%)'. A compact leaderboard preview with only 2 rows '1 ABC 37,843 tỷ', '2 Hào 25,213 tỷ', own row highlighted subtly. Tabs all visible single row: 'Tổng quan', 'Dòng tiền', 'Sự kiện'. Active Tổng quan with only compact outcome/statistics, no duplicate long descriptions. One strong orange gold button 'Về trang chủ'. Secondary link 'Xem bảng xếp hạng'. Small separate explanatory state inset outside main screen 'Nếu phòng còn chơi: Hạng tạm' avoids claiming final rank before all teams finish. Mobile team name wraps max2lines and no horizontal scroll; primary stats and two leaderboard rows readable. Hero trophy modest not dominating. No win claim for early finished team. Layout prioritizes resultvalue over image."
+    ],
+    [
+      "02-host-results",
+      "Design HOST RESULTS PROJECTOR screen, large desktop1440x900-like. Header 'Kết quả phòng XTV45', small '2 đội · Đã kết thúc', button 'Phòng mới' top right. Tabs in one clear row 'Bảng xếp hạng' active, 'Từng đội', 'Câu hỏi'. Main spacious cream leaderboard single source of truth, no repeated team cards below. Gold first-place trophy next to row1 'ABC', short sector 'Cảng biển và logistics', small region 'Hải Phòng', value right '37,843 tỷ VNĐ', year30. Row2 silver 'Hào', sector 'Lưới điện thông minh', region 'Bình Định', value '25,213 tỷ VNĐ', 'Tụt hậu'. Rows have optional chevron to inspect team, not expansion of every team at once. Above list a modest celebratory painted industrial ribbon/trophy, not a giant podium or busy new stats. Keep final value highest emphasis, abbreviated sector sublines, names with ellipsis and accessible full detail indicated by inset showing long teamname 2lines. Bottom right small pagination '1–2 / 2 đội'. Lower a clean narrow annotated state preview for selected 'Từng đội' showing ABC details only: '30 năm', '19 câu đúng', 'Giữ nguyên 0%', '37,843 tỷ VNĐ', tabs 'Tổng quan / Dòng tiền / Sự kiện'. Clear that main ranking does not duplicate this selected detail. No giant question list, no piecharts, no export, no invented rewards. Beautiful handpainted gold coins/trophy icon consistent with reference."
+    ],
+    [
+      "03-host-question-detail",
+      "Design HOST QUESTION RESULTS detail tab. Large desktop 'Kết quả phòng XTV45', tabs 'Bảng xếp hạng', 'Từng đội', 'Câu hỏi' active. Clean short list4questionrows, each concise title and progressbar plus right text number correct/total attempts. Heading 'Kết quả trả lời', small explanatory 'Theo lượt trả lời' to avoid misleading denominator as numberteams. A row 'Cách mạng công nghiệp 4.0' '50% · 1/2 lượt'; 'Mô hình công nghiệp hóa' '100% · 3/3 lượt'; 'Nội dung CNH–HĐH' '0% · 0/2 lượt'; 'Vai trò công nghệ' '67% · 2/3 lượt'. Third row open reveals exact full prompt in roomy parchment detail, correct answer not invented: show 'Nội dung nào thuộc nội dung cơ bản của CNH–HĐH ở Việt Nam?' and '0/2 lượt trả lời đúng'. No answer choices because data unavailable, no fake per-team breakdown. Default otherrowscollapsed. Search optional no avoid extra UI, show pagination '1–4 / 19 câu'. A matching compact phone view on right with shortened rowtitles, all3tabs visible small singleline, one expandedquestion. Summary page shows only one activepanel, no duplicatedleaderboard. Plenty empty space; maximum5rowsbeforepagination, no endlesslist. Existing 'Phòng mới' action. Do not use illustrations for everyrow, only small handpainted book/scroll icon once."
+    ],
+    [
+      "04-create-room",
+      "Design complete HOST CREATE ROOM SETUP approval screen, desktop and compact phone side by side. Signed-in host flow, not a login/signup newfeature. Header brand, 'Tạo phòng', small 'Đã đăng nhập Google', 'Đăng xuất'. Center cream parchment form under heading 'Thiết lập phiên chơi', restrained engraved gold. Fields 'Tên chủ phòng' value 'Nhóm trình chiếu' plus '15/40 ký tự'; 'Thời lượng' value '10 phút'; 'Vốn khởi đầu' value '10 tỷ VNĐ'. A calm selected 'Phiên 10 phút' option labeled 'Đề xuất', small 'Gồm hướng dẫn năm 1 và tổng kết'. Collapsed disclosure 'Thiết lập nâng cao' for future year-duration settings, NO investmentprice inputs anywhere. Note 'Giá đầu tư thay đổi theo ngành và quy mô.' Bottom main button 'Mở phòng', subtle 'Đóng'. Small handpainted desk with ledger and housekeys in empty rightarea, not a big photo. Phone exactsamefields nooverflow. This form does not show roomcode or QR before actualroomcreated. Do not invent roompasswords/teamlimits/roleoptions/autostart. Add external caption 'Thời lượng 10 phút là đề xuất, chưa áp dụng'. Native editableinputs mustlookeditable, not images masqueradingcontrols. Compact layout single viewport, no giant setupdialog."
+    ],
+    [
+      "05-host-lobby",
+      "Design HOST WAITING LOBBY screen for projecting, complete desktop balanced layout, not current giantQR. Header brand 'Đi Tắt Đón Đầu', page 'Phòng chờ', host account small 'Đã đăng nhập'. Left join column about36% width: heading 'Vào phòng cùng đội', very legible roomcode 'XTV45', QR in cream square around260px (illustrative not certifiedworkingQR), below brief 'Quét mã hoặc nhập mã phòng', link 'ditatdondau.neoforcelab.com/?code=XTV45', action 'Sao chép liên kết' as proposedsecondaryaction. Right mainpanel 'Đội đã vào (2)' with two spacious rows 'ABC', 'Hào', simple small handpainted crest avatars and neutral 'Đã vào phòng' status NOT readytoggle/status. Below calm settingssummary '10 phút · Vốn khởi đầu 10 tỷ' and small disclosurebutton 'Thiết lập phiên chơi'. Main orange framed button bottomright 'Bắt đầu' veryclear. No priceconfig, no giantsettingsgrid, nolocalhost/IPjargon, no countdownuntilactualstart. Empty state small separate annotation 'Chưa có đội: khóa nút Bắt đầu'. Small mobileview below or atside optional onlyifroom; prioritize beautiful readable full desktop1440x900. Light factorylinework backgrounddecor outside text. Markexternal 'QR minh họa · Bản duyệt', '10 phút: đề xuất'. No extra hostssection or fakeexport. This is lobbyaftercreation beforestart."
+    ],
+    [
+      "06-tutorial-start",
+      "Create a readable THREE PANEL storyboard, landscape, of guided first-year gameplay for Đi Tắt Đón Đầu. Three equal portraitphone-ishpanels with large readableinterface elements; not tiny fullpage screenshots. Headeroutside 'Hướng dẫn năm 1 · Bấm thật để đi tiếp'. Same gameplay burgundy/gold/cream frame style. Industry example 'Chế biến trái cây sấy', requires5workers percluster. Panel1 step '1/6 · Đặt tên nhà máy', nameinput 'Đại Việt', counter '8/256 ký tự', bright spotlightborder on realbutton 'Bắt đầu', anchored shortcoachmark 'Đặt tên rồi bấm Bắt đầu.' No floatingtoaststack, onlysingleanchoredhint. Panel2 step '2/6 · Mở cụm đầu tiên', funds '10 tỷ', tabĐầutưactive, one upgrade card with painted fruitdryermachine 'Mở cụm sản xuất', '+1 cụm · Chưa có công nhân', realbutton 'Mua 1 · 220 triệu', spotlightthisbutton; bottommutedSangnăm. Hint 'Mở 1 cụm để có nơi sản xuất.' Panel3 step '3/6 · Tuyển đủ người', funds '9,78 tỷ', productionstate '1 cụm · Thiếu 5 người', cardpaintedworkers, 'Tuyển đủ tổ · 5 người', realbutton 'Tuyển 5 · 200 triệu'. Hint 'Ngành này cần 5 người cho 1 cụm.' Crew count andpricesclearlyindustryspecific. Eachtargetsurroundedgoldfocusring (no neon); unusedUI dimmedslightlyonly. Smallbottomnote 'Chỉ tiếp tục sau khi thao tác thành công'. Do notincludeNextbuttons thatskiprealaction, nofakecoinsgifts, nomodalquestions, noarrowscoveringtext. Showstatechangebetweencorrectsteps. Footer 'Giá minh họa theo ngành · Chưa áp dụng'. No unexplainedcashoutputformula."
+    ],
+    [
+      "07-tutorial-year-one",
+      "Create matching THREE PANEL storyboard landscape highreadability, continuation 'Hướng dẫn năm 1 · Chốt năm đầu'. Panel1 step '4/6 · Xem doanh nghiệp', tab 'Doanh nghiệp' goldspotlight, stats large '5 công nhân', '1 cụm hoạt động', '100 sản phẩm/năm' caption 'Dự kiến', funds '9,58 tỷ'. Hint 'Đã đủ người. Bấm Doanh nghiệp để xem khả năng vận hành.' Mark100productsaspreviewonly notguaranteedroll. Panel2 step '5/6 · Chốt năm', backtoinvestment/generalpane, realbottom 'Sang năm' button goldspotlight rectangularperimeter countdownnotcircle. Hint 'Bấm Sang năm để nhận kết quả năm 1.' Othercontrolsvisibledim, noquestionoverlay. Panel3 step '6/6 · Xem kết quả', tab 'Thay đổi từng năm' fullyvisiblehighlight, receipt 'Năm 1', rows 'Đầu tư −420 triệu', 'Sản xuất: theo kết quả thực tế', 'Tiền mặt sau chốt: dữ liệu thực tế'. Shortcoachmark 'Mở Năm 1 để xem tiền nhận và tiền đã chi.' Finalrealbutton 'Đã hiểu' onlyafterreceiptopened. No inventedprofitamount, noautomaticallybuyingforuser, nofakecompletionbyNext. Smallbottomstrip outside 'Sau năm 1: tắt hướng dẫn, giữ gameplay thông thoáng'. Same richpainterly goldframe/parchment/burgundy, noemoji/nophotos, notgenericappwireframe. Sixstepstatepersistandactuallyactiongatedisdesignintent. Alltabsalwaysvisiblewithshortsingleline labels ifneeded, nohorizontalcarousel. Footer 'BẢN DUYỆT · SỐ LIỆU MINH HỌA'."
+    ]
+  ],
+  "revisions": [
+    [
+      "01-player-results",
+      "01-player-results-final",
+      "Edit only labels and state clarity on this player-results concept. Keep all style/layout/numbers. This screen depicts a FINAL room result: leaderboard heading must be 'Bảng xếp hạng', remove '(tạm thời)' on both desktop and phone. REMOVE the entire hourglass explanatory inset from the phone to reduce clutter. On desktop replace its text with a tiny separate outside-UI variant note: 'Phòng còn chơi: giá trị đã chốt, hạng tạm có thể thay đổi.' Never call locked team value temporary. Keep ownnumber37,843tỷ,2rows,3tabs,homebutton. Mainportraitphone must fitcontentwithbreathingroom. Retain footer approval label."
+    ],
+    [
+      "02-host-results",
+      "02-host-results-final",
+      "Redesign this host results preview to REMOVE all duplicated team detail and invented narrative BELOW the ranking. ONE active tab only: Bảng xếp hạng. Keep roomXTV45,2teams ABC/Hào, values37,843tỷ and25,213tỷ, beautiful painterly wine/cream/gold style. Main table headings only 'Hạng', 'Đội / Ngành', 'Giá trị cuối', 'Kết quả'. Row1 teamABC with shortindustry/region secondline, rankgoldmedal, final37,843tỷ, outcome'Chuyển giao · Giữ nguyên0%'. Row2 Hào with shortindustry/region,25,213tỷ,outcome'Tụt hậu'. Much smaller paintedportthumbnail to avoidfiller. NO separateRegioncolumn. NO 'Kết quả năm30' misleadingheader. Three tabs Bảngxếphạng/Từngđội/Câuhỏi; teamdetail accessedonlyviaTừngđộiorrowclick, NOT rendered inoverview. Bottom airy spacewithmodestwatercolorfactorysilhouette, not hugeemptyframe nor extra panels. Phòngmới top right. Header and table fit1440x900. If small secondarypreviewofteamdetail, DO NOT include it; justsinglecleanprimaryscreen. Label previewoutside."
+    ],
+    [
+      "05-host-lobby",
+      "05-host-lobby-final",
+      "Preserve this lobby composition, goldframes,codeXTV45,QR,teamlistandallbuttons. Correct the capital summary: replace 'Vốn khởi đầu10tỷ' with 'Vốn tham chiếu10tỷ'; replace 'Mọi đội bắt đầu với số vốn như nhau' with 'Điều chỉnh theo quy mô doanh nghiệp'. This distinction matches existing game with scale and context. Keep 10phút explicitly 'Đề xuất'. Remove useravatar showing specificrealhostidentity, replace withneutralpaintedmedallion. QR remains markedminhhọa. Do notchangeotherfeatures."
+    ],
+    [
+      "06-tutorial-start",
+      "06-tutorial-start-final",
+      "Keep this threepanel tutorialstoryboard and ALLindustry/prices/values/painterlyart, but remove invented navigationtabs 'Nhân sự' and 'Sản xuất'. Both buycluster andhirecrew are on existing ĐẦU TƯ tab. In panels2and3 show the EXISTING five tabs ALLvisible incompacttwo-row grid ifneeded: 'Đầu tư', 'Doanh nghiệp', 'Rủi ro', 'Lịch sử sự kiện', 'Thay đổi từng năm'. Đầutưactive inbothpanels. No horizontal scrolling; nofake_newtabs. Real buybutton220triệu andfirst5crew200triệuremainillustrativequotedcosts; short hints. No otherchanges. The image isillustrativedesignpreview, notnewtabsreorganization."
+    ],
+    [
+      "07-tutorial-year-one",
+      "07-tutorial-year-one-final",
+      "Keep this threepanel storyboard, but fix nav to preserve ACTUALfiveexistingtabs: 'Đầu tư', 'Doanh nghiệp', 'Rủi ro', 'Lịch sử sự kiện', 'Thay đổi từng năm'. All five visible,compacttwo-rowgrid ifneeded,nohorizontalcarousel. Panel1 Doanhnghiệpactive, panel2 Đầutưactive, panel3 Thayđổitừngnămactive. Remove invented 'Tổng quan' tab. Inpanel3 remove futureyearsNăm2,Năm3,Năm4,Năm5entirely; only Năm1exists sofar. Enlargeactualyear1receipt inthatspace. Keep −420triệuillustrativeinvestment, placeholderprofitnotinvented. No extraformulas. Keeprealactioncoachmarks, Đãhiểuafteropenedreceipt."
+    ]
+  ],
+  "tool": "built-in image_gen",
+  "outputs": [
+    {
+      "file": "01-player-results.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-bdfba461-1b2a-4737-bee3-b9a27d258d8b.png"
+    },
+    {
+      "file": "02-host-results.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-56cfbeb5-9360-4a93-a1fb-c666d8b35ca9.png"
+    },
+    {
+      "file": "03-host-questions.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-23b167fa-123d-4bf1-bfd1-b485b1ef8f7f.png"
+    },
+    {
+      "file": "04-create-room.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-685fee45-b2df-4d9a-8bf5-8804aa7b37f6.png"
+    },
+    {
+      "file": "05-host-lobby.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-1ef16304-6db0-4005-a555-32e0767c96e4.png"
+    },
+    {
+      "file": "06-tutorial-start.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-679a2e2a-457b-40d4-a1a6-602c1de4e7e9.png"
+    },
+    {
+      "file": "07-tutorial-year-one.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-35e768ad-0de4-469a-8c44-34365b294225.png"
+    }
+  ]
+}

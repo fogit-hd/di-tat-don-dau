@@ -1,0 +1,403 @@
+{
+  "sizes": [
+    {
+      "width": 390,
+      "hint": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 7,
+        "clip": "point-down-left",
+        "mode": "point",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 1,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1.0418243377813186,
+        "worldAnchor": [
+          110,
+          313.6234520057104
+        ],
+        "pointName": "point-down-left",
+        "autoHint": true,
+        "expectedDirection": "point-down-left",
+        "idleSince": 5.203100000000007,
+        "t": 5.6864000000000114
+      },
+      "overlay": {
+        "plate": [
+          23,
+          336.046875,
+          174,
+          33
+        ],
+        "inside": true,
+        "overlap": 0,
+        "scroll": 390,
+        "animations": 0,
+        "text": "Cố vấn doanh nghiệp"
+      },
+      "breathingFrames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "talkFrames": [
+        1,
+        2,
+        0,
+        4
+      ],
+      "flow": [
+        {
+          "id": "tab-invest",
+          "direction": "point-down-left",
+          "expected": "point-down-left"
+        },
+        {
+          "id": "buy-cluster",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        },
+        {
+          "id": "hire-crew",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        },
+        {
+          "id": "tab-company",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        },
+        {
+          "id": "next-year",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        }
+      ],
+      "done": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 5,
+        "clip": "breathe",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 0,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1,
+        "worldAnchor": [
+          110,
+          137.56303392338148
+        ],
+        "pointName": "point-down-right",
+        "autoHint": false,
+        "expectedDirection": "point-right",
+        "idleSince": 40.9081000000001,
+        "t": 43.62480000000026
+      }
+    },
+    {
+      "width": 768,
+      "hint": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 7,
+        "clip": "point-right",
+        "mode": "point",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 1,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1,
+        "worldAnchor": [
+          116,
+          347.6054403753027
+        ],
+        "pointName": "point-right",
+        "autoHint": true,
+        "expectedDirection": "point-right",
+        "idleSince": 5.216498000000013,
+        "t": 5.699798000000018
+      },
+      "overlay": {
+        "plate": [
+          29,
+          371.828125,
+          174,
+          33
+        ],
+        "inside": true,
+        "overlap": 0,
+        "scroll": 768,
+        "animations": 0,
+        "text": "Cố vấn doanh nghiệp"
+      },
+      "breathingFrames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "talkFrames": [
+        1,
+        2,
+        0,
+        4
+      ],
+      "flow": [
+        {
+          "id": "tab-invest",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "buy-cluster",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "hire-crew",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        },
+        {
+          "id": "tab-company",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "next-year",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        }
+      ],
+      "done": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 5,
+        "clip": "breathe",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 0,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1,
+        "worldAnchor": [
+          116,
+          347.6054403753027
+        ],
+        "pointName": "point-down-right",
+        "autoHint": false,
+        "expectedDirection": "point-right",
+        "idleSince": 41.49159800000013,
+        "t": 44.20819800000032
+      }
+    },
+    {
+      "width": 1440,
+      "hint": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 7,
+        "clip": "point-right",
+        "mode": "point",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 1,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1,
+        "worldAnchor": [
+          196,
+          414.01408512079314
+        ],
+        "pointName": "point-right",
+        "autoHint": true,
+        "expectedDirection": "point-right",
+        "idleSince": 5.199696000000006,
+        "t": 5.682996000000011
+      },
+      "overlay": {
+        "plate": [
+          91,
+          447.3125,
+          210,
+          39
+        ],
+        "inside": true,
+        "overlap": 0,
+        "scroll": 1440,
+        "animations": 0,
+        "text": "Cố vấn doanh nghiệp"
+      },
+      "breathingFrames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "talkFrames": [
+        1,
+        2,
+        0,
+        4
+      ],
+      "flow": [
+        {
+          "id": "tab-invest",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "buy-cluster",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "hire-crew",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "tab-company",
+          "direction": "point-right",
+          "expected": "point-right"
+        },
+        {
+          "id": "next-year",
+          "direction": "point-down-right",
+          "expected": "point-down-right"
+        }
+      ],
+      "done": {
+        "gesture": null,
+        "queuedGesture": null,
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 5,
+        "clip": "breathe",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true,
+        "pointProgress": 0,
+        "pointDuration": 0.48,
+        "returnDuration": 0.32,
+        "sharedIdle": true,
+        "cameraScale": 1,
+        "worldAnchor": [
+          196,
+          414.01408512079314
+        ],
+        "pointName": "point-down-right",
+        "autoHint": false,
+        "expectedDirection": "point-right",
+        "idleSince": 41.97519600000008,
+        "t": 44.70849600000029
+      }
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "six authored pointing directions",
+    "actual target geometry selects guide direction",
+    "gaze and chin: source art visual review",
+    "hands lower before direction change",
+    "whole-actor breathing loop while waiting",
+    "fixed camera and gentler talking mouth sequence",
+    "framed advisor plaque stays in viewport and clear of buttons",
+    "no CSS or Web Animations",
+    "no year-1 timer or automatic step",
+    "all five actions and year-2 timer",
+    "reduced motion static actor",
+    "390/768/1440 no horizontal overflow"
+  ]
+}

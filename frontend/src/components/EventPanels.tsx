@@ -84,8 +84,8 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
 /** One predictable place for the player's next decision and the evidence behind it. */
 export type GameTabsHandle = { showEvents: (group: EventGroup) => void; showYear: (year: number) => void }
 
-export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, investmentLines, industryId, finished = false, result }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; investmentLines?: LineView[]; industryId?: string; finished?: boolean; result?: ReactNode }) {
-  const [tab, setTab] = useState(finished ? 'events' : 'investment')
+export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, investmentLines, industryId, finished = false, result, tutorialTarget, initialTab='investment', onVisit }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; investmentLines?: LineView[]; industryId?: string; finished?: boolean; result?: ReactNode; tutorialTarget?: string|null; initialTab?:string; onVisit?:(tab:string)=>void }) {
+  const [tab, setTab] = useState(finished ? 'events' : initialTab)
   const [yearRequest, setYearRequest] = useState(0)
   const [requestedYear, setRequestedYear] = useState<number | null>(null)
   const [eventGroup, setEventGroup] = useState<EventGroup>('history')
@@ -93,10 +93,11 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
   useLayoutEffect(() => { if (panel.current) panel.current.scrollTop = 0 }, [tab, eventGroup])
   const uid = useId()
   useImperativeHandle(ref, () => ({ showEvents(group) {
+    if(tutorialTarget!==undefined)return
     setTab('events')
     setEventGroup(group)
     requestAnimationFrame(() => document.getElementById(`${uid}-events`)?.focus({ preventScroll: true }))
-  }, showYear(year) { setYearRequest(n=>n+1); setRequestedYear(year); setTab('years'); requestAnimationFrame(() => panel.current?.focus({preventScroll:true})) } }), [uid])
+  }, showYear(year) { if(tutorialTarget!==undefined)return;setYearRequest(n=>n+1); setRequestedYear(year); setTab('years'); requestAnimationFrame(() => panel.current?.focus({preventScroll:true})) } }), [uid,tutorialTarget])
   const tabs = [['investment', 'Đầu tư'], ['enterprise', 'Doanh nghiệp'], ['risk', 'Rủi ro'], ['events', 'Lịch sử sự kiện'], ['years', 'Thay đổi từng năm']]
   return (
     <section className="card game-tabs" aria-label="Điều khiển trận chơi">
@@ -106,7 +107,8 @@ export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, ev
         </div>
       </div>
       <div className="tablist game-tablist" role="tablist" aria-label="Điều hành nhà máy">
-        {tabs.map(([id, label], index) => <button key={id} id={`${uid}-${id}`} aria-controls={`${uid}-panel`} type="button" role="tab" aria-selected={tab === id} tabIndex={tab === id ? 0 : -1} className={tab === id ? 'on' : ''} onClick={() => setTab(id)} onKeyDown={(event) => {
+        {tabs.map(([id, label], index) => <button key={id} data-guide={`tab-${id}`} disabled={tutorialTarget!==undefined&&tutorialTarget!==id} id={`${uid}-${id}`} aria-controls={`${uid}-panel`} type="button" role="tab" aria-selected={tab === id} tabIndex={tab === id || tutorialTarget===id ? 0 : -1} className={tab === id ? 'on' : ''} onClick={() => {setTab(id);onVisit?.(id)}} onKeyDown={(event) => {
+          if(tutorialTarget!==undefined)return
           const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : -1
           if (next < 0) return
           event.preventDefault()

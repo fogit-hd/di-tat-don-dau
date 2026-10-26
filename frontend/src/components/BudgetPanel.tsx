@@ -15,6 +15,7 @@ export function BudgetPanel({
   onInvest,
   onRestart,
   onUpgrade,
+  tutorialAction,
 }: {
   scene: SceneView
   step: number
@@ -24,6 +25,7 @@ export function BudgetPanel({
   onInvest: (line: 'eng' | 'mac' | 'sup' | 'inf' | 'grn', quantity: 1 | 5 | 10 | 'max' | 'crew') => Promise<boolean>
   onUpgrade?: (kind: 'training'|'modernization'|'maintenance')=>Promise<boolean>
   onRestart: () => void
+  tutorialAction?: string
 }) {
   const modern=scene.economyVersion===3
   const crew=scene.crewRequired??scene.productionForecast?.expected.engineersPerMachine??1
@@ -63,13 +65,13 @@ export function BudgetPanel({
     <>
     <div className="investment-toolbar"><CanvasHeading icon="investment">Đầu tư</CanvasHeading>
     <div className="investment-quantity" role="group" aria-label="Số gói đầu tư">
-      {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
+      {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused || Boolean(tutorialAction)} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
     </div></div>
     {!modern && <p className="canvas-caption">Chọn số gói để xem trước kết quả nhận được.</p>}
     {!modern && <p className="investment-help">Lượt chơi này dùng cơ chế trước. Cơ chế cụm sản xuất theo ngành áp dụng khi bắt đầu lượt chơi mới.</p>}
     {modern && scene.operating===0 && <div className="investment-start-guide"><b>{scene.machines===0?'Chưa có cụm hoạt động':`Còn thiếu ${Math.max(0,crew-scene.engineers)} công nhân cho tổ đầu tiên`}</b><div className="starter-actions">
-      <button type="button" disabled={busy||paused||scene.machines>0||!scene.investmentPreviews?.mac?.[1]||scene.cash<scene.investmentPreviews.mac[1].total} onClick={()=>void purchase('mac','Mở cụm đầu tiên',1)}>{scene.machines>0?'Đã có cụm đầu tiên':`Mở 1 cụm · ${money(scene.investmentPreviews?.mac?.[1]?.total??0)}`}</button>
-      <button type="button" disabled={busy||paused||scene.engineers>=crew||!scene.investmentPreviews?.eng?.crew||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>{scene.engineers>=crew?'Đã đủ tổ công nhân':`Tuyển ${scene.investmentPreviews?.eng?.crew?.count??crew} người · ${money(scene.investmentPreviews?.eng?.crew?.total??0)}`}</button>
+      <button type="button" data-guide="starter-cluster" disabled={busy||paused||Boolean(tutorialAction&&tutorialAction!=='cluster')||scene.machines>0||!scene.investmentPreviews?.mac?.[1]||scene.cash<scene.investmentPreviews.mac[1].total} onClick={()=>void purchase('mac','Mở cụm đầu tiên',1)}>{scene.machines>0?'Đã có cụm đầu tiên':`Mở 1 cụm · ${money(scene.investmentPreviews?.mac?.[1]?.total??0)}`}</button>
+      <button type="button" data-guide="starter-crew" disabled={busy||paused||Boolean(tutorialAction&&tutorialAction!=='crew')||scene.engineers>=crew||!scene.investmentPreviews?.eng?.crew||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>{scene.engineers>=crew?'Đã đủ tổ công nhân':`Tuyển ${scene.investmentPreviews?.eng?.crew?.count??crew} người · ${money(scene.investmentPreviews?.eng?.crew?.total??0)}`}</button>
     </div></div>}
     {modern && <p className="investment-help">Đang vận hành: {scene.operating} cụm · Chờ đủ nhân lực: {scene.idle} cụm.</p>}
     {scene.cash <= 0 && <p className="investment-warning">{scene.cash < 0 ? 'Công ty đang có dư nợ; lãi nợ được tính mỗi năm.' : 'Tiền mặt đã hết.'} Bạn vẫn có thể Sang năm để sản xuất; hết tiền mặt chưa phải phá sản.</p>}
@@ -80,7 +82,7 @@ export function BudgetPanel({
         const preview = scene.investmentPreviews?.[line.id]?.[quantity]
         const count = preview?.count ?? (quantity === 'max' ? 0 : quantity)
         const total = preview?.total ?? price * count
-        const can = !busy && !paused && count > 0 && scene.cash + 1e-6 >= total
+        const can = !busy && !paused && !tutorialAction && count > 0 && scene.cash + 1e-6 >= total
         const info = upgradeInfo(scene, line.id)
         const benefit = preview ? previewInfo(scene, line.id, preview) : null
         return (
@@ -98,7 +100,7 @@ export function BudgetPanel({
             <button type="button" className="choice-price investment-buy" disabled={!can} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => void purchase(line.id,benefit?.gain || line.label)}>
               {feedback?.line === line.id && feedback.phase === 'sending' ? 'Đang gửi…' : `Đầu tư ×${count}`}<b>{money(total)}</b>
             </button>
-            {modern && line.id==='eng' && scene.investmentPreviews?.eng?.crew && <button type="button" className="recruit-crew" disabled={busy||paused||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>Tuyển đủ tổ: +{scene.investmentPreviews.eng.crew.count} người · {money(scene.investmentPreviews.eng.crew.total)}</button>}
+            {modern && line.id==='eng' && scene.investmentPreviews?.eng?.crew && <button type="button" className="recruit-crew" disabled={busy||paused||Boolean(tutorialAction)||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>Tuyển đủ tổ: +{scene.investmentPreviews.eng.crew.count} người · {money(scene.investmentPreviews.eng.crew.total)}</button>}
             {feedback?.line === line.id && <span key={feedback.version+feedback.phase} className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Chờ máy chủ xác nhận':feedback.phase==='confirmed'?'Đã nâng cấp · Máy chủ đã xác nhận':'Chưa nâng cấp · xem lỗi ở trên'}</span>}
             {preview && <details className="investment-projection"><summary>Xem tác động khi Sang năm</summary>
               <p>{benefit?.detail}</p><p>Giá gói kế tiếp: {money(preview.nextPrice ?? price)}. Giá tăng theo số gói đã mua; mua nhiều cộng giá từng nấc.</p>
@@ -115,7 +117,7 @@ export function BudgetPanel({
         <PaintedIcon name={upgrade.kind==='training'?'eng':upgrade.kind==='modernization'?'tech':'investment'} className="quality-upgrade-art" />
         <div className="choice-copy"><h4 className="choice-label">{label}</h4><span className="choice-benefit">{upgrade.kind==='training'?'+5% năng suất gốc/cấp tay nghề':upgrade.kind==='modernization'?'+8% năng suất gốc/cấp thiết bị':'Khôi phục tình trạng thiết bị về 100%'}</span><small>{upgrade.kind==='maintenance'?`Tình trạng: ${Math.round(upgrade.conditionBefore*100)}%`:`Cấp ${upgrade.level} → ${Math.min(5,upgrade.levelAfter)}`}</small>{upgrade.locked&&<small className="investment-warning">{upgrade.reason}</small>}</div>
         <div className="choice-result"><strong>{wholeCount(upgrade.outputBefore)} → {wholeCount(upgrade.outputAfter)} sản phẩm/năm</strong><small>Lãi sản xuất: {money(upgrade.netBefore)} → {money(upgrade.netAfter)}/năm</small></div>
-        <button type="button" className="choice-price investment-buy" disabled={busy||paused||upgrade.locked||scene.cash<upgrade.price} onClick={async()=>{const version=++purchaseSequence.current;setFeedback({line:upgrade.kind,phase:'sending',version,gain:label});const ok=await onUpgrade?.(upgrade.kind);if(version===purchaseSequence.current)setFeedback({line:upgrade.kind,phase:ok?'confirmed':'failed',version,gain:label})}}>{upgrade.kind==='maintenance'?'Bảo dưỡng':'Nâng 1 cấp'}<b>{money(upgrade.price)}</b></button>
+        <button type="button" className="choice-price investment-buy" disabled={busy||paused||Boolean(tutorialAction)||upgrade.locked||scene.cash<upgrade.price} onClick={async()=>{const version=++purchaseSequence.current;setFeedback({line:upgrade.kind,phase:'sending',version,gain:label});const ok=await onUpgrade?.(upgrade.kind);if(version===purchaseSequence.current)setFeedback({line:upgrade.kind,phase:ok?'confirmed':'failed',version,gain:label})}}>{upgrade.kind==='maintenance'?'Bảo dưỡng':'Nâng 1 cấp'}<b>{money(upgrade.price)}</b></button>
         {feedback?.line===upgrade.kind && <span className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Đang nâng cấp…':feedback.phase==='confirmed'?'Đã nâng cấp · Chỉ số đã cập nhật':'Chưa nâng cấp · Xem lỗi ở trên'}</span>}
       </article>
     })}</div></details>}

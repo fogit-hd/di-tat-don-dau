@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linh vật hướng dẫn — Bản chuyển động thử</title>
+<link rel="stylesheet" href="./preview.css"><script defer src="./rig.js"></script><script defer src="./preview.js"></script>
+</head>
+<body>
+<main class="preview">
+<header class="preview-header"><div><p class="preview-note">Bản thử nhân vật · Chưa áp dụng vào game</p><h1>Linh vật hướng dẫn</h1></div><button id="restart" class="quiet" type="button">Chơi lại hướng dẫn</button></header>
+<section class="game" aria-label="Gameplay mô phỏng để duyệt nhân vật">
+<header class="hud frame"><strong>Đại Việt <span>Trái cây sấy</span></strong><div><span>Tiền mặt</span><b id="cash">10 tỷ</b></div><div><span>Năm đang chơi</span><b id="year">1</b></div></header>
+<div class="game-columns">
+<aside class="scene-column">
+<div class="scene frame" id="character-stage"><img src="./assets/factory.webp" alt="Nhà máy chế biến trái cây sấy vẽ tay" draggable="false"></div>
+<section class="event-panel frame"><h2>Sự kiện năm nay</h2><p>Chưa có sự kiện nào.</p><p class="scene-status" id="scene-status">0 cụm · 0 công nhân</p></section>
+</aside>
+<section class="operations frame" aria-labelledby="operations-title">
+<h2 id="operations-title">Điều hành nhà máy</h2>
+<nav class="tabs" aria-label="Các mục điều hành">
+<button type="button" id="tab-invest" class="selected">Đầu tư</button><button type="button" id="tab-company">Doanh nghiệp</button><button type="button" disabled>Rủi ro</button><button type="button" disabled>Lịch sử sự kiện</button><button type="button" disabled>Thay đổi từng năm</button>
+</nav>
+<div class="tab-content" id="invest-panel">
+<article class="upgrade"><img src="./assets/machine.webp" alt="" draggable="false"><div><h3>Mở cụm sản xuất</h3><p>Thêm nơi vận hành cho đội.</p><strong id="cluster-state">0 cụm</strong></div><button id="buy-cluster" type="button" class="action"><small>Mở 1 cụm</small><b>220 triệu</b></button></article>
+<article class="upgrade"><img src="./assets/workers.webp" alt="" draggable="false"><div><h3>Tuyển đủ tổ</h3><p>Cụm của ngành này cần 5 người.</p><strong id="worker-state">0/5 công nhân</strong></div><button id="hire-crew" type="button" class="action"><small>Tuyển 5 người</small><b>200 triệu</b></button></article>
+<div class="operation-status" id="operation-status">Chưa vận hành</div>
+</div>
+<div class="tab-content" id="company-panel" hidden><h3>Doanh nghiệp của bạn</h3><div class="company-stats"><div><b id="stat-workers">5</b><span>Công nhân</span></div><div><b id="stat-operating">1</b><span>Cụm hoạt động</span></div></div><p>Đã sẵn sàng cho lần chốt năm đầu tiên.</p></div>
+<p class="demo-data">Giá và trạng thái trong bản thử chỉ để minh họa hướng dẫn.</p>
+</section>
+</div>
+<button id="next-year" type="button" class="next-year frame"><b>Sang năm</b><span>Chốt năm 1</span></button>
+</section>
+<section class="motion-lab" aria-label="Duyệt chuyển động độc lập"><div><h2>Thử chuyển động</h2><p>Miệng chạy theo chữ · Không giọng đọc · Canvas 2D</p></div>
+<div class="motion-buttons"><button type="button" data-motion="welcome">Chào</button><button type="button" data-motion="talk">Nói chuyện</button><button type="button" data-motion="point">Chỉ nút</button><button type="button" data-motion="think">Chờ / suy nghĩ</button><button type="button" data-motion="confirm">Gật đầu</button><button type="button" data-motion="celebrate">Vẫy tay</button><button type="button" data-motion="exit">Rời màn hình</button></div>
+<button type="button" class="text-button" id="return-guide" hidden>Quay lại bước hướng dẫn</button>
+</section>
+</main>
+<canvas id="mascot" aria-hidden="true"></canvas>
+<section class="dialogue frame" id="dialogue" aria-label="Lời hướng dẫn" hidden>
+<span id="step-count" class="sr-only">1/5</span><p id="speech-text" aria-hidden="true"></p>
+<p class="sr-only" id="speech-announcement" aria-live="polite" aria-atomic="true"></p>
+<span id="speech-state" class="sr-only" role="status"></span><button id="show-all" type="button" hidden>Hiện hết lời</button>
+</section>
+<div class="loading" id="loading" role="status">Đang chuẩn bị nhân vật…</div>
+</body></html>

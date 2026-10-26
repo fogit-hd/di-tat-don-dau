@@ -1,0 +1,272 @@
+{
+  "errors": [],
+  "sizes": [
+    {
+      "width": 390,
+      "waiting": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "done": {
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "geometry": {
+        "before": {
+          "character-stage": [
+            10,
+            182.765625,
+            370,
+            200
+          ],
+          "operations-title": [
+            28,
+            522.640625,
+            334,
+            29
+          ],
+          "next-year": [
+            10,
+            915.484375,
+            370,
+            64
+          ]
+        },
+        "after": {
+          "character-stage": [
+            10,
+            182.765625,
+            370,
+            200
+          ],
+          "operations-title": [
+            28,
+            522.640625,
+            334,
+            29
+          ],
+          "next-year": [
+            10,
+            915.484375,
+            370,
+            64
+          ]
+        },
+        "scroll": 390,
+        "width": 390,
+        "animations": 0
+      }
+    },
+    {
+      "width": 768,
+      "waiting": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "done": {
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "geometry": {
+        "before": {
+          "character-stage": [
+            16,
+            222.8125,
+            317.40625,
+            242
+          ],
+          "operations-title": [
+            371.40625,
+            243.8125,
+            355.578125,
+            31.890625
+          ],
+          "next-year": [
+            16,
+            844.1875,
+            736,
+            73.1875
+          ]
+        },
+        "after": {
+          "character-stage": [
+            16,
+            222.8125,
+            317.40625,
+            242
+          ],
+          "operations-title": [
+            371.40625,
+            243.8125,
+            355.578125,
+            31.890625
+          ],
+          "next-year": [
+            16,
+            844.1875,
+            736,
+            73.1875
+          ]
+        },
+        "scroll": 768,
+        "width": 768,
+        "animations": 0
+      }
+    },
+    {
+      "width": 1440,
+      "waiting": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 1,
+        "complete": false,
+        "yearTwoRemaining": null,
+        "text": "Chào bạn! Bấm Đầu tư để bắt đầu. Mình sẽ hướng dẫn từng bước.",
+        "target": "tab-invest",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "done": {
+        "ready": true,
+        "step": 5,
+        "year": 2,
+        "cash": 9580,
+        "clusters": 1,
+        "workers": 5,
+        "speaking": false,
+        "frame": 0,
+        "clip": "talk",
+        "mode": "wait",
+        "opacity": 0,
+        "complete": true,
+        "yearTwoRemaining": 60,
+        "text": "Sẵn sàng rồi! Bấm Sang năm để hoàn thành năm 1.",
+        "lab": null,
+        "wholeCharacter": true
+      },
+      "geometry": {
+        "before": {
+          "character-stage": [
+            26,
+            217.78125,
+            484.5,
+            286
+          ],
+          "operations-title": [
+            555.5,
+            238.78125,
+            833.5,
+            34.796875
+          ],
+          "next-year": [
+            26,
+            746.125,
+            1388,
+            73.1875
+          ]
+        },
+        "after": {
+          "character-stage": [
+            26,
+            217.78125,
+            484.5,
+            286
+          ],
+          "operations-title": [
+            555.5,
+            238.78125,
+            833.5,
+            34.796875
+          ],
+          "next-year": [
+            26,
+            746.125,
+            1388,
+            73.1875
+          ]
+        },
+        "scroll": 1440,
+        "width": 1440,
+        "animations": 0
+      }
+    }
+  ],
+  "checks": [
+    "whole frames change while typing",
+    "closed mouth and wait after dialogue",
+    "no automatic tutorial step",
+    "no year-1 timer",
+    "year-2 timer starts only after tutorial completion",
+    "overlay does not reflow game",
+    "integer crew and cluster",
+    "no horizontal overflow at 390/768/1440",
+    "no CSS or WebAnimations",
+    "five required button actions"
+  ]
+}

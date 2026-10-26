@@ -1,0 +1,26 @@
+[
+  {
+    "file": "georgia.ttf",
+    "tested": 102,
+    "missing": 92,
+    "characters": "ƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỴỵỶỷỸỹ"
+  },
+  {
+    "file": "georgiab.ttf",
+    "tested": 102,
+    "missing": 92,
+    "characters": "ƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỴỵỶỷỸỹ"
+  },
+  {
+    "file": "times.ttf",
+    "tested": 102,
+    "missing": 0,
+    "characters": ""
+  },
+  {
+    "file": "timesbd.ttf",
+    "tested": 102,
+    "missing": 0,
+    "characters": ""
+  }
+]

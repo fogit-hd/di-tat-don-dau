@@ -1,6 +1,6 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs');const path=require('node:path');const assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..');const out=path.join(root,'design-preview/landing-wiki-v2/verification');fs.mkdirSync(out,{recursive:true});
+const root=path.resolve(__dirname,'..');const out=path.join(root,process.env.PUBLIC_QA_OUT||'design-preview/landing-wiki-v2/verification-final');fs.mkdirSync(out,{recursive:true});
 const requests=[],errors=[],missing=[],mockPlayErrors=[];let browser;
 (async()=>{
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
@@ -55,7 +55,7 @@ const requests=[],errors=[],missing=[],mockPlayErrors=[];let browser;
  await page.getByRole('searchbox',{name:'Tìm sự kiện'}).fill('don chip');assert((await page.locator('.wiki-event-row').count())>0,'accentless search must match titles beginning with Đ');
  await page.goto('http://game.test/wiki?section=industries');await page.getByRole('searchbox',{name:'Tìm ngành'}).fill('trái cây');assert.equal(await page.locator('.wiki-industry-row').count(),1);
  await page.goto('http://game.test/');await page.getByRole('button',{name:'Tạo phòng',exact:true}).click();await page.getByRole('dialog',{name:'Tạo phòng',exact:true}).waitFor();await page.getByRole('button',{name:'Mở phòng',exact:true}).click();await page.waitForURL('**/host/QA1234');
- const created=requests.find(r=>r.path==='/api/rooms');assert.equal(created.headers['x-host-session'],'test-session');assert.equal(created.body.cycleSeconds,60);assert.equal(created.body.startingCapital,10000);
+ const created=requests.find(r=>r.path==='/api/rooms');assert.equal(created.headers['x-host-session'],'test-session');assert.equal(created.body.cycleSeconds,60);assert.equal(created.body.startingCapital,10000);assert.equal('linePrices' in created.body,false,'room creation must not send price overrides');
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({measurements,missing,errors,mockPlayErrors,checks:['Google before create','login-only does not create','logout','join code by Enter and name submit by click','context menu prevented','drag disabled','Wiki search','event context selector','authenticated room create POST'],apiRequests:requests.map(({path,method,body})=>({path,method,body}))},null,2));
  // Errors from host/play mocks are not gameplay validation; public-page runtime must remain clean.
  assert.equal(missing.length,0,'missing static assets');

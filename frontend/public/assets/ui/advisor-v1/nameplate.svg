@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="48" viewBox="0 0 260 48" fill="none">
+<defs><linearGradient id="gold" x2="0" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#fff0aa"/><stop offset=".26" stop-color="#b77321"/><stop offset=".52" stop-color="#ffda76"/><stop offset="1" stop-color="#815019"/></linearGradient><linearGradient id="wine" x2="0" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#742234"/><stop offset="1" stop-color="#35101d"/></linearGradient></defs>
+<path d="M13 2H247L258 12V36L247 46H13L2 36V12Z" fill="url(#wine)" stroke="#492313" stroke-width="4"/>
+<path d="M13 3H247L257 13V35L247 45H13L3 35V13Z" stroke="url(#gold)" stroke-width="3"/>
+<path d="M17 8H243L251 16V32L243 40H17L9 32V16Z" stroke="#e7b958" stroke-width="1"/>
+<path d="M20 11H240" stroke="#f4d890" opacity=".34"/>
+<g fill="url(#gold)" stroke="#633510" stroke-width=".8"><path d="m12 17 5 7-5 7-5-7Z"/><path d="m248 17 5 7-5 7-5-7Z"/><circle cx="21" cy="8" r="2.5"/><circle cx="239" cy="8" r="2.5"/><circle cx="21" cy="40" r="2.5"/><circle cx="239" cy="40" r="2.5"/></g>
+</svg>

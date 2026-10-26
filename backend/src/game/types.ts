@@ -222,6 +222,7 @@ export type TeamState = {
   pulseYear: number
   nextPromptAt: number
   introDone: boolean
+  tutorial?: { version: 1; step: number; complete: boolean }
   factoryName: string
   pending: Pending | null
   promptYearPausedAt?: number

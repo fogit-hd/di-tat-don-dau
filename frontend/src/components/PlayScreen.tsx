@@ -20,6 +20,9 @@ import { ThemeIntro } from './ThemeIntro.tsx'
 import { TopBar } from './TopBar.tsx'
 import { specialStatuses } from '../lib/special-status.ts'
 import { TraitNotice } from './TraitNotice.tsx'
+import { FirstYearAdvisor } from './FirstYearAdvisor.tsx'
+import { preloadAdvisor } from '../lib/advisor-assets.ts'
+import { guideActive, guideDisplayedTab, guideStep } from '../lib/first-year-guide.ts'
 import './gameplay.css'
 import './responsive-gameplay.css'
 import './painted-frames.css'
@@ -43,6 +46,8 @@ export function PlayScreen() {
   useEffect(() => {
     setToken(localStorage.getItem(`player:${upper}`))
   }, [upper])
+  const preloadRequested=Boolean(snap?.you?.scene?.tutorial&&!snap.you.scene.introDone)
+  useEffect(()=>{if(preloadRequested)void preloadAdvisor().catch(()=>{})},[preloadRequested])
 
   async function join() {
     setBusy(true)
@@ -107,6 +112,8 @@ export function PlayScreen() {
   const statuses = scene ? specialStatuses(scene) : []
   const currentEvents = scene?.eventLog?.filter(event => event.year === scene.cycles) ?? []
   const ongoing = scene ? ongoingEventEntries({ effects: scene.activeEffects ?? [], timed: scene.effects, traits: statuses, events: scene.eventLog ?? [], now: youFinished ? snap?.serverNow ?? now : now }) : []
+  const tutorial = scene && showGame && guideActive(scene) ? guideStep(scene) : null
+  async function acknowledge(action:string) { if(busy||snap?.paused||offline)return false;return Boolean(await act('tutorial',{action})) }
 
   return (
     <EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main data-economy-model={scene?.economyVersion} className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
@@ -141,6 +148,8 @@ export function PlayScreen() {
             now={now}
             rank={snap.you?.rank ?? 1}
             muted={muted}
+            guideAction={tutorial?.action}
+            onGuideAction={action=>{if(tutorial?.action===action)void acknowledge(action)}}
             onMute={() => {
               const next = !muted
               setMuted(next)
@@ -160,6 +169,9 @@ export function PlayScreen() {
                 key={`${upper}-${youFinished ? 'finished' : 'playing'}`}
                 ref={gameTabs}
                 finished={youFinished}
+                tutorialTarget={tutorial?(busy?null:tutorial.tab??null):undefined}
+                initialTab={tutorial?guideDisplayedTab(scene.tutorial!.step):'investment'}
+                onVisit={tab=>{if(tutorial?.tab===tab)void acknowledge(tutorial.action)}}
                 result={<InlineResult snap={snap} />}
                 enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}
                 risk={<GovernanceRiskCard scene={scene} />}
@@ -183,6 +195,7 @@ export function PlayScreen() {
                           prices={scene.linePrices ?? snap.room.linePrices}
                           busy={busy}
                           paused={snap.paused}
+                          tutorialAction={tutorial?.action}
                           onInvest={(line, quantity) => {
                             beep(660, 0.06, muted)
                             return act('invest', { line, quantity }).then(Boolean)
@@ -209,12 +222,15 @@ export function PlayScreen() {
               nextYearAt={scene.nextYearAt}
               yearLockUntil={scene.yearLockUntil}
               yearSeconds={snap.room.cycleSeconds}
+              guided={Boolean(tutorial)}
+              guideCanPress={tutorial?.action==='year'}
               onPress={() => {
                 beep(520, 0.08, muted)
                 void act('year')
               }}
               onFinish={() => setFinishedSummary(true)}
             />
+            {tutorial&&!scene.pending&&<FirstYearAdvisor key={`${upper}:${snap.you?.id}`} step={tutorial} stepIndex={scene.tutorial!.step} paused={snap.paused||offline} busy={busy} error={formError} onAcknowledge={acknowledge} />}
         </>
       )}
       {snap && showGame && century && theme && (
@@ -250,6 +266,8 @@ function YearButton({
   yearSeconds,
   onPress,
   onFinish,
+  guided=false,
+  guideCanPress=false,
 }: {
   finished: boolean
   year: number
@@ -261,6 +279,8 @@ function YearButton({
   yearSeconds: number
   onPress: () => void
   onFinish: () => void
+  guided?:boolean
+  guideCanPress?:boolean
 }) {
   if (finished) {
     return (
@@ -278,21 +298,22 @@ function YearButton({
   const ratio = Math.min(1, left / total)
   const seconds = Math.ceil(left / 1000)
   const lockLeft = Math.max(0, yearLockUntil - now)
-  const locked = lockLeft > 0
+  const locked = !guided && lockLeft > 0
   return (
     <div className="year-dock">
       <button
         type="button"
-        className="year-btn"
-        disabled={busy || locked}
+        data-guide="year"
+        className={`year-btn${guided?' guide-year':''}`}
+        disabled={busy || locked || guided&&!guideCanPress}
         onClick={onPress}
-        aria-label={`${locked ? 'Đang diễn' : 'Sang năm'}, tự chốt sau ${seconds} giây`}
+        aria-label={guided?'Sang năm · Hướng dẫn năm đầu, không có thời gian chờ':`${locked ? 'Đang diễn' : 'Sang năm'}, tự chốt sau ${seconds} giây`}
       >
-        <YearPerimeter ratio={ratio} />
+        {!guided&&<YearPerimeter ratio={ratio} />}
         {year > 0 && <span key={year} className="year-settlement-note">Năm {year} · Đã chốt</span>}
         <span>
           {locked ? 'Đang diễn' : 'Sang năm'}
-          <small>{seconds}s</small>
+          <small>{guided?'Chưa đếm ngược':`${seconds}s`}</small>
         </span>
       </button>
     </div>

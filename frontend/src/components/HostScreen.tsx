@@ -21,13 +21,6 @@ export function HostScreen() {
   const [capital, setCapital] = useState(10000)
   const [cycle, setCycle] = useState(60)
   const [yearMin, setYearMin] = useState(5)
-  const [prices, setPrices] = useState<Record<'eng' | 'mac' | 'sup' | 'inf' | 'grn', number>>({
-    eng: 50,
-    mac: 200,
-    sup: 75,
-    inf: 100,
-    grn: 60,
-  })
   const [primed, setPrimed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState('')
@@ -45,7 +38,6 @@ export function HostScreen() {
     setCapital(snap.room.startingCapital)
     setCycle(snap.room.cycleSeconds)
     setYearMin(snap.room.yearMinSeconds)
-    if (snap.room.linePrices) setPrices(snap.room.linePrices)
     setPrimed(true)
   }, [snap, primed])
 
@@ -110,32 +102,6 @@ export function HostScreen() {
                 <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
               </label>
             </div>
-            <div className="config-section host-config-section">
-              <h2>Điều chỉnh mức giá toàn phòng</h2>
-              <p>Các ô dưới là giá tham chiếu để điều chỉnh toàn phòng. Giá thực tế khác nhau theo ngành và tăng theo quy mô.</p>
-            </div>
-            <div className="settings price-grid" aria-label="Giá đầu tư">
-              {(
-                [
-                  ['eng', 'Tuyển công nhân'],
-                  ['mac', 'Cụm sản xuất'],
-                  ['sup', 'Phụ trợ'],
-                  ['inf', 'Hạ tầng'],
-                  ['grn', 'Công nghệ sạch'],
-                ] as const
-              ).map(([id, label]) => (
-                <label key={id}>
-                  Giá tham chiếu {label} (triệu VNĐ)
-                  <input
-                    type="number"
-                    min={1}
-                    max={100000}
-                    value={prices[id]}
-                    onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}
-                  />
-                </label>
-              ))}
-            </div>
             {note && <p className="warn">{note}</p>}
             <button
               type="button"
@@ -149,7 +115,7 @@ export function HostScreen() {
                     await api(`/api/rooms/${upper}`, {
                       method: 'PATCH',
                       hostToken: token,
-                      body: { durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin, linePrices: prices },
+                      body: { durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin },
                     })
                     await api(`/api/rooms/${upper}/start`, { method: 'POST', hostToken: token, body: {} })
                   } catch (err) {

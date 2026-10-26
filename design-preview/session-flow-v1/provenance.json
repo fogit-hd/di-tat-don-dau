@@ -1,0 +1,54 @@
+{
+  "tool": "built-in image_gen",
+  "outputs": [
+    {
+      "file": "01-player-results.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-bdfba461-1b2a-4737-bee3-b9a27d258d8b.png"
+    },
+    {
+      "file": "02-host-results.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-56cfbeb5-9360-4a93-a1fb-c666d8b35ca9.png"
+    },
+    {
+      "file": "03-host-questions.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-23b167fa-123d-4bf1-bfd1-b485b1ef8f7f.png"
+    },
+    {
+      "file": "04-create-room.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-685fee45-b2df-4d9a-8bf5-8804aa7b37f6.png"
+    },
+    {
+      "file": "05-host-lobby.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-1ef16304-6db0-4005-a555-32e0767c96e4.png"
+    },
+    {
+      "file": "06-tutorial-start.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-679a2e2a-457b-40d4-a1a6-602c1de4e7e9.png"
+    },
+    {
+      "file": "07-tutorial-year-one.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-35e768ad-0de4-469a-8c44-34365b294225.png"
+    },
+    {
+      "file": "06-in-game-guide-desktop.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-f837dc19-984c-4a20-a915-ee5e29193a67.png"
+    },
+    {
+      "file": "07-in-game-guide-mobile.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-b473a3cc-cd4d-4cad-9601-c1d9f6408c28.png"
+    },
+    {
+      "file": "08-guide-character-states.png",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-ac748c00-90b3-4d47-ad06-d67b0e2cd40b.png"
+    }
+  ],
+  "mainGuideFiles": [
+    "06-in-game-guide-desktop.png",
+    "07-in-game-guide-mobile.png"
+  ],
+  "supersededGuideFiles": [
+    "06-tutorial-start.png",
+    "07-tutorial-year-one.png"
+  ],
+  "stage": "approval canvases; animated character runtime not implemented"
+}

@@ -33,6 +33,7 @@ import { LINES } from './game/engine'
 import { isBankrupt, productionPlan, productionForecast } from './game/production'
 import { investmentPreviews } from './game/investment-preview'
 import { introFactoryName } from './game/intro'
+import { TUTORIAL_ACTIONS, tutorialAction, tutorialActive } from './game/tutorial'
 import { money, moneyTemplate } from './game/money'
 import { hashString, makeRng } from './game/rng'
 import { annualBalance, annualEconomy, annualPolicy, annualWeights, annualWholeRate } from './game/random-economy'
@@ -638,7 +639,8 @@ export async function confirmIntro(code: string, token: string, factoryName: str
   team.state.introDone = true
   const yearMs = room.cycleSeconds * 1000
   const base = room.status === 'paused' && room.pausedAt ? room.pausedAt : Date.now()
-  team.state.nextYearAt = base + yearMs
+  team.state.nextYearAt = tutorialActive(team.state) ? 0 : base + yearMs
+  if (tutorialActive(team.state)) { team.state.yearLockUntil = 0; team.state.nextPromptAt = 0 }
   team.theme = { ...team.theme, factoryName: name, vars: { ...team.theme.vars, factory: name } }
   team.state.yearOpenCash = team.state.cash
   team.state.yearOpenAssets = computeValue(team.state, team.theme, rules().balance)
@@ -650,6 +652,43 @@ export async function confirmIntro(code: string, token: string, factoryName: str
 function teamInvestmentLines(team: LiveTeam) {
   const lines=linesOf(team.theme!)
   return team.state?.productionVersion===3 ? lines.map(line=>({...line,hint:line.label,label:line.id==='eng'?'Tuyển công nhân':line.id==='mac'?'Mở cụm sản xuất':line.label})) : lines
+}
+
+export async function acknowledgeTutorial(code: string, token: string, action: string) {
+  const room = requireRoom(code), team = findTeam(room, token), state = team.state
+  if (room.status !== 'playing' || !state?.introDone || state.finished) throw new HttpError(409, 'Chưa thể tiếp tục hướng dẫn')
+  if (!state.tutorial) throw new HttpError(409, 'Lượt chơi này không có hướng dẫn năm đầu')
+  if (action === 'confirm-existing-cluster' || action === 'confirm-existing-crew') {
+    const expected=action==='confirm-existing-cluster'?'cluster':'crew'
+    if(state.tutorial.step>TUTORIAL_ACTIONS.indexOf(expected))return {ok:true}
+    if(tutorialAction(state)!==expected||(expected==='cluster'?state.machines<1:state.engineers<(state.crewSize??1)))throw new HttpError(409,'Chưa có đủ nguồn lực để xác nhận bước này')
+    state.tutorial.step++;await persist(room);push(room.code);return {ok:true}
+  }
+  if (action === 'continue-without-purchase' && team.theme) {
+    if(state.tutorial.step>=TUTORIAL_ACTIONS.indexOf('enterprise-ready'))return {ok:true}
+    const current = tutorialAction(state), line = current === 'cluster' ? 'mac' : 'eng'
+    if (current !== 'cluster' && current !== 'crew') throw new HttpError(409, 'Không phải bước đầu tư')
+    const quote = investmentQuote(state, line, teamBasePrices(team, room)[line], current === 'cluster' ? 1 : 'crew', Date.now())
+    if (quote.count > 0 && state.cash >= quote.total) throw new HttpError(409, 'Bạn vẫn đủ vốn cho khoản đầu tư được hướng dẫn')
+    state.tutorial.step = TUTORIAL_ACTIONS.indexOf('enterprise-ready')
+    await persist(room); push(room.code); return { ok: true }
+  }
+  const index = TUTORIAL_ACTIONS.indexOf(action as typeof TUTORIAL_ACTIONS[number])
+  if (index < 0 || ['cluster', 'crew', 'year'].includes(action)) throw new HttpError(400, 'Thao tác hướng dẫn không hợp lệ')
+  // A lost response or duplicate click must never move two steps forward.
+  if (index < state.tutorial.step || state.tutorial.complete) return { ok: true }
+  if (tutorialAction(state) !== action) throw new HttpError(409, 'Hãy thực hiện đúng bước đang được hướng dẫn')
+  if (action === 'complete') {
+    if (state.cycles !== 1) throw new HttpError(409, 'Hãy chốt năm đầu trước')
+    const now = Date.now()
+    state.tutorial.complete = true
+    state.nextYearAt = now + room.cycleSeconds * 1000
+    state.yearLockUntil = now + room.yearMinSeconds * 1000
+    presentYearQuestion(team, now)
+  }
+  state.tutorial.step++
+  await persist(room); push(room.code)
+  return { ok: true }
 }
 
 function teamBasePrices(team: LiveTeam, room: LiveRoom) {
@@ -666,6 +705,7 @@ export async function investLine(code: string, token: string, line: Line, quanti
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
   if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
+  if (tutorialActive(team.state) && !((tutorialAction(team.state) === 'cluster' && line === 'mac' && quantity === 1) || (tutorialAction(team.state) === 'crew' && line === 'eng' && quantity === 'crew'))) throw new HttpError(409, 'Hãy thực hiện khoản đầu tư đang được cố vấn hướng dẫn')
   const basePrice = teamBasePrices(team,room)[line] ?? room.step
   const quote = investmentQuote(team.state,line,basePrice,quantity,Date.now())
   if (![1, 5, 10, 'max','crew'].includes(quantity) || (quantity==='crew' && line!=='eng')) throw new HttpError(400, 'Mức đầu tư không hợp lệ')
@@ -675,6 +715,8 @@ export async function investLine(code: string, token: string, line: Line, quanti
   const result = invest(team.state, line, quote.total, rules().balance, teamInvestmentLines(team), basePrice, packages, efficiency)
   if (!result.ok) throw new HttpError(400, result.error)
   team.state = result.state
+  if (tutorialAction(team.state) === 'cluster' && team.state.machines >= 1) team.state.tutorial!.step++
+  else if (tutorialAction(team.state) === 'crew' && team.state.engineers >= (team.state.crewSize ?? 1)) team.state.tutorial!.step++
   await persist(room)
   push(room.code)
   return { ok: true, cash: team.state.cash }
@@ -683,6 +725,7 @@ export async function investLine(code: string, token: string, line: Line, quanti
 export async function investCompanyUpgrade(code: string, token: string, kind: CompanyUpgrade) {
   const room=requireRoom(code);const team=findTeam(room,token)
   if(room.status!=='playing'||!team.state||!team.theme||!team.state.introDone)throw new HttpError(409,'Chưa thể nâng cấp lúc này')
+  if(tutorialActive(team.state))throw new HttpError(409,'Hãy hoàn tất hướng dẫn năm đầu trước khi nâng cấp chất lượng')
   if(team.state.productionVersion!==3)throw new HttpError(409,'Nâng cấp này dành cho lượt chơi theo mô hình mới')
   const result=upgradeCompany(team.state,team.theme,annualBalance(team.state,rules().balance),kind,Date.now())
   if(!result.ok)throw new HttpError(400,result.error)
@@ -838,6 +881,7 @@ function beginPlay(room: LiveRoom, now: number) {
     used.add(theme.id)
     const teamRng = makeRng(hashString(`${room.seed}:${team.id}`))
     const state = createState(theme, room.startingCapital, teamRng, balance, now)
+    state.tutorial = { version: 1, step: 0, complete: false }
     state.eventBag = shuffleIds(theme.eventIds, teamRng)
     state.yearOpenCash = state.cash
     state.yearOpenAssets = computeValue(state, theme, balance)
@@ -881,8 +925,10 @@ export async function advanceTeamYear(code: string, token: string) {
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
   const now = Date.now()
   if(team.state.pending?.kind==='question')throw new HttpError(409,'Hãy hoàn tất câu hỏi trước khi sang năm')
+  if (tutorialActive(team.state) && tutorialAction(team.state) !== 'year') throw new HttpError(409, 'Hãy hoàn tất các bước hướng dẫn trước khi sang năm')
   if (team.state.yearLockUntil && now < team.state.yearLockUntil) throw new HttpError(409, 'Năm này chưa diễn xong')
   advanceYear(room, team, now)
+  if (tutorialAction(team.state) === 'year' && !team.state.finished) { team.state.tutorial!.step++; team.state.nextYearAt = 0; team.state.yearLockUntil = 0 }
   await persist(room)
   push(room.code)
   return { ok: true, cycles: team.state.cycles }
@@ -962,7 +1008,7 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
       if (notice) emitSuccession(room.code, notice)
     }
   }
-  if (!team.state.finished && !isBankrupt(team.state)) presentYearQuestion(team, now)
+  if (!team.state.finished && !isBankrupt(team.state) && !tutorialActive(team.state)) presentYearQuestion(team, now)
   const cashAfter = team.state.cash
   const assetsAfter = team.state.finished ? (team.score ?? computeValue(team.state, team.theme, balance)) : computeValue(team.state, team.theme, balance)
   const extra = team.state.pendingCauses ?? []
@@ -1507,6 +1553,7 @@ export function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
   let dirty = false
   for (const team of room.teams) {
     if (!team.state?.introDone || !team.theme) continue
+    if (tutorialActive(team.state)) { if(expirePrompt(room,team,now))dirty=true;continue }
     if(team.state.pending?.kind==='question')pauseYearForPrompt(team.state,now)
     if (expirePrompt(room, team, now)) dirty = true
     if (!team.state.pending && team.state.promptYearPausedAt!=null){resumeYearAfterPrompt(team.state,now);dirty=true}
@@ -1730,6 +1777,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     })),
     pending: publicPending(state.pending),
     introDone: state.introDone,
+    tutorial: state.tutorial,
     eventLog: state.eventLog ?? [],
     yearChanges: includeHistory ? state.yearLedger ?? [] : [],
     linePrices: Object.fromEntries(

@@ -17,7 +17,7 @@ for item in sources:
   for name,box in [('wine',(0,0,im.width//2,im.height)),('paper',(im.width//2,0,im.width,im.height))]:
    im.crop(box).resize((512,512),Image.Resampling.LANCZOS).convert('RGB').save(out/(name+'.webp'),quality=88,method=6)
  if item['name']=='chapter-art':
-  for name,box in [('step-1',(0,0,768,512)),('step-2',(768,0,1536,512)),('step-3',(0,512,768,1024)),('book',(768,512,1536,1024))]:
+  for name,box in [('step-1',(0,0,768,512)),('step-2',(768,0,1536,512)),('step-3',(0,540,768,1024)),('book',(768,540,1536,1024))]:
    im.crop(box).save(out/(name+'.webp'),quality=92,method=6)
 metadata={p.name:{'width':Image.open(p).width,'height':Image.open(p).height,'bytes':p.stat().st_size} for p in out.glob('*.webp')}
 (out/'manifest.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')

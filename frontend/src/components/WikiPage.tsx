@@ -88,7 +88,7 @@ export function WikiPage(){
         <Heading title="Wiki trò chơi" body="Tra cứu ngành, nâng cấp và sự kiện"/>
         <form className="wiki-search" onSubmit={e=>{e.preventDefault();setParams({section:'events'});setPage(0)}}><input type="search" aria-label="Tìm trong Wiki" placeholder="Tìm ngành, nâng cấp, sự kiện…" value={search} onChange={e=>setSearch(e.target.value)}/><button type="submit" className="public-button"><T text="Tìm kiếm"/></button></form>
         <div className="wiki-entry-list">{[
-          ['Mở cụm & tuyển người','Tìm hiểu vốn khởi động, tổ vận hành và giá riêng của từng ngành.','/assets/landing-v2/step-1.webp','industries'],
+          ['Mở cụm & tuyển người','Tìm hiểu vốn khởi động, tổ vận hành và giá riêng của từng ngành.','/assets/landing-v2/step-2.webp','industries'],
           ['Được gì sau mỗi năm?','Xem sản lượng, giá bán, chi phí và các khoản cộng trừ tiền mặt.','/assets/landing-v2/step-3.webp','production'],
           ['Hiểu tác động sự kiện','Tra cứu ảnh, tác động, thời hạn và tương tác giữa các sự kiện.',artwork('storm'),'events'],
         ].map(([title,body,src,next])=><button type="button" className="wiki-entry" key={title} onClick={()=>navigate(next as Section)}><Art src={src}/><div><h2><T text={title} bold/></h2><p><T text={body}/></p></div><span className="wiki-chevron" aria-hidden="true"><T text="›"/></span></button>)}</div>

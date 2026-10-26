@@ -28,7 +28,8 @@ vi.mock('./game/catalog', async () => {
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
 
 })
-import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick } from './runtime'
+import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom } from './runtime'
+import { TUTORIAL_ACTIONS } from './game/tutorial'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
 function theme(): ThemeDef {
@@ -347,4 +348,78 @@ describe('question protects the team year clock',()=>{
   await expect(answerPrompt(a.code,a.player.playerToken,'yes')).rejects.toMatchObject({status:409})
   expect(a.team.state!.cash).toBe(cash);expect(a.team.state!.pending!.phase).toBe('resolved')
  })
+})
+
+
+describe('first-year advisor clock and required actions',()=>{
+  it('enables the guide when a real new room begins, without changing the match duration',async()=>{
+    vi.mocked((await import('./game/catalog')).pickFreshTheme).mockReturnValue(theme())
+    const a=await roomWithTeam();await startRoom(a.code,a.hostToken)
+    const start=a.room.countdownEndsAt!;tick(a.room,start)
+    expect(a.team.state!.tutorial).toEqual({version:1,step:0,complete:false})
+    expect(a.room.endsAt).toBe(start+a.room.durationSec*1000)
+    await confirmIntro(a.code,a.player.playerToken,factoryName)
+    expect(a.team.state!.nextYearAt).toBe(0)
+  })
+
+  async function guided(){
+    const a=await roomWithTeam();a.team.state!.tutorial={version:1,step:0,complete:false};a.room.status='playing';a.room.endsAt=Date.now()+900000
+    await confirmIntro(a.code,a.player.playerToken,factoryName);return a
+  }
+  it('persists HUD/tab visits in order and blocks future purchases or years without moving the room deadline',async()=>{
+    const a=await guided(),deadline=a.room.endsAt
+    expect(a.team.state!.nextYearAt).toBe(0);expect(a.team.state!.yearLockUntil).toBe(0)
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,'cash')).rejects.toMatchObject({status:409})
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,'cluster')).rejects.toMatchObject({status:400})
+    await expect(investLine(a.code,a.player.playerToken,'mac')).rejects.toMatchObject({status:409})
+    await expect(advanceTeamYear(a.code,a.player.playerToken)).rejects.toMatchObject({status:409})
+    for(const action of TUTORIAL_ACTIONS.slice(0,TUTORIAL_ACTIONS.indexOf('cluster'))){
+      await acknowledgeTutorial(a.code,a.player.playerToken,action)
+      const step=a.team.state!.tutorial!.step
+      await acknowledgeTutorial(a.code,a.player.playerToken,action)
+      expect(a.team.state!.tutorial!.step).toBe(step)
+      expect(buildSnapshot(a.room,{role:'player',code:a.code,teamId:a.player.teamId}).you!.scene!.tutorial).toEqual(a.team.state!.tutorial)
+    }
+    expect(db.participant.upsert).toHaveBeenLastCalledWith(expect.objectContaining({update:expect.objectContaining({state:expect.objectContaining({tutorial:expect.objectContaining({step:TUTORIAL_ACTIONS.indexOf('cluster')})})})}))
+    await expect(investLine(a.code,a.player.playerToken,'eng','crew')).rejects.toMatchObject({status:409})
+    await expect(investLine(a.code,a.player.playerToken,'mac',5)).rejects.toMatchObject({status:409})
+    await investLine(a.code,a.player.playerToken,'mac',1)
+    expect(a.team.state!.machines).toBe(1);expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_ACTIONS.indexOf('crew'))
+    await investLine(a.code,a.player.playerToken,'eng','crew')
+    expect(a.team.state!.engineers).toBe(a.team.state!.crewSize);expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_ACTIONS.indexOf('enterprise-ready'))
+    await acknowledgeTutorial(a.code,a.player.playerToken,'enterprise-ready')
+    await advanceTeamYear(a.code,a.player.playerToken)
+    expect(a.team.state!.cycles).toBe(1);expect(a.team.state!.tutorial!.complete).toBe(false);expect(a.team.state!.nextYearAt).toBe(0);expect(a.team.state!.pending).toBeNull()
+    await expect(advanceTeamYear(a.code,a.player.playerToken)).rejects.toMatchObject({status:409})
+    const before=Date.now();await acknowledgeTutorial(a.code,a.player.playerToken,'complete')
+    expect(a.team.state!.tutorial!.complete).toBe(true);expect(a.team.state!.nextYearAt).toBeGreaterThanOrEqual(before+a.room.cycleSeconds*1000)
+    const next=a.team.state!.nextYearAt;await acknowledgeTutorial(a.code,a.player.playerToken,'complete');expect(a.team.state!.nextYearAt).toBe(next)
+    expect(a.room.endsAt).toBe(deadline)
+  })
+  it('keeps the global match and other teams running while one player waits in the guide',async()=>{
+    const a=await roomWithTeam(),joined=await joinRoom(a.code,'Đội khác'),other=a.room.teams.find(t=>t.id===joined.teamId)!,start=Date.now()
+    a.team.state!.tutorial={version:1,step:0,complete:false};a.room.status='playing';a.room.endsAt=start+900000
+    other.theme=theme();other.state=createState(other.theme,10000,makeRng(5),balance);other.state.introDone=true;other.state.nextYearAt=start+60000
+    await confirmIntro(a.code,a.player.playerToken,factoryName)
+    tick(a.room,start+61000)
+    expect(a.team.state!.cycles).toBe(0);expect(a.team.state!.tutorial!.step).toBe(0);expect(other.state.cycles).toBe(1);expect(a.room.endsAt).toBe(start+900000)
+    tick(a.room,start+900001);expect(a.room.status).toBe('ended')
+  })
+  it('handles resources received during the guide without requiring a duplicate purchase',async()=>{
+    const a=await guided();a.team.state!.tutorial!.step=TUTORIAL_ACTIONS.indexOf('cluster')
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,'confirm-existing-cluster')).rejects.toMatchObject({status:409})
+    a.team.state!.machines=1;const cash=a.team.state!.cash
+    await acknowledgeTutorial(a.code,a.player.playerToken,'confirm-existing-cluster')
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,'confirm-existing-crew')).rejects.toMatchObject({status:409})
+    a.team.state!.engineers=a.team.state!.crewSize!
+    await acknowledgeTutorial(a.code,a.player.playerToken,'confirm-existing-crew')
+    expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_ACTIONS.indexOf('enterprise-ready'));expect(a.team.state!.cash).toBe(cash)
+  })
+  it('does not trap a low-capital team or grant it free funds',async()=>{
+    const a=await guided();a.team.state!.tutorial!.step=TUTORIAL_ACTIONS.indexOf('cluster')
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,'continue-without-purchase')).rejects.toMatchObject({status:409})
+    a.team.state!.cash=1
+    await acknowledgeTutorial(a.code,a.player.playerToken,'continue-without-purchase')
+    expect(a.team.state!.cash).toBe(1);expect(a.team.state!.machines).toBe(0);expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_ACTIONS.indexOf('enterprise-ready'))
+  })
 })

@@ -71,7 +71,6 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
   const [capital, setCapital] = useState(10000)
   const [cycle, setCycle] = useState(60)
   const [yearMin, setYearMin] = useState(5)
-  const [prices, setPrices] = useState({ eng: 50, mac: 200, sup: 75, inf: 100, grn: 60 })
   const [hostOpen, setHostOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
@@ -164,10 +163,9 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
   }, [searchParams])
 
   useEffect(() => {
-    void api<{ investmentBasePrices?: typeof prices; yearMinSeconds: number; stepDivisor: number; stepRound: number; stepMin: number; lines: { id: string; label: string }[] }>('/api/setup')
+    void api<{ yearMinSeconds: number }>('/api/setup')
       .then((setup) => {
         setYearMin(setup.yearMinSeconds)
-        if(setup.investmentBasePrices)setPrices(setup.investmentBasePrices)
       })
       .catch(() => undefined)
   }, [])
@@ -199,7 +197,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
       const created = await api<{ code: string; hostToken: string }>('/api/rooms', {
         method: 'POST',
         hostSession,
-        body: { hostName, durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin, linePrices: prices },
+        body: { hostName, durationMin: minutes, startingCapital: capital, cycleSeconds: cycle, yearMinSeconds: yearMin },
       })
       localStorage.setItem(`host:${created.code}`, created.hostToken)
       navigate(`/host/${created.code}`)
@@ -298,7 +296,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
         <div className="modal on public-modal" role="dialog" aria-modal="true" aria-labelledby="host-title">
           <div className="card painted-frame" data-painted-frame>
             <h2 id="host-title"><T text="Tạo phòng" bold/></h2>
-            <p><T text="Chủ phòng chiếu mã. Giá từng khoản đầu tư mặc định theo vốn, và có thể sửa trước khi mở phòng."/></p>
+            <p><T text="Mỗi ngành có giá đầu tư riêng. Chủ phòng thiết lập thời lượng và vốn khởi đầu."/></p>
             <form
               onSubmit={(event) => {
                 event.preventDefault()
@@ -327,32 +325,6 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
                   <T text="Khóa nút (giây)"/>
                   <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
                 </label>
-              </div>
-              <div className="config-section">
-                <h3><T text="Điều chỉnh mức giá toàn phòng" bold/></h3>
-                <p><T text="Đây là giá tham chiếu để điều chỉnh toàn phòng. Mỗi ngành có giá riêng; giá mua tăng theo quy mô."/></p>
-              </div>
-              <div className="settings price-grid" aria-label="Giá đầu tư">
-                {(
-                  [
-                    ['eng', 'Tuyển công nhân'],
-                    ['mac', 'Cụm sản xuất'],
-                    ['sup', 'Phụ trợ'],
-                    ['inf', 'Hạ tầng'],
-                    ['grn', 'Công nghệ sạch'],
-                  ] as const
-                ).map(([id, label]) => (
-                  <label key={id}>
-                    <T text={`Giá tham chiếu ${label} (triệu VNĐ)`}/>
-                    <input
-                      type="number"
-                      min={1}
-                      max={100000}
-                      value={prices[id]}
-                      onChange={(event) => setPrices({ ...prices, [id]: Number(event.target.value) })}
-                    />
-                  </label>
-                ))}
               </div>
               {error && (
                 <p className="warn" role="alert">

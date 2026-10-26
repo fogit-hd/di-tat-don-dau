@@ -133,6 +133,7 @@ export type SceneView = {
   effects: EffectView[]
   pending: PendingView | null
   introDone: boolean
+  tutorial?: { version: 1; step: number; complete: boolean }
   eventLog?: EventLogView[]
   yearChanges?: YearChangeView[]
   activeEffects?: ActiveEffectView[]

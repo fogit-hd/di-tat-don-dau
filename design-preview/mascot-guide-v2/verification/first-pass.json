@@ -1,0 +1,170 @@
+{
+  "errors": [],
+  "measurements": [
+    {
+      "width": 390,
+      "scroll": 390,
+      "height": 1177,
+      "pose": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": true,
+        "mouth": 0.0498191620844015,
+        "mouthShape": "wide",
+        "head": 0.013433890949920207,
+        "right": [
+          120.78869712318226,
+          -289.51426265434026
+        ],
+        "blink": 1,
+        "opacity": 0.8997211025031414,
+        "pose": "welcome",
+        "glyph": "!",
+        "text": "Chào bạn!",
+        "fullText": "Chào bạn! Mình sẽ hướng dẫn năm đầu. Bấm Đầu tư để bắt đầu nhé.",
+        "lab": null,
+        "target": "tab-invest",
+        "position": {
+          "x": 68,
+          "y": 370.765625,
+          "scale": 0.34334763948497854
+        },
+        "guideComplete": false,
+        "yearTwoRemaining": null
+      },
+      "stage": {
+        "x": 10,
+        "y": 182.765625,
+        "w": 370,
+        "h": 200
+      },
+      "dialogue": {
+        "x": 122,
+        "y": 200.765625,
+        "w": 250,
+        "h": 144
+      },
+      "next": {
+        "x": 10,
+        "y": 915.484375,
+        "w": 370,
+        "h": 64
+      },
+      "animations": 0
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "height": 1077,
+      "pose": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": true,
+        "mouth": 0.032141641660162326,
+        "mouthShape": "wide",
+        "head": 0.008441753246352475,
+        "right": [
+          121.99994500693447,
+          -301.99943314840147
+        ],
+        "blink": 1,
+        "opacity": 0.9999445373091388,
+        "pose": "welcome",
+        "glyph": " ",
+        "text": "Chào bạn! Mình sẽ hướng dẫn năm ",
+        "fullText": "Chào bạn! Mình sẽ hướng dẫn năm đầu. Bấm Đầu tư để bắt đầu nhé.",
+        "lab": null,
+        "target": "tab-invest",
+        "position": {
+          "x": 74,
+          "y": 452.8125,
+          "scale": 0.34334763948497854
+        },
+        "guideComplete": false,
+        "yearTwoRemaining": null
+      },
+      "stage": {
+        "x": 16,
+        "y": 222.8125,
+        "w": 317.40625,
+        "h": 242
+      },
+      "dialogue": {
+        "x": 128,
+        "y": 240.8125,
+        "w": 201.40625,
+        "h": 144
+      },
+      "next": {
+        "x": 16,
+        "y": 844.1875,
+        "w": 736,
+        "h": 73.1875
+      },
+      "animations": 0
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "height": 987,
+      "pose": {
+        "ready": true,
+        "step": 0,
+        "year": 1,
+        "cash": 10000,
+        "clusters": 0,
+        "workers": 0,
+        "speaking": true,
+        "mouth": 0.7462852222848784,
+        "mouthShape": "wide",
+        "head": 0.0034347830328565285,
+        "right": [
+          121.9999677047844,
+          -301.9996671108544
+        ],
+        "blink": 1,
+        "opacity": 0.9999627930877212,
+        "pose": "welcome",
+        "glyph": "ầ",
+        "text": "Chào bạn! Mình sẽ hướng dẫn năm đầ",
+        "fullText": "Chào bạn! Mình sẽ hướng dẫn năm đầu. Bấm Đầu tư để bắt đầu nhé.",
+        "lab": null,
+        "target": "tab-invest",
+        "position": {
+          "x": 122.9,
+          "y": 491.78125,
+          "scale": 0.5386266094420601
+        },
+        "guideComplete": false,
+        "yearTwoRemaining": null
+      },
+      "stage": {
+        "x": 26,
+        "y": 217.78125,
+        "w": 484.5,
+        "h": 286
+      },
+      "dialogue": {
+        "x": 191,
+        "y": 235.78125,
+        "w": 325,
+        "h": 144
+      },
+      "next": {
+        "x": 26,
+        "y": 746.125,
+        "w": 1388,
+        "h": 73.1875
+      },
+      "animations": 0
+    }
+  ]
+}

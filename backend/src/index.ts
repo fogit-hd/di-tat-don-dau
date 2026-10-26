@@ -10,6 +10,7 @@ import {
   bootRooms,
   buildSnapshot,
   confirmIntro,
+  acknowledgeTutorial,
   createRoom,
   dismissPrompt,
   endRoom,
@@ -248,6 +249,14 @@ app.post('/api/rooms/:code/intro', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+app.post('/api/rooms/:code/tutorial', async (req, res, next) => {
+  try {
+    const code = param(req.params.code)
+    const body = z.object({ action: z.string().min(1).max(40) }).parse(req.body)
+    res.json(await withRoom(code, () => acknowledgeTutorial(code, playerToken(req), body.action)))
+  } catch (error) { next(error) }
 })
 
 app.post('/api/rooms/:code/year', async (req, res, next) => {
