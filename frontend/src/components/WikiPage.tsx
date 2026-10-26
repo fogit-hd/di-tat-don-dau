@@ -180,7 +180,7 @@ function EventDetail({row,context,setContext}:{row:EventRow;context:string;setCo
       <p><T text={`Hiệu ứng kinh tế áp dụng từ năm kế tiếp, kéo dài ${Math.max(1,Math.floor(years*.8))}–${Math.ceil(years*1.2)} năm sau bốc. Thay đổi tiền/tài sản/nhân lực tức thời xảy ra ngay khi nhận sự kiện.`}/></p>
     </div></div>
     <Fold title="Phạm vi, ngẫu nhiên & cộng dồn"><p><T text="Các khoảng trên là dải bốc quanh mốc dữ liệu, chưa áp bảo vệ phụ trợ và quy mô. % tác động được làm tròn nguyên; số người/cụm được làm tròn sau quy đổi. Mức cuối cùng được lưu khi sự kiện xuất hiện, không bốc lại khi mở xem."/></p><p><T text="Hệ số đang hiệu lực được nhân với nhau. Tác động gốc vẫn được giữ khi thêm ngữ cảnh giá đầu tư; vì vậy một biến thể có thể vừa có lợi vừa có hại."/></p><p><T text="Sự kiện kinh tế được bốc theo đội; cơ chế hiện tại còn có khả năng lan sự kiện đầu sang các đội khác. Trait gia đình theo đội và giữ đến khi thay đổi lượt; nghỉ hưu có thể chuyển giao ngay."/></p></Fold>
-    {row.narrations.length>0&&<Fold title="Lời dẫn theo địa phương và bối cảnh">{row.narrations.map((n,index)=><p key={index}><T text={replace(n.title+' — '+n.body,'ngành của bạn')}/></p>)}</Fold>}
+    {row.narrations.length>0&&<Fold title="Lời dẫn theo địa phương và bối cảnh">{row.narrations.map((n:{title:string;body:string},index:number)=><p key={index}><T text={replace(n.title+' — '+n.body,'ngành của bạn')}/></p>)}</Fold>}
     <p className="wiki-meta"><T text={`Mã dữ liệu: ${row.id}${context==='base'?'':'--'+context}`}/></p>
   </article>
 }

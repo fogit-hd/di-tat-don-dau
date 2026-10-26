@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import letters from '../lib/wiki-letter-paths.json'
 
 type Weight = 'regular' | 'bold'
-const glyphs = letters as Record<Weight, Record<string, [number, string]>>
+const glyphs = letters as unknown as Record<Weight, Record<string, [number, string]>>
 
 /** Public-page lettering is SVG geometry, not a browser font or an inaccessible screenshot. */
 export function ArtText({ text, bold = false, className = '', style }: { text: string; bold?: boolean; className?: string; style?: CSSProperties }) {
