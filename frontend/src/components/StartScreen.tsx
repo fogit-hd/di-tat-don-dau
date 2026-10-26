@@ -1,14 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
-import '../landing.css'
+import '../public-pages.css'
 import { googleClientId } from '../lib/endpoints.ts'
+import { ArtText as T, PaintedArt as Art } from './ArtText'
+const WikiPage = lazy(() => import('./WikiPage').then(module => ({default:module.WikiPage})))
 
 type GoogleIdentity = {
   accounts: {
     id: {
       initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void
       renderButton: (element: HTMLElement, options: Record<string, unknown>) => void
+      disableAutoSelect?: () => void
     }
   }
 }
@@ -31,22 +34,22 @@ const STEPS = [
 const FEATURES = [
   {
     id: 'eng',
-    title: 'Đào tạo nhân lực',
+    title: 'Tuyển công nhân',
     body: 'Nâng năng lực đội ngũ để mở khoá các phương án phát triển tiếp theo.',
   },
   {
     id: 'mac',
-    title: 'Dây chuyền sản xuất',
+    title: 'Mở cụm sản xuất',
     body: 'Đầu tư máy móc để tăng năng lực tạo ra giá trị cho doanh nghiệp.',
   },
   {
     id: 'sup',
-    title: 'Hệ sinh thái phụ trợ',
+    title: 'Phụ trợ',
     body: 'Kết nối nhà cung ứng và logistics để chuỗi vận hành vững hơn.',
   },
   {
     id: 'inf',
-    title: 'Hạ tầng vận hành',
+    title: 'Hạ tầng',
     body: 'Củng cố điện, nước và giao thông — nền tảng để doanh nghiệp lớn lên.',
   },
   {
@@ -60,7 +63,7 @@ function readCode(params: URLSearchParams) {
   return (params.get('code') ?? '').trim().toUpperCase().slice(0, 8)
 }
 
-export function StartScreen() {
+export function StartScreen({ wiki = false }: { wiki?: boolean }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [hostName, setHostName] = useState('Nhóm trình chiếu')
@@ -73,6 +76,7 @@ export function StartScreen() {
   const [loginOpen, setLoginOpen] = useState(false)
   const [hostSession, setHostSession] = useState(() => localStorage.getItem('host-session') || '')
   const loginButton = useRef<HTMLDivElement | null>(null)
+  const loginIntent = useRef<'create' | 'login'>('create')
   const roomCodeInput = useRef<HTMLInputElement | null>(null)
   const [joinStep, setJoinStep] = useState<'code' | 'name'>('code')
   const codeFromUrl = readCode(searchParams)
@@ -125,7 +129,7 @@ export function StartScreen() {
               setHostSession(token)
               setHostName(user.name || 'Chủ phòng')
               setLoginOpen(false)
-              setHostOpen(true)
+              if(loginIntent.current==='create')setHostOpen(true)
             })
             .catch((err) => setError(err instanceof ApiError ? err.message : 'Không đăng nhập được Google'))
         },
@@ -222,148 +226,64 @@ export function StartScreen() {
   }
 
   return (
-    <div className="landing">
-      <a className="skip" href="#cach-choi">
-        Tới cách chơi
-      </a>
-      <header className="land-bar" id="dau-trang">
-        <div className="land-wrap bar-inner">
-          <a className="wordmark" href="#dau-trang">
-            <img src="/assets/landing/game-logo-header.png" alt="Đi Tắt Đón Đầu" />
-          </a>
-          <nav className="land-nav" aria-label="Mục lục">
-            <a href="#cach-choi" aria-label="Cách chơi">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10c2 0 3 2 3.5 4l1 6c.4 2-1.7 3-3 1.5L16 16H8l-2.5 2.5c-1.3 1.5-3.4.5-3-1.5l1-6C4 9 5 7 7 7ZM7 10v5m-2.5-2.5h5" /><circle cx="16" cy="11" r=".6" /><circle cx="18" cy="14" r=".6" /></svg>
-              <span>Cách chơi</span>
-            </a>
-            <a href="#tinh-nang" aria-label="Sự kiện">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 10h18m-9 3 .9 2.1 2.3.2-1.8 1.5.6 2.2-2-1.2-2 1.2.6-2.2-1.8-1.5 2.3-.2L12 13Z" /></svg>
-              <span>Sự kiện</span>
-            </a>
-          </nav>
-          <div className="land-actions">
-            <button type="button" className="btn land-cta" onClick={() => { setError(''); hostSession ? setHostOpen(true) : setLoginOpen(true) }}>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>Tạo phòng
-            </button>
-            <button type="button" className="nav-join" aria-label="Vào phòng" onClick={() => { setJoinStep('code'); window.scrollTo({ top: 0, behavior: 'smooth' }); window.requestAnimationFrame(() => roomCodeInput.current?.focus({ preventScroll: true })) }}>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v16h-6M3 12h12m-5-5 5 5-5 5" /></svg><span>Vào phòng</span>
-            </button>
-          </div>
+    <div className="public-site" onContextMenu={event => { if(!(event.target instanceof Element) || !event.target.closest('input,textarea,select'))event.preventDefault() }} onDragStart={event => { if(event.target instanceof Element && event.target.closest('img,svg,.art-text'))event.preventDefault() }}>
+      <a className="public-skip" href={wiki?'#wiki-main':'#join-title'}><T text={wiki?'Tới nội dung Wiki':'Tới phần vào phòng'}/></a>
+      <header className="public-header public-wrap" id="dau-trang">
+        <Link className="public-brand" to="/" aria-label="Đi Tắt Đón Đầu — Trang chủ"><Art src="/assets/landing-v2/brand-logo.webp" alt="Đi Tắt Đón Đầu" eager/></Link>
+        <nav className="public-nav" aria-label="Mục lục">
+          <a href={wiki?'/#cach-choi':'#cach-choi'}><T text="Cách chơi"/></a>
+          <a href={wiki?'/#tinh-nang':'#tinh-nang'}><T text="Sự kiện"/></a>
+          <Link to="/wiki" aria-current={wiki?'page':undefined}><T text="Wiki"/></Link>
+        </nav>
+        <div className="public-account">
+          <button type="button" className="public-button" onClick={() => { setError(''); loginIntent.current='create'; hostSession ? setHostOpen(true) : setLoginOpen(true) }}><T text="Tạo phòng" bold/></button>
+          <button type="button" className="public-button public-button-dark" onClick={() => {
+            setError('')
+            if(hostSession){localStorage.removeItem('host-session');setHostSession('');setHostOpen(false);(window as Window & {google?:GoogleIdentity}).google?.accounts.id.disableAutoSelect?.()}
+            else {loginIntent.current='login';setLoginOpen(true)}
+          }}><T text={hostSession?'Đăng xuất':'Đăng nhập'}/></button>
         </div>
       </header>
-      {server === 'down' && (
-        <p className="server-banner land-wrap" role="status">
-          Máy chủ chưa sẵn sàng. Nếu vừa bật Docker, hãy đợi thêm một chút.
-        </p>
-      )}
-      <main>
-        <section className="hero-sec" aria-labelledby="hero-title">
-          <div className="land-wrap hero-grid">
-            <img className="hero-game-art" src="/assets/landing/game-world-canvas.png" alt="Thành phố công nghiệp, nông nghiệp, logistics và cảng biển trong trò chơi" />
-            <div className="hero-copy">
-              <h1 id="hero-title" className="hero-heading">
-                <span className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</span>
-                <picture>
-                  <source srcSet="/assets/landing/hero-title.webp" type="image/webp" />
-                  <img className="hero-lettering" src="/assets/landing/hero-title.png" alt="" aria-hidden="true" width="1600" height="669" decoding="async" />
-                </picture>
-              </h1>
-              <p className="tagline">Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu.</p>
-          <div className="hero-join" id="join-title" aria-label="Vào phòng">
-            <div className="hero-cta-row">
-            {joinStep === 'code' ? (
-              <form
-                className="join-form"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void checkCode()
-                }}
-              >
-                <svg className="join-enter" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v16h-6M3 12h12m-5-5 5 5-5 5" /></svg>
-                <label>
-                  <span className="sr-only">Mã phòng</span>
-                  <input ref={roomCodeInput} value={joinCode} maxLength={8} autoCapitalize="characters" placeholder="Nhập mã phòng" onChange={(event) => setJoinCode(event.target.value.toUpperCase())} />
-                </label>
-                <button type="submit" className="btn" disabled={busy}>{busy ? 'Đang kiểm tra…' : 'Vào phòng'}</button>
-              </form>
-            ) : (
-              <form
-                className="join-form join-name-form"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void join()
-                }}
-              >
-                <p className="join-room">Phòng <b>{joinCode}</b> đã sẵn sàng.</p>
-                <label>
-                  <span className="sr-only">Tên đội</span>
-                  <input value={team} maxLength={24} autoFocus placeholder="Nhập tên đội" onChange={(event) => setTeam(event.target.value)} />
-                  <small>{team.length}/24 ký tự</small>
-                </label>
-                <button type="submit" className="btn" disabled={busy || team.trim().length < 1}>Vào sảnh</button>
-                <button type="button" className="join-change" onClick={() => { setError(''); setJoinStep('code') }}>Đổi mã</button>
-              </form>
-            )}
-            </div>
-            {error && <p className="join-error" role="alert">{error}</p>}
-          </div>
+      {server==='down'&&<p className="public-server public-wrap" role="status"><T text="Máy chủ chưa sẵn sàng. Vui lòng thử lại sau."/></p>}
+      {wiki?<Suspense fallback={<div className="public-loading public-wrap" role="status"><T text="Đang mở Wiki…"/></div>}><WikiPage/></Suspense>:<main className="public-wrap public-landing">
+        <section className="public-hero painted-frame" data-painted-frame aria-labelledby="hero-title">
+          <Art className="public-hero-art" src="/assets/landing-v2/hero-art.webp" alt="Đội ngũ xây dựng doanh nghiệp bên cảng biển và nhà máy Việt Nam" eager/>
+          <div className="public-hero-copy">
+            <h1 id="hero-title"><span className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</span><Art src="/assets/landing-v2/hero-title.webp" className="public-title-art" eager/></h1>
+            <p className="public-tagline"><T text="Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu."/></p>
+            <div className="public-join painted-frame" data-painted-frame id="join-title" aria-label="Vào phòng chơi">
+              {joinStep==='code'?<form className="public-join-form" onSubmit={event=>{event.preventDefault();void checkCode()}}>
+                <label><span className="sr-only">Mã phòng</span><input ref={roomCodeInput} value={joinCode} maxLength={8} autoCapitalize="characters" autoComplete="off" placeholder="Nhập mã phòng" onChange={event=>setJoinCode(event.target.value.toUpperCase())}/></label>
+                <button type="submit" className="public-button" disabled={busy}><T text={busy?'Đang kiểm tra…':'Vào phòng'} bold/></button>
+              </form>:<form className="public-join-form public-join-name" onSubmit={event=>{event.preventDefault();void join()}}>
+                <p className="public-join-status"><T text={`Phòng ${joinCode} đã sẵn sàng.`}/></p>
+                <label><span className="sr-only">Tên đội</span><input value={team} maxLength={24} autoFocus placeholder="Nhập tên đội" onChange={event=>setTeam(event.target.value)}/><small><T text={`${team.length}/24 ký tự`}/></small></label>
+                <button type="submit" className="public-button" disabled={busy||team.trim().length<1}><T text="Vào sảnh" bold/></button>
+                <button type="button" className="public-change" onClick={()=>{setError('');setJoinStep('code');window.requestAnimationFrame(()=>roomCodeInput.current?.focus())}}><T text="Đổi mã"/></button>
+              </form>}
+              {error&&!loginOpen&&!hostOpen&&<p className="public-error" role="alert"><T text={error}/></p>}
             </div>
           </div>
         </section>
-
-        <section className="band" id="cach-choi" aria-labelledby="how-title">
-          <div className="land-wrap how-grid">
-            <div>
-              <h2 className="section-title" id="how-title">
-                Cách chơi
-              </h2>
-            </div>
-            <ol className="steps">
-              {STEPS.map((step, index) => (
-                <li className="step" key={step.title}>
-                  <span className="step-num" aria-hidden="true">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3>{step.title}</h3>
-                    <p>{step.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+        <section className="public-how painted-frame" data-painted-frame id="cach-choi" aria-labelledby="how-title">
+          <h2 id="how-title" className="public-section-title"><T text="3 bước vào game" bold/></h2>
+          <ol>{STEPS.map((step,index)=><li key={step.title}>
+            <Art src={`/assets/landing-v2/step-${index+1}.webp`}/>
+            <div><h3><span className="public-step-number"><T text={String(index+1)} bold/></span><T text={step.title} bold/></h3><p><T text={index===0?'Chủ phòng đăng nhập Google để tạo phòng và mời bạn chơi.':step.body}/></p></div>
+          </li>)}</ol>
         </section>
-
-        <section className="feat-sec" id="tinh-nang" aria-labelledby="feat-title">
-          <div className="land-wrap">
-            <div className="section-head">
-              <h2 className="section-title" id="feat-title">
-                5 thẻ đầu tư quyết định hướng đi
-              </h2>
-            </div>
-            <div className="feat-grid">
-              {FEATURES.map((feature) => (
-                <article className={`card feat feat-${feature.id}`} key={feature.id}>
-                  <img className="investment-card-art" src={`/assets/investments/${feature.id}.png`} alt="" />
-                  <h3>{feature.title}</h3>
-                  <p>{feature.body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
+        <section className="public-features painted-frame" data-painted-frame id="tinh-nang" aria-labelledby="features-title">
+          <h2 className="public-section-title" id="features-title"><T text="Đầu tư. Ứng biến. Dẫn đầu." bold/></h2>
+          <div className="public-investment-strip">{FEATURES.map(feature=><Link to={`/wiki?section=upgrades&industry=trai-cay-say`} key={feature.id} aria-label={`Tìm hiểu ${feature.title}`}><Art src={`/assets/investments/handdrawn-v1/${feature.id==='grn'?'common':'trai-cay-say'}/${feature.id}.webp`}/><T text={feature.title} bold/></Link>)}</div>
+          <div className="public-wiki-link"><Link className="public-button public-button-dark" to="/wiki"><Art src="/assets/landing-v2/book.webp"/><T text="Khám phá Wiki" bold/></Link></div>
         </section>
-
-      </main>
-      <footer className="land-foot">
-        <div className="land-wrap foot-inner">
-          <p className="foot-copy">Trò chơi lớp học về nhà máy gia đình.</p>
-        </div>
-      </footer>
+      </main>}
+      <footer className="public-footer public-wrap"><T text="Trò chơi lớp học về nhà máy gia đình."/></footer>
       {loginOpen && (
-        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="google-login-title">
-          <div className="card">
-            <h2 id="google-login-title">Đăng nhập để tạo phòng</h2>
-            <p>Chỉ chủ phòng cần đăng nhập Google. Báo cáo từng lượt chơi sẽ được lưu vào tài khoản này.</p>
+        <div className="modal on public-modal" role="dialog" aria-modal="true" aria-labelledby="google-login-title">
+          <div className="card painted-frame" data-painted-frame>
+            <h2 id="google-login-title"><T text={loginIntent.current==='create'?'Đăng nhập để tạo phòng':'Đăng nhập chủ phòng'} bold/></h2>
+            <p><T text="Chỉ chủ phòng cần đăng nhập Google. Báo cáo từng lượt chơi sẽ được lưu vào tài khoản này."/></p>
             <div ref={loginButton} className="google-login" />
             {error && <p className="warn" role="alert">{error}</p>}
             <button type="button" className="btn s" onClick={() => setLoginOpen(false)}>Đóng</button>
@@ -371,9 +291,9 @@ export function StartScreen() {
         </div>
       )}
       {hostOpen && (
-        <div className="modal on" role="dialog" aria-modal="true" aria-labelledby="host-title">
-          <div className="card">
-            <h2 id="host-title">Tạo phòng</h2>
+        <div className="modal on public-modal" role="dialog" aria-modal="true" aria-labelledby="host-title">
+          <div className="card painted-frame" data-painted-frame>
+            <h2 id="host-title"><T text="Tạo phòng" bold/></h2>
             <p>Chủ phòng chiếu mã. Giá từng khoản đầu tư mặc định theo vốn, và có thể sửa trước khi mở phòng.</p>
             <form
               onSubmit={(event) => {

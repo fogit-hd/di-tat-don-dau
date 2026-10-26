@@ -1,0 +1,62 @@
+{
+  "book.webp": {
+    "width": 768,
+    "height": 512,
+    "bytes": 172930
+  },
+  "brand-logo.webp": {
+    "width": 1885,
+    "height": 563,
+    "bytes": 374244
+  },
+  "chapter-art.webp": {
+    "width": 1536,
+    "height": 1024,
+    "bytes": 636736
+  },
+  "hero-art.webp": {
+    "width": 1774,
+    "height": 887,
+    "bytes": 710642
+  },
+  "hero-title.webp": {
+    "width": 2005,
+    "height": 545,
+    "bytes": 335796
+  },
+  "paper.webp": {
+    "width": 512,
+    "height": 512,
+    "bytes": 41524
+  },
+  "public-frame.webp": {
+    "width": 1254,
+    "height": 1254,
+    "bytes": 198550
+  },
+  "public-textures.webp": {
+    "width": 1774,
+    "height": 887,
+    "bytes": 455696
+  },
+  "step-1.webp": {
+    "width": 768,
+    "height": 512,
+    "bytes": 120048
+  },
+  "step-2.webp": {
+    "width": 768,
+    "height": 512,
+    "bytes": 186930
+  },
+  "step-3.webp": {
+    "width": 768,
+    "height": 512,
+    "bytes": 154756
+  },
+  "wine.webp": {
+    "width": 512,
+    "height": 512,
+    "bytes": 56546
+  }
+}

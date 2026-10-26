@@ -8,6 +8,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<StartScreen />} />
+        <Route path="/wiki" element={<StartScreen wiki />} />
         <Route path="/host/:code" element={<HostScreen />} />
         <Route path="/play/:code" element={<PlayScreen />} />
         <Route path="/join/:code" element={<PlayScreen />} />
