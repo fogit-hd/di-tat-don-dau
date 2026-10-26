@@ -5,12 +5,13 @@ $bitmap = [System.Drawing.Bitmap]::new(1,1)
 $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
 $format = [System.Drawing.StringFormat]::GenericTypographic.Clone()
 $format.FormatFlags = $format.FormatFlags -bor [System.Drawing.StringFormatFlags]::MeasureTrailingSpaces
-$codes = @(32..383) + @(768..879) + @(7840..7929) + @(8211,8212,8216,8217,8220,8221,8226,8230,8594,8592,215,8722,8363)
+$codes = @(32..126) + @(160..255) + @(258,259,272,273,296,297,360,361,416,417,431,432) + @(7840..7929) + @(8211,8212,8216,8217,8220,8221,8226,8230,8249,8250,8594,8592,215,8722,8363)
 $fonts = @{}
 foreach ($weight in @('regular','bold')) {
   $style = if($weight -eq 'bold'){[System.Drawing.FontStyle]::Bold}else{[System.Drawing.FontStyle]::Regular}
   $font = [System.Drawing.Font]::new($fontFamily,64,$style,[System.Drawing.GraphicsUnit]::Pixel)
-  $glyphs = @{}
+  # PowerShell hashtables are case-insensitive: using one loses a/A, o/O, etc.
+  $glyphs = [System.Collections.Generic.Dictionary[string,object]]::new([StringComparer]::Ordinal)
   foreach($code in $codes) {
     $letter = [char]$code
     $path = [System.Drawing.Drawing2D.GraphicsPath]::new()

@@ -9,3 +9,73 @@
 [1024/190936.327:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
 [1024/190936.343:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
 [1024/190937.610:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/135824.980:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/135825.156:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/135826.951:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/135829.987:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/135840.003:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/135900.010:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/140639.616:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/140639.631:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/141059.351:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/141059.376:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/141100.649:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/141104.354:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/141114.359:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/141134.380:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/142145.355:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/142145.413:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/142147.183:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/142150.375:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/142200.395:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/142220.409:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143025.428:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143025.455:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/143026.087:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143026.718:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/143026.767:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/143026.768:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/143030.444:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143031.095:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143040.461:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143041.111:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/143055.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.716:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143055.717:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[1026/143101.114:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144920.170:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144920.180:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/144920.941:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144921.522:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/144921.607:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/144921.610:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/144925.184:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144925.953:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144935.191:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144935.967:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144955.198:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/144955.972:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/150238.979:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/150239.038:ERROR:ui\gl\angle_platform_impl.cc:37] vulkan_icd.cpp:157 (angle::vk::ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment): Error setting CWD for Vulkan layers init.
+[1026/150240.529:WARNING:ui\gl\angle_platform_impl.cc:42] vulkan_icd.cpp:389 (angle::vk::ChoosePhysicalDevice): Preferred device ICD not found. Using default physicalDevice instead.
+[1026/150243.988:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/150254.011:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.
+[1026/150314.026:WARNING:net\dns\dns_config_service_win.cc:609] Failed to read DnsConfig.

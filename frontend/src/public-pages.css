@@ -6,6 +6,7 @@
   font-size:17px;line-height:1.45;isolation:isolate;
 }
 .public-site * {box-sizing:border-box}
+.public-site .sr-only {position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .public-wrap {width:min(1480px,calc(100% - 40px));margin-inline:auto}
 .public-site img {display:block;user-select:none;-webkit-user-drag:none;object-fit:contain}
 .public-site svg {user-select:none;-webkit-user-drag:none}
@@ -19,7 +20,7 @@
 .public-site input:focus-visible,.public-site select:focus-visible {outline:3px solid #e8ad43;outline-offset:2px}
 .art-text {display:inline-flex;flex-wrap:wrap;align-items:baseline;column-gap:.22em;row-gap:0;max-width:100%;vertical-align:middle;line-height:1.35;white-space:normal}
 .art-text>svg {display:block;height:1.34375em;flex:none;max-width:100%;overflow:visible}
-.painted-frame {border:18px solid transparent;border-image:url('/assets/landing-v2/public-frame.webp') 310 / 30px / 0 stretch;background-clip:padding-box}
+:where(.public-site) .painted-frame {border:18px solid transparent;border-image:url('/assets/landing-v2/public-frame.webp') 310 / 40px / 0 stretch;background-clip:padding-box}
 .public-header {position:relative;display:grid;grid-template-columns:minmax(190px,1fr) auto minmax(290px,1fr);align-items:center;gap:28px;min-height:76px;border-bottom:2px solid #d1a04b;padding:0 12px 8px;color:#fff1cf;z-index:3}
 .public-brand {display:block;width:246px;max-width:100%}
 .public-brand img {width:100%;height:68px}
@@ -39,8 +40,8 @@
 .public-server,.public-loading {padding:18px;color:#fff0d2}
 .public-landing {display:grid;gap:10px;padding-top:8px}
 .public-hero {position:relative;min-height:420px;height:clamp(420px,31.5vw,500px);background:#fff1d5 url('/assets/landing-v2/paper.webp');background-size:512px;display:flex;align-items:center;padding:22px 26px;isolation:isolate}
-.public-hero-art {position:absolute;inset:0 0 0 auto;width:68%;height:100%;object-fit:contain!important;object-position:right center;z-index:-1}
-.public-hero-copy {width:46%;max-width:620px;position:relative;padding:4px 0 0;align-self:center}
+.public-hero-art {position:absolute;inset:0 0 0 auto;width:68%;height:100%;object-fit:contain!important;object-position:right center;z-index:0}
+.public-hero-copy {width:46%;max-width:620px;position:relative;z-index:1;padding:4px 0 0;align-self:center}
 .public-hero h1 {margin:0 0 8px;line-height:0}
 .public-title-art {width:100%;height:auto;max-height:230px}
 .public-tagline {font-size:20px;max-width:530px;margin:10px 8px 18px!important}
@@ -87,11 +88,11 @@
 .public-modal input {width:100%}
 .public-modal .settings {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}
 .public-modal small {display:block;font-size:13px}
-.wiki-layout {display:grid;grid-template-columns:254px minmax(0,1fr);gap:0;padding-top:10px;align-items:stretch;min-height:calc(100svh - 130px)}
+.wiki-layout {display:grid;grid-template-columns:270px minmax(0,1fr);gap:0;padding-top:10px;align-items:stretch;min-height:calc(100svh - 130px)}
 .wiki-sidebar {position:relative;padding:18px 9px;background:transparent;color:#ffe8a8;overflow:hidden;min-width:0}
 .wiki-sidebar nav {position:relative;z-index:1;display:grid;gap:8px}
-.wiki-sidebar button {display:flex;align-items:center;gap:13px;text-align:left;width:100%;min-height:66px;padding:8px;background:none;border:0;border-bottom:1px solid #bd7a39;color:inherit;font-size:18px}
-.wiki-sidebar button img {width:36px;height:37px;flex:none;object-fit:contain}
+.wiki-sidebar button {display:flex;align-items:center;gap:9px;text-align:left;width:100%;min-height:66px;padding:8px;background:none;border:0;border-bottom:1px solid #bd7a39;color:inherit;font-size:16px}
+.wiki-sidebar button img {width:30px;height:34px;flex:none;object-fit:contain}
 .wiki-sidebar button.active {background:#870d18;border:6px solid transparent;border-image:url('/assets/landing-v2/public-frame.webp') 310 / 13px / 0 stretch}
 .wiki-side-art {position:sticky;top:26px;width:100%;height:290px;object-fit:cover!important;object-position:right bottom;margin-top:30px;mask-image:linear-gradient(transparent,#000 25%)}
 .wiki-paper {min-width:0;background:var(--public-paper) url('/assets/landing-v2/paper.webp');background-size:512px;padding:25px 28px;color:#471c10}
@@ -152,6 +153,8 @@
 .wiki-fold {border:1px solid #cfab70;background:rgba(255,246,219,.25);margin-bottom:10px;border-radius:4px;padding:0 12px}
 .wiki-fold summary {cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;min-height:48px;padding:8px 0;font-size:18px}
 .wiki-fold summary::-webkit-details-marker {display:none}
+.wiki-fold-arrow {display:block;transform:rotate(90deg);flex:none}
+.wiki-fold[open] .wiki-fold-arrow {transform:rotate(-90deg)}
 .wiki-fold>div {padding:4px 0 10px}
 .wiki-fold p {font-size:16px}
 .wiki-upgrade-list {display:grid;gap:9px;margin-bottom:18px}
@@ -193,7 +196,7 @@
   .public-site {padding-top:3px;font-size:16px}.public-wrap {width:calc(100% - 20px)}
   .public-header {grid-template-columns:1fr auto;gap:4px 8px;min-height:96px;padding:0 4px 5px}
   .public-brand {width:160px}.public-brand img {height:53px}.public-nav {grid-row:2;grid-column:1/-1;gap:35px}.public-nav a {font-size:16px;min-height:34px}.public-account {gap:5px}.public-account .public-button {min-height:40px;padding:5px 10px;font-size:14px;border-width:5px;border-image-width:10px}
-  .public-landing {gap:8px;padding-top:6px}.painted-frame {border-width:12px;border-image-width:23px}
+  .public-landing {gap:8px;padding-top:6px}:where(.public-site) .painted-frame {border-width:12px;border-image-width:23px}
   .public-hero {height:auto;min-height:0;display:flex;flex-direction:column;padding:18px 9px 2px;gap:0}
   .public-hero-copy {width:100%;max-width:600px;padding:0;align-self:center}.public-title-art {max-height:none;width:100%}.public-hero h1 {margin-bottom:7px}
   .public-tagline {font-size:17px;margin:10px 2px 16px!important;max-width:none}.public-hero-art {position:relative;inset:auto;width:calc(100% + 16px);height:auto;order:2;z-index:0;max-width:none;margin-top:7px}
@@ -210,6 +213,12 @@
   .wiki-article-columns {gap:12px}.wiki-inset {padding:12px}.wiki-receipt>div {gap:10px}.wiki-receipt>div:last-child {font-size:19px}.wiki-fold {padding:0 10px}.wiki-fold summary {font-size:17px}
   .wiki-upgrade-row {grid-template-columns:78px minmax(0,1fr);padding:7px;gap:9px}.wiki-upgrade-row>img {height:80px;width:78px;object-fit:cover;mask-image:none}.wiki-upgrade-row>div {min-width:0}.wiki-upgrade-row>span {grid-column:2;font-size:15px;color:#885114}.wiki-upgrade-row h2 {font-size:20px}.wiki-upgrade-row p {font-size:15px}.wiki-quality {gap:10px;align-items:flex-start}.wiki-quality>img {width:61px;height:65px}
   .wiki-event-row {grid-template-columns:76px minmax(0,1fr) 12px;gap:10px;padding:7px}.wiki-event-row>img {width:76px;height:79px}.wiki-event-row h2 {font-size:20px}.wiki-event-row p {font-size:14px}.wiki-event-detail h2 {font-size:24px}.wiki-event-detail-grid {grid-template-columns:1fr;gap:10px}.wiki-event-detail-grid>img {height:170px}.wiki-system-grid {grid-template-columns:repeat(2,minmax(0,1fr))}.wiki-system-grid .art-text {font-size:15px}.wiki-risk-pair .wiki-inset>img {height:140px}
+}
+@media(min-width:768px) and (max-width:1023px) {
+  .wiki-layout {display:block}
+  .wiki-sidebar {display:none}
+  .wiki-mobile-nav {display:block;margin-bottom:18px}
+  .wiki-mobile-nav select {width:100%;background:#77121c;color:#fff0c9;border-color:#c99a46}
 }
 @media(max-width:380px){.public-brand{width:135px}.public-account .public-button{font-size:13px;padding-inline:7px}.public-join-form{grid-template-columns:1fr}.public-join-form .public-button{width:100%}}
 @media(prefers-reduced-motion:no-preference){.public-site main{animation:public-arrive .22s ease-out}.wiki-entry:hover img,.public-investment-strip a:hover img{transform:translateY(-2px);transition:transform .18s}.wiki-fold[open]>div{animation:public-arrive .18s ease-out}@keyframes public-arrive{from{opacity:.6;transform:translateY(5px)}to{opacity:1;transform:none}}}

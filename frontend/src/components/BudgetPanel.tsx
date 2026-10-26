@@ -65,9 +65,9 @@ export function BudgetPanel({
     <div className="investment-quantity" role="group" aria-label="Số gói đầu tư">
       {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
     </div></div>
-    <p className="canvas-caption">{modern ? `1 cụm cần ${crew} công nhân · Mỗi lần tuyển nhận 1 người, mở cụm nhận 1 cụm hoàn chỉnh.` : 'Chọn số gói để xem trước kết quả nhận được.'}</p>
+    {!modern && <p className="canvas-caption">Chọn số gói để xem trước kết quả nhận được.</p>}
     {!modern && <p className="investment-help">Lượt chơi này dùng cơ chế trước. Cơ chế cụm sản xuất theo ngành áp dụng khi bắt đầu lượt chơi mới.</p>}
-    {modern && scene.operating===0 && <div className="investment-start-guide"><b>Khởi động 1 cụm · Cần {crew} công nhân</b><p>Đã có {scene.machines} cụm · {Math.min(scene.engineers,crew)}/{crew} người cho tổ đầu tiên.</p><div className="starter-actions">
+    {modern && scene.operating===0 && <div className="investment-start-guide"><b>{scene.machines===0?'Chưa có cụm hoạt động':`Còn thiếu ${Math.max(0,crew-scene.engineers)} công nhân cho tổ đầu tiên`}</b><div className="starter-actions">
       <button type="button" disabled={busy||paused||scene.machines>0||!scene.investmentPreviews?.mac?.[1]||scene.cash<scene.investmentPreviews.mac[1].total} onClick={()=>void purchase('mac','Mở cụm đầu tiên',1)}>{scene.machines>0?'Đã có cụm đầu tiên':`Mở 1 cụm · ${money(scene.investmentPreviews?.mac?.[1]?.total??0)}`}</button>
       <button type="button" disabled={busy||paused||scene.engineers>=crew||!scene.investmentPreviews?.eng?.crew||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>{scene.engineers>=crew?'Đã đủ tổ công nhân':`Tuyển ${scene.investmentPreviews?.eng?.crew?.count??crew} người · ${money(scene.investmentPreviews?.eng?.crew?.total??0)}`}</button>
     </div></div>}

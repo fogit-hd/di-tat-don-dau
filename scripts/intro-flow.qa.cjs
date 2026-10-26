@@ -329,11 +329,11 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  assert.equal(await image.evaluate(el=>el.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true}))),false);
  assert.equal(await image.evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),false);
  const art=page.locator('svg[data-game-art]').first();if(await art.count())assert.equal(await art.evaluate(el=>el.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true}))),false);
- await page.goto('http://game.test/');await page.locator('.wordmark img').waitFor();
- assert.equal(await page.locator('.wordmark img').getAttribute('draggable'),'false');
- assert.equal(await page.locator('.wordmark img').evaluate(el=>el.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true}))),false);
- assert.equal(await page.locator('.wordmark img').evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),false);
- assert.equal(await page.locator('p').first().evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),true);
+ await page.goto('http://game.test/');await page.locator('.public-brand img').waitFor();
+ assert.equal(await page.locator('.public-brand img').getAttribute('draggable'),'false');
+ assert.equal(await page.locator('.public-brand img').evaluate(el=>el.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true}))),false);
+ assert.equal(await page.locator('.public-brand img').evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),false);
+ assert.equal(await page.getByRole('textbox',{name:'Mã phòng'}).evaluate(el=>el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true}))),true);
  assert.deepEqual(errors,[]);
  console.log(JSON.stringify({passed:true,defaultNameLength:defaultFactoryName.length,maxLength:256,errorVisible:true,enterSubmits:true,invoice:900,bulkAndMax:true,yearCountdownConsistent:true,widths:sizes.map(s=>s[0]),successionLossVisible:'50%',sameAfterReload:true,enterpriseCanvas:true,groupedYearLedger:true,economyV2Receipts:true,pollutionExplainer:true,zeroCashCanProduce:true,bankruptcyStopsTimer:true,companyV3ZeroStart:true,industrySpecificPrices:true,crewRecruitment:true,qualityAndMaintenance:true,staticFallbacks:33,staticOnlyNetwork:true,canvasHistoryAndDetailWidths:sizes.map(s=>s[0]),staticNodeStableAcrossClocks:true,reducedMotionStatic:true,pausedStatic:true,imageDraggingBlocked:true,imageContextMenuBlocked:true,textContextMenuPreserved:true,errors},null,2));
  await browser.close();

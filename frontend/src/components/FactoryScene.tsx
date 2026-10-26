@@ -31,12 +31,9 @@ export function FactoryScene({ scene, paused, dim = false, onShowYear }: { scene
             <div className="report-output-result"><PaintedIcon name="prod" /><div><small>Sản lượng tạo ra / năm</small><strong>{count(range.outputMin)}–{count(range.outputMax)} <span>{scene.unit}</span></strong></div></div>
             <div className="report-capacity"><span>{count(plan.engineers)} công nhân</span><OperationIcon name="arrow" /><span>{count(plan.operating)} / {count(plan.machines)} cụm đang vận hành</span></div>
             {plan.staffMissing>0 && <p className="investment-warning">Còn thiếu {count(plan.staffMissing)} công nhân · {count(plan.idle)} cụm chờ đủ nhân lực.</p>}
-            <p className="report-equation">{count(plan.operating)} cụm × {figure(plan.baseOutput,4)} × {figure(plan.techFactor,4)} ≈ <b>{count(plan.theoreticalOutput)} {scene.unit}</b></p>
-            {scene.economyVersion===3 && <p className="finance-note">Định mức {plan.engineersPerMachine} công nhân/cụm · Tay nghề ×{figure(plan.workerBonus??1,2)} · Thiết bị ×{figure(plan.machineBonus??1,2)} · Tình trạng {rate(plan.conditionFactor??1)}. Công nghệ tích lũy tối đa cấp 3.</p>}
             {plan.appliedEffects.filter(e=>e.outputMul!==1).map(e=><p className="report-factor" key={e.id}>{e.title}<b>×{figure(e.outputMul,4)} ({rate(e.outputMul-1)})</b></p>)}
             <p className="report-factor">Dao động sản xuất<b>{rate(range.outputNoiseMin)}–{rate(range.outputNoiseMax)}</b></p>
             <p className="report-delivery"><PaintedIcon name="inst" /><span>Bán được {rate(plan.delivery)}: <b>{count(range.soldMin)}–{count(range.soldMax)} {scene.unit}</b></span></p>
-            <details><summary>Công thức và đơn vị</summary><p>Chỉ tính máy đã lắp hoàn chỉnh và đủ người vận hành. Sản phẩm tạo ra và lượng bán được làm tròn xuống sau khi áp dụng các hệ số.</p><p>Cần {figure(plan.engineersPerMachine,0)} công nhân/cụm. Năng suất gốc {figure(plan.baseOutput)} {scene.unit}/máy. Hệ số công nghệ kỳ tới {figure(plan.techFactor,4)}. Các hiệu ứng sản lượng nhân với nhau: tổng hệ số ×{figure(plan.outputMul,4)}. Ví dụ −10% và −20% tương đương ×0,9×0,8 = ×0,72 (giảm 28%).</p><p>Sản lượng tạo ra khác lượng bán được. Tổng sản phẩm cộng dồn hiện tại: {count(scene.output)} {scene.unit}.</p></details>
           </>}
           {tab==='finance' && <>
             <div className="report-output-result"><PaintedIcon name="coins" /><div><small>Lãi/lỗ sản xuất dự kiến</small><strong>{money(range.netMin)} – {money(range.netMax)}</strong></div></div>
@@ -53,12 +50,11 @@ export function FactoryScene({ scene, paused, dim = false, onShowYear }: { scene
             {plan.appliedEffects.map(effect=><article className="report-effect" key={effect.id}><b>{effect.title}</b><small>{effect.yearsLeft>0?`Còn ${effect.yearsLeft} năm`:'Đang có hiệu lực'} · đã tính vào dự báo</small><p>{[
               effect.outputMul!==1?`Sản lượng ×${figure(effect.outputMul,4)}`:'',effect.priceMul!==1?`Giá bán ×${figure(effect.priceMul,4)}`:'',effect.revenueMul!==1?`Doanh thu ×${figure(effect.revenueMul,4)}`:'',effect.costMul!==1?`Chi phí ×${figure(effect.costMul,4)}`:'',effect.cashPerYear?`${signedMoney(effect.cashPerYear)}/năm`:'',effect.investmentMul!==1?`Giá mua ×${figure(effect.investmentMul,4)}`:'',
             ].filter(Boolean).join(' · ') || 'Không có thay đổi tiền hoặc hệ số sản xuất còn hiệu lực.'}</p></article>)}
-            <p className="finance-note">Giảm sản lượng làm giảm doanh thu, không trừ tiền thêm lần hai. Hiệu ứng thay đổi chỉ số ngay và rủi ro đặc biệt xem tại Lịch sử sự kiện / Rủi ro.</p>
           </>}
           <p className="forecast-conditions">Giữ nguyên đầu tư và hiệu ứng đã biết; chưa tính sự kiện mới.</p>
           {scene.cycles>0 && onShowYear && <button type="button" className="report-history-link" onClick={() => onShowYear?.(scene.cycles)}>Xem kết quả năm {scene.cycles} đã chốt <OperationIcon name="arrow" /></button>}
         </div>
       </>}
-    </div> : <div className="factory-photo" id={`${uid}-body`}>{photo ? <img src={factoryArt(scene.industryId)} alt={scene.factoryName} onError={() => setPhoto(false)} /> : <p className="scene-fallback">{scene.factoryName}</p>}<span className="factory-photo-caption">Xem cách tính sản lượng và thu nhập</span></div>}
+    </div> : <div className="factory-photo" id={`${uid}-body`}>{photo ? <img src={factoryArt(scene.industryId)} alt={scene.factoryName} onError={() => setPhoto(false)} /> : <p className="scene-fallback">{scene.factoryName}</p>}</div>}
   </section>
 }

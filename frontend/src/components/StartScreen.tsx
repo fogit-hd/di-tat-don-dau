@@ -112,6 +112,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
 
   useEffect(() => {
     if (!loginOpen || !loginButton.current) return
+    let closed = false
     const clientId = googleClientId()
     if (!clientId) {
       setError('Máy chủ frontend chưa có GOOGLE_CLIENT_ID')
@@ -119,7 +120,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
     }
     const render = () => {
       const google = (window as Window & { google?: GoogleIdentity }).google
-      if (!google || !loginButton.current) return
+      if (closed || !google || !loginButton.current) return
       google.accounts.id.initialize({
         client_id: clientId,
         callback: (response) => {
@@ -140,7 +141,8 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
     const existing = document.querySelector('script[data-google-identity]')
     if (existing) {
       render()
-      return
+      existing.addEventListener('load', render)
+      return () => { closed = true; existing.removeEventListener('load', render) }
     }
     const script = document.createElement('script')
     script.src = 'https://accounts.google.com/gsi/client'
@@ -148,7 +150,9 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
     script.defer = true
     script.dataset.googleIdentity = 'true'
     script.onload = render
+    script.onerror = () => { if(!closed)setError('Không tải được đăng nhập Google. Vui lòng thử lại.'); script.remove() }
     document.head.appendChild(script)
+    return () => { closed = true }
   }, [loginOpen])
 
   useEffect(() => {
@@ -285,8 +289,8 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
             <h2 id="google-login-title"><T text={loginIntent.current==='create'?'Đăng nhập để tạo phòng':'Đăng nhập chủ phòng'} bold/></h2>
             <p><T text="Chỉ chủ phòng cần đăng nhập Google. Báo cáo từng lượt chơi sẽ được lưu vào tài khoản này."/></p>
             <div ref={loginButton} className="google-login" />
-            {error && <p className="warn" role="alert">{error}</p>}
-            <button type="button" className="btn s" onClick={() => setLoginOpen(false)}>Đóng</button>
+            {error && <p className="warn" role="alert"><T text={error}/></p>}
+            <button type="button" className="btn s" onClick={() => setLoginOpen(false)}><T text="Đóng"/></button>
           </div>
         </div>
       )}
@@ -294,7 +298,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
         <div className="modal on public-modal" role="dialog" aria-modal="true" aria-labelledby="host-title">
           <div className="card painted-frame" data-painted-frame>
             <h2 id="host-title"><T text="Tạo phòng" bold/></h2>
-            <p>Chủ phòng chiếu mã. Giá từng khoản đầu tư mặc định theo vốn, và có thể sửa trước khi mở phòng.</p>
+            <p><T text="Chủ phòng chiếu mã. Giá từng khoản đầu tư mặc định theo vốn, và có thể sửa trước khi mở phòng."/></p>
             <form
               onSubmit={(event) => {
                 event.preventDefault()
@@ -302,31 +306,31 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
               }}
             >
               <label>
-                Tên
+                <T text="Tên"/>
                 <input value={hostName} maxLength={40} onChange={(event) => setHostName(event.target.value)} />
-                <small>{hostName.length}/40 ký tự</small>
+                <small><T text={`${hostName.length}/40 ký tự`}/></small>
               </label>
               <div className="settings">
                 <label>
-                  Phút
+                  <T text="Phút"/>
                   <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
                 </label>
                 <label>
-                  Vốn (triệu VNĐ)
+                  <T text="Vốn (triệu VNĐ)"/>
                   <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => setCapital(Number(event.target.value))} />
                 </label>
                 <label>
-                  Giây mỗi năm
+                  <T text="Giây mỗi năm"/>
                   <input type="number" min={10} max={180} value={cycle} onChange={(event) => setCycle(Number(event.target.value))} />
                 </label>
                 <label>
-                  Khóa nút (giây)
+                  <T text="Khóa nút (giây)"/>
                   <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
                 </label>
               </div>
               <div className="config-section">
-                <h3>Điều chỉnh mức giá toàn phòng</h3>
-                <p>Đây là giá tham chiếu để điều chỉnh toàn phòng. Mỗi ngành có giá riêng; giá mua tăng theo quy mô.</p>
+                <h3><T text="Điều chỉnh mức giá toàn phòng" bold/></h3>
+                <p><T text="Đây là giá tham chiếu để điều chỉnh toàn phòng. Mỗi ngành có giá riêng; giá mua tăng theo quy mô."/></p>
               </div>
               <div className="settings price-grid" aria-label="Giá đầu tư">
                 {(
@@ -339,7 +343,7 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
                   ] as const
                 ).map(([id, label]) => (
                   <label key={id}>
-                    Giá tham chiếu {label} (triệu VNĐ)
+                    <T text={`Giá tham chiếu ${label} (triệu VNĐ)`}/>
                     <input
                       type="number"
                       min={1}
@@ -352,15 +356,15 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
               </div>
               {error && (
                 <p className="warn" role="alert">
-                  {error}
+                  <T text={error}/>
                 </p>
               )}
               <button type="submit" className="btn big" disabled={busy || hostName.trim().length < 1}>
-                Mở phòng
+                <T text="Mở phòng" bold/>
               </button>
             </form>
             <button type="button" className="btn s" onClick={() => setHostOpen(false)}>
-              Đóng
+              <T text="Đóng"/>
             </button>
           </div>
         </div>

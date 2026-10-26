@@ -1,0 +1,357 @@
+{
+  "measurements": [
+    {
+      "name": "landing",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "hero-title",
+      "buttons": []
+    },
+    {
+      "name": "wiki",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "industry",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "production",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "upgrades",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "events",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "risk",
+      "width": 390,
+      "scroll": 390,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "landing",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "hero-title",
+      "buttons": []
+    },
+    {
+      "name": "wiki",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "industry",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "production",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "upgrades",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "events",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "risk",
+      "width": 768,
+      "scroll": 768,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "landing",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "hero-title",
+      "buttons": []
+    },
+    {
+      "name": "wiki",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "industry",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "production",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "upgrades",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "events",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    },
+    {
+      "name": "risk",
+      "width": 1440,
+      "scroll": 1440,
+      "broken": [],
+      "title": "wiki",
+      "buttons": []
+    }
+  ],
+  "missing": [],
+  "errors": [],
+  "mockPlayErrors": [],
+  "checks": [
+    "Google before create",
+    "login-only does not create",
+    "logout",
+    "join code by Enter and name submit by click",
+    "context menu prevented",
+    "drag disabled",
+    "Wiki search",
+    "event context selector",
+    "authenticated room create POST"
+  ],
+  "apiRequests": [
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/auth/google",
+      "method": "POST",
+      "body": {
+        "credential": "synthetic-test-credential"
+      }
+    },
+    {
+      "path": "/api/auth/google",
+      "method": "POST",
+      "body": {
+        "credential": "synthetic-test-credential"
+      }
+    },
+    {
+      "path": "/api/rooms/QA1234/exists",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/rooms/QA1234/join",
+      "method": "POST",
+      "body": {
+        "teamName": "Đội QA"
+      }
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/setup",
+      "method": "GET",
+      "body": null
+    },
+    {
+      "path": "/api/rooms",
+      "method": "POST",
+      "body": {
+        "hostName": "Nhóm trình chiếu",
+        "durationMin": 15,
+        "startingCapital": 10000,
+        "cycleSeconds": 60,
+        "yearMinSeconds": 5,
+        "linePrices": {
+          "eng": 50,
+          "mac": 200,
+          "sup": 75,
+          "inf": 100,
+          "grn": 60
+        }
+      }
+    }
+  ]
+}

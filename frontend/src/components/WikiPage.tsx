@@ -28,7 +28,7 @@ const contexts = [
 const groups=[...new Map(catalog.industries.map(i=>[i.group,i.groupName])).entries()]
 const vn=(value:number,digits=2)=>value.toLocaleString('vi-VN',{maximumFractionDigits:digits})
 const money=(value:number)=>Math.abs(value)>=1000?`${vn(value/1000)} tỷ`:`${vn(value)} triệu`
-const normalize=(text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase()
+const normalize=(text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/đ/g,'d')
 const artwork=(name:string)=>`/assets/ui/static-events-v3/${name}.webp`
 const replace=(text:string,industry:string)=>text.replaceAll('{{factory}}','doanh nghiệp của bạn').replaceAll('{{industry}}',industry).replaceAll('{{region}}','địa phương')
 
@@ -36,7 +36,7 @@ function Heading({title,body}:{title:string;body?:string}){
   return <div className="wiki-heading"><h1><T text={title} bold /></h1>{body&&<p><T text={body}/></p>}</div>
 }
 function Fold({title,children}:{title:string;children:React.ReactNode}){
-  return <details className="wiki-fold"><summary><T text={title} bold/><span aria-hidden="true">⌄</span></summary><div>{children}</div></details>
+  return <details className="wiki-fold"><summary><T text={title} bold/><span className="wiki-fold-arrow" aria-hidden="true"><T text="›"/></span></summary><div>{children}</div></details>
 }
 function Receipt({rows}:{rows:[string,string][]}){
   return <dl className="wiki-receipt">{rows.map(([label,value])=><div key={label}><dt><T text={label}/></dt><dd><T text={value} bold/></dd></div>)}</dl>
@@ -63,6 +63,14 @@ export function WikiPage(){
     window.scrollTo({top:0,behavior:'smooth'})
   }
   const selectIndustry=(id:string)=>{setParams({section,industry:id});setSelectedEvent(null)}
+  const openEvent=(row:EventRow)=>{
+    setSelectedEvent(row);setContext('base')
+    window.requestAnimationFrame(()=>{
+      const detail=document.getElementById('wiki-event-detail')
+      detail?.focus({preventScroll:true})
+      detail?.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})
+    })
+  }
   const filteredIndustries=catalog.industries.filter(i=>(!group||i.group===group)&&normalize(i.name).includes(normalize(search)))
   const filteredEvents=useMemo(()=>catalog.events.filter(e=>{
     const relevant=eventKind==='all'||(eventKind==='industry'?e.industry===industry.id:e.industry===eventKind)
@@ -83,7 +91,7 @@ export function WikiPage(){
           ['Mở cụm & tuyển người','Tìm hiểu vốn khởi động, tổ vận hành và giá riêng của từng ngành.','/assets/landing-v2/step-1.webp','industries'],
           ['Được gì sau mỗi năm?','Xem sản lượng, giá bán, chi phí và các khoản cộng trừ tiền mặt.','/assets/landing-v2/step-3.webp','production'],
           ['Hiểu tác động sự kiện','Tra cứu ảnh, tác động, thời hạn và tương tác giữa các sự kiện.',artwork('storm'),'events'],
-        ].map(([title,body,src,next])=><button type="button" className="wiki-entry" key={title} onClick={()=>navigate(next as Section)}><Art src={src}/><div><h2><T text={title} bold/></h2><p><T text={body}/></p></div><span className="wiki-chevron" aria-hidden="true">›</span></button>)}</div>
+        ].map(([title,body,src,next])=><button type="button" className="wiki-entry" key={title} onClick={()=>navigate(next as Section)}><Art src={src}/><div><h2><T text={title} bold/></h2><p><T text={body}/></p></div><span className="wiki-chevron" aria-hidden="true"><T text="›"/></span></button>)}</div>
         <div className="wiki-notice"><h2><T text="Gameplay: chỉ hiện kết quả" bold/></h2><p><T text="Trong game, theo dõi giá mua, lợi ích, số còn thiếu và tiền được/mất. Công thức, điều kiện và cách vận hành được tra cứu trong Wiki."/></p><p><T text="Thông tin theo mô hình cụm sản xuất mới. Lượt lưu cũ và cấu hình riêng của phòng có thể khác."/></p></div>
       </>}
       {section==='industries'&&<>
@@ -105,10 +113,10 @@ export function WikiPage(){
       {section==='upgrades'&&<UpgradeArticle industry={industry} selector={select}/>}
       {section==='events'&&<>
         <Heading title="Danh mục sự kiện" body="1.388 sự kiện gốc · 10.348 bản ghi sau mở rộng"/>
-        <div className="wiki-toolbar"><input type="search" aria-label="Tìm sự kiện" placeholder="Tìm tên sự kiện, tác động…" value={search} onChange={e=>{setSearch(e.target.value);setPage(0)}}/><select aria-label="Loại sự kiện" value={eventKind} onChange={e=>{setEventKind(e.target.value);setPage(0);setSelectedEvent(null)}}><option value="all">Tất cả sự kiện</option><option value="industry">Ngành đang chọn</option><option value="general">Sự kiện chung</option><option value="family">Gia đình & quản trị</option></select><select value={tone} aria-label="Sắc thái gốc" onChange={e=>{setTone(e.target.value);setPage(0)}}><option value="all">Tất cả sắc thái gốc</option><option value="true">Gốc có lợi</option><option value="false">Gốc bất lợi</option></select></div>
+        <div className="wiki-toolbar"><input type="search" aria-label="Tìm sự kiện" placeholder="Tìm tên sự kiện, tác động…" value={search} onChange={e=>{setSearch(e.target.value);setPage(0);setSelectedEvent(null)}}/><select aria-label="Loại sự kiện" value={eventKind} onChange={e=>{setEventKind(e.target.value);setPage(0);setSelectedEvent(null)}}><option value="all">Tất cả sự kiện</option><option value="industry">Ngành đang chọn</option><option value="general">Sự kiện chung</option><option value="family">Gia đình & quản trị</option></select><select value={tone} aria-label="Sắc thái gốc" onChange={e=>{setTone(e.target.value);setPage(0);setSelectedEvent(null)}}><option value="all">Tất cả sắc thái gốc</option><option value="true">Gốc có lợi</option><option value="false">Gốc bất lợi</option></select></div>
         {eventKind==='industry'&&select}
         <p className="wiki-meta"><T text={`${filteredEvents.length} sự kiện gốc phù hợp. Biến thể ngữ cảnh được gom trong từng sự kiện.`}/></p>
-        <div className="wiki-events-list">{filteredEvents.slice(page*8,page*8+8).map(e=><button type="button" key={e.id} className={`wiki-event-row ${selectedEvent?.id===e.id?'selected':''}`} onClick={()=>{setSelectedEvent(e);setContext('base')}}><Art src={artwork(e.art)}/><div><h2><T text={e.title} bold/></h2><p><T text={e.industry==='general'?'Sự kiện chung':e.industry==='family'?'Gia đình & quản trị':catalog.industries.find(i=>i.id===e.industry)?.name??''}/></p></div><span aria-hidden="true" className="wiki-chevron">›</span></button>)}</div>
+        <div className="wiki-events-list">{filteredEvents.slice(page*8,page*8+8).map(e=><button type="button" key={e.id} className={`wiki-event-row ${selectedEvent?.id===e.id?'selected':''}`} onClick={()=>openEvent(e)}><Art src={artwork(e.art)}/><div><h2><T text={e.title} bold/></h2><p><T text={e.industry==='general'?'Sự kiện chung':e.industry==='family'?'Gia đình & quản trị':catalog.industries.find(i=>i.id===e.industry)?.name??''}/></p></div><span aria-hidden="true" className="wiki-chevron"><T text="›"/></span></button>)}</div>
         {!filteredEvents.length&&<p role="status"><T text="Không tìm thấy sự kiện phù hợp."/></p>}
         <Pager page={page} total={Math.ceil(filteredEvents.length/8)} onChange={setPage}/>
         {selectedEvent&&<EventDetail row={selectedEvent} context={context} setContext={setContext}/>}
@@ -132,6 +140,7 @@ function ProductionArticle({industry:i,selector}:{industry:Industry;selector:Rea
       <Fold title="Cách tính sản lượng"><p><T text="Cụm chạy = số nhỏ hơn giữa tổng số cụm và số tổ đủ người. Người dư không tự sinh sản lượng."/></p><p><T text="Sản lượng = cụm chạy × 100 × công nghệ × tay nghề × chất lượng × tình trạng máy × biến động × tác động sự kiện; làm tròn xuống."/></p><p><T text="Biến động nền 97–103% sản lượng, 98–102% giá bán; bốc theo % nguyên. Sự kiện giảm 10% sản lượng nhân hệ số 0,9 trước khi làm tròn."/></p></Fold>
       <Fold title="Giá bán & ô nhiễm"><p><T text={`Giá bán cơ sở mỗi sản phẩm: ${money(entry*.33/.9/100)}. Giá thực tế còn chịu biến động và sự kiện.`}/></p><p><T text="Ô nhiễm từ 0 đến 100. Trên 30 bắt đầu giảm giá bán, tối đa 35%. Công nghệ sạch giảm ô nhiễm, không tự tăng số cụm hay nhân lực."/></p><p><T text="Ô nhiễm năm mới = ô nhiễm cũ × 0,9 + phát thải sản xuất − xử lý xanh, giới hạn 0–100."/></p></Fold>
       <Fold title="Các khoản cộng trừ tiền mặt"><p><T text="Tiền cuối năm = tiền đầu năm − đầu tư + doanh thu − vận hành − lạm phát + lãi vay (âm nếu có nợ) + tiền hiệu ứng hằng năm + sự kiện tức thời."/></p><p><T text="Chi phí vận hành chia: đầu vào 65%, logistics 20%, khác 15%. Phụ trợ và hạ tầng giảm đúng phần chi phí tương ứng; các khoản không biến mất khi sản lượng bị giảm."/></p></Fold>
+      <Fold title="Tài sản công ty và điểm xếp hạng"><p><T text="Định giá = tiền mặt + giá trị nhân lực + thiết bị + phụ trợ + hạ tầng + công nghệ sạch + thương hiệu − phạt ô nhiễm − phạt phụ thuộc; làm tròn và không thấp hơn 0. Phá sản có định giá 0."/></p><p><T text="Nhân lực = số người × giá tuyển cơ sở ngành × hệ số tay nghề × 0,74 × (1 + công nghệ × 0,05). Thiết bị = số cụm × giá cụm cơ sở × hệ số chất lượng × (0,4 + 0,6 × tỷ lệ đủ người) × tình trạng."/></p><p><T text="Phụ trợ = cấp × giá cơ sở × 0,9; hạ tầng dùng 0,86; công nghệ sạch dùng 0,84. Thương hiệu = tổng doanh thu đã tạo × 10%. Mỗi điểm ô nhiễm trừ 8 triệu, mỗi điểm phụ thuộc trừ 90 triệu theo cấu hình mặc định."/></p><p><T text="Đây là định giá, không phải tiền có thể chi ngay. Kết cục chuyển giao hoặc trăm năm có thể chốt điểm riêng; xem kết quả lượt."/></p></Fold>
     </div></div>
     <div className="wiki-notice"><T text="Hiện mọi ngành dùng 100 đơn vị đầu ra quy ước cho một cụm cơ sở; giá bán được cân theo vốn đủ tổ. Đây là quy tắc game, không phải sản lượng và chi phí doanh nghiệp ngoài đời."/></div>
   </>
@@ -150,7 +159,7 @@ function UpgradeArticle({industry:i,selector}:{industry:Industry;selector:React.
   return <><div className="wiki-article-top"><Heading title="Đầu tư để được gì?"/>{selector}</div><div className="wiki-upgrade-list">{rows.map(r=><button type="button" className={`wiki-upgrade-row ${chosen===r.id?'selected':''}`} key={r.id} onClick={()=>setChosen(r.id)}><Art src={investmentArt(i.id,r.id)}/><div><h2><T text={r.title} bold/></h2><p><T text={r.body}/></p></div><T text={money(r.price)} bold/></button>)}</div>
     <div className="wiki-article-columns"><div className="wiki-inset"><h2><T text={selected.title} bold/></h2><p><T text={selected.detail}/></p><Fold title="Giới hạn và công thức"><p><T text="Phụ trợ: giảm đầu vào = 30% × (1 − exp(−0,35 × cấp)); bảo vệ sốc vật tư = 50% × (1 − exp(−0,25 × cấp))."/></p><p><T text="Hạ tầng: giảm logistics = 30% × (1 − exp(−0,4 × cấp)); giao hàng = 90% + 10% × (1 − exp(−0,35 × cấp))."/></p></Fold></div>
     <div className="wiki-inset"><h2><T text="Chất lượng & bảo dưỡng" bold/></h2>{[['training','Đào tạo tay nghề','Thêm 5% hệ số tay nghề mỗi cấp, tối đa cấp 5.'],['new-machinery','Cải tiến thiết bị','Thêm 8% hệ số chất lượng mỗi cấp, tối đa cấp 5.'],['cnc-breakdown','Bảo dưỡng','Khôi phục tình trạng máy về 100%; không thêm cụm.']].map(([art,title,body])=><div className="wiki-quality" key={title}><Art src={artwork(art)}/><div><h3><T text={title} bold/></h3><p><T text={body}/></p></div></div>)}<p><T text="Đào tạo và cải tiến mở khi có 3 cụm đang vận hành. Bảo dưỡng cần có cụm và tình trạng máy dưới 99%."/></p></div></div>
-    <Fold title="Vì sao giá nâng cấp tăng?"><p><T text="Giá cơ sở riêng theo ngành. Giá mua tăng sau các gói đã mua, thêm bậc quy mô; tuyển người tăng theo tổ. Mua ×5, ×10 hoặc Tối đa là tổng giá từng gói, không nhân giá gói đầu cho tất cả."/></p><p><T text="Giá đào tạo phụ thuộc số người và cấp; cải tiến phụ thuộc số cụm và cấp; bảo dưỡng phụ thuộc số cụm. Hóa đơn còn chịu hệ số giá phòng và sự kiện."/></p></Fold>
+    <Fold title="Vì sao giá nâng cấp tăng?"><p><T text="Giá cơ sở riêng theo ngành. Giá mua tăng sau các gói đã mua, thêm bậc quy mô; tuyển người tăng theo tổ. Mua ×5, ×10 hoặc Tối đa là tổng giá từng gói, không nhân giá gói đầu cho tất cả."/></p><p><T text="Gọi P là giá một gói sau hệ số phòng và ưu đãi; n là số gói đã mua; b là số người mỗi tổ khi tuyển, các hạng mục khác b = 1. Giá gói tiếp = P + max(1, làm tròn P × 4%) × floor(n / b) + max(1, làm tròn P × 20%) × floor(n / (10 × b))²."/></p><p><T text="Giá đào tạo = (20 + số người × giá tuyển ngành × 10%) × (1 + cấp hiện tại × 0,6). Giá cải tiến = (50 + số cụm × giá cụm ngành × 12%) × (1 + cấp hiện tại × 0,6). Giá bảo dưỡng = 15 + số cụm × giá cụm ngành × 2,5%. Các số tiền trong công thức là triệu VNĐ; làm tròn lên trước khi áp ưu đãi mua."/></p><p><T text="Giá đào tạo phụ thuộc số người và cấp; cải tiến phụ thuộc số cụm và cấp; bảo dưỡng phụ thuộc số cụm. Hóa đơn còn chịu hệ số giá phòng và sự kiện."/></p></Fold>
   </>
 }
 
@@ -159,21 +168,21 @@ function EventDetail({row,context,setContext}:{row:EventRow;context:string;setCo
   const variant=contexts.find(c=>c.id===context)??contexts[0]
   const effect={...row.effect} as Record<string,number|number[]>
   if(isIndustry&&context!=='base'){effect.investmentPct=variant.pct;effect.years=Math.max(Number(effect.years??1),variant.years)}
-  const labels:Record<string,string>={revenuePct:'Doanh thu',costPct:'Chi phí',assetsPct:'Tài sản (tức thời)',cashPerYear:'Tiền mỗi năm',investmentPct:'Giá đầu tư',outputMul:'Sản lượng',priceMul:'Giá bán',inflationMul:'Hệ số lạm phát',cash:'Tiền tức thời',machinesAdd:'Cụm được thêm (trước làm tròn)',machinesPct:'Số cụm',engineersAdd:'Nhân lực (trước quy đổi ngành)',engineersPct:'Nhân lực',pollution:'Ô nhiễm',tech:'Công nghệ',support:'Phụ trợ',dependency:'Phụ thuộc'}
+  const labels:Record<string,string>={revenuePct:'Doanh thu',costPct:'Chi phí',assetsPct:'Tài sản (tức thời)',cashPerYear:'Tiền mỗi năm',investmentPct:'Giá đầu tư',outputMul:'Sản lượng',priceMul:'Giá bán',inflationMul:'Hệ số lạm phát',cash:'Tiền tức thời',machinesAdd:'Cụm tăng sau làm tròn',machinesPct:'Số cụm',engineersAdd:'Nhân lực theo ngành',engineersPct:'Nhân lực',pollution:'Ô nhiễm',tech:'Công nghệ',support:'Phụ trợ',dependency:'Phụ thuộc'}
   const impacts=Object.entries(effect).filter(([key,value])=>key in labels&&(Array.isArray(value)?value.some(v=>v!==(key.endsWith('Mul')?1:0)):value!==0)).map(([key,value])=>{
     const neutral=key.endsWith('Mul')?1:0
     const [a,b]=Array.isArray(value)?value:[value,value]
     const low=a===b?neutral+(a-neutral)*.8:a,high=a===b?neutral+(b-neutral)*1.2:b
     const bounds=[low,high].sort((x,y)=>x-y)
     const pct=key.endsWith('Pct')||key.endsWith('Mul')
-    const num=(n:number)=>key.endsWith('Mul')?vn(Math.round((n-1)*100)):pct?vn(Math.round(n)):['cash','cashPerYear'].includes(key)?money(Math.round(n)):vn(n)
+    const num=(n:number)=>key.endsWith('Mul')?vn(Math.round((n-1)*100)):['machinesPct','engineersPct','cashPct'].includes(key)?vn(Math.round(n*100)):pct?vn(Math.round(n)):['cash','cashPerYear'].includes(key)?money(Math.round(n)):key==='machinesAdd'?vn(Math.round(n)):vn(n)
     return [labels[key],`${num(bounds[0])} đến ${num(bounds[1])}${pct?'%':''}`] as [string,string]
   })
   const nonNeutral=impacts.filter(([,value])=>value!=='0 đến 0%')
   const years=Number(effect.years??1)
-  return <article className="wiki-event-detail" aria-label={`Chi tiết ${row.title}`}>
+  return <article className="wiki-event-detail" id="wiki-event-detail" tabIndex={-1} aria-label={`Chi tiết ${row.title}`}>
     <h2><T text={row.title+(isIndustry&&context!=='base'?' · '+variant.title:'')} bold/></h2>
-    {isIndustry&&<label><span className="sr-only">Biến thể ngữ cảnh</span><select value={context} onChange={e=>setContext(e.target.value)}>{contexts.map(c=><option key={c.id} value={c.id}>{c.title}</option>)}</select></label>}
+    {isIndustry&&<label><span className="sr-only">Biến thể ngữ cảnh</span><select aria-label="Biến thể ngữ cảnh" value={context} onChange={e=>setContext(e.target.value)}>{contexts.map(c=><option key={c.id} value={c.id}>{c.title}</option>)}</select></label>}
     <div className="wiki-event-detail-grid"><Art src={artwork(row.art)}/><div><p><T text={replace(row.body,catalog.industries.find(i=>i.id===row.industry)?.name??'ngành của bạn')}/></p>
       {nonNeutral.length?<Receipt rows={nonNeutral}/>:<p><T text="Chưa có tác động kinh tế trực tiếp được khai báo cho sự kiện gốc này."/></p>}
       {row.trait&&<p className="wiki-notice"><T text={traitText(row.trait)}/></p>}
@@ -194,5 +203,6 @@ function RiskArticle(){
     {[['longevity','Trường thọ','longevity'],['illness','Bạo bệnh','illness'],['family-fund','Quỹ gia tộc','family_fund'],['life-insurance','Bảo hiểm nhân thọ','life_insurance']].map(([art,title,trait])=><div className="wiki-quality" key={title}><Art src={artwork(art)}/><div><h2><T text={title} bold/></h2><p><T text={traitText(trait)}/></p></div></div>)}
     <Fold title="Các kết quả tài sản sau chuyển giao"><Receipt rows={[["Phá sản","0% tài sản"],["Mất tài sản","Mất 10–60%"],["Giữ nguyên","100%"],["Phát đạt","Tăng 20–100%"],["Nhân tài sản","Bằng 2–3 lần"]]}/><p><T text="Xác suất không đồng đều và còn phụ thuộc trait. % tài sản được bốc nguyên và hiện kết quả cụ thể; mốc giữa trong dữ liệu cũ không phải mức cố định."/></p></Fold>
     <Fold title="Khi nào được Nhà nước cấp vốn làm lại?"><p><T text="Quyết định chấp thuận có thể xuất hiện hiếm trước giai đoạn rủi ro tăng. Chỉ được giải ngân nếu công ty phá sản trong chuyển giao và quyền hỗ trợ chưa dùng. Tử vong không được khởi động lại."/></p></Fold>
+    <Fold title="Cách bốc rủi ro và câu hỏi"><p><T text="Mỗi lần chốt năm có thể bốc sự kiện kinh tế, sau đó kiểm tra các nhánh đặc biệt, rủi ro và câu hỏi. Trần sự kiện thường mặc định là 2 trong một lần chốt; các trait và kết quả đặc biệt là nhánh riêng. Túi bốc tránh lặp đúng mã cho đến khi hết túi, nhưng các biến thể cùng gốc vẫn là mã khác nhau."/></p><p><T text="Mặc định chuyển giao bắt đầu từ 1% và bị giới hạn mức nền 4%; tử vong bắt đầu từ 0,5% và giới hạn mức nền 2%. Bạo bệnh có phần cộng riêng; trường thọ khóa hai mức 1% và 0,5%. Cấu hình quản trị hoặc phiên cũ có thể khác; tỷ lệ thực của đội được hiển thị trong tab Rủi ro."/></p><p><T text="Khi có câu hỏi chưa giải quyết, đồng hồ năm của đội được giữ lại; đồng hồ chung của phiên và thời hạn trả lời vẫn chạy. Không mở chồng câu hỏi mới khi câu trước còn chờ. Thưởng câu đúng trong mô hình mới là tiền bốc trong khoảng 32–48 triệu, không tự tặng công nhân."/></p></Fold>
   </>
 }
