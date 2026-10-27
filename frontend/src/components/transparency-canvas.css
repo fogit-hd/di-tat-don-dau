@@ -219,3 +219,29 @@
 .gameplay.game-shell .starter-actions button { min-width:0; min-height:44px; padding:7px; background:linear-gradient(#e98720,#a83a0c); color:#fff0c9; border:1px solid #b77828; border-radius:5px; font:700 14px/1.2 Cambria,Georgia,serif; cursor:pointer; }
 .gameplay.game-shell .starter-actions button:disabled { opacity:.5; cursor:default; }
 @media(max-width:699px) { .gameplay.game-shell .starter-actions button { font-size:12px; } }
+
+/* Compact operating view: key decisions only, with no nested scrolling or formula tabs. */
+.gameplay.game-shell .factory-scene.scene.compact-report{height:auto;min-height:0;container-type:inline-size}
+.gameplay.game-shell .compact-report .factory-report{height:auto;min-height:0;padding:5px 8px 8px}
+.gameplay.game-shell .compact-report .factory-report>header{padding-left:108px;min-height:46px}
+.gameplay.game-shell .factory-quick-view{display:grid;gap:7px;padding-top:7px;font-size:13px;line-height:1.3;font-variant-numeric:tabular-nums lining-nums}
+.gameplay.game-shell .factory-key-metrics{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:8px}
+.gameplay.game-shell .factory-key-metrics article{display:flex;align-items:center;gap:8px;padding:10px 8px;background:#fff4da;border:1px solid #d2b376;border-radius:5px;min-width:0}
+.gameplay.game-shell .factory-key-metrics .painted-icon{width:30px;height:32px;flex:none}
+.gameplay.game-shell .factory-key-metrics article>div{min-width:0}
+.gameplay.game-shell .factory-key-metrics span,.gameplay.game-shell .factory-key-metrics small{display:block;font-size:12px;color:#73512d}
+.gameplay.game-shell .factory-key-metrics strong{display:block;font-size:clamp(16px,1.7vw,23px);line-height:1.25;overflow-wrap:anywhere}
+.gameplay.game-shell .factory-cash-forecast,.gameplay.game-shell .factory-fleet-summary{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:5px 2px}
+.gameplay.game-shell .factory-cash-forecast b{color:#5c371d;font-size:16px}
+.gameplay.game-shell .factory-fleet-summary{color:#73512d;border-top:1px solid #cdb07a77;font-size:13px}
+.gameplay.game-shell .factory-key-warning{margin:0;padding:6px 8px;border-left:3px solid #b85c24;background:#f6e2b7;color:#844121;font-size:13px}
+.gameplay.game-shell .factory-impact-link{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 2px;color:#613718;background:none;border:0;text-align:left;cursor:pointer;min-height:36px;font:inherit}
+.gameplay.game-shell .factory-impact-link>span:first-child{min-width:0}
+.gameplay.game-shell .factory-impact-link b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.gameplay.game-shell .factory-impact-link small{display:block;font-size:12px;margin-top:2px}
+.gameplay.game-shell .factory-impact-link>span:last-child{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px}
+.gameplay.game-shell .factory-impact-link .operation-icon{width:16px;height:16px}
+@media(max-width:640px){.gameplay.game-shell .factory-key-metrics article{padding:8px 6px;gap:5px}.gameplay.game-shell .factory-key-metrics .painted-icon{width:24px;height:26px}.gameplay.game-shell .factory-key-metrics strong{font-size:17px}.gameplay.game-shell .factory-key-metrics span{font-size:11px}.gameplay.game-shell .factory-cash-forecast b{font-size:15px}.gameplay.game-shell .factory-quick-view{gap:5px}}
+
+.gameplay.game-shell .factory-photo-health{position:absolute;bottom:8px;left:8px;right:8px;margin:0;padding:8px 10px;color:#fff3d3;background:#761f1de8;border:1px solid #d3a250;font-size:14px;text-align:center}
+@container (max-width:340px){.gameplay.game-shell .factory-key-metrics{grid-template-columns:1fr}.gameplay.game-shell .factory-key-metrics article{padding:7px 8px}.gameplay.game-shell .factory-key-metrics strong{font-size:18px}.gameplay.game-shell .factory-key-metrics span{font-size:12px}.gameplay.game-shell .factory-key-metrics .painted-icon{width:28px;height:30px}}

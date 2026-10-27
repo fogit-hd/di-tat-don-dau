@@ -91,7 +91,7 @@ export type Effect = {
   cashPerYear?: number
   /** Multiplier applied to all investment prices while this event remains active. */
   investmentMul?: number
-  /** Game years still to settle. 0 means a wall-clock effect. */
+  /** Game years still to settle. 0 has no yearly settlements; legacy effects may still use endsAt. */
   yearsLeft?: number
   icon?: string
   good?: boolean
@@ -183,6 +183,11 @@ export const TRAIT_IDS = [
 export type TraitId = (typeof TRAIT_IDS)[number]
 
 export type TeamState = {
+  patentLevy?: import('./strategic-events').PatentLevy
+  exclusiveTechnology?: boolean
+  finalClaims?: import('./strategic-events').FinalClaim[]
+  finalSettlement?: import('./strategic-events').FinalSettlement
+  questionHistory?: import('./quiz-review').QuestionVisit[]
   cash: number
   engineers: number
   machines: number
@@ -234,6 +239,7 @@ export type TeamState = {
   workerSkill?: number
   machineQuality?: number
   investmentCounts?: Partial<Record<Line,number>>
+  qualityPurchases?: {training:number;modernization:number}
   rng: number
   seed: number
 }
@@ -269,6 +275,13 @@ export type EffectPatch = {
   machinesPct?: Range
   tech?: Range
   support?: Range
+  infra?: Range
+  green?: Range
+  workerSkill?: Range
+  machineQuality?: Range
+  conditionPct?: Range
+  /** Direct modern worker counts, never rescaled from legacy large workforces. */
+  workforceUnits?: boolean
   pollution?: Range
   dependency?: Range
   /** Exact percent points from the seed file, not exposure-scaled. */
@@ -277,7 +290,7 @@ export type EffectPatch = {
   assetsPct?: Range
   cashPerYear?: Range
   investmentPct?: Range
-  /** How many future year settlements this patch covers. 0 settles only by the wall clock. */
+  /** How many future year settlements this patch covers. 0 means immediate-only; undefined preserves legacy wall-clock timing. */
   yearSpan?: number
 }
 
@@ -429,6 +442,13 @@ export type EventDef = {
   machinesPct?: Range
   tech?: Range
   support?: Range
+  infra?: Range
+  green?: Range
+  workerSkill?: Range
+  machineQuality?: Range
+  conditionPct?: Range
+  /** Direct modern worker counts, never rescaled from legacy large workforces. */
+  workforceUnits?: boolean
   pollution?: Range
   dependency?: Range
   revenuePct?: Range

@@ -10,11 +10,12 @@ export const COMPANY_UPGRADES: CompanyUpgrade[] = ['training','modernization','m
 export function companyUpgradePreview(state: TeamState, theme: ThemeDef, balance: Balance, kind: CompanyUpgrade, now: number) {
   const level = kind==='training' ? state.workerSkill??0 : kind==='modernization' ? state.machineQuality??0 : 0
   const profile=industryEconomy(theme.industryId,state.companyProfile)
-  const operating=Math.min(Math.floor(state.machines),Math.floor(state.engineers/profile.crew))
+  const operating=productionPlan(state,theme,balance,now).operating
+  const paidTier=kind==='training' ? state.qualityPurchases?.training??level : kind==='modernization' ? state.qualityPurchases?.modernization??level : 0
   const reason = kind==='maintenance' ? state.machines<1 ? 'Cần có máy trước khi bảo dưỡng' : state.condition>=.99 ? 'Máy đang ở tình trạng tốt' : ''
     : operating<3 ? 'Mở khi có 3 máy đang vận hành' : level>=5 ? 'Đã đạt cấp tối đa' : ''
-  const base = kind==='training' ? (20+state.engineers*profile.prices.eng*.10)*(1+level*.6)
-    : kind==='modernization' ? (50+state.machines*profile.prices.mac*.12)*(1+level*.6)
+  const base = kind==='training' ? (20+state.engineers*profile.prices.eng*.10)*(1+paidTier*.6)
+    : kind==='modernization' ? (50+state.machines*profile.prices.mac*.12)*(1+paidTier*.6)
     : 15+state.machines*profile.prices.mac*.025
   const price=investmentPrice(state,Math.ceil(base),now)
   const next={...state,cash:state.cash-price}
@@ -38,6 +39,7 @@ export function upgradeCompany(state: TeamState, theme: ThemeDef, balance: Balan
     workerSkill:kind==='training'?preview.levelAfter:state.workerSkill??0,
     machineQuality:kind==='modernization'?preview.levelAfter:state.machineQuality??0,
     condition:preview.conditionAfter,
+    qualityPurchases:{training:(state.qualityPurchases?.training??state.workerSkill??0)+(kind==='training'?1:0),modernization:(state.qualityPurchases?.modernization??state.machineQuality??0)+(kind==='modernization'?1:0)},
     pendingCauses:[...(state.pendingCauses??[]),{kind:'investment' as const,label,cash:-preview.price,packages:1,cashBefore:state.cash,cashAfter:state.cash-preview.price,
       detail:`${label} · sản lượng dự kiến ${preview.outputBefore} → ${preview.outputAfter} · lãi sản xuất ${preview.netBefore.toFixed(2)} → ${preview.netAfter.toFixed(2)} triệu/năm`}],
     log:[`${label} · cấp ${preview.levelAfter || 'bảo dưỡng hoàn tất'}`,...state.log].slice(0,balance.logLimit)}

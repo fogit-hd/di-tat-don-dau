@@ -1,3 +1,4 @@
+import { annualMachineWear } from './machine-condition'
 import { hashString, makeRng } from './rng'
 import type { Balance, Line, TeamState } from './types'
 import type { SuccessionPolicy } from './succession'
@@ -42,7 +43,7 @@ export function annualBalance(state: Pick<TeamState, 'seed' | 'cycles'>, balance
   const profile = annualEconomy(state, state.cycles + 1)
   const rate = (value: number, key: string) => annualWholeRate(state, value, key, state.cycles + 1)
   return { ...balance, debtInterest: rate(balance.debtInterest * profile.interest, 'interest'),
-    conditionDecay: 1 - rate((1 - balance.conditionDecay) * profile.wear, 'wear'),
+    conditionDecay: 1 - annualMachineWear(state),
     yearEventChance: rate(balance.yearEventChance * profile.events, 'events'), yearExtraChance: rate(balance.yearExtraChance * profile.extraEvents, 'extra-events'),
     classEventChance: rate(balance.classEventChance * profile.classEvents, 'class-events'), questionChance: rate(balance.questionChance * profile.questions, 'questions') }
 }

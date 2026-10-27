@@ -9,7 +9,7 @@ export function CostRows({ plan }: { plan: ProductionPlanView }) {
     <div><dt>Nguyên liệu {plan.inputDiscount > 0 && <small>(phụ trợ giảm {rate(plan.inputDiscount)})</small>}</dt><dd>{signedMoney(-plan.inputCost)}</dd></div>
     <div><dt>Logistics {plan.logisticsDiscount > 0 && <small>(hạ tầng giảm {rate(plan.logisticsDiscount)})</small>}</dt><dd>{signedMoney(-plan.logisticsCost)}</dd></div>
     <div><dt>Chi phí khác</dt><dd>{signedMoney(-plan.otherCost)}</dd></div>
-    <div><dt>Chờ đủ nhân lực · {count(plan.idle)} cụm</dt><dd>{signedMoney(-plan.idleCost)}</dd></div>
+    <div><dt>Duy trì cụm chưa chạy · {count(plan.idle+(plan.stopped??0))} cụm</dt><dd>{signedMoney(-plan.idleCost)}</dd></div>
   </dl>
 }
 
@@ -21,10 +21,12 @@ export function ProductionDetails({ report }: { report: ProductionReportView }) 
       <div><dt>Cụm đang vận hành / sở hữu</dt><dd>{count(report.operating)} / {count(report.machines)}</dd></div>
       {report.workerBonus!=null && <div><dt>Hiệu quả tay nghề</dt><dd>{signedRate(report.workerBonus-1)}</dd></div>}
       {report.machineBonus!=null && <div><dt>Hiệu quả thiết bị</dt><dd>{signedRate(report.machineBonus-1)}</dd></div>}
-      {report.conditionFactor!=null && <div><dt>Tình trạng thiết bị</dt><dd>{rate(report.conditionFactor)}</dd></div>}
+      {report.conditionWearPct!=null && report.conditionWearPct>0 && <div><dt>Hao mòn sau năm này</dt><dd>−{report.conditionWearPct} điểm % · còn {Math.round((report.conditionAfter??0)*100)}%</dd></div>}
+      {report.conditionFactor!=null && <div><dt>Tốc độ theo độ bền</dt><dd>{rate(report.conditionFactor)}</dd></div>}
       {report.appliedEffects.filter(e => e.outputMul !== 1).map(e => <div key={e.id}><dt>{e.title}</dt><dd>{signedRate(e.outputMul - 1)} sản lượng</dd></div>)}
       <div><dt>Biến động sản lượng</dt><dd>{signedRate(report.outputNoise-1)}</dd></div>
       <div className="finance-emphasis"><dt>Sản lượng thực tế</dt><dd>{count(report.output)} {report.unit}</dd></div>
+      {report.defective!=null&&<><div><dt>Hàng lỗi · {report.defectRatePct}% · không bán được</dt><dd className="down">{count(report.defective)} {report.unit}</dd></div><div><dt>Đạt chất lượng</dt><dd>{count(report.saleable??report.output)} {report.unit}</dd></div></>}
       <div><dt>Bán được · {rate(report.delivery)}</dt><dd>{count(report.sold)} {report.unit}</dd></div>
       <div><dt>Giá gốc / {report.unit}</dt><dd>{money(report.basePrice)}</dd></div>
       <div><dt>Biến động giá</dt><dd>{signedRate(report.priceNoise-1)}</dd></div>

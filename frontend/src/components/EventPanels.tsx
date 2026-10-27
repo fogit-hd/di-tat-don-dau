@@ -85,7 +85,8 @@ export function YearTabs({ events, changes }: { events: EventLogView[]; changes:
 export type GameTabsHandle = { showEvents: (group: EventGroup) => void; showYear: (year: number) => void }
 
 export function GameTabs({ ref, investment, enterprise, risk, riskIncreasing, events, currentEvents, ongoing, changes, investmentLines, industryId, finished = false, result, tutorialTarget, initialTab='investment', onVisit }: { ref?: Ref<GameTabsHandle>; investment: ReactNode; enterprise: ReactNode; risk: ReactNode; riskIncreasing: boolean; events: EventLogView[]; currentEvents: EventLogView[]; ongoing: EventEntry[]; changes: YearChangeView[]; investmentLines?: LineView[]; industryId?: string; finished?: boolean; result?: ReactNode; tutorialTarget?: string|null; initialTab?:string; onVisit?:(tab:string)=>void }) {
-  const [tab, setTab] = useState(finished ? 'events' : initialTab)
+  const [selectedTab, setTab] = useState(finished ? 'events' : initialTab)
+  const tab=tutorialTarget!==undefined?(tutorialTarget??initialTab):selectedTab
   const [yearRequest, setYearRequest] = useState(0)
   const [requestedYear, setRequestedYear] = useState<number | null>(null)
   const [eventGroup, setEventGroup] = useState<EventGroup>('history')

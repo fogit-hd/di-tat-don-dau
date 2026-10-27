@@ -1,0 +1,27 @@
+.quiz-review{color:#4f2518;font-family:Arial,sans-serif;font-variant-numeric:lining-nums tabular-nums}
+.quiz-review-card{padding:16px;margin:0 0 16px;border:1px solid #c5a468;border-radius:8px;background:#fff7e5}
+.quiz-review-card header{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.quiz-review-card h3{font:700 18px/1.5 Arial,sans-serif;margin:12px 0}
+.quiz-options{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+.quiz-options li{position:relative;isolation:isolate;display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border:2px solid #c5ac7b;border-radius:7px;background:#fff8e9;overflow:hidden;font:16px/1.5 Arial,sans-serif;overflow-wrap:anywhere}
+.quiz-options li.is-correct{border-color:#287347;background:#e4f3dd;color:#164f2d}
+.quiz-options li.is-wrong{border-color:#ba3d31;background:#fce8de;color:#92281f}
+.quiz-options li>b{font-size:13px}
+.quiz-option-letter{font-weight:700;text-align:center}
+.quiz-explanation{font:15px/1.6 Arial,sans-serif}
+.quiz-distribution{position:absolute;inset:0;z-index:-1;background:#cda97030;transform-origin:left;animation:quiz-bar-enter .65s cubic-bezier(.2,.7,.2,1) both}
+.is-correct .quiz-distribution{background:#3a9b4c30}
+.quiz-host-detail{padding:12px 20px}
+.quiz-host-detail .quiz-options li{grid-template-columns:28px minmax(0,1fr) auto}
+@keyframes quiz-bar-enter{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(max-width:480px){.quiz-options li{grid-template-columns:22px minmax(0,1fr);padding:10px;font-size:14px}.quiz-options li>b{grid-column:2}.quiz-host-detail{padding:10px}.quiz-host-detail .quiz-options li{grid-template-columns:22px minmax(0,1fr)}.quiz-review-card{padding:12px}.quiz-review-card h3{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.quiz-distribution{animation:none}}
+
+.quiz-review .session-pagination .session-button{width:auto;font-size:16px;padding:8px 14px}
+.session-player-results .session-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:480px){.session-player-results .session-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.final-settlement{min-width:0;max-width:100%;overflow-wrap:anywhere;color:#4f2518;font:16px/1.55 Arial,sans-serif;margin:12px 0}
+.final-settlement summary{cursor:pointer;font-weight:700;min-height:40px;padding:8px 0}
+.final-settlement p{font:16px/1.55 Arial,sans-serif;margin:8px 0}
+.final-settlement small{font:14px/1.5 Arial,sans-serif}

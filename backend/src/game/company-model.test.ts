@@ -39,10 +39,10 @@ describe('industry production units and purposeful upgrades',()=>{
   if(!hired.ok)throw Error(hired.error)
   expect(productionPlan(hired.state,theme(),balance,1).operating).toBe(3)
  })
- it('calibrates baseline returns against complete crew + equipment across all industries',()=>{
+ it('calibrates defect-free baseline returns against complete crew + equipment across all industries',()=>{
   for(const [id,profile]of Object.entries(INDUSTRY_ECONOMY)){
    const s={...fresh(id),machines:1,engineers:profile.crew,green:100}
-   const plan=productionPlan(s,theme(id),balance,1)
+   const plan=productionPlan(s,theme(id),balance,1,1,1,0)
    const entry=profile.prices.mac+profile.crew*profile.prices.eng
    expect(plan.net/entry).toBeCloseTo(.22,10)
   }
@@ -68,7 +68,8 @@ describe('industry production units and purposeful upgrades',()=>{
   expect(productionPlan({...s,engineers:5000},theme(),balance,1).tech).toBe(productionPlan(s,theme(),balance,1).tech)
   let live=s
   for(let year=0;year<200;year++)live=runCycle(live,theme(),makeRng(year+1),year+1,balance) as typeof s
-  expect(live.tech).toBeLessThanOrEqual(3);expect(live.condition).toBeGreaterThanOrEqual(.6)
+  expect(live.tech).toBeLessThanOrEqual(3);expect(live.condition).toBe(0)
+  expect(productionPlan(live,theme(),balance,201).operating).toBe(0)
  })
  it('keeps late production proportional to staffed units and rescales old personnel gifts',()=>{
   const maxed={...fresh(),machines:100,engineers:500,tech:3,workerSkill:5,machineQuality:5,green:1000}

@@ -42,6 +42,6 @@ export function guideStep(scene: SceneView,context:{ceoName?:string;industryName
   return step
 }
 export function guideDisplayedTab(step: number, version: number = 1) {
-  if(version===2)return step<=14?'investment':step<=23?'enterprise':step===24?'risk':step===25?'events':'years'
+  if(version===2)return step<=13?'investment':step<=22?'enterprise':step===23?'risk':step===24?'events':'years'
   return step<=9?'investment':step===10?'enterprise':step===11?'risk':step===12?'events':step===13?'years':step<=16?'investment':'enterprise'
 }

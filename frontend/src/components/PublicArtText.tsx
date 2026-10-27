@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { ArtText, type Lettering } from './ArtText'
 import letters from '../lib/public-letter-paths.json'
+import '../public-font.css'
 
 const lettering = letters as unknown as Lettering
 

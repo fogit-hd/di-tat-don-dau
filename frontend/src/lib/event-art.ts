@@ -1,3 +1,4 @@
+import companyEvents from './company-events.json'
 import index from './static-event-art-index.json'
 
 const art: Record<string, string> = index.art
@@ -5,12 +6,15 @@ const ids = new Set<string>(Object.keys(art))
 const contexts = new Set<string>(index.contexts)
 const root = '/assets/ui/static-events-v3/'
 const contextTitles: Record<string,string> = {'input-shortage':'Nguồn đầu vào bị siết','local-supplier':'Nhà cung cấp trong nước vào chuỗi','port-delay':'Cảng và kho bãi ùn tắc','green-support':'Gói mua sắm xanh được duyệt','credit-tightening':'Tín dụng thiết bị bị siết','tech-transfer':'Chuyển giao thiết bị theo lô','new-standard':'Tiêu chuẩn đầu vào mới'}
-export type EventArtwork = { id: string; base: string }
+const companyIds = new Set(companyEvents.map(event=>event.id))
+export type EventArtwork = { id: string; base: string; extension?: 'svg' }
 const resolve = (id: string): EventArtwork => ({ id, base: `${root}${art[id]}` })
 
 /** Only allow audited catalog IDs in local URLs; labels/percent rolls never become filenames. */
 export function eventArtwork(eventId?: string, title = '', detail = ''): EventArtwork | undefined {
   if (!eventId) return undefined
+  const baseId=eventId.split('--')[0]
+  if(companyIds.has(baseId) || baseId==='gen-lop-nghe')return {id:baseId,base:`/assets/ui/company-events-v1/${baseId}`,extension:'svg'}
   let id = eventId
   if (/^second-life-used-\d+$/.test(id)) id = 'system-support-used'
   else if (/^second-life-\d+$/.test(id)) id = 'system-support-approved'

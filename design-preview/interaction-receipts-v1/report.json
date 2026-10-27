@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "missing": [],
+  "widths": [
+    390,
+    768,
+    1440
+  ],
+  "checks": [
+    "selected wrong answer red",
+    "correct answer green",
+    "timeout unselected",
+    "own answers survive reload",
+    "host appearances and four option distributions",
+    "animated bars/reduced motion",
+    "pagination",
+    "no horizontal overflow",
+    "full final-transfer receipt in event history"
+  ]
+}

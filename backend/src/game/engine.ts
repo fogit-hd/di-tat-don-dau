@@ -1,3 +1,4 @@
+import { annualMachineWear, annualDefectPercent } from './machine-condition'
 import {industryEconomy} from './industry-economy'
 import { shuffle, type Rng } from './rng'
 import { isBankrupt, productionPlan, supplyBenefits } from './production'
@@ -188,7 +189,7 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   const noise = rollWholeMultiplier(balance.outputNoiseMin, balance.outputNoiseMax, rng)
   const priceNoise = rollWholeMultiplier(balance.priceNoiseMin, balance.priceNoiseMax, rng)
   const { inflationMul, cashPerYear } = effectFactors(s.effects, now)
-  const plan = productionPlan(s, theme, balance, now, noise, priceNoise)
+  const plan = productionPlan(s, theme, balance, now, noise, priceNoise, s.productionVersion===3?annualDefectPercent(s):0)
   const { operating, idle, output, revenue, net } = plan
   s.tech = plan.tech
   s.pollution = plan.pollution
@@ -210,7 +211,10 @@ export function runCycle(state: TeamState, theme: ThemeDef, rng: Rng, now: numbe
   s.lastIncome = net - infl + cashPerYear
   s.lastOutput = output
   s.cycles += 1
-  if(s.productionVersion!==3 || operating>0)s.condition = Math.max(s.productionVersion===3?.6:0,s.condition*balance.conditionDecay)
+  if(s.productionVersion!==3 || operating>0)s.condition = s.productionVersion===3 ? Math.max(0,Number((s.condition-annualMachineWear(state)).toFixed(10))) : Math.max(0,s.condition*balance.conditionDecay)
+  s.cycleReport.conditionBefore=state.condition
+  s.cycleReport.conditionAfter=s.condition
+  s.cycleReport.conditionWearPct=Math.round((state.condition-s.condition)*100)
   if (operating > balance.dependencyEaseOperating && idle < operating * balance.dependencyEaseIdleRatio) {
     s.dependency = Math.max(0, s.dependency * balance.dependencyEaseMul)
   }
@@ -326,12 +330,12 @@ export function applyPatch(
   }
   const cash = roll(rng, patch.cash, 0) * exposure
   const cashPct = Math.max(-1, wholeRate(roll(rng, patch.cashPct, 0) * exposure))
-  const engineersAdd = roll(rng, patch.engineersAdd, 0) * exposure
+  const engineersAdd = patch.workforceUnits && patch.engineersAdd ? rng.int(Math.ceil(patch.engineersAdd[0]),Math.floor(patch.engineersAdd[1])) : roll(rng, patch.engineersAdd, 0) * exposure
   const engineersPct = Math.max(-1, wholeRate(roll(rng, patch.engineersPct, 0) * exposure))
   const machinesAdd = roll(rng, patch.machinesAdd, 0) * exposure
   const machinesPct = Math.max(-1, wholeRate(roll(rng, patch.machinesPct, 0) * exposure))
   const tech = roll(rng, patch.tech, 0) * exposure
-  const support = roll(rng, patch.support, 0) * exposure
+  const support = patch.workforceUnits && patch.support ? rng.int(Math.ceil(patch.support[0]),Math.floor(patch.support[1])) : roll(rng, patch.support, 0) * exposure
   const pollution = roll(rng, patch.pollution, 0) * exposure
   const dependency = roll(rng, patch.dependency, 0) * exposure
   next.cash = next.cash + cash + next.cash * cashPct
@@ -341,6 +345,15 @@ export function applyPatch(
   next.machineProgress = state.productionVersion===3 ? 0 : Math.max(0,capacity-next.machines)
   next.tech = Math.min(state.productionVersion===3?3:Infinity,Math.max(0, next.tech + tech))
   next.support = Math.max(0, next.support + support)
+  const discrete = (range: Range | undefined) => range ? rng.int(Math.ceil(range[0]),Math.floor(range[1])) : 0
+  next.infra = Math.max(0,next.infra+discrete(patch.infra))
+  next.green = Math.max(0,next.green+discrete(patch.green))
+  // Damage changes useful levels, never the paid-price ladder.
+  if(patch.workerSkill || patch.machineQuality)next.qualityPurchases={training:state.qualityPurchases?.training??state.workerSkill??0,modernization:state.qualityPurchases?.modernization??state.machineQuality??0}
+  next.workerSkill=clamp((next.workerSkill??0)+discrete(patch.workerSkill),0,5)
+  next.machineQuality=clamp((next.machineQuality??0)+discrete(patch.machineQuality),0,5)
+  const conditionChange=discrete(patch.conditionPct)
+  if(conditionChange)next.condition=clamp(Number((next.condition+conditionChange/100).toFixed(10)),0,1)
   next.pollution = clamp(next.pollution + pollution, 0, 100)
   next.dependency = Math.max(0, next.dependency + dependency)
   const assetsPct = Math.max(-100, roundImpact(patch.assetsPct ? roll(rng, patch.assetsPct, 0) : 0))
@@ -394,7 +407,14 @@ export function applyPatch(
   if (priceMul !== 1) bits.push(`giá bán ${priceMul >= 1 ? '+' : ''}${percentText((priceMul - 1) * 100)}%`)
   if (inflationMul !== 1) bits.push(`lạm phát ${inflationMul >= 1 ? '+' : ''}${percentText((inflationMul - 1) * 100)}%`)
   if (tech) bits.push(`công nghệ ${tech > 0 ? '+' : ''}${Math.round(tech)}`)
-  if (support) bits.push(`hỗ trợ ${support > 0 ? '+' : ''}${Math.round(support)}`)
+  const changed = (label:string,before:number,after:number,suffix='') => {if(before!==after)bits.push(`${label} ${before.toLocaleString('vi-VN',{maximumFractionDigits:2})}${suffix} → ${after.toLocaleString('vi-VN',{maximumFractionDigits:2})}${suffix} (${after-before>0?'+':''}${Number((after-before).toFixed(2)).toLocaleString('vi-VN')}${suffix})`)}
+  changed('phụ trợ',state.support,next.support)
+  changed('hạ tầng',state.infra,next.infra)
+  changed('công nghệ sạch',state.green,next.green)
+  changed('tay nghề',state.workerSkill??0,next.workerSkill??0)
+  changed('chất lượng thiết bị',state.machineQuality??0,next.machineQuality??0)
+  changed('độ bền',Math.round(state.condition*100),Math.round(next.condition*100),'%')
+  if(conditionChange && next.condition===0)bits.push('Máy ngừng sản xuất · cần bảo dưỡng')
   if (pollution) bits.push(`ô nhiễm ${pollution > 0 ? '+' : ''}${Math.round(pollution)}`)
   if (protection) bits.push(`phụ trợ giảm ${Math.round(protection * 100)}% mức bất lợi của cú sốc đầu vào`)
   if (dependency) bits.push(`phụ thuộc ${dependency > 0 ? '+' : ''}${Math.round(dependency)}`)
@@ -405,7 +425,7 @@ export function applyPatch(
     body: patch.body,
     severity: 1,
     startedAt: now,
-    endsAt: now + shownFor * 1000,
+    endsAt: patch.yearSpan===0 ? now : now + shownFor * 1000,
     outputMul,
     priceMul,
     inflationMul,
@@ -450,12 +470,13 @@ export function patchFromEvent(event: EventDef, title: string, body: string): Ef
     cashPerYear: event.cashPerYear,
     investmentPct: event.investmentPct,
     yearSpan: event.yearSpan,
-    engineersAdd: event.engineersAdd,
+    engineersAdd: event.id.split('--')[0]==='gen-lop-nghe' ? [1,5] : event.engineersAdd,
     engineersPct: event.engineersPct,
-    machinesAdd: event.machinesAdd,
+    machinesAdd: event.id.split('--')[0]==='gen-lop-nghe' ? undefined : event.machinesAdd,
     machinesPct: event.machinesPct,
     tech: event.tech,
     support: event.support,
+    infra: event.infra, green: event.green, workerSkill: event.workerSkill, machineQuality: event.machineQuality, conditionPct: event.conditionPct, workforceUnits: event.id.split('--')[0]==='gen-lop-nghe' || event.workforceUnits,
     pollution: event.pollution,
     dependency: event.dependency,
   }

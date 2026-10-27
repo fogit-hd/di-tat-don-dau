@@ -30,3 +30,8 @@
 .ceo-status>svg{width:20px;height:20px;flex:none}.session-player-results .player-rank{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:4px}.personal-rank-medal{display:grid;place-items:center;width:112px;height:102px;background:url('/assets/session-v2/personal-rank.svg') center/contain no-repeat;color:#ffdfa0;font-size:42px}.personal-rank-medal>.art-text{padding-top:0}.live-ranking .ceo-status{max-width:100%}@media(max-width:640px){.ceo-status>svg{width:14px;height:14px}.personal-rank-medal{width:88px;height:80px;font-size:32px}}
 
 @media(min-width:1000px){.session-create .session-header{grid-template-columns:220px minmax(0,1fr) auto;gap:16px}.session-create .session-header-actions{max-width:none;flex-wrap:nowrap}}
+
+/* Title and form share exactly one centered border box at every breakpoint. */
+.session-create .session-create-stack{width:min(740px,100%);margin-inline:auto;min-width:0}
+.session-create .session-create-stack .session-create-title{width:100%;max-width:none;margin:0 0 -4px!important}
+.session-create .session-create-stack .session-create-form{width:100%;max-width:none;margin:0}

@@ -4,16 +4,16 @@
 
 ## Luồng
 
-Phiên mới dùng **version 2, 28 bước**: tám mục HUD → bấm Đầu tư → mua cụm và tổ công nhân trên thẻ thật → thực hành phụ trợ, hạ tầng, công nghệ sạch → bấm Doanh nghiệp → lần lượt sáu chỉ số → ô nhiễm và chất lượng → bấm Rủi ro, Lịch sử sự kiện, Thay đổi từng năm → chốt năm đầu → hoàn tất. Version 1 cũ vẫn giữ nguyên 19 bước theo action để phiên đang dở không bị đổi chỉ số bước hoặc mua lặp.
+Phiên mới dùng **version 2, 28 bước**: tám mục HUD → tự mở Đầu tư → mua cụm và tổ công nhân trên thẻ thật → thực hành phụ trợ, hạ tầng, công nghệ sạch → tự mở Doanh nghiệp → lần lượt sáu chỉ số → ô nhiễm và chất lượng → tự mở Rủi ro, Lịch sử sự kiện, Thay đổi từng năm → chốt năm đầu → hoàn tất. Version 1 cũ vẫn giữ nguyên 19 bước theo action để phiên đang dở không bị đổi chỉ số bước hoặc mua lặp.
 
-Phần giới thiệu thanh trên (8 mục đầu) cho phép chạm nền, lời thoại hoặc Enter/Space để chuyển ngay, không bắt bấm chỉ số. Các tab phải được người chơi bấm thật; không tự mở rồi tính như đã xem. Bước thực hành mua và Sang năm vẫn cần thao tác thật. Trong các đoạn thực hành, chạm khi đang nói sẽ hiện hết đoạn hiện tại; chạm sau đó phản hồi để tiếp tục. Đến yêu cầu thao tác, chỉ bấm đúng mục mới chuyển bước.
+Phần giới thiệu thanh trên (8 mục đầu) cho phép chạm nền, lời thoại hoặc Enter/Space để chuyển ngay, không bắt bấm chỉ số. Sau lời giới thiệu, tab được mở tự động bằng chính nút tab thật, rồi xác nhận tiến độ qua API hiện có. Người chơi vẫn có thể chạm để tiếp tục sớm. Bước thực hành mua và Sang năm vẫn cần thao tác thật. Trong các đoạn thực hành, chạm khi đang nói sẽ hiện hết đoạn hiện tại; chạm sau đó phản hồi để tiếp tục. Đến yêu cầu thao tác, chỉ bấm đúng nút mua hoặc Sang năm mới thực hiện thao tác kinh tế.
 
-Lời thoại được chia ở ranh giới câu thành các đoạn ngắn (tối đa khoảng 110 ký tự), **18ms mỗi cụm ký tự tiếng Việt**, ngắt dấu phẩy 80ms và hết câu 180ms. Hết một đoạn, miệng khép lại và chờ 3 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ chỉ tự nối đoạn giải thích tiếp theo, không tự xác nhận thao tác. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
+Lời thoại được chia ở ranh giới câu thành các đoạn ngắn (tối đa khoảng 110 ký tự), **18ms mỗi cụm ký tự tiếng Việt**, ngắt dấu phẩy 80ms và hết câu 180ms. Hết một đoạn, miệng khép lại và chờ 2,5 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ tự nối đoạn, chuyển phần giới thiệu và mở tab. Tuyệt đối không tự mua nâng cấp hoặc chốt năm. Khi tab/đoạn cần xác nhận gặp lỗi, tự chuyển dừng để người chơi thử lại. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
 
 ## Thời gian và trạng thái
 
-- Đồng hồ **toàn trận luôn tiếp tục**, không tăng thời hạn phòng hoặc dừng các đội khác.
-- Chỉ đồng hồ tự Sang năm của đội đang học được giữ ở 0. Năm đầu không có delay cho nút Sang năm ở bước cuối.
+- Đồng hồ **toàn trận luôn tiếp tục**, không tăng thời hạn phòng hoặc dừng các CEO khác.
+- Chỉ đồng hồ tự Sang năm của CEO đang học được giữ ở 0. Năm đầu không có delay cho nút Sang năm ở bước cuối.
 - Tiến độ tutorial lưu trong JSON trạng thái từng participant, được gửi trong snapshot và lưu qua persist hiện có; không cần migration SQL mới.
 - Mở phòng mới/bắt đầu lượt chơi mới khởi tạo tutorial. Lượt đang chơi trước bản cập nhật không bị chèn hướng dẫn giữa chừng.
 - Bước mua chỉ qua sau đầu tư thật thành công; các gói vẫn theo giá và định mức ngành. Tài nguyên đã được sự kiện tặng có nhánh xác nhận riêng, không ép mua lặp. Vốn không đủ có nhánh tiếp tục xem với vốn hiện có, không cấp tiền miễn phí.
@@ -51,3 +51,7 @@ Lời cố vấn lấy tên CEO, ngành, vốn, tài sản, hạng, thời lư�
 QA giao diện dùng production bundle thật, Socket.IO/API mô phỏng cục bộ và công thức đầu tư/sản xuất thật. Kiểm tra 360×800, 390×844, 768×1024, 844×390, 1440×900: hướng dẫn, nhóm công nhân theo ngành, lỗi kết nối/thử lại, reload đúng bước, timer trận tiếp tục, timer năm được giữ, bảng tên sát, không tràn ngang và thoại không che target. Báo cáo cuối ở `design-preview/mascot-guide-v3/verification-ceo-final/report.json`.
 
 Kiểm thử backend xác nhận tiến độ khi phòng thật bắt đầu, thứ tự bắt buộc, thao tác kinh tế thật, request lặp, thiếu vốn, tài nguyên đã có và tính độc lập với đồng hồ/đội khác. Kiểm thử DB tích hợp cần DB riêng và đang skip theo cấu hình sẵn có. Không deploy hay ghi dữ liệu lên server công khai trong task này.
+
+Cập nhật sự kiện, độ bền và thông số rút gọn: xem `company-events-and-guidance.md`.
+
+Cập nhật mới: tab Đầu tư yêu cầu CEO bấm thật; các tab khác mở trước lời giải thích và tự tiếp tục sau 2,5 giây. Lời thoại 24px/21px. Xem `durability-quiz-strategy.md`.

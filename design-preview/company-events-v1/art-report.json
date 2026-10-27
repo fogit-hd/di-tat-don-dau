@@ -1,0 +1,32 @@
+{
+  "assets": [
+    "company-staff-arrival",
+    "company-staff-resignation",
+    "company-supplier-cooperation",
+    "company-supplier-withdrawal",
+    "company-warehouse-modernization",
+    "company-depot-damage",
+    "company-filter-installation",
+    "company-filter-failure",
+    "company-mentor-visit",
+    "company-key-crew-loss",
+    "company-upgrade-sponsor",
+    "company-control-fault",
+    "company-preventive-service",
+    "company-bearing-failure",
+    "company-exclusive-technology",
+    "company-royalty",
+    "company-commission",
+    "company-monopoly-scale",
+    "company-final-benchmark",
+    "company-final-levy",
+    "company-patent-expiry",
+    "gen-lop-nghe"
+  ],
+  "format": "Self-contained SVG with embedded approved hand-painted WebP, not traced vector paths",
+  "backgrounds": [
+    "cream",
+    "wine"
+  ],
+  "allDecoded": true
+}

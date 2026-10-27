@@ -6,7 +6,7 @@ export function StatCards({ scene }: { scene: SceneView }) {
   const number = (value: number) => value.toLocaleString('vi-VN', { maximumFractionDigits: 1 })
   const items: [PaintedIconName, string, string, string?][] = [
     ['eng', 'Công nhân', Math.round(scene.engineers).toLocaleString('vi-VN')],
-    ['line', 'Cụm sản xuất', Math.floor(scene.machines).toLocaleString('vi-VN'), `${scene.operating} đang vận hành · ${Math.floor(scene.idle)} chờ đủ nhân lực`],
+    ['line', 'Cụm sản xuất', Math.floor(scene.machines).toLocaleString('vi-VN'), `${scene.operating} đang vận hành · ${scene.stopped ? `${scene.stopped} cần bảo dưỡng` : `${Math.floor(scene.idle)} chờ đủ nhân lực`}`],
     ['prod', 'Sản phẩm cộng dồn', Math.round(scene.output).toLocaleString('vi-VN'), scene.unit !== 'sản phẩm' ? scene.unit : undefined],
     ['tech', 'Công nghệ', number(scene.tech)],
     ['sup', 'Phụ trợ', `Cấp ${number(scene.support)}`],
@@ -32,6 +32,10 @@ export function StatCards({ scene }: { scene: SceneView }) {
           </div>
         </div>
       </div>
+      {Boolean(scene.pendingInteractions?.length)&&<div className="enterprise-quality" aria-label="Giao dịch đang chờ"><span>Giao dịch đang chờ</span>{scene.pendingInteractions?.map(row=><small key={row.id}>{row.title} · Chờ CEO {row.targetName} sang năm · chưa nhận tiền</small>)}</div>}
+      {scene.patentLevy&&<div className="enterprise-quality" aria-label="Quyền thu tài sản cuối trận"><span>Hết hạn bảo hộ · Thu {scene.patentLevy.percent}% tài sản cuối trận</span><small>Từ CEO khác có Công nghệ độc quyền · đang chờ tổng kết</small></div>}
+      {scene.exclusiveTechnology&&<div className="enterprise-quality"><span>Công nghệ độc quyền</span><small>Có quyền nhận phí bản quyền</small></div>}
+      {Boolean(scene.finalClaims?.length)&&<div className="enterprise-quality">{scene.finalClaims?.map(claim=><span key={claim.eventId}>{claim.title} · {claim.direction>0?'+':'−'}{claim.percent}% · chốt cuối trận</span>)}</div>}
       <PollutionDetails scene={scene} />
     </>
   )

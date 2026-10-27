@@ -4,6 +4,8 @@ export type ProductionEffect = {
 }
 export type ProductionPlanView = {
   engineers: number; machines: number; engineersPerMachine: number; operating: number; idle: number; staffMissing: number;
+  stopped?: number;
+  defective?: number; saleable?: number; defectRatePct?: number; defectMin?: number; defectMax?: number;
   workerBonus?: number; machineBonus?: number; conditionFactor?: number;
   baseOutput: number; techFactor: number; theoreticalOutput: number; outputNoise: number; priceNoise: number;
   outputMul: number; priceMul: number; revenueMul: number; costMul: number;
@@ -13,6 +15,7 @@ export type ProductionPlanView = {
   appliedEffects: ProductionEffect[];
 }
 export type ProductionReportView = ProductionPlanView & {
+  conditionBefore?: number; conditionAfter?: number; conditionWearPct?: number;
   year: number; unit: string; inflation: number; inflationRate: number; interest: number; ongoing: number;
 }
 export type ProductionForecastView = {

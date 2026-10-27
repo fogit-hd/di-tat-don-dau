@@ -1,11 +1,4 @@
 /* Public pages only. Keep gameplay typography, logo artwork and session frames intact. */
-@font-face {
-  font-family: 'Public UI';
-  src: url('/assets/fonts/public-ui/DejaVuSans.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 .public-site {
   --public-ui-font: 'Public UI', Arial, sans-serif;
   font-family: var(--public-ui-font);

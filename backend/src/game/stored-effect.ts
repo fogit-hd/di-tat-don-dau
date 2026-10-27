@@ -16,6 +16,12 @@ export const effectSchema = z.object({
   machinesPct: range.optional(),
   tech: range.optional(),
   support: range.optional(),
+  infra: range.optional(),
+  green: range.optional(),
+  workerSkill: range.optional(),
+  machineQuality: range.optional(),
+  conditionPct: range.optional(),
+  workforceUnits: z.boolean().optional(),
   pollution: range.optional(),
   dependency: range.optional(),
 })

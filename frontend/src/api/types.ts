@@ -1,3 +1,5 @@
+export type FinalSettlementView={before:number;after:number;richestBefore:number;items:{eventId:string;title:string;percent:number;basis:number;delta:number;cap:number;receiptId?:string;counterpartyId?:string;counterpartyName?:string;requested?:number;limitReason?:string}[]}
+export type QuestionReview={id:string;questionId:string;prompt:string;options:{id:string;text:string}[];correctOptionId?:string;explanation:string;year:number;chosenOptionId?:string;correct?:boolean;resolved:boolean}
 import type { AvatarConfig } from '../lib/avatar'
 import type { CompanyBooksView, ProductionForecastView, ProductionReportView } from './production.ts'
 export type Ending = string
@@ -75,6 +77,7 @@ export type PendingView = {
 }
 
 export type OperatingForecast = {
+  stopped?: number
   operating: number; idle: number; staffMissing: number; idleCost: number;
   inputDiscount: number; disruptionProtection: number; logisticsDiscount: number; delivery: number;
   retainedPollution: number; emissions: number; treatment: number; pollution: number; pricePenalty: number;
@@ -85,6 +88,7 @@ export type InvestmentPreview = {
 } & Pick<OperatingForecast, 'operating' | 'idle' | 'staffMissing' | 'idleCost' | 'inputDiscount' | 'disruptionProtection' | 'logisticsDiscount' | 'delivery' | 'treatment' | 'pollution' | 'pricePenalty' | 'net'>
 
 export type SceneView = {
+  stopped?: number
   industryId: string
   factoryName: string
   art: string
@@ -120,6 +124,10 @@ export type SceneView = {
   bankrupt?: boolean
   crewRequired?: number
   basePrices?: Partial<Record<'eng'|'mac'|'sup'|'inf'|'grn',number>>
+  pendingInteractions?:{id:string;title:string;percent:number;cap:number;targetName:string;targetYear:number}[]
+  patentLevy?:{percent:number;year:number}
+  exclusiveTechnology?:boolean
+  finalClaims?:{eventId:string;title:string;percent:number;basis:'richest'|'own';direction:1|-1}[]
   workerSkill?: number
   machineQuality?: number
   condition?: number
@@ -205,6 +213,7 @@ export type BoardRow = {
 }
 
 export type TeamRow = {
+  finalSettlement?:FinalSettlementView
   playerStatus?: string
   id: string
   teamName: string
@@ -248,12 +257,14 @@ export type Snapshot = {
     countdownEndsAt: number | null
     cycleStartedAt: number | null
     cycleElapsedMs: number
-    questionStats: { questionId: string; prompt: string; correct: number; total: number }[]
+    questionStats: { questionId: string; prompt: string; correct: number; total: number; appearances?:number; unanswered?:number; options?:{id:string;text:string;count:number;correct:boolean}[] }[]
   }
   endings: Record<string, { title: string; text: string }>
   teams: TeamRow[]
   leaderboard: BoardRow[]
   you: {
+    finalSettlement?:FinalSettlementView
+    questionReview?:QuestionReview[]
     id: string
     teamName: string
     avatar?: AvatarConfig

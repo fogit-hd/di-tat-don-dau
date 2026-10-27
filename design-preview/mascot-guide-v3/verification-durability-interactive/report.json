@@ -1,0 +1,611 @@
+{
+  "errors": [],
+  "missing": [],
+  "widths": [
+    {
+      "width": 390,
+      "industry": "trai-cay-say",
+      "crew": 5,
+      "clockBefore": "⏱ 9:47",
+      "clockAfter": "⏱ 9:44",
+      "opened": [
+        "investment",
+        "enterprise",
+        "risk",
+        "events",
+        "years"
+      ],
+      "geometry": [
+        {
+          "action": "company",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            16,
+            20,
+            297.5,
+            18
+          ],
+          "dialogue": [
+            156,
+            523.8125,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cash",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            16,
+            47,
+            176.5,
+            32.390625
+          ],
+          "dialogue": [
+            156,
+            552.8125,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "assets",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            197.5,
+            47,
+            176.5,
+            32.390625
+          ],
+          "dialogue": [
+            156,
+            552.8125,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year-count",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            16,
+            85.140625,
+            55.5,
+            16.5
+          ],
+          "dialogue": [
+            156,
+            523.8125,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "clock",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            137,
+            85.140625,
+            55.5,
+            16.5
+          ],
+          "dialogue": [
+            156,
+            552.8125,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "income",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            197.5,
+            85.890625,
+            116,
+            15
+          ],
+          "dialogue": [
+            156,
+            523.8125,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "rank",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            318.5,
+            82.390625,
+            55.5,
+            22
+          ],
+          "dialogue": [
+            156,
+            493.8125,
+            210,
+            270.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "sound",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            318.5,
+            14,
+            55.5,
+            30
+          ],
+          "dialogue": [
+            156,
+            552.8125,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cluster",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            283,
+            716.28125,
+            72,
+            50
+          ],
+          "dialogue": [
+            156,
+            464.09375,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "crew",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            87,
+            603.671875,
+            199.78125,
+            36
+          ],
+          "dialogue": [
+            156,
+            380.484375,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "supply",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            283,
+            715.5625,
+            72,
+            50
+          ],
+          "dialogue": [
+            156,
+            492.375,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "infrastructure",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            283,
+            715.5,
+            72,
+            50
+          ],
+          "dialogue": [
+            156,
+            463.3125,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "green",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            283,
+            715.578125,
+            72,
+            50
+          ],
+          "dialogue": [
+            156,
+            463.390625,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-workers",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            19,
+            548.53125,
+            173,
+            89.28125
+          ],
+          "dialogue": [
+            156,
+            296.34375,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-clusters",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            198,
+            548.53125,
+            173,
+            89.28125
+          ],
+          "dialogue": [
+            156,
+            296.34375,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-products",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            19,
+            643.8125,
+            173,
+            83
+          ],
+          "dialogue": [
+            156,
+            391.625,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-tech",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            198,
+            643.8125,
+            173,
+            83
+          ],
+          "dialogue": [
+            156,
+            420.625,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-supply",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            19,
+            682.8125,
+            173,
+            83
+          ],
+          "dialogue": [
+            156,
+            459.625,
+            210,
+            211.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-infra",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            198,
+            682.8125,
+            173,
+            83
+          ],
+          "dialogue": [
+            156,
+            400.625,
+            210,
+            270.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-environment",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            19,
+            702.8125,
+            352,
+            62.875
+          ],
+          "dialogue": [
+            156,
+            420.625,
+            210,
+            270.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "stat-quality",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            19,
+            636.8125,
+            352,
+            54
+          ],
+          "dialogue": [
+            156,
+            384.625,
+            210,
+            240.1875
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year",
+          "scroll": 390,
+          "width": 390,
+          "target": [
+            13,
+            787,
+            364,
+            44
+          ],
+          "dialogue": [
+            156,
+            581.8125,
+            210,
+            182.1875
+          ],
+          "overlap": 0
+        }
+      ],
+      "cash": 9415.317137832113,
+      "nextYearAt": 1793126544788,
+      "deadline": 1793127036273
+    }
+  ],
+  "requests": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/api/rooms/QA1234/intro",
+          "body": {
+            "factoryName": "Đại Việt · Doanh nghiệp kiểm thử"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "company"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "assets"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "year-count"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "clock"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "income"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "rank"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "sound"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "mac",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "eng",
+            "quantity": "crew"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "sup",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "inf",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "grn",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise-ready"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-workers"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-clusters"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-products"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-tech"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-supply"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-infra"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-environment"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "stat-quality"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "risk"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "events"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "years"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/year",
+          "body": {}
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "complete"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'design-preview/public-fields/verification');
+const out = path.join(root, 'design-preview/public-fields/'+(process.env.PUBLIC_QA_OUTPUT||'verification'));
 fs.mkdirSync(out, { recursive: true });
 const letters = require('../frontend/src/lib/public-letter-paths.json');
 const catalog = require('../frontend/src/lib/wiki-catalog.json');
@@ -54,7 +54,7 @@ let browser;
       }
       await noOverflow();
     };
-    for (const section of ['start','industries','upgrades','production','events','risk']) {
+    for (const section of ['start','updates','industries','upgrades','production','events','risk']) {
       await page.goto(`http://game.test/wiki?section=${section}&industry=chip-ban-dan`);
       await page.locator('.wiki-heading').first().waitFor();
       await page.evaluate(() => document.fonts.ready);

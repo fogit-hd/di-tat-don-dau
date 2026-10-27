@@ -1,0 +1,41 @@
+{
+  "widths": [
+    390,
+    768,
+    1440
+  ],
+  "errors": [],
+  "missing": [],
+  "blockedExternal": [
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com"
+  ],
+  "checks": [
+    "two asset owners pay one collector",
+    "paired full histories with SVG",
+    "no cash debit",
+    "new final ranking",
+    "long CEO names",
+    "host individual receipts",
+    "right shown before final",
+    "Wiki explanation",
+    "reload does not change score",
+    "no horizontal overflow"
+  ]
+}

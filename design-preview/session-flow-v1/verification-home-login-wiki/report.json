@@ -1,0 +1,153 @@
+{
+  "widths": [
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/api/rooms",
+          "method": "POST",
+          "body": {
+            "hostName": "Chủ phòng QA",
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 45,
+            "yearMinSeconds": 3
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45",
+          "method": "PATCH",
+          "body": {
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 60,
+            "yearMinSeconds": 5
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/start",
+          "method": "POST",
+          "body": {}
+        }
+      ],
+      "geometry": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "width": 768,
+      "requests": [
+        {
+          "path": "/api/rooms",
+          "method": "POST",
+          "body": {
+            "hostName": "Chủ phòng QA",
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 45,
+            "yearMinSeconds": 3
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45",
+          "method": "PATCH",
+          "body": {
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 60,
+            "yearMinSeconds": 5
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/start",
+          "method": "POST",
+          "body": {}
+        }
+      ],
+      "geometry": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "width": 1366,
+      "requests": [
+        {
+          "path": "/api/rooms",
+          "method": "POST",
+          "body": {
+            "hostName": "Chủ phòng QA",
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 45,
+            "yearMinSeconds": 3
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45",
+          "method": "PATCH",
+          "body": {
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 60,
+            "yearMinSeconds": 5
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/start",
+          "method": "POST",
+          "body": {}
+        }
+      ],
+      "geometry": {
+        "width": 1366,
+        "scroll": 1366
+      }
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/api/rooms",
+          "method": "POST",
+          "body": {
+            "hostName": "Chủ phòng QA",
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 45,
+            "yearMinSeconds": 3
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45",
+          "method": "PATCH",
+          "body": {
+            "durationMin": 15,
+            "startingCapital": 10000,
+            "cycleSeconds": 60,
+            "yearMinSeconds": 5
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/start",
+          "method": "POST",
+          "body": {}
+        }
+      ],
+      "geometry": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "checks": [
+    "create form Google-session forwarding, logged-out Google-login guard, no line prices, real existing create route and stored host token, Escape/focus restoration",
+    "real QR, clipboard, empty-room start guard, live connected states, long CEO name",
+    "existing settings PATCH/start POST",
+    "four question rows/page, real full prompt, attempts denominator, zero-attempt handling, expansion and pagination",
+    "390/768/1440 screenshots and no horizontal scroll"
+  ]
+}

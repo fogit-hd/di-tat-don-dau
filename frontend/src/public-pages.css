@@ -79,6 +79,12 @@
 .public-wiki-link img {width:30px;height:26px;object-fit:cover}
 .public-footer {text-align:center;color:#f0cf98;padding:12px;font-size:13px}
 .public-footer .art-text {justify-content:center}
+.wiki-update-rules {margin:20px 0 28px}
+.wiki-update-events {display:grid;gap:14px;margin-top:16px}
+.wiki-update-event {display:grid;grid-template-columns:100px minmax(0,1fr);align-items:start;gap:18px;border:1px solid #cdaa73;padding:16px;background:rgba(255,248,228,.3)}
+.wiki-update-event>img {width:100px;height:100px;object-fit:contain}
+.wiki-update-event .public-button {font-size:14px;min-height:40px;padding:5px 14px}
+@media(max-width:479px){.wiki-update-event {grid-template-columns:60px minmax(0,1fr);gap:10px;padding:10px}.wiki-update-event>img{width:60px;height:70px}.wiki-update-event h3{font-size:18px}.wiki-update-event p{font-size:15px}}
 .public-site .public-modal {z-index:80;background:rgba(36,6,11,.8)}
 .public-modal .card {padding:25px;max-height:88svh;overflow:auto;max-width:700px;border-radius:0;background:#fff0d2 url('/assets/landing-v2/paper.webp');background-size:512px;color:#471c10;box-shadow:none}
 .public-modal h2 {font-size:28px}

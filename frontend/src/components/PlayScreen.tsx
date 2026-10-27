@@ -136,7 +136,7 @@ export function PlayScreen() {
           <section className="game-content">
             <div className="game-stage">
               <TraitNotice traits={statuses} />
-              <FactoryScene scene={scene} paused={snap.paused} onShowYear={year => gameTabs.current?.showYear(year)} />
+              <FactoryScene scene={scene} paused={snap.paused} onShowEffects={() => gameTabs.current?.showEvents('ongoing')} />
               <EventOverview current={currentEventEntries(currentEvents)} ongoing={ongoing} onShowAll={group => gameTabs.current?.showEvents(group)} />
             </div>
             <div className="game-workspace">
@@ -146,7 +146,7 @@ export function PlayScreen() {
                 finished={youFinished}
                 tutorialTarget={tutorial?(busy?null:tutorial.tab??null):undefined}
                 initialTab={tutorial?guideDisplayedTab(scene.tutorial!.step,scene.tutorial!.version):'investment'}
-                onVisit={tab=>{if(tutorial?.tab===tab)void acknowledge(tutorial.action)}}
+                onVisit={tab=>{if(tutorial?.action==='investment'&&tab==='investment')void acknowledge(tutorial.action)}}
                 result={<InlineResult snap={snap} />}
                 enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}
                 risk={<GovernanceRiskCard scene={scene} />}

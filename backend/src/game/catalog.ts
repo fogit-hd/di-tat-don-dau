@@ -1,3 +1,4 @@
+import { COMPANY_EVENTS } from './company-events'
 import { z } from 'zod'
 import { prisma } from '../prisma'
 import { effectSchema, readStoredEffect } from './stored-effect'
@@ -281,6 +282,8 @@ export async function loadCatalog(): Promise<Catalog> {
     }
   }
 
+  for(const event of COMPANY_EVENTS)if(!sharedEvents.some(row=>row.id===event.id))sharedEvents.push({id:event.id,industryIds:[],contextIds:[]})
+
   const board: ThemeBoard = {
     industries: industries.map((row) => ({
       id: row.id,
@@ -408,7 +411,7 @@ export async function loadCatalog(): Promise<Catalog> {
     board,
     themeCount: countThemes(board),
     questions: questionDefs,
-    events: eventDefs,
+    events: [...eventDefs,...COMPANY_EVENTS.filter(event=>!eventDefs.some(row=>row.id===event.id))],
     endings: endings.map(toEnding),
     balance: parseBalance(balanceRow.payload),
     lines: lineDefs,

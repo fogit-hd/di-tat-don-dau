@@ -75,10 +75,10 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       const spoken=chunks.length?chunks:dialogueChunks(latest.current.step.text)
       const key=`${latest.current.stepIndex}:${bw}:${spoken.join(' ')}`
       if(key!==measureKey&&words.current){
-        const measure=canvas.current?.getContext('2d');if(measure){measure.font=`${small?18:20}px "Times New Roman",serif`;let line='',lines=1
+        const measure=canvas.current?.getContext('2d');if(measure){measure.font=`${small?21:24}px "Times New Roman",serif`;let line='',lines=1
           let maxLines=1
           for(const chunk of spoken){line='';lines=1;for(const word of chunk.split(/\s+/)){const test=line?line+' '+word:word;if(measure.measureText(test).width>bw-(small?40:52)){lines++;line=word}else line=test}maxLines=Math.max(maxLines,lines)}
-          words.current.style.minHeight=Math.ceil(maxLines*(small?25.2:28))+'px';measureKey=key
+          words.current.style.minHeight=Math.ceil(maxLines*(small?29.4:33.6))+'px';measureKey=key
         }
       }
       const bh=bubble.current?.getBoundingClientRect().height||170
@@ -151,9 +151,15 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       if(!bitmap)return
       const waiting=entered&&!reading,remaining=waiting?Math.max(0,Math.ceil(pauseUntil-t)):0
       const responseReady=waiting&&chunkIndex===chunks.length-1&&(responded||t>=pauseUntil)&&!p.busy&&!p.paused
+      // Only explanations and tab visits advance automatically. Never buy or settle a year here.
+      if(responseReady && !p.error && !continueSent && (p.step.interaction==='continue'||p.step.tab)){
+        if(p.step.action==='investment'){/* The player opens the investment tab. */}
+        else if(p.step.tab){continueSent=true;void p.onAcknowledge(p.step.action).then(ok=>{if(alive&&!ok)continueSent=false})}
+        else{continueSent=true;void p.onAcknowledge(p.step.action).then(ok=>{if(alive&&!ok)continueSent=false})}
+      }
       const canAct=responseReady&&p.step.action!=='complete'&&p.step.interaction!=='continue'
       const dialogueState=!entered?'arriving':reading?'speaking':responseReady&&p.step.action==='complete'?'completing':responseReady&&p.step.interaction==='continue'?'awaiting-continue':chunkIndex<chunks.length-1?'pause':canAct?'awaiting-action':'pause'
-      const cueText=!entered?'':p.step.interaction==='continue'?'Chạm bất kỳ đâu để tiếp tục':reading?'Chạm để xem hết đoạn này':dialogueState==='completing'?'':dialogueState==='awaiting-action'?'Bấm mục đang sáng để tiếp tục':`Chạm để tiếp tục${responded?'':` · ${remaining}s`}`
+      const cueText=!entered||p.busy||continueSent?'':reading?'Chạm để xem hết đoạn này':dialogueState==='completing'?'':p.step.interaction==='continue'||p.step.tab&&p.step.action!=='investment'?`Chạm để tiếp tục · tự chuyển sau ${remaining}s`:dialogueState==='awaiting-action'?'Bấm mục đang sáng để tiếp tục':`Chạm để tiếp tục${responded?'':` · ${remaining}s`}`
       if(cue.current&&cue.current.textContent!==cueText)cue.current.textContent=cueText
       const focus=focusSelect(),action=p.step.interaction==='continue'?null:select()
       if(focus!==focusMark){focusMark?.removeAttribute('data-advisor-highlighted');focusMark=focus;focusMark?.setAttribute('data-advisor-highlighted','')}
@@ -223,6 +229,15 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
     document.addEventListener('click',capture,true);document.addEventListener('keydown',keyboard,true)
     return ()=>{document.removeEventListener('click',capture,true);document.removeEventListener('keydown',keyboard,true)}
   },[])
+  useEffect(()=>{
+    if(!loadError||props.busy||props.paused||props.error||!(props.step.interaction==='continue'||props.step.tab))return
+    const timeout=window.setTimeout(()=>{
+      if(props.step.action==='investment')return
+      if(props.step.tab)void latest.current.onAcknowledge(latest.current.step.action)
+      else void latest.current.onAcknowledge(latest.current.step.action)
+    },RESPONSE_SECONDS*1000)
+    return()=>window.clearTimeout(timeout)
+  },[loadError,props.busy,props.paused,props.error,props.stepIndex,props.step.action,props.step.tab,props.step.target,props.step.interaction])
   const retry=()=>void props.onAcknowledge(props.step.action).then(ok=>{if(ok)setFinishError(false)})
   return <aside className="first-year-advisor" aria-label="Cố vấn doanh nghiệp">
     <canvas ref={canvas} aria-hidden="true" />

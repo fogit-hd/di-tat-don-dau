@@ -1,0 +1,138 @@
+{
+  "widths": [
+    {
+      "width": 390,
+      "metrics": {
+        "numeric": [
+          91.6171875,
+          91.6171875,
+          91.6171875
+        ],
+        "baseline": [
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ],
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ]
+        ]
+      }
+    },
+    {
+      "width": 768,
+      "metrics": {
+        "numeric": [
+          91.6171875,
+          91.6171875,
+          91.6171875
+        ],
+        "baseline": [
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ],
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ]
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "metrics": {
+        "numeric": [
+          91.6171875,
+          91.6171875,
+          91.6171875
+        ],
+        "baseline": [
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ],
+          [
+            60.310001373291016,
+            59.40999984741211,
+            59.40999984741211,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016,
+            59.40999984741211,
+            60.310001373291016,
+            60.310001373291016
+          ]
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "fontCoverage": 204,
+  "checks": [
+    "390: start, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: updates, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: industries, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: upgrades, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: production, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: events, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "390: risk, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: start, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: updates, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: industries, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: upgrades, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: production, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: events, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "768: risk, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: start, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: updates, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: industries, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: upgrades, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: production, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: events, SVG normal/focus fields, no focus resize, no horizontal overflow",
+    "1440: risk, SVG normal/focus fields, no focus resize, no horizontal overflow"
+  ]
+}

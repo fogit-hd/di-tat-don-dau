@@ -66,6 +66,7 @@ export function BudgetPanel({
     <div className="investment-quantity" role="group" aria-label="Số gói đầu tư">
       {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused || Boolean(tutorialAction)} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
     </div></div>
+    {modern&&scene.machines>0&&(scene.condition??1)<=.25&&<p className="investment-warning" role="status">{(scene.condition??1)<=0?'Máy đang ngừng sản xuất. Chọn Bảo dưỡng máy để chạy lại.':`Độ bền máy còn ${Math.round((scene.condition??1)*100)}%. Nên bảo dưỡng trước khi máy dừng.`}</p>}
     {!modern && <p className="canvas-caption">Chọn số gói để xem trước kết quả nhận được.</p>}
     {modern && <p className="investment-help">Đang vận hành: {scene.operating} cụm · Chờ đủ nhân lực: {scene.idle} cụm.</p>}
     {scene.cash <= 0 && <p className="investment-warning">{scene.cash < 0 ? 'Công ty đang có dư nợ; lãi nợ được tính mỗi năm.' : 'Tiền mặt đã hết.'} Bạn vẫn có thể Sang năm để sản xuất; hết tiền mặt chưa phải phá sản.</p>}

@@ -8,7 +8,7 @@ export const EventIcon = memo(function EventIcon({ name, tone, eventId, title, d
   const kind=mapped==='coinsUp'&&tone==='bad'&&['coins','banknote','circle-dollar-sign','dollar-sign','euro','money'].includes(name.toLowerCase())?'coinsDown':mapped
   const [failed,setFailed]=useState<string | null>(null)
   const artwork=eventArtwork(eventId,title,detail)
-  const preferred=`${artwork?.base ?? fallbackEventArt(kind,title)}.webp`
+  const preferred=`${artwork?.base ?? fallbackEventArt(kind,title)}.${artwork?.extension??'webp'}`
   const fallback=`${fallbackEventArt(kind,title)}.webp`
   const src=failed===preferred?fallback:preferred
   return <span className={`ev-icon event-static kind-${kind}`} aria-hidden="true" data-event-kind={kind} data-event-art={artwork?.id}>

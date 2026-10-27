@@ -1,8 +1,8 @@
 export const LETTER_SECONDS = .018
-export const RESPONSE_SECONDS = 3
+export const RESPONSE_SECONDS = 2.5
 
 /** Short spoken turns; preserve every word and every Vietnamese diacritic. */
-export function dialogueChunks(text:string,limit=110) {
+export function dialogueChunks(text:string,limit=90) {
   const sentences=text.normalize('NFC').trim().split(/(?<=[.!?])\s+/u)
   const chunks:string[]=[];let current=''
   for(const sentence of sentences){

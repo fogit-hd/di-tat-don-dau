@@ -23,7 +23,8 @@ export function CreateRoomPanel(p:{hostName:string;minutes:number;capital:number
   document.addEventListener('keydown',keydown)
   return()=>{document.body.style.overflow=oldOverflow;document.removeEventListener('keydown',keydown);if(oldFocus instanceof HTMLElement)oldFocus.focus()}
  },[])
- return <SessionShell title="Tạo phòng" className="session-overlay session-create" dialog navigation={<nav className="session-navigation" aria-label="Điều hướng"><a href="/#cach-choi" onClick={p.onClose}><T text="Cách chơi"/></a><a href="/#tinh-nang" onClick={p.onClose}><T text="Sự kiện"/></a><Link to="/wiki" onClick={p.onClose}><T text="Wiki"/></Link></nav>} action={<><span className="session-auth"><T text="Đã đăng nhập Google"/></span><button type="button" className="session-button secondary" onClick={p.onLogout}><T text="Đăng xuất"/></button></>}>
+ return <SessionShell title="Tạo phòng" className="session-overlay session-create" dialog navigation={<nav className="session-navigation" aria-label="Điều hướng"><a href="/wiki?section=start" onClick={p.onClose}><T text="Cách chơi"/></a><a href="/wiki?section=events" onClick={p.onClose}><T text="Sự kiện"/></a><Link to="/wiki" onClick={p.onClose}><T text="Wiki"/></Link></nav>} action={<><span className="session-auth"><T text="Đã đăng nhập Google"/></span><button type="button" className="session-button secondary" onClick={p.onLogout}><T text="Đăng xuất"/></button></>}>
+  <div className="session-create-stack">
   <h1 className="session-create-title session-ribbon"><T text="Tạo phòng" bold/></h1>
   <form ref={form} className="session-frame session-create-form" onSubmit={e=>{e.preventDefault();if(!p.busy)p.onSubmit()}}>
    <h2><T text="Thiết lập phiên chơi" bold/></h2><p><T text="Tạo phòng để mời bạn bè cùng tham gia và bắt đầu hành trình phát triển doanh nghiệp."/></p>
@@ -33,5 +34,6 @@ export function CreateRoomPanel(p:{hostName:string;minutes:number;capital:number
    {p.error&&<p className="session-error" role="alert"><T text={p.error}/></p>}
    <div className="session-form-actions"><button type="submit" className="session-button primary" disabled={p.busy||p.hostName.trim().length<1}><T text="Mở phòng" bold/></button><button type="button" className="session-button secondary" onClick={p.onClose}><T text="Đóng"/></button></div>
   </form>
+  </div>
  </SessionShell>
 }

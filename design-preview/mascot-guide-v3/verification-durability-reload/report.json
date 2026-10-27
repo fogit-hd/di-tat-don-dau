@@ -1,0 +1,19 @@
+{
+  "errors": [],
+  "missing": [],
+  "widths": [
+    {
+      "width": 390,
+      "reload": true
+    },
+    {
+      "width": 768,
+      "reload": true
+    },
+    {
+      "width": 1440,
+      "reload": true
+    }
+  ],
+  "requests": []
+}

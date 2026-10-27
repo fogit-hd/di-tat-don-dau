@@ -1,3 +1,6 @@
+import {STRATEGIC_IDS,TRANSFER_IDS,PATENT_LEVY_ID,PATENT_LEVY_POLICY,rollPatentLevy,strategicEligible,transferTerms,settleTransfer,canQueueInteraction,finalSettlementPlans,type QueuedInteraction} from './game/strategic-events'
+import {rememberQuestion,resolveQuestionReview,quizStatistics} from './game/quiz-review'
+import { companyEventPool } from './game/company-events'
 import {industryEconomy,companyEventPatch} from './game/industry-economy'
 import { COMPANY_UPGRADES, companyUpgradePreview, upgradeCompany, type CompanyUpgrade } from './game/company-upgrades'
 import { INVESTMENT_BASE_PRICES, investmentQuote } from './game/investment-pricing'
@@ -122,6 +125,7 @@ export type LiveRoom = {
   nextRoomEventAt: number | null
   seenRoomEvents: string[]
   roomRng: number
+  interactions?:QueuedInteraction[]
   answers: AnswerRec[]
   unsavedAnswers: AnswerRec[]
   report: HostReport | null
@@ -263,6 +267,7 @@ export async function bootRooms() {
     const meta = (row.meta ?? {}) as {
       seenRoomEvents?: string[]
       roomRng?: number
+      interactions?:QueuedInteraction[]
       debugDeathYear?: number | null
       debugCentennialYear?: number | null
       debugForceDeath?: boolean
@@ -295,6 +300,7 @@ export async function bootRooms() {
       nextRoomEventAt: num(row.nextRoomEventAt),
       seenRoomEvents: meta.seenRoomEvents ?? [],
       roomRng: meta.roomRng ?? hashString(row.seed + ':room'),
+      interactions:meta.interactions??[],
       answers: answers.map((answer) => ({
         id: answer.id,
         teamId: answer.participantId,
@@ -324,11 +330,13 @@ export async function bootRooms() {
 }
 
 function roomMeta(room:LiveRoom){
-  return {seenRoomEvents:room.seenRoomEvents,roomRng:room.roomRng,debugDeathYear:room.debugDeathYear,debugCentennialYear:room.debugCentennialYear,debugForceDeath:room.debugForceDeath,avatars:Object.fromEntries(room.teams.map(team=>[team.id,avatarOf(team.avatar)]))}
+  return {interactions:room.interactions??[],seenRoomEvents:room.seenRoomEvents,roomRng:room.roomRng,debugDeathYear:room.debugDeathYear,debugCentennialYear:room.debugCentennialYear,debugForceDeath:room.debugForceDeath,avatars:Object.fromEntries(room.teams.map(team=>[team.id,avatarOf(team.avatar)]))}
 }
 
 async function persist(room: LiveRoom) {
-  await prisma.room.update({
+  const writes:Prisma.PrismaPromise<unknown>[]=[]
+  const batch=room.unsavedAnswers.slice()
+  writes.push(prisma.room.update({
     where: { id: room.id },
     data: {
       hostName: room.hostName,
@@ -350,11 +358,11 @@ async function persist(room: LiveRoom) {
       nextRoomEventAt: room.nextRoomEventAt ? new Date(room.nextRoomEventAt) : null,
       meta: json(roomMeta(room)),
     },
-  })
+  }))
   const ids = room.teams.map((team) => team.id)
-  await prisma.participant.deleteMany({ where: { roomId: room.id, id: { notIn: ids.length ? ids : ['__none__'] } } })
+  writes.push(prisma.participant.deleteMany({ where: { roomId: room.id, id: { notIn: ids.length ? ids : ['__none__'] } } }))
   for (const team of room.teams) {
-    await prisma.participant.upsert({
+    writes.push(prisma.participant.upsert({
       where: { id: team.id },
       update: {
         teamName: team.teamName,
@@ -375,11 +383,10 @@ async function persist(room: LiveRoom) {
         ending: team.ending,
         connected: team.connected,
       },
-    })
+    }))
   }
-  if (room.unsavedAnswers.length) {
-    const batch = room.unsavedAnswers.splice(0, room.unsavedAnswers.length)
-    await prisma.answer.createMany({
+  if (batch.length) {
+    writes.push(prisma.answer.createMany({
       data: batch.map((answer) => ({
         id: answer.id,
         participantId: answer.teamId,
@@ -390,8 +397,13 @@ async function persist(room: LiveRoom) {
         correct: answer.correct,
       })),
       skipDuplicates: true,
-    })
+    }))
   }
+  // Queue state and both cash ledgers must commit together, including after a restart.
+  if(room.interactions?.length||room.teams.some(team=>team.state?.patentLevy))await prisma.$transaction(writes)
+  else for(const write of writes)await write
+  const saved=new Set(batch.map(answer=>answer.id))
+  room.unsavedAnswers=room.unsavedAnswers.filter(answer=>!saved.has(answer.id))
 }
 
 function push(code: string) {
@@ -787,6 +799,9 @@ export async function restartTeam(code: string, token: string) {
     },
     ...(old.eventLog ?? []),
   ].slice(0, 200)
+  fresh.questionHistory = old.questionHistory ?? []
+  fresh.finalClaims = old.finalClaims ?? []
+  fresh.patentLevy = old.patentLevy
   fresh.yearLedger = old.yearLedger ?? []
   fresh.log = ['Nhà nước cấp vốn hỗ trợ để công ty làm lại từ đầu.', ...fresh.log].slice(0, rules().balance.logLimit)
   team.state = fresh
@@ -840,6 +855,7 @@ export async function answerPrompt(code: string, token: string, optionId: string
       optionId,
       correct,
     }
+    resolveQuestionReview(team.state,pending,rec.id)
     room.answers.push(rec)
     room.unsavedAnswers.push(rec)
   } else {
@@ -981,6 +997,7 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   const rng = teamRngOf(team)
   const cashBefore = team.state.yearOpenCash ?? team.state.cash
   const assetsBefore = team.state.yearOpenAssets || computeValue(team.state, team.theme, balance)
+  settleInteractions(room,now,team.id)
   const investCauses = [...(team.state.pendingCauses ?? [])]
   team.state.pendingCauses = []
   team.state = openYearEffects(team.state, now)
@@ -989,23 +1006,30 @@ function advanceYear(room: LiveRoom, team: LiveTeam, now: number) {
   const parts = team.state.yearParts ?? { production: 0, ongoing: 0, interest: 0 }
   team.state = closeYearEffects(team.state, now)
   const eventCauses: YearCause[] = []
-  const drawn = drawYearEvents(team.state.eventBag ?? [], team.theme.eventIds, rng, balance)
+  const registeredEvents = new Set(rules().events.map(event=>event.id))
+  const eventPool = companyEventPool(team.state,team.theme.eventIds).filter(id=>registeredEvents.has(id)&&strategicEligible(id,team.state!,room.teams.some(other=>other.id!==team.id&&other.theme&&other.state&&!other.state.finished&&!isBankrupt(other.state)&&other.state.cash>0),room.teams.some(other=>other.id!==team.id&&other.state?.exclusiveTechnology&&valueOf(other)>0)))
+  const oldBag = team.state.eventBag ?? []
+  // Existing saved rooms must not wait until their entire old deck empties to see new events.
+  const additions = eventPool.filter(id=>id.startsWith('company-')&&!oldBag.includes(id)&&!team.state!.seenEvents.includes(id))
+  const eventBag = additions.length ? shuffleIds([...oldBag,...additions],rng) : oldBag
+  const drawn = drawYearEvents(eventBag, eventPool, rng, balance)
   team.state.eventBag = drawn.bag
+  team.state.seenEvents=[...new Set([...team.state.seenEvents,...drawn.ids.filter(id=>id.startsWith('company-'))])]
   for (const id of drawn.ids) {
     const event = rules().events.find((item) => item.id === id)
     if (!event || event.trait) continue
-    eventCauses.push(applyEvent(team, event, rng, now))
+    eventCauses.push(applyEvent(team, event, rng, now,room))
   }
   const secondLifeCause = tryGrantSecondLife(room, team, rng)
   if (secondLifeCause) eventCauses.push(secondLifeCause)
   team.state.rng = rng.getState()
   const sharedId = drawn.classWide ? drawn.ids[0] : undefined
   const shared = sharedId ? rules().events.find((item) => item.id === sharedId) : undefined
-  if (shared && !shared.trait) {
+  if (shared && !shared.trait && !STRATEGIC_IDS.has(shared.id)) {
     for (const other of room.teams) {
       if (other.id === team.id || !other.state || !other.theme || other.state.finished || isBankrupt(other.state)) continue
       const otherRng = teamRngOf(other)
-      const sharedCause = applyEvent(other, shared, otherRng, now)
+      const sharedCause = applyEvent(other, shared, otherRng, now,room)
       other.state.pendingCauses = [...(other.state.pendingCauses ?? []), sharedCause]
       other.state.rng = otherRng.getState()
       other.state.log = [`Cả lớp: ${shared.title}`, ...other.state.log].slice(0, balance.logLimit)
@@ -1267,6 +1291,7 @@ function presentYearQuestion(team: LiveTeam, now: number) {
   const pending = presentQuestion(question, team.theme, rng, now, rules().balance.questionOpenMs)
   pending.title = 'Câu hỏi đề tài thuyết trình'
   team.state.pending = pending
+  rememberQuestion(team.state,pending)
   pauseYearForPrompt(team.state,now)
   team.state.rng = rng.getState()
 }
@@ -1276,7 +1301,7 @@ function rememberEvent(team: LiveTeam, event: EventDef, title: string, body: str
   return team.state?.eventLog[0]?.instanceId
 }
 
-function rememberSystemEvent(team: LiveTeam, event: { eventId: string; title: string; body: string; icon: string; good: boolean; effect: string }) {
+function rememberSystemEvent(team: LiveTeam, event: { eventId: string; title: string; body: string; icon: string; good: boolean; effect: string; year?:number }) {
   if (!team.state) return
   team.state.eventLog = [
     { year: team.state.cycles, instanceId: nid(10), ...event },
@@ -1284,12 +1309,40 @@ function rememberSystemEvent(team: LiveTeam, event: { eventId: string; title: st
   ].slice(0, 200)
 }
 
-function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number): YearCause {
+function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof makeRng>, now: number, room?:LiveRoom): YearCause {
   if (!team.state || !team.theme || team.state.finished) return { kind: 'event', label: event.title, cash: 0 }
   const before = team.state.cash
+  if(TRANSFER_IDS.has(event.id)&&room){
+    const queue=room.interactions??(room.interactions=[])
+    const parties=room.teams.filter(other=>other.id!==team.id&&other.state&&other.theme&&!other.state.finished&&!isBankrupt(other.state)&&other.state.cash>0&&canQueueInteraction(queue,team.id,other.id,event.id))
+    const payer=parties.length?rng.pick(parties):null
+    if(!payer?.state)return {kind:'event',label:event.title,cash:0,detail:'Chưa có đối tác khả dụng hoặc đang có giao dịch chờ; chưa thu phí.'}
+    const terms=transferTerms(rng,event.id==='company-royalty')
+    queue.push({id:nid(14),eventId:event.id,title:event.title,body:event.body,originId:team.id,targetId:payer.id,originYear:team.state.cycles,targetYear:payer.state.cycles+1,...terms,createdAt:now,status:'pending'})
+    const detail=`Đang chờ CEO ${payer.teamName} sang năm · ${terms.percent}% tiền mặt, trần ${money(terms.cap)} · chưa cộng/trừ tiền`
+    rememberSystemEvent(team,{eventId:event.id,title:event.title,body:event.body,icon:'coinsUp',good:true,effect:detail})
+    return {kind:'event',label:event.title,cash:0,cashBefore:before,cashAfter:before,detail}
+  }
+  if(event.id===PATENT_LEVY_ID){
+    if(team.state.patentLevy)return {kind:'event',label:event.title,cash:0,detail:'Quyền thu cuối trận đã được ghi nhận.'}
+    const levy=rollPatentLevy(rng,team.state.cycles);team.state.patentLevy=levy
+    const detail=`Cuối trận thu ${levy.percent}% tài sản từ mỗi CEO khác có Công nghệ độc quyền · tổng nhận tối đa ${Math.round(PATENT_LEVY_POLICY.collectorFraction*100)}% tài sản của bạn và ${money(PATENT_LEVY_POLICY.collectorCap)} · chưa cộng/trừ tiền hoặc tài sản`
+    rememberSystemEvent(team,{eventId:event.id,title:event.title,body:event.body,icon:'coinsUp',good:true,effect:detail})
+    return {kind:'event',label:event.title,cash:0,detail}
+  }
+  if(event.id==='company-final-benchmark'||event.id==='company-final-levy'){
+    if(team.state.finalClaims?.some(c=>c.eventId===event.id))return {kind:'event',label:event.title,cash:0,detail:'Quyền/nghĩa vụ này đã được ghi nhận.'}
+    const gain=event.id==='company-final-benchmark',percent=rng.int(gain?1:3,gain?3:8)
+    team.state.finalClaims=[...(team.state.finalClaims??[]),{eventId:event.id,title:event.title,percent,basis:gain?'richest':'own',direction:gain?1:-1}]
+    const detail=`Chốt cuối trận: ${gain?'+':'−'}${percent}% ${gain?'tài sản CEO giàu nhất':'tài sản của bạn'} · trần ${gain?'20% tài sản của bạn và ':''}500 triệu · chưa thu/chi bây giờ`
+    rememberSystemEvent(team,{eventId:event.id,title:event.title,body:event.body,icon:gain?'coinsUp':'coinsDown',good:gain,effect:detail})
+    return {kind:'event',label:event.title,cash:0,detail}
+  }
+  if(event.id==='company-exclusive-technology')team.state.exclusiveTechnology=true
   const copy = eventCopy(event, team.theme)
   const factor = team.theme.scaleFactor || 1
   const patch = patchFromEvent(event, copy.title, copy.body)
+  if(event.id==='company-monopoly-scale'){patch.revenuePct=[6,12];patch.costPct=[2,5]}
   if (patch.cashPerYear) patch.cashPerYear = scaleRange(patch.cashPerYear, factor)
   team.state = applyPatch(team.state, companyEventPatch(team.state,team.theme,patch), rng, now, `${event.id}-${team.id}-${now}`, rules().balance)
   const latest = team.state.effects[0]
@@ -1312,13 +1365,46 @@ function applyEvent(team: LiveTeam, event: EventDef, rng: ReturnType<typeof make
   }
 }
 
+/** A receiver sees/applies incoming interactions only on their next year, or at final settlement. */
+function settleInteractions(room:LiveRoom,now:number,targetId?:string){
+  const final=targetId===undefined
+  for(const row of room.interactions??[]){
+    if(row.status!=='pending'||!final&&row.targetId!==targetId)continue
+    const payer=room.teams.find(t=>t.id===row.targetId),payee=room.teams.find(t=>t.id===row.originId)
+    if(!payer?.state||!payee?.state)continue
+    const prefix=final?'Quyết toán khi tổng kết':'Đã xử lý khi sang năm'
+    const targetYear=final?payer.state.cycles:payer.state.cycles+1
+    const invalid=[payer,payee].find(t=>isBankrupt(t.state!)||t.state!.finished&&(t.score??0)<=0)
+    if(invalid){
+      row.status='cancelled';row.settledAt=now;row.amount=0;row.reason=`CEO ${invalid.teamName} không còn tài sản khả dụng cho giao dịch`
+      for(const t of [payer,payee])rememberSystemEvent(t,{eventId:row.eventId,title:row.title,body:row.body,icon:'coinsDown',good:false,effect:`${prefix} · giao dịch hủy · ${row.reason} · không cộng/trừ tiền`,year:t.id===payer.id?targetYear:t.state!.cycles})
+      continue
+    }
+    const receipt=settleTransfer(payer.state,payee.state,row,payer.state.finished?Math.min(payer.state.cash,payer.score??0):payer.state.cash)
+    if(payer.state.finished&&payer.score!=null)payer.score=Math.max(0,payer.score-receipt.amount)
+    if(payee.state.finished&&payee.score!=null)payee.score+=receipt.amount
+    row.status='settled';row.settledAt=now;row.amount=receipt.amount
+    const detail=`${prefix} · CEO ${payer.teamName} trả CEO ${payee.teamName} ${money(receipt.amount)} · ${row.percent}% tiền mặt khả dụng lúc xử lý, trần ${money(row.cap)}`
+    rememberSystemEvent(payer,{eventId:row.eventId,title:row.eventId==='company-royalty'?'Trả phí bản quyền công nghệ':'Trả hoa hồng giao dịch',body:row.body,icon:'coinsDown',good:false,effect:detail,year:targetYear})
+    rememberSystemEvent(payee,{eventId:row.eventId,title:row.title,body:row.body,icon:'coinsUp',good:true,effect:detail})
+    payer.state.pendingCauses=[...(payer.state.pendingCauses??[]),{kind:'event',label:row.title,cash:-receipt.amount,cashBefore:receipt.before,cashAfter:receipt.after,detail}]
+    payee.state.pendingCauses=[...(payee.state.pendingCauses??[]),{kind:'event',label:row.title,cash:receipt.amount,cashBefore:receipt.receivedBefore,cashAfter:receipt.receivedAfter,detail}]
+  }
+}
+
 function finish(room: LiveRoom, now: number) {
+  if(room.status==='ended')return
+  settleInteractions(room,now)
   for (const team of room.teams) {
     if (!team.state || !team.theme) continue
-    team.state.pending = null
+    settlePending(room,team,now)
     if (team.state.finished && team.score != null) continue
     team.score = computeValue(team.state, team.theme, rules().balance)
     team.ending = computeEnding(team.state, team.theme, rules().endings, rules().balance)
+  }
+  const settlements=finalSettlementPlans(room.teams.filter(t=>t.state&&t.theme).map(t=>({id:t.id,name:t.teamName,state:t.state!,value:t.score??computeValue(t.state!,t.theme!,rules().balance)})))
+  for(const row of settlements){const team=room.teams.find(t=>t.id===row.id)!;team.state!.finalSettlement=row.settlement;team.score=row.settlement.after
+    for(const item of row.settlement.items)rememberSystemEvent(team,{eventId:item.eventId,title:item.title,body:item.eventId===PATENT_LEVY_ID?'Quyết toán khi tổng kết: chuyển tài sản xếp hạng, không trừ tiền mặt thêm lần nữa. Đối tác: '+(item.counterpartyName??'không có đối tác đủ điều kiện')+'.':'Đã quyết toán trên tài sản trước thưởng/phạt cuối trận.',icon:item.delta>=0?'coinsUp':'coinsDown',good:item.delta>=0,effect:`${item.eventId===PATENT_LEVY_ID?'Quyết toán khi tổng kết · ':''}${item.delta>=0?'+':'−'}${money(Math.abs(item.delta))} tài sản · ${item.percent}% trên ${money(item.basis)} · tài sản cuối ${money(row.settlement.after)}${item.limitReason?' · '+item.limitReason+(item.requested!=null?' Mức theo tỷ lệ: '+money(item.requested)+'.':''):''}`})
   }
   room.status = 'ended'
   room.endsAt = now
@@ -1368,11 +1454,12 @@ function openTeamPrompt(room: LiveRoom, team: LiveTeam, now: number) {
   const balance = rules().balance
   const wantQuestion = opening || rng.next() < annualBalance(team.state, balance).questionChance
   const question = wantQuestion ? drawQuestion(team.state, rules().questions, rng) : null
-  const event = question ? null : drawEvent(team.state.seenEvents, rules().events, rng, 'team')
+  const event = question ? null : drawEvent(team.state.seenEvents, rules().events.filter(e=>!STRATEGIC_IDS.has(e.id)), rng, 'team')
   const fallbackQuestion = !question && !event ? drawQuestion(team.state, rules().questions, rng) : question
   if (fallbackQuestion) {
     team.state.seenQuestions = [...team.state.seenQuestions, fallbackQuestion.id]
     team.state.pending = presentQuestion(fallbackQuestion, team.theme, rng, now, balance.questionOpenMs)
+    rememberQuestion(team.state,team.state.pending)
     pauseYearForPrompt(team.state,now)
   } else if (event) {
     openEvent(team, event, rng, now, false)
@@ -1472,6 +1559,7 @@ function timeoutPending(team: LiveTeam, now: number) {
       optionId: '',
       correct: false,
     }
+    resolveQuestionReview(team.state,pending,rec.id)
     return rec
   }
   if (pending.kind === 'choice') {
@@ -1615,15 +1703,19 @@ function valueOf(team: LiveTeam) {
   return 0
 }
 
-function questionStats(room: LiveRoom) {
+function questionStats(room: LiveRoom, detailed=false) {
+  const visits=detailed?room.teams.flatMap(team=>team.state?.questionHistory??[]):[]
+  const reviewed=new Set(visits.map(v=>v.answerId).filter(Boolean))
+  const modern=detailed?quizStatistics(visits):[]
   const grouped = new Map<string, { prompt: string; correct: number; total: number }>()
   for (const answer of room.answers) {
+    if(detailed&&reviewed.has(answer.id))continue
     const row = grouped.get(answer.questionId) ?? { prompt: answer.prompt, correct: 0, total: 0 }
     row.total += 1
     if (answer.correct) row.correct += 1
     grouped.set(answer.questionId, row)
   }
-  return [...grouped.entries()].map(([questionId, row]) => ({ questionId, ...row }))
+  return [...modern,...[...grouped.entries()].map(([questionId, row]) => ({ questionId, ...row }))]
 }
 
 export function playerStatusOf(team: LiveTeam, room: LiveRoom) {
@@ -1675,7 +1767,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       countdownEndsAt: room.countdownEndsAt,
       cycleStartedAt: room.cycleStartedAt,
       cycleElapsedMs: room.cycleElapsedMs,
-      questionStats: questionStats(room),
+      questionStats: questionStats(room,viewer.role==='host'&&room.status==='ended'),
     },
     endings: endingMap(),
     teams: ranked.map((team) => ({
@@ -1700,6 +1792,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       centennial: team.state?.centennial ?? null,
       traits: traitViews(team.state?.traits ?? [], team.state?.eventLog, team.state),
       score: team.score,
+      finalSettlement: room.status==='ended'&&(viewer.role==='host'||team.id===self?.id)?team.state?.finalSettlement:undefined,
       scene: viewer.role === 'host' && team.state && team.theme ? sceneOf(team, room, Date.now(), false) : null,
     })),
     leaderboard,
@@ -1709,6 +1802,8 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
           teamName: self.teamName,
           avatar: avatarOf(self.avatar),
           rank: leaderboard.find((row) => row.teamId === self.id)?.rank ?? room.teams.length,
+          finalSettlement: room.status==='ended' ? self.state?.finalSettlement : undefined,
+          questionReview: room.status==='ended'||self.state?.finished ? self.state?.questionHistory??[] : [],
           correct: youCorrect,
           answered: youAnswered,
           finished: Boolean(self.state?.finished),
@@ -1743,8 +1838,8 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
   const state = team.state!
   const theme = team.theme!
   const epl = state.productionVersion===3?industryEconomy(theme.industryId,state.companyProfile).crew:theme.coefs.epl
-  const operating = Math.min(Math.floor(state.machines),Math.floor(Math.round(state.engineers)/Math.max(1,epl)))
-  const idle = Math.max(0,Math.floor(state.machines)-operating)
+  const currentPlan = productionPlan(state,theme,rules().balance,now)
+  const {operating,idle,stopped} = currentPlan
   const riskStartsAt = room.debugDeathYear ?? deathStartYear(room.durationSec, room.cycleSeconds)
   const nextYear = state.cycles + 1
   return {
@@ -1757,6 +1852,7 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     machineProgress: state.machineProgress??0,
     operating,
     idle,
+    stopped,
     util: state.machines > 0 ? operating / state.machines : 0,
     tech: state.tech,
     support: state.support,
@@ -1785,6 +1881,10 @@ function sceneOf(team: LiveTeam, room: LiveRoom, now = Date.now(), includeHistor
     workerSkill: state.workerSkill??0,
     machineQuality: state.machineQuality??0,
     condition: state.condition,
+    exclusiveTechnology: Boolean(state.exclusiveTechnology),
+    patentLevy:state.patentLevy,
+    finalClaims: state.finalClaims??[],
+    pendingInteractions:(room.interactions??[]).filter(row=>row.originId===team.id&&row.status==='pending').map(row=>({id:row.id,title:row.title,percent:row.percent,cap:row.cap,targetName:room.teams.find(t=>t.id===row.targetId)?.teamName??'CEO',targetYear:row.targetYear})),
     companyUpgrades: state.productionVersion===3 && !state.finished && !isBankrupt(state) ? COMPANY_UPGRADES.map(kind=>companyUpgradePreview(state,theme,annualBalance(state,rules().balance),kind,now+1)) : [],
     companyBooks: { ...companyBooks(state, theme, rules().balance), reportedValue: valueOf(team) },
     lastProduction: state.cycleReport,

@@ -7,10 +7,11 @@ import { makeRng } from './game/rng'
 import { annualEconomy } from './game/random-economy'
 import type { ThemeDef } from './game/types'
 
-const scenario = vi.hoisted(() => ({ family: false, outcome: 'steady' as 'steady' | 'bankrupt', noRisks: true, shared: false, inflation: false }))
+const scenario = vi.hoisted(() => ({ family: false, outcome: 'steady' as 'steady' | 'bankrupt', noRisks: true, shared: false, inflation: false, strategic: false }))
 const db = vi.hoisted(() => {
   let sequence = 0
   return {
+    $transaction:vi.fn(async(queries:Promise<unknown>[])=>Promise.all(queries)),
     room: { create: vi.fn(async () => ({ id: `room-${++sequence}` })), findUnique: vi.fn(async () => null), findMany: vi.fn(async () => [] as unknown[]), update: vi.fn(async () => ({})) },
     participant: { deleteMany: vi.fn(async () => ({})), upsert: vi.fn(async () => ({})) },
     answer: { createMany: vi.fn(async () => ({})), findMany: vi.fn(async () => [] as unknown[]) },
@@ -20,9 +21,10 @@ vi.mock('./prisma', () => ({ prisma: db }))
 vi.mock('./game/catalog', async () => {
   const { balance } = await import('../prisma/seed/balance')
   const { LINES } = await import('../prisma/seed/rules')
+  const {COMPANY_EVENTS}=await import('./game/company-events')
   return { catalog: () => ({ balance: { ...balance, yearEventChance: scenario.shared ? 2 : 0, inflationBase: scenario.inflation ? .02 : balance.inflationBase, classEventChance: scenario.shared ? 2 : 0, yearMaxEvents: 1, familyEventChance: scenario.family ? 2 : 0 }, lines: LINES, themeCount: 64, endings: [], traitCopy: [],
     familyEvents: scenario.family ? [{ id: 'retirement', trait: 'early_retirement', title: 'Nghỉ hưu sớm', body: '', weight: 1 }] : [],
-    questions: [], events: [{ id:'shared-cash',title:'Hỗ trợ chung',body:'Cấp vốn',weight:1,scope:'team',good:true,icon:'coins',visual:'supply_shock',exposure:'any',durationSec:[1,1],outputMul:[1,1],priceMul:[1,1],inflationMul:[1,1],cash:[100,100],yearSpan:1,
+    questions: [], events: [...(scenario.strategic?COMPANY_EVENTS:[]),{ id:'shared-cash',title:'Hỗ trợ chung',body:'Cấp vốn',weight:1,scope:'team',good:true,icon:'coins',visual:'supply_shock',exposure:'any',durationSec:[1,1],outputMul:[1,1],priceMul:[1,1],inflationMul:[1,1],cash:[100,100],yearSpan:1,
       choice:{timeoutIndex:0,options:[{id:'cash-choice',text:'Nhận',patch:{visual:'none',title:'Lựa chọn nhận tiền',body:'Đã nhận',exposure:'any',durationSec:[1,1],outputMul:[1,1],priceMul:[1,1],inflationMul:[1,1],cash:[50,50]}}]} }], successionReasons: [],
     heirOutcomes: [{ id: 'heir', outcomeType: scenario.outcome, industryId: null, contextId: null, label: scenario.outcome, detail: '', weight: 1, multiplier: scenario.outcome === 'bankrupt' ? 0 : 1, sort: 1 }],
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
@@ -507,5 +509,161 @@ describe('approved v2 tutorial and host lifecycle statuses',()=>{
   state.bankrupt=true;state.finished=false;state.stateAidEligible=true;state.secondLife='available';expect(status()).toBe('restructuring')
   state.finished=true;expect(status()).toBe('bankrupt')
   state.bankrupt=false;state.stateAidEligible=false;state.finished=false;state.succession=null;state.finishReason=undefined;expect(status()).toBe('operating')
+ })
+})
+
+
+describe('final quiz review and strategic settlement integration',()=>{
+ beforeEach(()=>{vi.clearAllMocks();scenario.family=false;scenario.noRisks=true;scenario.shared=false;scenario.strategic=false;scenario.inflation=false})
+ it('does not expose answer keys during play, then shows own selection and all host distributions',async()=>{
+  const a=await roomWithTeam();a.room.status='playing';a.team.state!.introDone=true
+  const make=(id:string)=>({id,kind:'question' as const,phase:'open' as const,title:'Câu hỏi',body:'Chọn một đáp án',options:['a','b','c','d'].map(id=>({id,text:'Đáp án '+id})),correctOptionId:'b',explanation:'B là đúng',expiresAt:Date.now()+100000,questionId:'sample'})
+  a.team.state!.pending=make('first');await answerPrompt(a.code,a.player.playerToken,'a','first')
+  const viewer={role:'player' as const,code:a.code,teamId:a.team.id}
+  expect(buildSnapshot(a.room,viewer).you!.questionReview).toEqual([])
+  expect(buildSnapshot(a.room,{role:'host',code:a.code}).room.questionStats[0]).not.toHaveProperty('options')
+  a.team.state!.pending=make('second');await answerPrompt(a.code,a.player.playerToken,'b','second')
+  a.team.state!.pending=make('timeout');await endRoom(a.code,a.hostToken)
+  const self=buildSnapshot(a.room,viewer),host=buildSnapshot(a.room,{role:'host',code:a.code})
+  expect(self.you!.questionReview).toHaveLength(3);expect(self.you!.questionReview[0].chosenOptionId).toBe('a');expect(self.you!.questionReview[1].correct).toBe(true);expect(self.you!.questionReview[2].chosenOptionId).toBeUndefined()
+  expect(host.room.questionStats).toHaveLength(1);expect(host.room.questionStats[0]).toMatchObject({appearances:3,total:3,correct:1,unanswered:1})
+  expect(host.room.questionStats[0]).toMatchObject({options:expect.arrayContaining([expect.objectContaining({id:'b',count:1,correct:true})])})
+  const saved=(db.participant.upsert.mock.calls as unknown as [{update:{state:{questionHistory:unknown[]}}}][]).at(-1)![0].update.state
+  expect(saved.questionHistory).toHaveLength(3)
+ })
+ it('queues a fast CEO event until the target next year, then settles both ledgers once',async()=>{
+  scenario.strategic=true;scenario.shared=true
+  try{
+   const a=await roomWithTeam(),joined=await joinRoom(a.code,'Đối tác'),other=a.room.teams.find(t=>t.id===joined.teamId)!
+   other.theme=theme();other.state=createState(other.theme,10000,makeRng(8),balance);other.state.introDone=true;other.state.cycles=3
+   a.room.status='playing';a.team.state!.introDone=true;a.team.state!.cycles=30;a.team.state!.eventBag=['company-commission'];a.team.state!.seenEvents=(await import('./game/company-events')).COMPANY_EVENTS.map(e=>e.id);a.team.state!.machines=0;a.team.state!.engineers=0
+   const before=other.state.cash,tier=JSON.stringify(other.state.investmentCounts)
+   await advanceTeamYear(a.code,a.player.playerToken)
+   expect(a.room.interactions).toHaveLength(1);expect(a.room.interactions![0]).toMatchObject({status:'pending',targetYear:4,originYear:31});expect(other.state.cash).toBe(before);expect(other.state.eventLog).toHaveLength(0)
+   const actorView=()=>buildSnapshot(a.room,{role:'player',code:a.code,teamId:a.team.id}).you!.scene!
+   const targetView=()=>buildSnapshot(a.room,{role:'player',code:a.code,teamId:other.id}).you!.scene!
+   expect(actorView().pendingInteractions).toHaveLength(1);expect(targetView().pendingInteractions).toHaveLength(0)
+   expect(a.team.state!.yearLedger[0].causes.find(c=>c.label==='Nhận hoa hồng giao dịch')!.cash).toBe(0)
+   scenario.shared=false
+   await advanceTeamYear(a.code,joined.playerToken)
+   const row=a.room.interactions![0],paid=other.state!.yearLedger[0].causes.find(c=>c.label==='Nhận hoa hồng giao dịch')!,received=a.team.state!.pendingCauses.find(c=>c.label==='Nhận hoa hồng giao dịch')!
+   expect(row.status).toBe('settled');expect(row.amount).toBeGreaterThan(0);expect(row.amount).toBeLessThanOrEqual(75);expect(paid.cash).toBe(-row.amount!);expect(received.cash).toBe(row.amount);expect(actorView().pendingInteractions).toHaveLength(0)
+   expect(other.state!.eventLog.find(e=>e.eventId==='company-commission')!.year).toBe(4);expect(other.state!.eventLog[0].effect).toContain('Đã xử lý khi sang năm');expect(JSON.stringify(other.state!.investmentCounts)).toBe(tier)
+   const ledger=other.state!.yearLedger[0];expect(ledger.cashBefore+ledger.causes.reduce((n,c)=>n+c.cash,0)).toBeCloseTo(ledger.cashAfter,8)
+   other.state!.yearLockUntil=0;await advanceTeamYear(a.code,joined.playerToken)
+   expect(a.team.state!.pendingCauses.filter(c=>c.label==='Nhận hoa hồng giao dịch')).toHaveLength(1)
+   expect(other.state!.eventLog.filter(e=>e.eventId==='company-commission')).toHaveLength(1)
+  }finally{scenario.strategic=false;scenario.shared=false}
+ })
+ it('draws exclusive rights, temporary scale effects and integer final claims through the annual event deck',async()=>{
+  scenario.strategic=true;scenario.shared=true
+  try{
+   const {COMPANY_EVENTS}=await import('./game/company-events')
+   const {strategicEligible}=await import('./game/strategic-events')
+   for(const id of ['company-exclusive-technology','company-monopoly-scale','company-final-benchmark','company-final-levy']){
+    const a=await roomWithTeam();a.room.status='playing';a.team.state!.introDone=true;a.team.state!.machines=3;a.team.state!.engineers=100;a.team.state!.eventBag=[id];a.team.state!.seenEvents=COMPANY_EVENTS.map(e=>e.id)
+    await advanceTeamYear(a.code,a.player.playerToken)
+    expect(a.team.state!.eventLog.some(e=>e.eventId===id)).toBe(true);expect(a.team.state!.seenEvents).toContain(id)
+    if(id==='company-exclusive-technology'){expect(a.team.state!.exclusiveTechnology).toBe(true);expect(strategicEligible(id,a.team.state!,true)).toBe(false)}
+    if(id==='company-monopoly-scale'){const effect=a.team.state!.effects.find(e=>e.eventId===id)!;expect(effect.revenueMul).toBeGreaterThanOrEqual(1.06);expect(effect.revenueMul).toBeLessThanOrEqual(1.12);expect(effect.costMul).toBeGreaterThanOrEqual(1.02);expect(effect.costMul).toBeLessThanOrEqual(1.05);expect(effect.defer).toBe(true)}
+    if(id.startsWith('company-final-')){const claim=a.team.state!.finalClaims![0];expect(Number.isInteger(claim.percent)).toBe(true);expect(claim.percent).toBeGreaterThanOrEqual(id.endsWith('levy')?3:1);expect(claim.percent).toBeLessThanOrEqual(id.endsWith('levy')?8:3);expect(strategicEligible(id,a.team.state!,true)).toBe(false);expect(buildSnapshot(a.room,{role:'player',code:a.code,teamId:a.team.id}).you!.scene!.finalClaims).toEqual([claim])}
+   }
+  }finally{scenario.strategic=false;scenario.shared=false}
+ })
+ it('freezes a common baseline and records the final adjustment without paying again after reload',async()=>{
+  const a=await roomWithTeam();a.room.status='playing';a.team.state!.finalClaims=[{eventId:'company-final-benchmark',title:'Thưởng',percent:3,basis:'richest',direction:1}]
+  await endRoom(a.code,a.hostToken)
+  const saved=a.team.state!.finalSettlement!;expect(saved.items).toHaveLength(1);expect(a.team.score).toBe(saved.before+saved.items[0].delta)
+  await expect(endRoom(a.code,a.hostToken)).rejects.toMatchObject({status:409});expect(a.team.state!.finalSettlement).toEqual(saved)
+  const self=buildSnapshot(a.room,{role:'player',code:a.code,teamId:a.team.id});expect(self.you!.finalSettlement).toEqual(saved);expect(a.room.report!.teams[0].value).toBe(Math.round(saved.after))
+ })
+})
+
+
+describe('asynchronous CEO interaction persistence and finalization',()=>{
+ beforeEach(()=>{vi.clearAllMocks();scenario.family=false;scenario.noRisks=true;scenario.shared=false;scenario.strategic=false;scenario.inflation=false})
+ async function waiting(){
+  const a=await roomWithTeam(),joined=await joinRoom(a.code,'CEO chậm'),target=a.room.teams.find(t=>t.id===joined.teamId)!
+  target.theme=theme();target.state=createState(target.theme,10000,makeRng(8),balance);target.state.introDone=true;a.team.state!.introDone=true;a.room.status='playing'
+  a.room.interactions=[{id:'transfer-one',eventId:'company-commission',title:'Nhận hoa hồng giao dịch',body:'Giao dịch chờ',originId:a.team.id,targetId:target.id,originYear:20,targetYear:1,percent:3,cap:75,createdAt:1,status:'pending'}]
+  return {...a,joined,target}
+ }
+ it('settles pending fees at game end and explicitly records final settlement in both histories',async()=>{
+  const a=await waiting(),before=a.team.state!.cash,targetBefore=a.target.state!.cash
+  await endRoom(a.code,a.hostToken)
+  expect(a.room.interactions![0]).toMatchObject({status:'settled',amount:75});expect(a.team.state!.cash).toBe(before+75);expect(a.target.state!.cash).toBe(targetBefore-75)
+  for(const team of [a.team,a.target]){const event=team.state!.eventLog.find(e=>e.eventId==='company-commission')!;expect(event.effect).toContain('Quyết toán khi tổng kết');expect(event.effect).toContain('75 triệu');expect(event.year).toBe(team.state!.cycles)}
+  expect(a.target.state!.cycles).toBe(0);const cash=a.target.state!.cash;tick(a.room,Date.now()+100000);expect(a.target.state!.cash).toBe(cash)
+  await expect(endRoom(a.code,a.hostToken)).rejects.toMatchObject({status:409});expect(a.team.state!.cash).toBe(before+75)
+ })
+ it('persists the queue in room metadata and restores it without notifying the target early',async()=>{
+  const a=await waiting();await confirmIntro(a.code,a.player.playerToken,factoryName)
+  const persisted=(db.room.update.mock.calls as unknown as [{data:Record<string,unknown>}][]).at(-1)![0].data
+  expect((persisted.meta as {interactions:unknown[]}).interactions).toEqual(a.room.interactions);expect(db.$transaction).toHaveBeenCalled()
+  db.room.findMany.mockResolvedValueOnce([{...persisted,id:'restored',code:'ASYNC1',seed:'restored',hostTokenHash:a.room.hostTokenHash,hostUserId:'host',participants:[a.team,a.target].map(t=>({id:t.id,tokenHash:t.tokenHash,teamName:t.teamName,theme:t.theme,state:t.state,score:t.score,ending:t.ending,connected:true}))}])
+  await bootRooms();const restored=getRoom('ASYNC1')!;expect(restored.interactions).toEqual(a.room.interactions);expect(restored.teams.find(t=>t.id===a.target.id)!.state!.eventLog).toHaveLength(0)
+  await advanceTeamYear('ASYNC1',a.joined.playerToken);expect(restored.interactions![0].status).toBe('settled')
+ })
+ it('uses the current available cash without rerolling rates, and does not revive zero-value estates',async()=>{
+  const a=await waiting();a.target.state!.cash=100;a.target.state!.yearOpenCash=100
+  await advanceTeamYear(a.code,a.joined.playerToken)
+  expect(a.room.interactions![0]).toMatchObject({status:'settled',percent:3,amount:3})
+  const b=await waiting();b.team.state!.finished=true;b.team.score=0;const before=b.target.state!.cash
+  await endRoom(b.code,b.hostToken);expect(b.room.interactions![0].status).toBe('cancelled');expect(b.target.state!.cash).toBe(before);expect(b.team.score).toBe(0);expect(b.target.state!.eventLog[0].effect).toContain('giao dịch hủy')
+ })
+ it('keeps the next-turn rule when restructuring has reset the target year counter',async()=>{
+  const a=await waiting();a.room.interactions![0].targetYear=35
+  await advanceTeamYear(a.code,a.joined.playerToken)
+  expect(a.target.state!.cycles).toBe(1);expect(a.room.interactions![0].status).toBe('settled');expect(a.target.state!.eventLog.find(e=>e.eventId==='company-commission')!.year).toBe(1)
+ })
+ it('applies cash changes to a frozen positive estate without restarting its turn',async()=>{
+  const a=await waiting();a.team.state!.finished=true;a.team.score=500
+  await endRoom(a.code,a.hostToken);expect(a.team.score).toBe(575);expect(a.team.state!.finished).toBe(true);expect(a.team.state!.cycles).toBe(0)
+ })
+})
+
+
+describe('patent expiry random right and final ranking transfer',()=>{
+ beforeEach(()=>{vi.clearAllMocks();scenario.family=false;scenario.noRisks=true;scenario.shared=false;scenario.strategic=false;scenario.inflation=false})
+ it('draws one saved integer right, transfers assets only at finalization and reverses ranks with matching histories',async()=>{
+  scenario.strategic=true;scenario.shared=true
+  try{
+   const a=await roomWithTeam(),joined=await joinRoom(a.code,'CEO Bản quyền'),owner=a.room.teams.find(t=>t.id===joined.teamId)!
+   owner.theme=theme();owner.state=createState(owner.theme,10000,makeRng(8),balance);owner.state.exclusiveTechnology=true;owner.state.cash=0;owner.state.machines=3;owner.state.engineers=100
+   a.room.status='playing';a.team.state!.introDone=true;a.team.state!.eventBag=['company-patent-expiry'];a.team.state!.seenEvents=(await import('./game/company-events')).COMPANY_EVENTS.map(e=>e.id)
+   await advanceTeamYear(a.code,a.player.playerToken)
+   const claim=a.team.state!.patentLevy!;expect(claim).toBeDefined();expect(Number.isInteger(claim.percent)).toBe(true);expect(claim.percent).toBeGreaterThanOrEqual(1);expect(claim.percent).toBeLessThanOrEqual(3)
+   const viewer={role:'player' as const,code:a.code,teamId:a.team.id};expect(buildSnapshot(a.room,viewer).you!.scene!.patentLevy).toEqual(claim);expect(owner.state.patentLevy).toBeUndefined();expect(owner.state.eventLog).toHaveLength(0)
+   const savedClaim={...claim},rng=a.team.state!.rng;buildSnapshot(a.room,viewer);buildSnapshot(a.room,viewer);expect(a.team.state!.patentLevy).toEqual(savedClaim);expect(a.team.state!.rng).toBe(rng)
+   a.team.state!.finished=true;a.team.score=9900;owner.state.finished=true;owner.score=10000
+   const cashA=a.team.state!.cash,cashOwner=owner.state.cash,fee=10000*claim.percent/100
+   expect(buildSnapshot(a.room,{role:'host',code:a.code}).leaderboard[0].teamId).toBe(owner.id)
+   await endRoom(a.code,a.hostToken)
+   expect(a.team.score).toBe(9900+fee);expect(owner.score).toBe(10000-fee);expect(a.team.state!.cash).toBe(cashA);expect(owner.state.cash).toBe(cashOwner)
+   const snap=buildSnapshot(a.room,{role:'host',code:a.code});expect(snap.leaderboard[0].teamId).toBe(a.team.id);expect(a.room.report!.teams[0].teamId).toBe(a.team.id)
+   const aItem=a.team.state!.finalSettlement!.items.find(i=>i.eventId==='company-patent-expiry')!,bItem=owner.state.finalSettlement!.items.find(i=>i.eventId==='company-patent-expiry')!
+   expect(aItem.delta).toBe(fee);expect(bItem.delta).toBe(-fee);expect(aItem.receiptId).toBe(bItem.receiptId)
+   for(const team of [a.team,owner]){const event=team.state!.eventLog.find(e=>e.eventId==='company-patent-expiry'&&e.effect.includes('Quyết toán khi tổng kết'))!;expect(event).toBeDefined();expect(event.effect).toContain('tài sản');expect(event.body).toContain('không trừ tiền mặt')}
+   expect(db.$transaction).toHaveBeenCalled();await expect(endRoom(a.code,a.hostToken)).rejects.toMatchObject({status:409});expect(a.team.score).toBe(9900+fee)
+  }finally{scenario.strategic=false;scenario.shared=false}
+ })
+ it('settles existing cash obligations first, then uses one baseline for the asset fee',async()=>{
+  const a=await roomWithTeam(),joined=await joinRoom(a.code,'Chủ công nghệ'),owner=a.room.teams.find(t=>t.id===joined.teamId)!
+  owner.theme=theme();owner.state=createState(owner.theme,10000,makeRng(8),balance);owner.state.exclusiveTechnology=true;owner.state.finished=true;owner.score=10000
+  a.room.status='playing';a.team.state!.patentLevy={percent:3,year:1};a.team.state!.finished=true;a.team.score=9900
+  a.room.interactions=[{id:'cash-first',eventId:'company-commission',title:'Hoa hồng',body:'',originId:a.team.id,targetId:owner.id,originYear:1,targetYear:1,percent:3,cap:75,createdAt:1,status:'pending'}]
+  await endRoom(a.code,a.hostToken)
+  const basis=10000-75,fee=basis*.03
+  expect(a.team.score).toBeCloseTo(9900+75+fee,8);expect(owner.score).toBeCloseTo(basis-fee,8)
+  expect(a.team.state!.finalSettlement!.items.find(i=>i.eventId==='company-patent-expiry')!.basis).toBe(basis)
+  expect(a.team.score!+owner.score!).toBeCloseTo(19900,8)
+ })
+ it('restores the right from participant JSON without rerolling or inventing an expiration date',async()=>{
+  const a=await roomWithTeam();a.room.status='playing';a.team.state!.patentLevy={percent:3,year:8};a.team.state!.exclusiveTechnology=true
+  await confirmIntro(a.code,a.player.playerToken,factoryName)
+  const stored=(db.room.update.mock.calls as unknown as [{data:Record<string,unknown>}][]).at(-1)![0].data
+  db.room.findMany.mockResolvedValueOnce([{...stored,id:'patent-restored',code:'PATENT1',seed:'restore',hostTokenHash:a.room.hostTokenHash,hostUserId:'host',participants:[{id:a.team.id,tokenHash:a.team.tokenHash,teamName:a.team.teamName,theme:a.team.theme,state:JSON.parse(JSON.stringify(a.team.state)),score:null,ending:null,connected:true}]}])
+  await bootRooms();const restored=getRoom('PATENT1')!;expect(restored.teams[0].state!.patentLevy).toEqual({percent:3,year:8});expect(restored.teams[0].state!.exclusiveTechnology).toBe(true)
+  expect(buildSnapshot(restored,{role:'player',code:'PATENT1',teamId:a.team.id}).you!.scene!.patentLevy).toEqual({percent:3,year:8})
  })
 })

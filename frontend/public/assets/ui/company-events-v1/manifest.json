@@ -1,0 +1,93 @@
+{
+  "format": "SVG with embedded approved hand-painted WebP; transparent, no added symbols",
+  "events": {
+    "company-staff-arrival": {
+      "source": "returning-graduate.webp",
+      "title": "Tổ công nhân mới gia nhập"
+    },
+    "company-staff-resignation": {
+      "source": "departing-engineer.webp",
+      "title": "Một nhóm công nhân nghỉ việc"
+    },
+    "company-supplier-cooperation": {
+      "source": "new-contract.webp",
+      "title": "Liên kết nhà cung ứng mới"
+    },
+    "company-supplier-withdrawal": {
+      "source": "material-shortage.webp",
+      "title": "Nhà cung ứng rút khỏi chuỗi"
+    },
+    "company-warehouse-modernization": {
+      "source": "warehouse.webp",
+      "title": "Cải tạo kho và luồng giao hàng"
+    },
+    "company-depot-damage": {
+      "source": "port-congestion.webp",
+      "title": "Kho trung chuyển bị hư hại"
+    },
+    "company-filter-installation": {
+      "source": "research.webp",
+      "title": "Lắp thêm bộ xử lý môi trường"
+    },
+    "company-filter-failure": {
+      "source": "chemical-spill.webp",
+      "title": "Hệ thống xử lý mất hiệu quả"
+    },
+    "company-mentor-visit": {
+      "source": "training.webp",
+      "title": "Chuyên gia kèm cặp tại xưởng"
+    },
+    "company-key-crew-loss": {
+      "source": "lost-design.webp",
+      "title": "Thiếu thợ lành nghề dẫn ca"
+    },
+    "company-upgrade-sponsor": {
+      "source": "robot.webp",
+      "title": "Hỗ trợ cải tiến thiết bị"
+    },
+    "company-control-fault": {
+      "source": "wafer-defect.webp",
+      "title": "Bộ điều khiển mất độ chính xác"
+    },
+    "company-preventive-service": {
+      "source": "new-machinery.webp",
+      "title": "Đội kỹ thuật phục hồi thiết bị"
+    },
+    "company-bearing-failure": {
+      "source": "cnc-breakdown.webp",
+      "title": "Ổ trục bị mài mòn bất thường"
+    },
+    "gen-lop-nghe": {
+      "source": "training.webp",
+      "title": "Lớp nghề tại chỗ"
+    },
+    "company-exclusive-technology": {
+      "source": "patent.webp",
+      "title": "Công nghệ độc quyền được công nhận"
+    },
+    "company-royalty": {
+      "source": "research.webp",
+      "title": "Thu phí bản quyền công nghệ"
+    },
+    "company-commission": {
+      "source": "new-contract.webp",
+      "title": "Nhận hoa hồng giao dịch"
+    },
+    "company-monopoly-scale": {
+      "source": "warehouse.webp",
+      "title": "Lợi thế quy mô và giám sát thị trường"
+    },
+    "company-final-benchmark": {
+      "source": "market-recovery.webp",
+      "title": "Cam kết thưởng tăng trưởng cuối trận"
+    },
+    "company-final-levy": {
+      "source": "price-decline.webp",
+      "title": "Nghĩa vụ tài sản khi chốt trận"
+    },
+    "company-patent-expiry": {
+      "source": "tax-relief.webp",
+      "title": "Hết hạn bảo hộ"
+    }
+  }
+}

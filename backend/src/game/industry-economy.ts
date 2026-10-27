@@ -46,7 +46,8 @@ export function industryEconomy(id: string, stored?: {crew:number;prices:Record<
 
 /** Existing authored events describe old large workforces; preserve equivalent crew capacity. */
 export function companyEventPatch(state: TeamState, theme: ThemeDef, patch: EffectPatch): EffectPatch {
-  if(state.productionVersion!==3 || !patch.engineersAdd)return patch
+  if(state.productionVersion===3 && /Lớp nghề tại chỗ/u.test(patch.title))return {...patch,engineersAdd:[1,5],workforceUnits:true,machinesAdd:undefined}
+  if(state.productionVersion!==3 || !patch.engineersAdd || patch.workforceUnits)return patch
   const ratio=industryEconomy(theme.industryId,state.companyProfile).crew/Math.max(1,theme.coefs.epl)
   return {...patch,engineersAdd:[patch.engineersAdd[0]*ratio,patch.engineersAdd[1]*ratio]}
 }
