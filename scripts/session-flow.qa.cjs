@@ -1,0 +1,128 @@
+// Browser regression against the built production bundle; all HTTP/socket data stays local.
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
+const root = path.resolve(__dirname, '..');
+const out = path.join(root, 'design-preview/session-flow-v1', process.env.SESSION_QA_OUTPUT || 'verification');
+fs.mkdirSync(out, { recursive: true });
+let browser;
+(async () => {
+  browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH, headless: true });
+  const report = { widths: [], errors: [], missing: [], checks: [] };
+  for (const width of [390, 768, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : width === 768 ? 1024 : 900 } });
+    await context.addInitScript(() => {
+      if(!localStorage.getItem('qa-no-session'))localStorage.setItem('host-session', 'mock-google-session');
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText: async text => { window.__copiedLink = text; } } });
+    });
+    const requests = [], sockets = new Set();
+    const snap = { serverNow: Date.now(), paused: false, frozenNow: null, role: 'host', you: null, endings: {},
+      room: { code: 'XTV45', hostName: 'Nhóm trình chiếu', status: 'lobby', durationSec: 900, startingCapital: 10000, cycleSeconds: 60, yearMinSeconds: 5, step: 50, endsAt: null, remainingMs: null, countdownEndsAt: null, cycleStartedAt: null, cycleElapsedMs: 0, questionStats: [] }, teams: [], leaderboard: [] };
+    const emit = () => { snap.serverNow = Date.now(); for (const ws of sockets) ws.send('42' + JSON.stringify(['snapshot', snap])); };
+    await context.routeWebSocket('**/socket.io/**', ws => {
+      sockets.add(ws); ws.send('0' + JSON.stringify({ sid: 'local', upgrades: [], pingInterval: 25000, pingTimeout: 20000, maxPayload: 1000000 }));
+      ws.onMessage(msg => { const s = String(msg); if (s.startsWith('40')) ws.send('40{"sid":"local"}'); if (s.startsWith('42') && s.includes('hello')) emit(); });
+      ws.onClose(() => sockets.delete(ws));
+    });
+    await context.route('**/*', async route => {
+      const url = new URL(route.request().url());
+      if (url.hostname !== 'game.test') return route.abort();
+      if (url.pathname === '/health') return route.fulfill({ json: { ok: true } });
+      if (url.pathname.startsWith('/api/')) {
+        const req = route.request(); const body = req.postData() ? req.postDataJSON() : null;
+        requests.push({ path: url.pathname, method: req.method(), body, headers: req.headers() });
+        if (url.pathname === '/api/setup') return route.fulfill({ json: { yearMinSeconds: 5 } });
+        if (url.pathname === '/api/rooms' && req.method() === 'POST') return route.fulfill({ json: { code: 'XTV45', hostToken: 'mock-host-token' } });
+        return route.fulfill({ json: { ok: true } });
+      }
+      if (url.pathname === '/config.js') return route.fulfill({ contentType: 'application/javascript', body: 'window.__APP_CONFIG__={};' });
+      let file = path.join(root, 'frontend/dist', decodeURIComponent(url.pathname));
+      if (!path.extname(file)) file = path.join(root, 'frontend/dist/index.html');
+      if (!fs.existsSync(file)) { report.missing.push(url.pathname); return route.fulfill({ status: 404, body: '' }); }
+      return route.fulfill({ body: fs.readFileSync(file), contentType: ({ '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png' })[path.extname(file)] || 'application/octet-stream' });
+    });
+    const page = await context.newPage();
+    page.on('pageerror', error => report.errors.push(String(error)));
+    page.setDefaultTimeout(15000);
+    await page.goto('http://game.test/');
+    await page.getByRole('button', { name: 'Tạo phòng', exact: true }).click();
+    const create = page.getByRole('dialog', { name: 'Tạo phòng', exact: true });
+    await create.waitFor();
+    assert.equal(await create.locator('input').count(), 3, 'Only host name and two advanced timing inputs; no room-level investment prices');
+    await create.getByRole('textbox').fill('Chủ phòng QA');
+    await create.locator('select').nth(0).selectOption('15');
+    await create.locator('select').nth(1).selectOption('10000');
+    await page.screenshot({ path: path.join(out, `create-${width}.png`) });
+    assert.equal(await create.getByRole('button', { name: 'Mở phòng', exact: true }).evaluate(el=>getComputedStyle(el).color), 'rgb(255, 242, 208)');
+    assert.equal(await create.locator('.session-create-title').evaluate(el=>getComputedStyle(el).color),'rgb(255, 240, 191)');
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth),width);
+    await create.getByRole('button',{name:'Đóng',exact:true}).scrollIntoViewIfNeeded();
+    await page.screenshot({path:path.join(out,`create-actions-${width}.png`)});
+    await page.keyboard.press('Escape');
+    await create.waitFor({state:'detached'});
+    assert.equal(await page.evaluate(()=>document.body.style.overflow),'');
+    assert(await page.getByRole('button',{name:'Tạo phòng',exact:true}).evaluate(el=>document.activeElement===el),'return focus after closing create dialog');
+    await page.getByRole('button',{name:'Tạo phòng',exact:true}).click();
+    await create.waitFor();
+    await create.locator('summary').click();
+    await create.getByRole('spinbutton').nth(0).fill('45');
+    await create.getByRole('spinbutton').nth(1).fill('3');
+    await create.getByRole('button', { name: 'Mở phòng', exact: true }).click();
+    await page.waitForURL('**/host/XTV45');
+    await page.locator('.session-lobby').waitFor();
+    const posted = requests.find(r => r.path === '/api/rooms' && r.method === 'POST');
+    assert.deepEqual(posted.body, { hostName: 'Chủ phòng QA', durationMin: 15, startingCapital: 10000, cycleSeconds: 45, yearMinSeconds: 3 });
+    assert(Object.values(posted.headers).some(value => value.includes('mock-google-session')), 'existing Google host session must be sent');
+    assert.equal(await page.evaluate(() => localStorage.getItem('host:XTV45')), 'mock-host-token');
+    assert(await page.getByRole('button', { name: 'Chờ ít nhất một CEO', exact: true }).isDisabled());
+    snap.teams = ['Minh', 'Lan', 'CEO có tên rất dài cần xuống dòng hợp lý không tràn khung'].map((teamName, i) => ({ id: String(i), teamName, connected: i !== 2, themeName: '', industryId: '', factoryName: '', introDone: false, cycles: 0, cash: null, value: 0, finished: false, succession: null, ending: null, endingTitle: null, score: null, scene: null }));
+    emit();
+    await page.getByRole('heading', { name: 'CEO đã vào (3)', exact: true }).waitFor();
+    await page.locator('.session-qr img').waitFor();
+    assert((await page.locator('.session-qr img').getAttribute('src')).startsWith('data:image/png;base64,'), 'QR generated by existing QRCode library');
+    await page.getByRole('button', { name: 'Sao chép liên kết', exact: true }).click();
+    assert.equal(await page.evaluate(() => window.__copiedLink), 'http://game.test/?code=XTV45');
+    await page.locator('.session-lobby img').evaluateAll(nodes=>Promise.all(nodes.map(img=>{img.loading='eager';return img.decode()})));
+    await page.screenshot({ path: path.join(out, `host-lobby-${width}.png`), fullPage: true });
+    const geometry = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth }));
+    assert.equal(geometry.scroll, width, 'no horizontal overflow in host lobby');
+    await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
+    await page.waitForFunction(() => !document.querySelector('.session-start')?.disabled);
+    const patch = requests.find(r => r.path === '/api/rooms/XTV45' && r.method === 'PATCH');
+    assert.deepEqual(patch.body, { durationMin: 15, startingCapital: 10000, cycleSeconds: 60, yearMinSeconds: 5 });
+    assert(requests.find(r => r.path.endsWith('/start') && r.method === 'POST'));
+    snap.room.status = 'ended';
+    snap.room.questionStats = Array.from({ length: 7 }, (_, i) => ({ questionId: `q${i}`, prompt: `Câu hỏi ${i + 1}: Trong bối cảnh công nghiệp hóa, phương án nào hỗ trợ doanh nghiệp phát triển hiệu quả và bền vững?`, correct: i === 0 ? 1 : i === 1 ? 0 : 2, total: i === 1 ? 0 : 3 }));
+    emit();
+    await page.getByRole('tab',{name:'Câu hỏi',exact:true}).click();
+    const questions = page.getByRole('region', { name: 'Kết quả trả lời', exact: true });
+    await questions.waitFor();
+    await questions.scrollIntoViewIfNeeded();
+    assert.equal(await questions.locator('ol>li').count(), 4);
+    assert.equal(await questions.locator('.session-question-title .art-text').first().evaluate(el=>getComputedStyle(el).flexWrap),'nowrap','collapsed question titles must never show clipped fragments of a second line');
+    await questions.locator('.session-question-toggle').first().click();
+    assert(await questions.locator('.session-question-detail').first().isVisible());
+    const artCopy = locator => locator.locator('[role="img"][aria-label]').evaluateAll(nodes => nodes.map(n => n.getAttribute('aria-label')).join(' '));
+    assert((await artCopy(questions.locator('.session-question-detail').first())).includes('1/3 lượt trả lời đúng'));
+    assert((await artCopy(questions.locator('.session-question-score').first())).includes('33%'), 'round denominator is answer attempts');
+    assert((await artCopy(questions.locator('.session-question-score').nth(1))).includes('0%'), 'zero denominator does not produce NaN');
+    await questions.screenshot({ path: path.join(out, `questions-${width}.png`) });
+    await questions.getByRole('button', { name: 'Trang sau', exact: true }).click();
+    assert.equal(await questions.locator('ol>li').count(), 3);
+    assert((await artCopy(questions.getByRole('status'))).includes('5 – 7 / 7'));
+    assert(await questions.getByRole('button', { name: 'Trang sau', exact: true }).isDisabled());
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
+    await page.evaluate(()=>{localStorage.removeItem('host-session');localStorage.setItem('qa-no-session','1')});
+    await page.goto('http://game.test/');
+    const beforeLogin = requests.filter(r=>r.path==='/api/rooms'&&r.method==='POST').length;
+    await page.getByRole('button',{name:'Tạo phòng',exact:true}).click();
+    await page.getByRole('dialog',{name:'Đăng nhập để tạo phòng',exact:true}).waitFor();
+    assert.equal(requests.filter(r=>r.path==='/api/rooms'&&r.method==='POST').length,beforeLogin,'logged-out hosts must reach Google login, not create a room');
+    report.widths.push({ width, requests: requests.filter(r => r.method !== 'GET').map(({ path, method, body }) => ({ path, method, body })), geometry });
+    await context.close();
+  }
+  await browser.close();
+  assert.equal(report.errors.length, 0); assert.equal(report.missing.length, 0);
+  report.checks = ['create form Google-session forwarding, logged-out Google-login guard, no line prices, real existing create route and stored host token, Escape/focus restoration', 'real QR, clipboard, empty-room start guard, live connected states, long CEO name', 'existing settings PATCH/start POST', 'four question rows/page, real full prompt, attempts denominator, zero-attempt handling, expansion and pagination', '390/768/1440 screenshots and no horizontal scroll'];
+  fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
+  console.log(JSON.stringify(report));
+})().catch(async e => { console.error(e); await browser?.close(); process.exitCode = 1; });

@@ -19,6 +19,7 @@ import {
   advanceTeamYear,
   investLine,
   joinRoom,
+  saveAvatar,
   listThemes,
   lobbyView,
   publicSetup,
@@ -213,6 +214,13 @@ app.post('/api/rooms/:code/start', async (req, res, next) => {
   }
 })
 
+app.post('/api/rooms/:code/avatar', async (req, res, next) => {
+  try {
+    const code = param(req.params.code)
+    res.json(await withRoom(code, () => saveAvatar(code, playerToken(req), req.body)))
+  } catch (error) { next(error) }
+})
+
 app.post('/api/rooms/:code/pause', async (req, res, next) => {
   try {
     const code = param(req.params.code)
@@ -387,7 +395,7 @@ io.on('connection', (socket) => {
       const hash = (await import('crypto')).createHash('sha256').update(token).digest('hex')
       const team = room.teams.find((item) => item.tokenHash === hash)
       if (!team) {
-        socket.emit('problem', { error: 'Không thấy đội trong phòng' })
+        socket.emit('problem', { error: 'Không thấy CEO trong phòng' })
         return
       }
       const gen = touchTeam(code, team.id)

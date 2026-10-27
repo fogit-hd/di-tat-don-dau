@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
 import type { CentennialNotice, Snapshot } from '../api/types.ts'
 import { useClock, useRoom } from '../realtime/useRoom.ts'
 import { beep } from '../lib/sound.ts'
-import { clock, vnd } from '../lib/format.ts'
+import { vnd } from '../lib/format.ts'
 import { BudgetPanel } from './BudgetPanel.tsx'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { EndScreen } from './EndScreen.tsx'
@@ -17,6 +17,10 @@ import { FactoryScene } from './FactoryScene.tsx'
 import { GovernanceRiskCard } from './GovernanceRiskCard.tsx'
 import { StatCards } from './StatCards.tsx'
 import { ThemeIntro } from './ThemeIntro.tsx'
+import { CeoJoinPanel, SessionCountdown } from './SessionEntry'
+import { CeoLobby } from './CeoLobby'
+import { PlayerResults } from './PlayerResults'
+import type { AvatarConfig } from '../lib/avatar'
 import { TopBar } from './TopBar.tsx'
 import { specialStatuses } from '../lib/special-status.ts'
 import { TraitNotice } from './TraitNotice.tsx'
@@ -81,23 +85,7 @@ export function PlayScreen() {
     }
   }
 
-  if (!token) {
-    return (
-      <main className="wrap narrow">
-        <h1>Vào phòng {upper}</h1>
-        <p className="lead">Mỗi điện thoại là một đội. Không cần tài khoản.</p>
-        <input value={name} maxLength={24} placeholder="Tên đội (ví dụ: Nhóm 3)" onChange={(event) => setName(event.target.value)} />
-        <small>{name.length}/24 ký tự</small>
-        {formError && <p className="warn">{formError}</p>}
-        <button type="button" className="btn big" disabled={busy || name.trim().length < 1} onClick={() => void join()}>
-          Vào sảnh
-        </button>
-        <Link to="/" className="textlink">
-          Về trang chủ
-        </Link>
-      </main>
-    )
-  }
+  if (!token) return <CeoJoinPanel code={upper} name={name} busy={busy} error={formError} onName={setName} onSubmit={()=>void join()}/>
 
   const scene = snap?.you?.scene
   const theme = snap?.you?.theme
@@ -112,32 +100,18 @@ export function PlayScreen() {
   const statuses = scene ? specialStatuses(scene) : []
   const currentEvents = scene?.eventLog?.filter(event => event.year === scene.cycles) ?? []
   const ongoing = scene ? ongoingEventEntries({ effects: scene.activeEffects ?? [], timed: scene.effects, traits: statuses, events: scene.eventLog ?? [], now: youFinished ? snap?.serverNow ?? now : now }) : []
-  const tutorial = scene && showGame && guideActive(scene) ? guideStep(scene) : null
+  const tutorial = scene && showGame && guideActive(scene) ? guideStep(scene,{ceoName:snap?.you?.teamName,industryName:theme?.industryName,rank:snap?.you?.rank,durationSec:snap?.room.durationSec}) : null
   async function acknowledge(action:string) { if(busy||snap?.paused||offline)return false;return Boolean(await act('tutorial',{action})) }
 
   return (
     <EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main data-economy-model={scene?.economyVersion} className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
-      {snap && status === 'lobby' && (
-        <section className="narrow">
-          <h1>Phòng {snap.room.code}</h1>
-          <p className="lead">
-            Xin chào <b>{snap.you?.teamName}</b>. Đợi {snap.room.hostName} bắt đầu. Đồng hồ {Math.round(snap.room.durationSec / 60)} phút, vốn{' '}
-            {vnd(snap.room.startingCapital)}.
-          </p>
-          <ul className="waitlist">
-            {snap.teams.map((team) => (
-              <li key={team.id}>{team.teamName}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      {snap && status === 'countdown' && <Countdown snapEnds={snap.room.countdownEndsAt} now={now} />}
+      {snap && status === 'lobby' && <CeoLobby key={snap.you?.id} snap={snap} onSave={avatar=>api<{avatar:AvatarConfig}>(`/api/rooms/${upper}/avatar`,{method:'POST',playerToken:token,body:avatar})}/>}
+      {snap && status === 'countdown' && <SessionCountdown code={upper} ends={snap.room.countdownEndsAt} now={now} name={snap.you?.teamName} avatar={snap.you?.avatar}/>}
       {snap && scene && theme && (status === 'playing' || status === 'paused') && !scene.introDone && (
         <>
-          <p className="lead center">Đồng hồ đang chạy · ⏱ {clock(snap.paused ? (snap.room.remainingMs ?? 0) : (snap.room.endsAt ?? now) - now)}</p>
-          <ThemeIntro key={`${upper}-${snap.you?.id}-${theme.id}`} theme={{ ...theme, factoryName: scene.factoryName }} crewRequired={scene.economyVersion===3?scene.crewRequired:undefined} busy={busy} error={formError} onBegin={(factoryName) => void act('intro', { factoryName })} />
+          <ThemeIntro key={`${upper}-${snap.you?.id}-${theme.id}`} theme={{ ...theme, factoryName: scene.factoryName }} crewRequired={scene.economyVersion===3?scene.crewRequired:undefined} cash={scene.cash} workers={scene.engineers} clusters={scene.machines} ceoName={snap.you?.teamName} avatar={snap.you?.avatar} remainingMs={snap.paused?(snap.room.remainingMs??0):(snap.room.endsAt??now)-now} busy={busy} error={formError} onBegin={(factoryName) => void act('intro', { factoryName })} />
         </>
       )}
       {snap && showGame && scene && (
@@ -185,7 +159,7 @@ export function PlayScreen() {
                 investment={
                   <>
                     {youFinished ? (
-                      <p className="finish-note">Lượt chơi của đội đã được chốt. Xem lịch sử sự kiện ở các tab bên trên trước khi kết thúc.</p>
+                      <p className="finish-note">Lượt chơi của CEO đã được chốt. Xem lịch sử sự kiện ở các tab bên trên trước khi kết thúc.</p>
                     ) : (
                       <>
                         <p className="meta">Chọn một hướng đầu tư, rồi bấm Sang năm để sản xuất và chốt năm.</p>
@@ -236,7 +210,7 @@ export function PlayScreen() {
       {snap && showGame && century && theme && (
         <CentennialReveal notice={century} industryId={theme.industryId} teamName={snap.you?.teamName ?? ''} onDone={() => setCenturyDone(true)} />
       )}
-      {snap && showGame && finishedSummary && <FinishedSummary snap={snap} onClose={() => setFinishedSummary(false)} />}
+      {snap && showGame && finishedSummary && <PlayerResults snap={snap} provisional onClose={() => setFinishedSummary(false)} />}
       {snap && scene?.pending && status !== 'ended' && !youFinished && (
         <EventQuizModal
           key={scene.pending.id}
@@ -351,49 +325,4 @@ function InlineResult({ snap }: { snap: Snapshot }) {
     {succession && <p>{succession.causeText} · {succession.outcomeDetail}</p>}
     <p>Giá trị cuối <b>{vnd(scene?.value ?? 0)}</b> · Hạng {snap.you?.rank ?? '—'}</p>
   </section>
-}
-
-function FinishedSummary({ snap, onClose }: { snap: Snapshot; onClose: () => void }) {
-  const you = snap.you
-  const succession = you?.succession
-  const value = snap.leaderboard.find((row) => row.teamId === you?.id)?.value ?? 0
-  return (
-    <div className="modal on" role="dialog" aria-modal="true" aria-label="Kết quả lượt chơi">
-      <div className="card finished-summary">
-        <h2>Đã kết thúc lượt chơi</h2>
-        {succession ? (
-          <>
-            <p>{succession.causeText}</p>
-            <p>
-              <b>{succession.outcomeLabel}.</b> {succession.outcomeDetail}
-            </p>
-          </>
-        ) : (
-          <p>Đội đã chốt mốc đặc biệt của lượt chơi.</p>
-        )}
-        <p className="end-sum">
-          Giá trị cuối <b>{vnd(value)}</b> · Hạng {you?.rank ?? '—'}
-        </p>
-        <div className="finished-actions">
-          <button type="button" className="btn s" onClick={onClose}>
-            Xem lại sự kiện
-          </button>
-          <Link className="btn" to="/">
-            Về trang chủ
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Countdown({ snapEnds, now }: { snapEnds: number | null; now: number }) {
-  const left = snapEnds ? snapEnds - now : 3000
-  const n = Math.max(1, Math.ceil(left / 1000))
-  return (
-    <div className="countdown">
-      <b>{n}</b>
-      <span>Cùng xuất phát</span>
-    </div>
-  )
 }

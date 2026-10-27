@@ -6,9 +6,9 @@
 
 19 bước: tên doanh nghiệp → tiền mặt → tài sản → số năm đã chốt → đồng hồ trận → thu nhập → thứ hạng → loa → Đầu tư → Doanh nghiệp → Rủi ro → Lịch sử sự kiện → Thay đổi từng năm → quay lại Đầu tư → mở một cụm → tuyển đủ tổ theo ngành → xem Doanh nghiệp đã cập nhật → chốt năm đầu → phản hồi hoàn tất.
 
-Các tab phải được người chơi bấm thật; không tự mở rồi tính như đã xem. Mọi bước cần thao tác đều chờ vô hạn, không có nút tự bỏ qua. Chạm khi đang nói sẽ hiện hết đoạn hiện tại; chạm sau đó phản hồi để tiếp tục. Đến yêu cầu thao tác, chỉ bấm đúng mục mới chuyển bước.
+Phần giới thiệu thanh trên (8 mục đầu) cho phép chạm nền, lời thoại hoặc Enter/Space để chuyển ngay, không bắt bấm chỉ số. Các tab phải được người chơi bấm thật; không tự mở rồi tính như đã xem. Bước thực hành mua và Sang năm vẫn cần thao tác thật. Trong các đoạn thực hành, chạm khi đang nói sẽ hiện hết đoạn hiện tại; chạm sau đó phản hồi để tiếp tục. Đến yêu cầu thao tác, chỉ bấm đúng mục mới chuyển bước.
 
-Lời thoại được chia ở ranh giới câu thành các đoạn ngắn, khoảng 45ms mỗi cụm ký tự tiếng Việt, nghỉ lâu hơn ở dấu câu. Hết một đoạn, miệng khép lại và chờ 3 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ chỉ tự nối đoạn giải thích tiếp theo, không tự xác nhận thao tác. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
+Lời thoại được chia ở ranh giới câu thành các đoạn ngắn (tối đa khoảng 110 ký tự), khoảng 45ms mỗi cụm ký tự tiếng Việt, nghỉ lâu hơn ở dấu câu. Hết một đoạn, miệng khép lại và chờ 3 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ chỉ tự nối đoạn giải thích tiếp theo, không tự xác nhận thao tác. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
 
 ## Thời gian và trạng thái
 
@@ -22,13 +22,23 @@ Lời thoại được chia ở ranh giới câu thành các đoạn ngắn, kho
 
 ## Hình ảnh
 
-Nguồn toàn nhân vật từ thiết kế đã duyệt, 20 chuỗi × 8 vị trí frame, bao gồm sáu chuỗi nói khi đang chỉ (một số lặp hình miệng đã vẽ trong các vị trí frame). Ảnh, bảng tên, fade/di chuyển khi xuất hiện, nói, thở, xác nhận, chúc mừng và sáu hướng chỉ đều phát qua Canvas; không dùng khớp cắt rời hay chuyển động CSS. Các frame được tách bitmap để không lấy lẫn hình bên cạnh.
+Nguồn toàn nhân vật từ thiết kế đã duyệt, 26 chuỗi × 8 vị trí frame, bao gồm chín chuỗi nói khi đang chỉ (một số lặp hình miệng đã vẽ trong các vị trí frame). Ảnh, bảng tên, fade/di chuyển khi xuất hiện, nói, thở, xác nhận, chúc mừng và chín hướng chỉ đều phát qua Canvas; không dùng khớp cắt rời hay chuyển động CSS. Các frame được tách bitmap để không lấy lẫn hình bên cạnh. Có ba hướng mới cho bố cục thấp: chỉ thẳng lên, chếch cao bên trái và bên phải; tư thế cuối dùng cùng frame kín miệng của chuỗi vừa chỉ vừa nói.
 
 Canvas phủ xám trung tính nhẹ ngoài vùng đang được giải thích. Vùng tập trung có nét vàng và phản hồi hover; tab, chỉ số, khoản đầu tư và Sang năm có điểm nhấn riêng. Hướng tay/ánh mắt theo vị trí mục đang nói đến; lời giải thích tab hiện tại và câu yêu cầu mở tab tiếp theo dùng đúng hai mục khác nhau. Cố vấn và khung thoại giữ sáng, tránh che mục đang chỉ. Giảm chuyển động theo thiết lập hệ điều hành.
+
+Khoanh vùng dùng `attention-frame.svg` riêng, cắt 9 phần để giữ góc/độ dày khi co giãn theo chỉ số, tab hoặc nút; tâm trong suốt, không chặn thao tác. Hướng chỉ được chọn từ góc giữa nhân vật và vùng đang giải thích trong viewport, không gắn cố định theo tên bước hoặc loại thiết bị.
 
 Bảng tên được vẽ chồng 3px lên đáy không trong suốt của frame hiện tại, nên không còn khoảng trống do gutter atlas. Chữ tiếng Việt dùng Times New Roman, chuẩn hóa NFC và đánh theo grapheme. Có chế độ reduced-motion và nhánh dự phòng không có ImageBitmap/Segmenter.
 
 Ảnh phục vụ từ `frontend/public/assets/ui/advisor-v1`. Metadata: `frontend/src/lib/advisor-sprites.json`. Giao diện: FirstYearAdvisor, TopBar, GameTabs, BudgetPanel, YearButton. Hướng dẫn không làm reflow grid game; khung thoại tránh nút cần bấm.
+
+Cố vấn neo ở vùng dưới bảng sự kiện bên trái thay vì che ảnh nhà máy. Trên màn hình không có đủ khoảng trống, lớp hướng dẫn tự tránh mục đang chỉ và giữ trong viewport. Lời thoại nằm chếch trên bên phải nhân vật, có khung/tail SVG riêng và nền giấy tạo riêng (`dialogue-frame.svg`, `dialogue-tail.svg`, `dialogue-paper.webp`), không dùng lại khung gameplay. Chữ thoại 20px, màn hình hẹp 18px; dòng nhắc 14px.
+
+Gameplay chỉ giữ số liệu dự báo, kết quả nhận/mất và dòng tiền. Cách tính, quy tắc cộng dồn, định giá và làm tròn đặt trong Wiki. Trạng thái mua không còn lời nhắc máy chủ/xác nhận; nút vẫn khóa lúc đang mua, lỗi thật vẫn được hiển thị.
+
+Người chơi được gọi là CEO trong giao diện, bảng xếp hạng, Wiki và phản hồi lỗi API; tên trường `teamName`/ID đội nội bộ giữ nguyên để không đổi hợp đồng dữ liệu. Chỉ nhập tên CEO khi vào phòng; ThemeIntro hiển thị tên doanh nghiệp phân sẵn, không có ô nhập lại tên công ty. Vẫn gửi tên phân sẵn qua hợp đồng intro hiện có.
+
+Lời cố vấn lấy tên CEO, ngành, vốn, tài sản, hạng, thời lượng phòng, số người/cụm thực có, định mức tổ, giá quote và báo cáo sản xuất từ snapshot hiện tại của CEO. Nội dung nói được chụp khi bắt đầu mỗi bước để đồng hồ hoặc thay đổi hạng trực tiếp không liên tục khởi động lại đoạn thoại. Khi chuyển bước hoặc reload, dùng dữ liệu mới nhất. Không suy giá từ một ngành khác hay cố định cần 4/5 người cho mọi CEO.
 
 ## Kiểm tra
 
@@ -38,6 +48,6 @@ Bảng tên được vẽ chồng 3px lên đáy không trong suốt của frame
 - `npm run test -w backend`
 - `node --import tsx scripts/first-year-guide.qa.cjs` với Playwright có sẵn.
 
-QA giao diện dùng production bundle thật, Socket.IO/API mô phỏng cục bộ và công thức đầu tư/sản xuất thật. Kiểm tra 360×800, 390×844, 768×1024, 844×390, 1440×900: hướng dẫn, nhóm công nhân theo ngành, lỗi kết nối/thử lại, reload đúng bước, timer trận tiếp tục, timer năm được giữ, bảng tên sát, không tràn ngang và thoại không che target. Báo cáo ở `design-preview/mascot-guide-v3/verification-production/report.json`.
+QA giao diện dùng production bundle thật, Socket.IO/API mô phỏng cục bộ và công thức đầu tư/sản xuất thật. Kiểm tra 360×800, 390×844, 768×1024, 844×390, 1440×900: hướng dẫn, nhóm công nhân theo ngành, lỗi kết nối/thử lại, reload đúng bước, timer trận tiếp tục, timer năm được giữ, bảng tên sát, không tràn ngang và thoại không che target. Báo cáo cuối ở `design-preview/mascot-guide-v3/verification-ceo-final/report.json`.
 
 Kiểm thử backend xác nhận tiến độ khi phòng thật bắt đầu, thứ tự bắt buộc, thao tác kinh tế thật, request lặp, thiếu vốn, tài nguyên đã có và tính độc lập với đồng hồ/đội khác. Kiểm thử DB tích hợp cần DB riêng và đang skip theo cấu hình sẵn có. Không deploy hay ghi dữ liệu lên server công khai trong task này.

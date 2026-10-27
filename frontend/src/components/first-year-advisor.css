@@ -1,10 +1,15 @@
 /* Placement only. All character frames, arrival, breathing and pointing use Canvas. */
 .first-year-advisor{position:fixed;inset:0;z-index:80;pointer-events:none;font-family:"Times New Roman","Noto Serif",serif}
 .first-year-advisor>canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.advisor-dialogue{position:fixed;margin:0;padding:16px 18px;color:#432719;background:#faedca url('/assets/landing-v2/paper.webp');border:12px solid transparent;border-image:url('/assets/ui/painted-frames-v1/inset.svg') 112 fill/14px;box-sizing:border-box;pointer-events:none;max-height:calc(100svh - 24px)}
+.advisor-attention-frame{position:fixed;box-sizing:border-box;pointer-events:none;border:12px solid transparent;border-image:url('/assets/ui/advisor-v1/attention-frame.svg') 30 fill/12px}
+.advisor-attention-frame[hidden]{display:none}
+.advisor-dialogue{position:fixed;margin:0;padding:14px 14px;color:#432719;background:#fff2d3 url('/assets/ui/advisor-v1/dialogue-paper.webp') center/cover;border:12px solid transparent;border-image:url('/assets/ui/advisor-v1/dialogue-frame.svg') 30 fill/18px;box-sizing:border-box;pointer-events:auto;max-height:calc(100svh - 24px);outline:none}
+.advisor-dialogue::before{content:"";position:absolute;left:-34px;top:var(--advisor-tail-top,48%);width:28px;height:44px;background:url('/assets/ui/advisor-v1/dialogue-tail.svg') center/100% 100% no-repeat;pointer-events:none}
 .advisor-dialogue[hidden]{display:none}
-.advisor-dialogue>p:not(.advisor-sr):not(.advisor-cue){margin:0;min-height:72px;font:17px/1.45 "Times New Roman","Noto Serif",serif;color:#432719;overflow-wrap:break-word}
-.advisor-dialogue .advisor-cue{margin:8px 0 0;min-height:32px;font:12px/1.3 "Times New Roman",serif;color:#79522d}
+.advisor-dialogue>p:not(.advisor-sr):not(.advisor-cue){margin:0;min-height:84px;font:20px/1.4 "Times New Roman","Noto Serif",serif;color:#432719;overflow-wrap:break-word}
+.advisor-dialogue .advisor-cue{margin:10px 0 0;min-height:40px;font:14px/1.35 "Times New Roman",serif;color:#79522d}
+.advisor-dialogue.is-compact{padding:10px;border-width:10px;border-image-width:16px}
+.advisor-dialogue.is-compact>p:not(.advisor-sr):not(.advisor-cue){font-size:18px;line-height:1.4;min-height:80px}
 .gameplay [data-advisor-highlighted]{opacity:1!important}
 .gameplay [data-advisor-pending]{cursor:wait}
 .advisor-dialogue button{pointer-events:auto;font:700 15px/1.3 "Times New Roman",serif;color:#fff1cf;background:#a93b13;border:2px solid #8b561d;border-radius:5px;padding:8px 10px;margin-top:8px;min-height:40px}
@@ -16,4 +21,4 @@
 .gameplay.game-shell .year-btn.guide-year{padding:0 12px;display:flex;justify-content:center;align-items:center}
 .gameplay.game-shell .year-btn.guide-year>span:not(.year-settlement-note){display:flex;flex-direction:row;justify-content:center;align-items:center;gap:12px;width:100%;font-size:22px;line-height:1.1}
 .gameplay.game-shell .year-btn.guide-year>span small{position:static;inset:auto;width:auto;font-size:12px;line-height:1.1;margin:0;white-space:nowrap}
-@media(max-width:639px),(max-height:599px){.advisor-dialogue{padding:10px 9px;border-width:8px;border-image-width:10px}.advisor-dialogue>p:not(.advisor-sr):not(.advisor-cue){font-size:15px;line-height:1.35;min-height:80px}}
+@media(max-width:639px),(max-height:599px){.advisor-dialogue{padding:10px;border-width:10px;border-image-width:16px}.advisor-dialogue>p:not(.advisor-sr):not(.advisor-cue){font-size:18px;line-height:1.4;min-height:80px}}

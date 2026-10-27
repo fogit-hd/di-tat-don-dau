@@ -4,6 +4,8 @@ import { api, ApiError } from '../api/client.ts'
 import '../public-pages.css'
 import { googleClientId } from '../lib/endpoints.ts'
 import { ArtText as T, PaintedArt as Art } from './ArtText'
+import { CreateRoomPanel } from './CreateRoomPanel'
+import { CeoJoinPanel } from './SessionEntry'
 const WikiPage = lazy(() => import('./WikiPage').then(module => ({default:module.WikiPage})))
 
 type GoogleIdentity = {
@@ -19,11 +21,11 @@ type GoogleIdentity = {
 const STEPS = [
   {
     title: 'Tạo phòng',
-    body: 'Mời các đội bằng một mã phòng duy nhất.',
+    body: 'Mời các CEO bằng một mã phòng duy nhất.',
   },
   {
     title: 'Chọn ngành',
-    body: 'Mỗi đội bắt đầu với một doanh nghiệp riêng.',
+    body: 'Mỗi CEO bắt đầu với một doanh nghiệp riêng.',
   },
   {
     title: 'Chốt năm',
@@ -35,7 +37,7 @@ const FEATURES = [
   {
     id: 'eng',
     title: 'Tuyển công nhân',
-    body: 'Nâng năng lực đội ngũ để mở khoá các phương án phát triển tiếp theo.',
+    body: 'Nâng năng lực nhân sự để mở khoá các phương án phát triển tiếp theo.',
   },
   {
     id: 'mac',
@@ -249,20 +251,15 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
       {server==='down'&&<p className="public-server public-wrap" role="status"><T text="Máy chủ chưa sẵn sàng. Vui lòng thử lại sau."/></p>}
       {wiki?<Suspense fallback={<div className="public-loading public-wrap" role="status"><T text="Đang mở Wiki…"/></div>}><WikiPage/></Suspense>:<main className="public-wrap public-landing">
         <section className="public-hero painted-frame" data-painted-frame aria-labelledby="hero-title">
-          <Art className="public-hero-art" src="/assets/landing-v2/hero-art.webp" alt="Đội ngũ xây dựng doanh nghiệp bên cảng biển và nhà máy Việt Nam" eager/>
+          <Art className="public-hero-art" src="/assets/landing-v2/hero-art.webp" alt="Nhân sự xây dựng doanh nghiệp bên cảng biển và nhà máy Việt Nam" eager/>
           <div className="public-hero-copy">
             <h1 id="hero-title"><span className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</span><Art src="/assets/landing-v2/hero-title.webp" className="public-title-art" eager/></h1>
-            <p className="public-tagline"><T text="Cùng đội của bạn đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu."/></p>
+            <p className="public-tagline"><T text="Trở thành CEO, đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu."/></p>
             <div className="public-join painted-frame" data-painted-frame id="join-title" aria-label="Vào phòng chơi">
-              {joinStep==='code'?<form className="public-join-form" onSubmit={event=>{event.preventDefault();void checkCode()}}>
+              <form className="public-join-form" onSubmit={event=>{event.preventDefault();void checkCode()}}>
                 <label><span className="sr-only">Mã phòng</span><input ref={roomCodeInput} value={joinCode} maxLength={8} autoCapitalize="characters" autoComplete="off" placeholder="Nhập mã phòng" onChange={event=>setJoinCode(event.target.value.toUpperCase())}/></label>
                 <button type="submit" className="public-button" disabled={busy}><T text={busy?'Đang kiểm tra…':'Vào phòng'} bold/></button>
-              </form>:<form className="public-join-form public-join-name" onSubmit={event=>{event.preventDefault();void join()}}>
-                <p className="public-join-status"><T text={`Phòng ${joinCode} đã sẵn sàng.`}/></p>
-                <label><span className="sr-only">Tên đội</span><input value={team} maxLength={24} autoFocus placeholder="Nhập tên đội" onChange={event=>setTeam(event.target.value)}/><small><T text={`${team.length}/24 ký tự`}/></small></label>
-                <button type="submit" className="public-button" disabled={busy||team.trim().length<1}><T text="Vào sảnh" bold/></button>
-                <button type="button" className="public-change" onClick={()=>{setError('');setJoinStep('code');window.requestAnimationFrame(()=>roomCodeInput.current?.focus())}}><T text="Đổi mã"/></button>
-              </form>}
+              </form>
               {error&&!loginOpen&&!hostOpen&&<p className="public-error" role="alert"><T text={error}/></p>}
             </div>
           </div>
@@ -292,55 +289,8 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
           </div>
         </div>
       )}
-      {hostOpen && (
-        <div className="modal on public-modal" role="dialog" aria-modal="true" aria-labelledby="host-title">
-          <div className="card painted-frame" data-painted-frame>
-            <h2 id="host-title"><T text="Tạo phòng" bold/></h2>
-            <p><T text="Mỗi ngành có giá đầu tư riêng. Chủ phòng thiết lập thời lượng và vốn khởi đầu."/></p>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault()
-                void createRoom()
-              }}
-            >
-              <label>
-                <T text="Tên"/>
-                <input value={hostName} maxLength={40} onChange={(event) => setHostName(event.target.value)} />
-                <small><T text={`${hostName.length}/40 ký tự`}/></small>
-              </label>
-              <div className="settings">
-                <label>
-                  <T text="Phút"/>
-                  <input type="number" min={1} max={45} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
-                </label>
-                <label>
-                  <T text="Vốn (triệu VNĐ)"/>
-                  <input type="number" min={2000} max={100000} step={1000} value={capital} onChange={(event) => setCapital(Number(event.target.value))} />
-                </label>
-                <label>
-                  <T text="Giây mỗi năm"/>
-                  <input type="number" min={10} max={180} value={cycle} onChange={(event) => setCycle(Number(event.target.value))} />
-                </label>
-                <label>
-                  <T text="Khóa nút (giây)"/>
-                  <input type="number" min={0} max={120} value={yearMin} onChange={(event) => setYearMin(Number(event.target.value))} />
-                </label>
-              </div>
-              {error && (
-                <p className="warn" role="alert">
-                  <T text={error}/>
-                </p>
-              )}
-              <button type="submit" className="btn big" disabled={busy || hostName.trim().length < 1}>
-                <T text="Mở phòng" bold/>
-              </button>
-            </form>
-            <button type="button" className="btn s" onClick={() => setHostOpen(false)}>
-              <T text="Đóng"/>
-            </button>
-          </div>
-        </div>
-      )}
+      {joinStep==='name'&&<CeoJoinPanel code={joinCode} name={team} busy={busy} error={error} onCode={setJoinCode} onName={setTeam} onSubmit={()=>void join()} onClose={()=>{setError('');setJoinStep('code');requestAnimationFrame(()=>roomCodeInput.current?.focus())}}/>}
+      {hostOpen && <CreateRoomPanel hostName={hostName} minutes={minutes} capital={capital} cycle={cycle} yearMin={yearMin} busy={busy} error={error} onHostName={setHostName} onMinutes={setMinutes} onCapital={setCapital} onCycle={setCycle} onYearMin={setYearMin} onSubmit={()=>void createRoom()} onClose={()=>setHostOpen(false)} onLogout={()=>{localStorage.removeItem('host-session');setHostSession('');setHostOpen(false);(window as Window & {google?:GoogleIdentity}).google?.accounts.id.disableAutoSelect?.()}}/>}
     </div>
   )
 }

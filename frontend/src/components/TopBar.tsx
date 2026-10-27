@@ -46,7 +46,7 @@ export function TopBar({
         <div className="top-tools">
           <span {...guided('year-count')} className="hud-year">Năm {scene.cycles}</span>
           {scene.finished ? <span className="top-ended">Đã chốt lượt chơi</span> : <span {...guided('clock')} className="hud-clock">⏱ {clock(remaining)}</span>}
-          <span {...guided('income')} className={income >= 0 ? 'up' : 'down'} title={scene.lastProduction ? 'Lãi/lỗ sản xuất năm vừa chốt, trước lạm phát và lãi nợ; không phải tổng biến động tiền mặt.' : 'Thu vận hành đã ghi: sản xuất sau lạm phát và khoản kéo dài; không phải tổng biến động tiền mặt.'}>
+          <span {...guided('income')} className={income >= 0 ? 'up' : 'down'} title="Kết quả vận hành năm vừa chốt">
             <small>{scene.lastProduction ? 'Lãi SX' : 'Thu vận hành'}</small> {income >= 0 ? '+' : ''}{money(income)}/năm
           </span>
           <span {...guided('rank')} className="rank">Hạng {rank}</span>

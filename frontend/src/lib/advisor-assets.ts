@@ -29,7 +29,7 @@ export function preloadAdvisor() {
     const assets={frames,plate:await platePromise,load}
     void Promise.allSettled(['confirm','celebrate'].map(load))
     // Load complete pointing/speaking pairs before optional unused gestures.
-    void (async()=>{for(const name of ['point','point-right','point-down-right','point-up-left','point-left','point-down-left'])await Promise.allSettled([load(name),load(name+'-talk')])})()
+    void (async()=>{for(const name of ['point-up','point-steep-right','point-steep-left','point','point-right','point-down-right','point-up-left','point-left','point-down-left'])await Promise.allSettled([load(name),load(name+'-talk')])})()
     return assets
   })().catch(error=>{assetPromise=undefined;throw error})
   return assetPromise

@@ -1,0 +1,506 @@
+[
+  {
+    "body": "slim-male",
+    "skin": "ivory",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-1b8daf02-fa97-406b-8f91-643e2a64d00a.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      290,
+      12,
+      420,
+      128
+    ],
+    "size": [
+      140,
+      121
+    ]
+  },
+  {
+    "body": "slim-male",
+    "skin": "peach",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-e5bf7c30-baac-457b-ac99-a3c2bf31ef4b.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      291,
+      12,
+      420,
+      128
+    ],
+    "size": [
+      139,
+      121
+    ]
+  },
+  {
+    "body": "slim-male",
+    "skin": "honey",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-b148a795-9eff-47fc-83ce-3bb6f971bb9a.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      289,
+      12,
+      419,
+      128
+    ],
+    "size": [
+      140,
+      121
+    ]
+  },
+  {
+    "body": "slim-male",
+    "skin": "tan",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-c215ded6-a2d2-45e9-af2d-249a4c01fbde.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      288,
+      12,
+      420,
+      128
+    ],
+    "size": [
+      142,
+      121
+    ]
+  },
+  {
+    "body": "slim-male",
+    "skin": "brown",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-734f49f1-986a-4b8a-8fdb-8e35ff0d17b3.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      291,
+      12,
+      419,
+      128
+    ],
+    "size": [
+      138,
+      121
+    ]
+  },
+  {
+    "body": "slim-male",
+    "skin": "deep",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-3512d931-5c4d-4d1a-b76d-cc50afbf9995.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      291,
+      12,
+      420,
+      128
+    ],
+    "size": [
+      139,
+      121
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "ivory",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-08b7a163-fb82-4186-ae90-383842ab0a4d.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      256,
+      8,
+      409,
+      128
+    ],
+    "size": [
+      163,
+      125
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "peach",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-64fd22a0-5bf1-4a6b-8aca-cc40215591c6.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      255,
+      7,
+      409,
+      128
+    ],
+    "size": [
+      164,
+      126
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "honey",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-05328a9c-9669-444a-aa49-bb590bca0a23.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      255,
+      8,
+      408,
+      128
+    ],
+    "size": [
+      163,
+      125
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "tan",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-978d740d-1f32-46b7-be03-0d1cca2d351f.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      255,
+      6,
+      407,
+      128
+    ],
+    "size": [
+      162,
+      127
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "brown",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-7852ddff-c6f6-4a1f-9fa1-854a0406efad.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      256,
+      6,
+      411,
+      128
+    ],
+    "size": [
+      165,
+      127
+    ]
+  },
+  {
+    "body": "broad-male",
+    "skin": "deep",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-62542d67-6f33-44a8-b609-3eefa5e88d36.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      255,
+      7,
+      410,
+      128
+    ],
+    "size": [
+      165,
+      126
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "ivory",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-4b42beb3-e13f-4680-9bd0-7ea3d49029af.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      6,
+      416,
+      128
+    ],
+    "size": [
+      128,
+      127
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "peach",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-cf52ab88-0518-4f6e-84a6-0043f488964d.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      6,
+      416,
+      128
+    ],
+    "size": [
+      128,
+      127
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "honey",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-a66e0418-b978-4fb3-86aa-cc9fa75d3fe1.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      6,
+      416,
+      128
+    ],
+    "size": [
+      128,
+      127
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "tan",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-4b7ef1f8-44e7-48dc-a90f-f265066a48dd.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      5,
+      416,
+      128
+    ],
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "brown",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-d0aefc55-ba08-4041-8407-56a4fcbb5a56.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      6,
+      417,
+      128
+    ],
+    "size": [
+      129,
+      127
+    ]
+  },
+  {
+    "body": "slim-female",
+    "skin": "deep",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-4bf61b26-fda9-4deb-b9a4-8a0f740f00dc.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      298,
+      5,
+      416,
+      128
+    ],
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "ivory",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-046408f8-d8b7-498a-8cad-73bfe50602da.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      310,
+      11,
+      448,
+      128
+    ],
+    "size": [
+      148,
+      122
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "peach",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-22bb6f2d-d224-4b15-8b6a-295bb40c360b.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      311,
+      11,
+      448,
+      128
+    ],
+    "size": [
+      147,
+      122
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "honey",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-3efc2f94-d2bb-452d-8e3a-de062e905fbf.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      309,
+      10,
+      449,
+      128
+    ],
+    "size": [
+      150,
+      123
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "tan",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-961f20a1-aeea-4273-8aff-e6dc6115bbe6.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      311,
+      10,
+      449,
+      128
+    ],
+    "size": [
+      148,
+      123
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "brown",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-af7f8302-2b4e-4004-9646-fd1576a6a5f9.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      311,
+      10,
+      449,
+      128
+    ],
+    "size": [
+      148,
+      123
+    ]
+  },
+  {
+    "body": "curvy-female",
+    "skin": "deep",
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-13b9f054-0ab4-467d-a68c-dba131ae534c.png",
+    "region": [
+      0,
+      0,
+      512,
+      128
+    ],
+    "bbox": [
+      310,
+      11,
+      449,
+      128
+    ],
+    "size": [
+      149,
+      122
+    ]
+  }
+]

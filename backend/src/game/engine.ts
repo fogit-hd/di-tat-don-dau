@@ -495,7 +495,7 @@ export function eventCopy(event: EventDef, theme: ThemeDef) {
   const title = fillText(variant?.title ?? event.title, theme.vars)
   let body = fillText(variant?.body ?? event.body, theme.vars)
   if (event.trait === 'longevity') body = 'Trường thọ giữ rủi ro ở mức thấp, không tăng theo năm. Xem tỷ lệ cụ thể trong tab Rủi ro.'
-  if (event.trait === 'illness') body = 'Bạo bệnh làm tăng rủi ro. Mức ảnh hưởng được bốc một lần cho đội, xem số cụ thể trong tab Rủi ro.'
+  if (event.trait === 'illness') body = 'Bạo bệnh làm tăng rủi ro. Mức ảnh hưởng được bốc một lần cho CEO, xem số cụ thể trong tab Rủi ro.'
   return { title, body }
 }
 

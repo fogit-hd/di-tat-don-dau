@@ -1,0 +1,1436 @@
+{
+  "errors": [],
+  "missing": [],
+  "widths": [
+    {
+      "width": 360,
+      "industry": "trai-cay-say",
+      "crew": 5,
+      "clockBefore": "⏱ 9:51",
+      "clockAfter": "⏱ 9:49",
+      "opened": [
+        "investment",
+        "enterprise",
+        "risk",
+        "events",
+        "years",
+        "investment",
+        "enterprise"
+      ],
+      "geometry": [
+        {
+          "action": "company",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            16,
+            20,
+            272.5,
+            18
+          ],
+          "dialogue": [
+            156,
+            453,
+            180,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cash",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            16,
+            47,
+            161.5,
+            32.390625
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "assets",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            182.5,
+            47,
+            161.5,
+            32.390625
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year-count",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            16,
+            85.140625,
+            50.5,
+            16.5
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "clock",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            127,
+            85.140625,
+            50.5,
+            16.5
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "income",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            182.5,
+            85.890625,
+            106,
+            15
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "rank",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            293.5,
+            82.390625,
+            50.5,
+            22
+          ],
+          "dialogue": [
+            156,
+            453,
+            180,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "sound",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            293.5,
+            14,
+            50.5,
+            30
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            12,
+            401.9375,
+            110,
+            32
+          ],
+          "dialogue": [
+            156,
+            453,
+            180,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            125,
+            401.9375,
+            110,
+            32
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "risk",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            238,
+            401.9375,
+            110,
+            32
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "events",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            12,
+            436.9375,
+            166.5,
+            32
+          ],
+          "dialogue": [
+            156,
+            478,
+            180,
+            242
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "years",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            181.5,
+            436.9375,
+            166.5,
+            32
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment-return",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            12,
+            401.9375,
+            110,
+            32
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cluster",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            34,
+            555.53125,
+            144.5,
+            44.78125
+          ],
+          "dialogue": [
+            156,
+            276.53125,
+            180,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "crew",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            184.5,
+            555.53125,
+            144.5,
+            44.78125
+          ],
+          "dialogue": [
+            156,
+            327.53125,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise-ready",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            125,
+            401.9375,
+            110,
+            32
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year",
+          "scroll": 360,
+          "width": 360,
+          "target": [
+            13,
+            743,
+            334,
+            44
+          ],
+          "dialogue": [
+            156,
+            504,
+            180,
+            216
+          ],
+          "overlap": 0
+        }
+      ],
+      "cash": 9672.0304,
+      "nextYearAt": 1793096839595,
+      "deadline": 1793097345910
+    },
+    {
+      "width": 768,
+      "industry": "chip-ban-dan",
+      "crew": 4,
+      "clockBefore": "⏱ 9:56",
+      "clockAfter": "⏱ 9:54",
+      "opened": [
+        "investment",
+        "enterprise",
+        "risk",
+        "events",
+        "years",
+        "investment",
+        "enterprise"
+      ],
+      "geometry": [
+        {
+          "action": "company",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            25,
+            22.1875,
+            285.75,
+            32
+          ],
+          "dialogue": [
+            156,
+            670,
+            140,
+            342
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cash",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            322.75,
+            21,
+            204.125,
+            34.390625
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "assets",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            538.875,
+            21,
+            204.125,
+            34.390625
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year-count",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            25,
+            70.390625,
+            36.03125,
+            18
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "clock",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            163.125,
+            70.390625,
+            38.21875,
+            18
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "income",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            303.4375,
+            70.390625,
+            139.390625,
+            18
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "rank",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            544.90625,
+            68.390625,
+            52,
+            22
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "sound",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            699,
+            61.390625,
+            44,
+            36
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            286.296875,
+            160.078125,
+            152.5625,
+            36
+          ],
+          "dialogue": [
+            156,
+            670,
+            140,
+            342
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            441.859375,
+            160.078125,
+            152.5625,
+            36
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "risk",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            597.421875,
+            160.078125,
+            152.5625,
+            36
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "events",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            286.296875,
+            199.078125,
+            230.34375,
+            36
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            292
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "years",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            519.640625,
+            199.078125,
+            230.34375,
+            36
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment-return",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            286.296875,
+            160.078125,
+            152.5625,
+            36
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            292
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cluster",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            310.296875,
+            372.671875,
+            201.34375,
+            44
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "crew",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            517.640625,
+            372.671875,
+            201.34375,
+            44
+          ],
+          "dialogue": [
+            156,
+            695,
+            140,
+            317
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise-ready",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            441.859375,
+            160.078125,
+            152.5625,
+            36
+          ],
+          "dialogue": [
+            156,
+            696.78125,
+            140,
+            267
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year",
+          "scroll": 768,
+          "width": 768,
+          "target": [
+            19,
+            955,
+            730,
+            50
+          ],
+          "dialogue": [
+            156,
+            676,
+            140,
+            267
+          ],
+          "overlap": 0
+        }
+      ],
+      "cash": 9328.4432,
+      "nextYearAt": 1793096865892,
+      "deadline": 1793097380309
+    },
+    {
+      "width": 1440,
+      "industry": "trai-cay-say",
+      "crew": 5,
+      "clockBefore": "⏱ 9:56",
+      "clockAfter": "⏱ 9:54",
+      "opened": [
+        "investment",
+        "enterprise",
+        "risk",
+        "events",
+        "years",
+        "investment",
+        "enterprise"
+      ],
+      "geometry": [
+        {
+          "action": "company",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            25,
+            21,
+            471.5,
+            55
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cash",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            512.5,
+            24.578125,
+            253.890625,
+            47.828125
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "assets",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            782.390625,
+            24.578125,
+            253.90625,
+            47.828125
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year-count",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1184.359375,
+            25.25,
+            42.03125,
+            21
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "clock",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1236.390625,
+            25.25,
+            44.59375,
+            21
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "income",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1184.359375,
+            56.25,
+            176.625,
+            19.5
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "rank",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1290.984375,
+            21.25,
+            70,
+            29
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "sound",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1370.984375,
+            26.5,
+            44,
+            44
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            535.59375,
+            141,
+            120.3125,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            658.90625,
+            141,
+            171.875,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "risk",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            833.78125,
+            141,
+            111.71875,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "events",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            948.5,
+            141,
+            206.265625,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "years",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            1157.765625,
+            141,
+            249.234375,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "investment-return",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            535.59375,
+            141,
+            120.3125,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "cluster",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            559.59375,
+            273.59375,
+            405.203125,
+            44
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "crew",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            970.796875,
+            273.59375,
+            405.203125,
+            44
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            214
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "enterprise-ready",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            658.90625,
+            141,
+            171.875,
+            36
+          ],
+          "dialogue": [
+            198,
+            629,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        },
+        {
+          "action": "year",
+          "scroll": 1440,
+          "width": 1440,
+          "target": [
+            19,
+            831,
+            1402,
+            50
+          ],
+          "dialogue": [
+            198,
+            613.875,
+            309.59375,
+            186
+          ],
+          "overlap": 0
+        }
+      ],
+      "cash": 9672.0304,
+      "nextYearAt": 1793096900383,
+      "deadline": 1793097406703
+    }
+  ],
+  "requests": [
+    {
+      "width": 360,
+      "requests": [
+        {
+          "path": "/api/rooms/QA1234/intro",
+          "body": {
+            "factoryName": "Đại Việt · Doanh nghiệp kiểm thử"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "company"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "assets"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "year-count"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "clock"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "income"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "rank"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "sound"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "risk"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "events"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "years"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment-return"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "mac",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "eng",
+            "quantity": "crew"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise-ready"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/year",
+          "body": {}
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "complete"
+          }
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "requests": [
+        {
+          "path": "/api/rooms/QA1234/intro",
+          "body": {
+            "factoryName": "Đại Việt · Doanh nghiệp kiểm thử"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "company"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "assets"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "year-count"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "clock"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "income"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "rank"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "sound"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "risk"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "events"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "years"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment-return"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "mac",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "eng",
+            "quantity": "crew"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise-ready"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/year",
+          "body": {}
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "complete"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/api/rooms/QA1234/intro",
+          "body": {
+            "factoryName": "Đại Việt · Doanh nghiệp kiểm thử"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "company"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "cash"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "assets"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "year-count"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "clock"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "income"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "rank"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "sound"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "risk"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "events"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "years"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "investment-return"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "mac",
+            "quantity": 1
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/invest",
+          "body": {
+            "line": "eng",
+            "quantity": "crew"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "enterprise-ready"
+          }
+        },
+        {
+          "path": "/api/rooms/QA1234/year",
+          "body": {}
+        },
+        {
+          "path": "/api/rooms/QA1234/tutorial",
+          "body": {
+            "action": "complete"
+          }
+        }
+      ]
+    }
+  ]
+}

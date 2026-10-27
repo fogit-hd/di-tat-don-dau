@@ -24,7 +24,7 @@ export function EventQuizModal({
         <p>
           <b>{pending.body}</b>
         </p>
-        {readOnly && <p className="meta">Đội đang trả lời trên điện thoại.</p>}
+        {readOnly && <p className="meta">CEO đang trả lời trên điện thoại.</p>}
         {!readOnly && pending.kind==='question' && pending.phase==='open' && now!=null && <p className="meta">Còn {Math.max(0,Math.ceil((pending.expiresAt-now)/1000))} giây trả lời · Đồng hồ Sang năm đang tạm dừng.</p>}
         {pending.phase === 'open' &&
           pending.options.map((option, index) =>

@@ -11,9 +11,9 @@ const scenario = vi.hoisted(() => ({ family: false, outcome: 'steady' as 'steady
 const db = vi.hoisted(() => {
   let sequence = 0
   return {
-    room: { create: vi.fn(async () => ({ id: `room-${++sequence}` })), findUnique: vi.fn(async () => null), update: vi.fn(async () => ({})) },
+    room: { create: vi.fn(async () => ({ id: `room-${++sequence}` })), findUnique: vi.fn(async () => null), findMany: vi.fn(async () => [] as unknown[]), update: vi.fn(async () => ({})) },
     participant: { deleteMany: vi.fn(async () => ({})), upsert: vi.fn(async () => ({})) },
-    answer: { createMany: vi.fn(async () => ({})) },
+    answer: { createMany: vi.fn(async () => ({})), findMany: vi.fn(async () => [] as unknown[]) },
   }
 })
 vi.mock('./prisma', () => ({ prisma: db }))
@@ -28,7 +28,7 @@ vi.mock('./game/catalog', async () => {
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
 
 })
-import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom } from './runtime'
+import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom, saveAvatar, bootRooms, endRoom } from './runtime'
 import { TUTORIAL_ACTIONS } from './game/tutorial'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
@@ -422,4 +422,40 @@ describe('first-year advisor clock and required actions',()=>{
     await acknowledgeTutorial(a.code,a.player.playerToken,'continue-without-purchase')
     expect(a.team.state!.cash).toBe(1);expect(a.team.state!.machines).toBe(0);expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_ACTIONS.indexOf('enterprise-ready'))
   })
+})
+
+describe('CEO avatars remain separate from economic state',()=>{
+ beforeEach(()=>{vi.clearAllMocks();scenario.family=false;scenario.noRisks=true})
+ it('updates only the token owner and rejects paths, unknown options and foreign-room tokens',async()=>{
+  const a=await roomWithTeam(),b=await roomWithTeam(),other=await joinRoom(a.code,'Đội trùng tên')
+  const before=JSON.stringify(a.team.state),avatar={body:'curvy-female',skin:'deep',outfit:'engineer'}
+  await saveAvatar(a.code,a.player.playerToken,avatar)
+  expect(a.team.avatar).toEqual(avatar);expect(JSON.stringify(a.team.state)).toBe(before)
+  expect(buildSnapshot(a.room,{role:'player',code:a.code,teamId:a.player.teamId}).you!.avatar).toEqual(avatar)
+  expect(buildSnapshot(a.room,{role:'host',code:a.code}).leaderboard.find(r=>r.teamId===a.player.teamId)!.avatar).toEqual(avatar)
+  expect(buildSnapshot(a.room,{role:'host',code:a.code}).teams.find(r=>r.id===other.teamId)!.avatar).not.toEqual(avatar)
+  await expect(saveAvatar(b.code,a.player.playerToken,avatar)).rejects.toMatchObject({status:403})
+  for(const bad of [{...avatar,body:'../../secret'},{...avatar,skin:'purple'},{...avatar,teamId:other.teamId}])await expect(saveAvatar(a.code,a.player.playerToken,bad)).rejects.toMatchObject({status:400})
+  expect(a.team.avatar).toEqual(avatar)
+ })
+ it('persists through room reload, locks once countdown starts and includes avatar in saved results',async()=>{
+  const a=await roomWithTeam(),avatar={body:'broad-male',skin:'honey',outfit:'founder'}
+  const before=(db.room.update.mock.calls as unknown as [{data:Record<string,unknown>}][]).at(-1)![0]
+  await saveAvatar(a.code,a.player.playerToken,avatar)
+  const stored=(db.room.update.mock.calls as unknown as [{data:Record<string,unknown>}][]).at(-1)![0]
+  expect((stored.data.meta as {avatars:Record<string,unknown>}).avatars[a.player.teamId]).toEqual(avatar)
+  db.room.findMany.mockResolvedValueOnce([{...before.data,...stored.data,id:'restored',code:'AVTEST',seed:'restored',hostTokenHash:a.room.hostTokenHash,hostUserId:'host',participants:[{id:a.team.id,tokenHash:a.team.tokenHash,teamName:a.team.teamName,theme:a.team.theme,state:a.team.state,score:null,ending:null,connected:true}]}])
+  await bootRooms();expect(getRoom('AVTEST')!.teams[0]!.avatar).toEqual(avatar)
+  await startRoom(a.code,a.hostToken)
+  await expect(saveAvatar(a.code,a.player.playerToken,{...avatar,outfit:'shirt'})).rejects.toMatchObject({status:409})
+  a.room.status='playing';await endRoom(a.code,a.hostToken)
+  expect(a.room.report!.teams[0]!.avatar).toEqual(avatar)
+  expect(a.room.report!.teams[0]!.teamId).toBe(a.player.teamId)
+ })
+ it('keeps the last saved appearance when the metadata write fails',async()=>{
+  const a=await roomWithTeam(),previous={...a.team.avatar!},state=JSON.stringify(a.team.state)
+  db.room.update.mockRejectedValueOnce(new Error('Database unavailable'))
+  await expect(saveAvatar(a.code,a.player.playerToken,{body:'slim-female',skin:'tan',outfit:'shirt'})).rejects.toThrow('Database unavailable')
+  expect(a.team.avatar).toEqual(previous);expect(JSON.stringify(a.team.state)).toBe(state)
+ })
 })

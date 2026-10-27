@@ -36,7 +36,7 @@ export function Leaderboard({
         <thead>
           <tr>
             <th>#</th>
-            <th>Đội</th>
+            <th>CEO</th>
             <th>Ngành</th>
             <th>Điểm</th>
           </tr>
@@ -52,7 +52,7 @@ export function Leaderboard({
           ) : body.length === 0 ? (
             <tr className="empty">
               <td className="st" colSpan={4}>
-                Chưa có đội nào.
+                Chưa có CEO nào.
               </td>
             </tr>
           ) : (

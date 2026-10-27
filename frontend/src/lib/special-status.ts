@@ -1,7 +1,7 @@
 import type { SceneView, TraitView } from '../api/types.ts'
 
 export function traitDetail(trait: TraitView) {
-  if (trait.id === 'illness') return 'Bạo bệnh làm tăng rủi ro tử vong và chuyển giao quyền điều hành. Mức ảnh hưởng được bốc một lần cho đội; Trường thọ được ưu tiên nếu có. Xem tỷ lệ cụ thể trong tab Rủi ro.'
+  if (trait.id === 'illness') return 'Bạo bệnh làm tăng rủi ro tử vong và chuyển giao quyền điều hành. Mức ảnh hưởng được bốc một lần cho CEO; Trường thọ được ưu tiên nếu có. Xem tỷ lệ cụ thể trong tab Rủi ro.'
   if (trait.id === 'longevity') return 'Trường thọ giữ rủi ro tử vong và chuyển giao quyền điều hành ở mức thấp, không tăng theo năm. Xem tỷ lệ cụ thể trong tab Rủi ro.'
   return trait.detail
 }

@@ -18,7 +18,6 @@ export function YearLedger({ changes, lines = [], industryId = '', initialYear =
   const uid = useId()
   return <section className="year-canvas">
     <CanvasHeading icon="coins">Dòng tiền từng năm</CanvasHeading>
-    <p className="canvas-caption">Tiền mặt cuối năm = đầu năm + tổng thu − tổng chi</p>
     {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
     <div className="year-summary-list">
       {changes.map(row => {
@@ -40,15 +39,13 @@ export function YearLedger({ changes, lines = [], industryId = '', initialYear =
           {open && <div className={`year-expanded${productionYear===row.year && row.production ? ' has-production' : ''}`} id={detailsId}><div className="cash-register">
             <div className="cash-opening"><PaintedIcon name="coins" /><span>Tiền đầu năm</span><b>{money(row.cashBefore)}</b></div>
             <ul className="grouped-ledger cash-ledger">{groups.filter(group => group.entries.some(entry => Math.abs(entry.cash) >= .005) || group.kind === 'production').map(group => group.kind==='production' ? <li key={group.key} className="production-ledger-item">
-              <details onToggle={event=>{const expanded=event.currentTarget.open;setProductionYear(prev=>expanded?row.year:prev===row.year?null:prev)}}><summary aria-controls={`${detailsId}-production`}><PaintedIcon name="line" /><span><b>{row.production ? 'Lãi sản xuất' : 'Sản xuất (đã trừ lạm phát)'}</b><small>{row.production ? 'Doanh thu từ bán hàng − chi phí vận hành' : 'Bản ghi cũ · không có đủ chi tiết sản xuất'}</small></span><strong className={tone(group.cash)}>{signed(group.cash)}</strong><DisclosureArrow /></summary>
-                {!row.production && <p className="finance-note">Không có đủ dữ liệu chi tiết của năm này. Giữ nguyên số đã lưu; không suy ngược từ doanh nghiệp hiện tại.</p>}
+              <details onToggle={event=>{const expanded=event.currentTarget.open;setProductionYear(prev=>expanded?row.year:prev===row.year?null:prev)}}><summary aria-controls={`${detailsId}-production`}><PaintedIcon name="line" /><span><b>Lãi sản xuất</b></span><strong className={tone(group.cash)}>{signed(group.cash)}</strong><DisclosureArrow /></summary>
+                {!row.production && <p className="finance-note">Chưa có chi tiết sản xuất của năm này.</p>}
               </details>
             </li> : <GroupedCause key={group.key} group={group} line={lines.find(line => line.label === group.label)} industryId={industryId} />)}</ul>
-            {!reconciled && <div className="cash-reconciliation mismatch" role="status"><OperationIcon name="warning" /><div><b>Chưa giải trình: {signed(unexplained)}</b><p>Tổng các khoản đã ghi chưa khớp số dư. Không tự coi là doanh thu.</p></div></div>}
+            {!reconciled && <div className="cash-reconciliation mismatch" role="status"><OperationIcon name="warning" /><b>Chênh lệch số dư: {signed(unexplained)}</b></div>}
             <div className="cash-closing"><PaintedIcon name="coins" /><span>Tiền cuối năm</span><b>{money(row.cashAfter)}</b></div>
-            {reconciled && <p className="cash-reconciliation matched"><OperationIcon name="verified" />Đã khớp: đầu năm + các khoản = cuối năm.</p>}
-            <details className="cash-precision"><summary>Xem số tiền chính xác hơn</summary><p>{row.cashBefore.toLocaleString('vi-VN',{maximumFractionDigits:6})} + ({cashDelta.toLocaleString('vi-VN',{maximumFractionDigits:6})}) = {row.cashAfter.toLocaleString('vi-VN',{maximumFractionDigits:6})} triệu VNĐ. Tính bằng số gốc, chỉ làm tròn lúc hiển thị.</p></details>
-            {groups.some(group=>!group.entries.some(e=>Math.abs(e.cash)>=.005)&&group.kind!=='production') && <section className="noncash-effects"><h4>Tác động không trừ tiền ngay</h4><ul className="grouped-ledger">{groups.filter(group=>!group.entries.some(e=>Math.abs(e.cash)>=.005)&&group.kind!=='production').map(group=><GroupedCause key={group.key} group={group} industryId={industryId} />)}</ul><p className="finance-note">Hệ số sản lượng, giá, chi phí và định giá không phải giao dịch tiền riêng. Chúng được áp dụng đúng kỳ; không trừ tiền lần hai.</p></section>}
+            {groups.some(group=>!group.entries.some(e=>Math.abs(e.cash)>=.005)&&group.kind!=='production') && <section className="noncash-effects"><h4>Tác động chỉ số</h4><ul className="grouped-ledger">{groups.filter(group=>!group.entries.some(e=>Math.abs(e.cash)>=.005)&&group.kind!=='production').map(group=><GroupedCause key={group.key} group={group} industryId={industryId} />)}</ul></section>}
             <div className="year-balance-footer"><details><summary>Xem thay đổi giá trị tài sản <DisclosureArrow /></summary><p>{vnd(row.assetsBefore)} → {vnd(row.assetsAfter)}</p><small>Định giá công ty, không cộng trực tiếp vào tiền mặt.</small></details></div>
           </div>{productionYear===row.year && row.production && <aside className="year-production-aside" id={`${detailsId}-production`}><ProductionDetails report={row.production} /></aside>}</div>}
         </article>

@@ -3374,6 +3374,1014 @@
         42.02796528447444,
         29.72709739633558
       ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 0,
+      "rect": [
+        53,
+        43,
+        366,
+        424
+      ],
+      "margins": [
+        57,
+        47,
+        1359,
+        424
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        40.93397296118622,
+        31.187788922808547
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 1,
+      "rect": [
+        489,
+        42,
+        369,
+        424
+      ],
+      "margins": [
+        493,
+        46,
+        920,
+        425
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        42.883209768861754,
+        30.21317051897078
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 2,
+      "rect": [
+        944,
+        44,
+        362,
+        422
+      ],
+      "margins": [
+        948,
+        48,
+        472,
+        425
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        42.883209768861754,
+        30.21317051897078
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 3,
+      "rect": [
+        1395,
+        42,
+        359,
+        424
+      ],
+      "margins": [
+        1399,
+        46,
+        24,
+        425
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        42.883209768861754,
+        30.21317051897078
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 4,
+      "rect": [
+        76,
+        484,
+        343,
+        402
+      ],
+      "margins": [
+        80,
+        488,
+        1359,
+        5
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        41.90859136502399,
+        29.238552115133015
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 5,
+      "rect": [
+        520,
+        480,
+        343,
+        406
+      ],
+      "margins": [
+        524,
+        484,
+        915,
+        5
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        42.883209768861754,
+        29.238552115133015
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 6,
+      "rect": [
+        966,
+        464,
+        344,
+        422
+      ],
+      "margins": [
+        970,
+        468,
+        468,
+        5
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        41.90859136502399,
+        29.238552115133015
+      ]
+    },
+    {
+      "clip": "point-up",
+      "frame": 7,
+      "rect": [
+        1414,
+        463,
+        338,
+        422
+      ],
+      "margins": [
+        1418,
+        467,
+        26,
+        6
+      ],
+      "cameraScale": 0.9746184038377671,
+      "normalizedBuckle": [
+        42.883209768861754,
+        29.238552115133015
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 0,
+      "rect": [
+        352,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        356,
+        19,
+        833,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 1,
+      "rect": [
+        959,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        963,
+        19,
+        226,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 2,
+      "rect": [
+        959,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        963,
+        19,
+        226,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 3,
+      "rect": [
+        352,
+        519,
+        355,
+        485
+      ],
+      "margins": [
+        356,
+        523,
+        833,
+        24
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        31.02795995857784
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 4,
+      "rect": [
+        959,
+        519,
+        355,
+        485
+      ],
+      "margins": [
+        963,
+        523,
+        226,
+        24
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        31.02795995857784
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 5,
+      "rect": [
+        959,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        963,
+        19,
+        226,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 6,
+      "rect": [
+        352,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        356,
+        19,
+        833,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-up-talk",
+      "frame": 7,
+      "rect": [
+        352,
+        15,
+        355,
+        485
+      ],
+      "margins": [
+        356,
+        19,
+        833,
+        528
+      ],
+      "cameraScale": 0.9696237487055575,
+      "normalizedBuckle": [
+        42.663444943044524,
+        30.05833620987228
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 0,
+      "rect": [
+        46,
+        31,
+        354,
+        413
+      ],
+      "margins": [
+        50,
+        35,
+        1378,
+        447
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        42.21621621621622,
+        31.66216216216216
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 1,
+      "rect": [
+        483,
+        27,
+        411,
+        417
+      ],
+      "margins": [
+        487,
+        31,
+        884,
+        447
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        41.25675675675676,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 2,
+      "rect": [
+        906,
+        29,
+        402,
+        415
+      ],
+      "margins": [
+        910,
+        33,
+        470,
+        447
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        41.25675675675676,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 3,
+      "rect": [
+        1351,
+        27,
+        385,
+        417
+      ],
+      "margins": [
+        1355,
+        31,
+        42,
+        447
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        40.2972972972973,
+        31.66216216216216
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 4,
+      "rect": [
+        46,
+        463,
+        405,
+        409
+      ],
+      "margins": [
+        50,
+        467,
+        1327,
+        19
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        42.21621621621622,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 5,
+      "rect": [
+        478,
+        463,
+        421,
+        410
+      ],
+      "margins": [
+        482,
+        467,
+        879,
+        18
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        42.21621621621622,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 6,
+      "rect": [
+        905,
+        463,
+        417,
+        410
+      ],
+      "margins": [
+        909,
+        467,
+        456,
+        18
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        42.21621621621622,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right",
+      "frame": 7,
+      "rect": [
+        1336,
+        463,
+        415,
+        410
+      ],
+      "margins": [
+        1340,
+        467,
+        27,
+        18
+      ],
+      "cameraScale": 0.9594594594594594,
+      "normalizedBuckle": [
+        42.21621621621622,
+        30.7027027027027
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 0,
+      "rect": [
+        192,
+        32,
+        497,
+        466
+      ],
+      "margins": [
+        196,
+        36,
+        851,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        40.996925656791504,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 1,
+      "rect": [
+        889,
+        32,
+        507,
+        466
+      ],
+      "margins": [
+        893,
+        36,
+        144,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        41.86920067076579,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 2,
+      "rect": [
+        889,
+        32,
+        507,
+        466
+      ],
+      "margins": [
+        893,
+        36,
+        144,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        41.86920067076579,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 3,
+      "rect": [
+        192,
+        534,
+        496,
+        467
+      ],
+      "margins": [
+        196,
+        538,
+        852,
+        27
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        40.996925656791504,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 4,
+      "rect": [
+        890,
+        534,
+        508,
+        467
+      ],
+      "margins": [
+        894,
+        538,
+        142,
+        27
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        40.996925656791504,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 5,
+      "rect": [
+        889,
+        32,
+        507,
+        466
+      ],
+      "margins": [
+        893,
+        36,
+        144,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        41.86920067076579,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 6,
+      "rect": [
+        192,
+        32,
+        497,
+        466
+      ],
+      "margins": [
+        196,
+        36,
+        851,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        40.996925656791504,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-right-talk",
+      "frame": 7,
+      "rect": [
+        192,
+        32,
+        497,
+        466
+      ],
+      "margins": [
+        196,
+        36,
+        851,
+        530
+      ],
+      "cameraScale": 0.8722750139742873,
+      "normalizedBuckle": [
+        40.996925656791504,
+        32.27417551704863
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 0,
+      "rect": [
+        64,
+        40,
+        360,
+        409
+      ],
+      "margins": [
+        68,
+        44,
+        1354,
+        442
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        40.51673861692596,
+        31.09424126415248
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 1,
+      "rect": [
+        468,
+        39,
+        394,
+        409
+      ],
+      "margins": [
+        472,
+        43,
+        916,
+        443
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        42.40123808748066,
+        31.09424126415248
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 2,
+      "rect": [
+        918,
+        39,
+        382,
+        410
+      ],
+      "margins": [
+        922,
+        43,
+        478,
+        442
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        41.458988352203306,
+        31.09424126415248
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 3,
+      "rect": [
+        1365,
+        39,
+        381,
+        409
+      ],
+      "margins": [
+        1369,
+        43,
+        32,
+        443
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        41.458988352203306,
+        30.151991528875133
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 4,
+      "rect": [
+        68,
+        471,
+        372,
+        404
+      ],
+      "margins": [
+        72,
+        475,
+        1338,
+        16
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        42.40123808748066,
+        31.09424126415248
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 5,
+      "rect": [
+        495,
+        470,
+        378,
+        405
+      ],
+      "margins": [
+        499,
+        474,
+        905,
+        16
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        43.343487822758,
+        32.03649099942983
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 6,
+      "rect": [
+        907,
+        470,
+        395,
+        405
+      ],
+      "margins": [
+        911,
+        474,
+        476,
+        16
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        41.458988352203306,
+        31.09424126415248
+      ]
+    },
+    {
+      "clip": "point-steep-left",
+      "frame": 7,
+      "rect": [
+        1355,
+        470,
+        390,
+        405
+      ],
+      "margins": [
+        1359,
+        474,
+        33,
+        16
+      ],
+      "cameraScale": 0.9422497352773479,
+      "normalizedBuckle": [
+        42.40123808748066,
+        32.03649099942983
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 0,
+      "rect": [
+        168,
+        38,
+        501,
+        452
+      ],
+      "margins": [
+        172,
+        42,
+        871,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        42.472972972972975,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 1,
+      "rect": [
+        887,
+        38,
+        506,
+        452
+      ],
+      "margins": [
+        891,
+        42,
+        147,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        41.60617760617761,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 2,
+      "rect": [
+        887,
+        38,
+        506,
+        452
+      ],
+      "margins": [
+        891,
+        42,
+        147,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        41.60617760617761,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 3,
+      "rect": [
+        168,
+        537,
+        502,
+        450
+      ],
+      "margins": [
+        172,
+        541,
+        870,
+        41
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        42.472972972972975,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 4,
+      "rect": [
+        887,
+        537,
+        506,
+        450
+      ],
+      "margins": [
+        891,
+        541,
+        147,
+        41
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        42.472972972972975,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 5,
+      "rect": [
+        887,
+        38,
+        506,
+        452
+      ],
+      "margins": [
+        891,
+        42,
+        147,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        41.60617760617761,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 6,
+      "rect": [
+        168,
+        38,
+        501,
+        452
+      ],
+      "margins": [
+        172,
+        42,
+        871,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        42.472972972972975,
+        30.33783783783784
+      ]
+    },
+    {
+      "clip": "point-steep-left-talk",
+      "frame": 7,
+      "rect": [
+        168,
+        38,
+        501,
+        452
+      ],
+      "margins": [
+        172,
+        42,
+        871,
+        538
+      ],
+      "cameraScale": 0.8667953667953668,
+      "normalizedBuckle": [
+        42.472972972972975,
+        30.33783783783784
+      ]
     }
   ]
 }

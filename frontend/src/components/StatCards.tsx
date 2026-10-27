@@ -23,7 +23,7 @@ export function StatCards({ scene }: { scene: SceneView }) {
           </div>
         ))}
       </div>
-      {scene.economyVersion===3 && <div className="enterprise-quality"><span>Tay nghề: {scene.workerSkill??0}/5</span><span>Thiết bị: {scene.machineQuality??0}/5</span><span>Tình trạng: {Math.round((scene.condition??1)*100)}%</span><small>Định mức mô phỏng: {scene.crewRequired} công nhân/cụm · {scene.idle} cụm chờ đủ nhân lực</small></div>}
+      {scene.economyVersion===3 && <div className="enterprise-quality"><span>Tay nghề: {scene.workerSkill??0}/5</span><span>Thiết bị: {scene.machineQuality??0}/5</span><span>Tình trạng: {Math.round((scene.condition??1)*100)}%</span><small>{scene.crewRequired} công nhân/cụm · {scene.idle} cụm chờ đủ nhân lực</small></div>}
       <div className="enterprise-environment">
         <PaintedIcon name="environment" />
         <div><p><b>Ô nhiễm {Math.round(scene.pollution)}</b><span>Công nghệ sạch · Cấp {number(scene.green)}</span></p>

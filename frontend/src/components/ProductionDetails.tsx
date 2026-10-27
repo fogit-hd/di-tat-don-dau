@@ -1,6 +1,6 @@
 import { money } from '../lib/format.ts'
 import type { ProductionPlanView, ProductionReportView } from '../api/production.ts'
-import { count, figure, rate, signedMoney } from '../lib/production-format.ts'
+import { count, figure, rate, signedRate, signedMoney } from '../lib/production-format.ts'
 import { PaintedIcon } from './PaintedIcon.tsx'
 
 
@@ -19,25 +19,23 @@ export function ProductionDetails({ report }: { report: ProductionReportView }) 
     <h4><PaintedIcon name="line" /> Sản xuất năm {report.year} · Đã chốt</h4>
     <dl className="finance-lines">
       <div><dt>Cụm đang vận hành / sở hữu</dt><dd>{count(report.operating)} / {count(report.machines)}</dd></div>
-      {report.workerBonus!=null && <div><dt>Năng suất do tay nghề</dt><dd>×{figure(report.workerBonus,4)}</dd></div>}
-      {report.machineBonus!=null && <div><dt>Năng suất do thiết bị</dt><dd>×{figure(report.machineBonus,4)}</dd></div>}
+      {report.workerBonus!=null && <div><dt>Hiệu quả tay nghề</dt><dd>{signedRate(report.workerBonus-1)}</dd></div>}
+      {report.machineBonus!=null && <div><dt>Hiệu quả thiết bị</dt><dd>{signedRate(report.machineBonus-1)}</dd></div>}
       {report.conditionFactor!=null && <div><dt>Tình trạng thiết bị</dt><dd>{rate(report.conditionFactor)}</dd></div>}
-      <div><dt>Sản lượng nền sau năng suất</dt><dd>{count(report.theoreticalOutput)} {report.unit}</dd></div>
-      {report.appliedEffects.filter(e => e.outputMul !== 1).map(e => <div key={e.id}><dt>{e.title}</dt><dd>×{figure(e.outputMul, 4)} ({rate(e.outputMul - 1)})</dd></div>)}
-      <div><dt>Dao động sản xuất đã bốc</dt><dd>{rate(report.outputNoise)}</dd></div>
+      {report.appliedEffects.filter(e => e.outputMul !== 1).map(e => <div key={e.id}><dt>{e.title}</dt><dd>{signedRate(e.outputMul - 1)} sản lượng</dd></div>)}
+      <div><dt>Biến động sản lượng</dt><dd>{signedRate(report.outputNoise-1)}</dd></div>
       <div className="finance-emphasis"><dt>Sản lượng thực tế</dt><dd>{count(report.output)} {report.unit}</dd></div>
       <div><dt>Bán được · {rate(report.delivery)}</dt><dd>{count(report.sold)} {report.unit}</dd></div>
       <div><dt>Giá gốc / {report.unit}</dt><dd>{money(report.basePrice)}</dd></div>
-      <div><dt>Dao động giá đã bốc</dt><dd>{rate(report.priceNoise)}</dd></div>
-      {report.priceMul !== 1 && <div><dt>Hệ số giá từ sự kiện</dt><dd>×{figure(report.priceMul, 4)}</dd></div>}
+      <div><dt>Biến động giá</dt><dd>{signedRate(report.priceNoise-1)}</dd></div>
+      {report.priceMul !== 1 && <div><dt>Tác động giá từ sự kiện</dt><dd>{signedRate(report.priceMul-1)}</dd></div>}
       {report.pricePenalty > 0 && <div><dt>Giảm giá vì ô nhiễm {figure(report.pollution)}/100</dt><dd>−{rate(report.pricePenalty)}</dd></div>}
       <div><dt>Giá bán thực tế / {report.unit}</dt><dd>{money(report.price)}</dd></div>
-      {report.revenueMul !== 1 && <div><dt>Hệ số doanh thu từ sự kiện</dt><dd>×{figure(report.revenueMul, 4)}</dd></div>}
-      <div className="finance-emphasis"><dt>Doanh thu = lượng bán × giá × hệ số doanh thu</dt><dd className="up">{signedMoney(report.revenue)}</dd></div>
+      {report.revenueMul !== 1 && <div><dt>Tác động doanh thu từ sự kiện</dt><dd>{signedRate(report.revenueMul-1)}</dd></div>}
+      <div className="finance-emphasis"><dt>Doanh thu</dt><dd className="up">{signedMoney(report.revenue)}</dd></div>
     </dl>
-    <h5>Chi phí vận hành {report.costMul !== 1 && <small>· hệ số sự kiện ×{figure(report.costMul, 4)} đã áp dụng</small>}</h5>
+    <h5>Chi phí vận hành</h5>
     <CostRows plan={report} />
-    <dl className="finance-lines"><div className="finance-total"><dt>Lãi/lỗ sản xuất = doanh thu − chi phí</dt><dd className={report.net < 0 ? 'down' : 'up'}>{signedMoney(report.net)}</dd></div></dl>
-    <p className="finance-note">Sản lượng và doanh thu đã tính hiệu ứng có hiệu lực. Không trừ sự kiện lần hai. Lạm phát, lãi nợ và tiền hỗ trợ nằm riêng trong sổ tiền.</p>
+    <dl className="finance-lines"><div className="finance-total"><dt>Lãi/lỗ sản xuất</dt><dd className={report.net < 0 ? 'down' : 'up'}>{signedMoney(report.net)}</dd></div></dl>
   </div>
 }

@@ -34,6 +34,7 @@ import { isBankrupt, productionPlan, productionForecast } from './game/productio
 import { investmentPreviews } from './game/investment-preview'
 import { introFactoryName } from './game/intro'
 import { TUTORIAL_ACTIONS, tutorialAction, tutorialActive } from './game/tutorial'
+import { avatarOf, avatarSchema, type AvatarConfig } from './game/avatar'
 import { money, moneyTemplate } from './game/money'
 import { hashString, makeRng } from './game/rng'
 import { annualBalance, annualEconomy, annualPolicy, annualWeights, annualWholeRate } from './game/random-economy'
@@ -77,6 +78,7 @@ export type LiveTeam = {
   id: string
   tokenHash: string
   teamName: string
+  avatar?: AvatarConfig
   theme: ThemeDef | null
   state: TeamState | null
   score: number | null
@@ -90,7 +92,7 @@ export type HostReport = {
   completedAt: number
   startingCapital: number
   durationSec: number
-  teams: Array<{ rank: number; teamName: string; industry: string; value: number; years: number; correct: number; answered: number; outcome: string }>
+  teams: Array<{ rank: number; teamName: string; industry: string; value: number; years: number; correct: number; answered: number; outcome: string; teamId?: string; avatar?: AvatarConfig }>
 }
 
 export type LiveRoom = {
@@ -264,6 +266,7 @@ export async function bootRooms() {
       debugDeathYear?: number | null
       debugCentennialYear?: number | null
       debugForceDeath?: boolean
+      avatars?: Record<string, unknown>
     }
     const room: LiveRoom = {
       id: row.id,
@@ -306,6 +309,7 @@ export async function bootRooms() {
         id: participant.id,
         tokenHash: participant.tokenHash,
         teamName: participant.teamName,
+        avatar: avatarOf(meta.avatars?.[participant.id]),
         theme: (participant.theme as ThemeDef | null) ?? null,
         state: hydrateState((participant.state as TeamState | null) ?? null),
         score: participant.score,
@@ -317,6 +321,10 @@ export async function bootRooms() {
     }
     rooms.set(room.code, room)
   }
+}
+
+function roomMeta(room:LiveRoom){
+  return {seenRoomEvents:room.seenRoomEvents,roomRng:room.roomRng,debugDeathYear:room.debugDeathYear,debugCentennialYear:room.debugCentennialYear,debugForceDeath:room.debugForceDeath,avatars:Object.fromEntries(room.teams.map(team=>[team.id,avatarOf(team.avatar)]))}
 }
 
 async function persist(room: LiveRoom) {
@@ -340,13 +348,7 @@ async function persist(room: LiveRoom) {
       cycleElapsedMs: room.cycleElapsedMs,
       countdownEndsAt: room.countdownEndsAt ? new Date(room.countdownEndsAt) : null,
       nextRoomEventAt: room.nextRoomEventAt ? new Date(room.nextRoomEventAt) : null,
-      meta: json({
-        seenRoomEvents: room.seenRoomEvents,
-        roomRng: room.roomRng,
-        debugDeathYear: room.debugDeathYear,
-        debugCentennialYear: room.debugCentennialYear,
-        debugForceDeath: room.debugForceDeath,
-      }),
+      meta: json(roomMeta(room)),
     },
   })
   const ids = room.teams.map((team) => team.id)
@@ -408,7 +410,7 @@ function assertHost(room: LiveRoom, token: string) {
 
 function findTeam(room: LiveRoom, token: string) {
   const team = room.teams.find((item) => item.tokenHash === sha(token))
-  if (!team) throw new HttpError(403, 'Không có quyền đội này')
+  if (!team) throw new HttpError(403, 'Không có quyền điều hành doanh nghiệp này')
   return team
 }
 
@@ -541,15 +543,16 @@ export async function updateRoom(
 
 export async function joinRoom(code: string, teamName: string) {
   const room = requireRoom(code)
-  if (room.status !== 'lobby') throw new HttpError(409, 'Phòng không còn nhận đội')
+  if (room.status !== 'lobby') throw new HttpError(409, 'Phòng không còn nhận CEO')
   const name = teamName.trim()
-  if (name.length < 1 || name.length > 24) throw new HttpError(400, 'Tên đội từ 1 đến 24 ký tự')
-  if (room.teams.length >= Math.min(24, Math.max(1, rules().themeCount))) throw new HttpError(409, 'Phòng đã đủ đội')
+  if (name.length < 1 || name.length > 24) throw new HttpError(400, 'Tên CEO từ 1 đến 24 ký tự')
+  if (room.teams.length >= Math.min(24, Math.max(1, rules().themeCount))) throw new HttpError(409, 'Phòng đã đủ CEO')
   const playerToken = nid(18)
   const team: LiveTeam = {
     id: nid(12),
     tokenHash: sha(playerToken),
     teamName: name,
+    avatar: avatarOf(null),
     theme: null,
     state: null,
     score: null,
@@ -563,11 +566,25 @@ export async function joinRoom(code: string, teamName: string) {
   return { playerToken, teamId: team.id, teamName: team.teamName }
 }
 
+export async function saveAvatar(code: string, token: string, raw: unknown) {
+  const room = requireRoom(code)
+  const team = findTeam(room, token)
+  if (room.status !== 'lobby') throw new HttpError(409, 'Chỉ đổi diện mạo trong sảnh chờ')
+  const parsed = avatarSchema.safeParse(raw)
+  if (!parsed.success) throw new HttpError(400, 'Diện mạo không hợp lệ')
+  const previous = team.avatar
+  team.avatar = parsed.data
+  // Appearance is one atomic metadata write; never rewrite the CEO's economic state.
+  try { await prisma.room.update({where:{id:room.id},data:{meta:json(roomMeta(room))}}) } catch (error) { team.avatar = previous; throw error }
+  push(room.code)
+  return { avatar: avatarOf(team.avatar) }
+}
+
 export async function startRoom(code: string, token: string) {
   const room = requireRoom(code)
   assertHost(room, token)
   if (room.status !== 'lobby') throw new HttpError(409, 'Phòng đã bắt đầu')
-  if (!room.teams.length) throw new HttpError(409, 'Chưa có đội nào vào phòng')
+  if (!room.teams.length) throw new HttpError(409, 'Chưa có CEO nào vào phòng')
   const now = Date.now()
   room.status = 'countdown'
   room.countdownEndsAt = now + 3000
@@ -703,7 +720,7 @@ export async function investLine(code: string, token: string, line: Line, quanti
   if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Chưa tới lượt đầu tư')
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
-  if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
+  if (team.state.finished) throw new HttpError(409, 'CEO đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
   if (tutorialActive(team.state) && !((tutorialAction(team.state) === 'cluster' && line === 'mac' && quantity === 1) || (tutorialAction(team.state) === 'crew' && line === 'eng' && quantity === 'crew'))) throw new HttpError(409, 'Hãy thực hiện khoản đầu tư đang được cố vấn hướng dẫn')
   const basePrice = teamBasePrices(team,room)[line] ?? room.step
@@ -738,9 +755,9 @@ export async function restartTeam(code: string, token: string) {
   const team = findTeam(room, token)
   if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Không thể làm lại lúc này')
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
-  if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
+  if (team.state.finished) throw new HttpError(409, 'CEO đã chốt kết quả')
   if (!isBankrupt(team.state)) throw new HttpError(409, 'Vốn hỗ trợ chỉ dành cho công ty đã phá sản khi chuyển giao quyền điều hành')
-  if (team.state.secondLife !== 'available') throw new HttpError(409, 'Đội chưa được Nhà nước chấp thuận hỗ trợ vốn hoặc đã dùng quyền này')
+  if (team.state.secondLife !== 'available') throw new HttpError(409, 'CEO chưa được Nhà nước chấp thuận hỗ trợ vốn hoặc đã dùng quyền này')
   if (!team.state.stateAidEligible) throw new HttpError(409, 'Vốn hỗ trợ chỉ được giải ngân khi công ty phá sản trong đợt chuyển giao quyền điều hành')
 
   const now = Date.now()
@@ -921,7 +938,7 @@ export async function advanceTeamYear(code: string, token: string) {
   if (room.status !== 'playing') throw new HttpError(409, room.status === 'paused' ? 'Đang tạm dừng' : 'Chưa tới lúc sang năm')
   if (!team.state || !team.theme) throw new HttpError(409, 'Chưa có nhà máy')
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
-  if (team.state.finished) throw new HttpError(409, 'Đội đã chốt kết quả')
+  if (team.state.finished) throw new HttpError(409, 'CEO đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
   const now = Date.now()
   if(team.state.pending?.kind==='question')throw new HttpError(409,'Hãy hoàn tất câu hỏi trước khi sang năm')
@@ -1317,6 +1334,8 @@ function makeReport(room: LiveRoom, completedAt: number): HostReport {
     teams: teams.map((team, index) => ({
       rank: index + 1,
       teamName: team.teamName,
+      teamId: team.id,
+      avatar: avatarOf(team.avatar),
       industry: team.theme?.industryName ?? team.theme?.name ?? 'Chưa phân ngành',
       value: Math.round(valueOf(team)),
       years: team.state?.cycles ?? 0,
@@ -1613,6 +1632,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
     rank: index + 1,
     teamId: team.id,
     teamName: team.teamName,
+    avatar: avatarOf(team.avatar),
     themeName: team.theme?.name ?? 'Chờ chủ đề',
     industryId: team.theme?.industryId ?? '',
     value: valueOf(team),
@@ -1647,6 +1667,9 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
     teams: ranked.map((team) => ({
       id: team.id,
       teamName: team.teamName,
+      avatar: avatarOf(team.avatar),
+      correct: room.answers.filter(answer => answer.teamId === team.id && answer.correct).length,
+      answered: room.answers.filter(answer => answer.teamId === team.id && answer.optionId).length,
       connected: team.connected,
       themeName: team.theme?.name ?? '',
       industryId: team.theme?.industryId ?? '',
@@ -1669,6 +1692,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       ? {
           id: self.id,
           teamName: self.teamName,
+          avatar: avatarOf(self.avatar),
           rank: leaderboard.find((row) => row.teamId === self.id)?.rank ?? room.teams.length,
           correct: youCorrect,
           answered: youAnswered,

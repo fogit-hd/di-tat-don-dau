@@ -1,0 +1,32 @@
+[
+  {
+    "name": "office-background",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-0f5620e1-12cc-4fa8-a01d-4e35652ce6db.png",
+    "prompt": "A richly hand-painted watercolor illustration of a Vietnamese industrial business planning office, warm wooden desk in lower right with green banker lamp, blank ledger, keys, maps; large open wooden window to bright Vietnamese industrial harbor/factories/mountains beyond. Landscape16:9, detailed scenery on right half, left half warm subdued workshop wall and window shadow leaving ample quiet area for an ivory form overlay. NO text, logo, UI, numbers, letters, borders or frames. Match reference04 atmosphere exactly, asset only not screenshot."
+  },
+  {
+    "name": "harbor-background",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-26652914-3a1e-4182-ae97-199ada4f780a.png",
+    "prompt": "Wide hand-painted watercolor Vietnamese industrial harbor panorama, factory brick warehouses on left and right edges, cranes, container ships, green mountains, warm golden clear daylight. Center upper half mostly pale blue sky, center lower half mostly harbor water, preserving quiet negative space behind UI. Landscape16:9 edge-to-edge illustration, no people in foreground, no UI, no paper card, no QR, no numbers, NO text or logo or frame. Match reference05 polished brushwork."
+  },
+  {
+    "name": "victory",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-1e8c036e-a867-4802-88aa-aaab410b5923.png",
+    "prompt": "Transparent hand-painted watercolor game victory illustration, large ornate golden trophy, stacks of wooden cargo crates, small sacks, folded navigation map and brass compass, a modest Vietnamese port crane/ship vignette behind trophy tapering into loose watercolor edges. Portrait4:5 composition, isolated on transparent alpha, NO background rectangle, no frame, no words, no logo, no letters, no currency values. Match victory art from reference01. This is an illustration only for the left side of the result page."
+  },
+  {
+    "name": "rank-medals",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-7f8cff7d-e544-44e6-8212-f01d30bff9c1.png",
+    "prompt": "A game UI asset atlas with THREE separate circular laurel-wreath rank medals arranged horizontally with huge transparent gutters. Left gold medal engraved number1, middle silver engraved2, right bronze engraved3. Ornate tasteful hand-painted gold leaves, embossed rim, burgundy center, ivory numeral, coherent antique business-board-game style matching reference02. All three complete round silhouettes with generous alpha border. Transparent background no other text/objects/labels, no clipped leaves. Each medal occupies separate third with50px clear space to neighbor."
+  },
+  {
+    "name": "ceo-avatar",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-92e2d972-1dda-468b-8019-e98df7092477.png",
+    "prompt": "Single hand-painted watercolor portrait crest of a Vietnamese business CEO/industrial founder in a dark flat cap, cream shirt and burgundy waistcoat, adult30s, friendly confident head and shoulders, three-quarter facing right. Oval metallic gold laurel border with small factory silhouette below, transparent alpha outside silhouette. Match reference05 CEO avatar craft quality, no background rectangle, no words, no numbers, no logos, no other portraits."
+  },
+  {
+    "name": "questions-art",
+    "path": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-054cde35-0c4f-45e6-8ca9-866c1750845d.png",
+    "prompt": "Hand-painted watercolor UI illustration of open ivory-paged reference book, brass globe, two small stacked burgundy leather books and rolled scroll, restrained green foliage. Transparent alpha background, landscape3:2 balanced composition, no readable text/letters on any pages or spines, no UI, frame or numbers. Match reference03 upper-right decorative learning illustration exactly in atmosphere."
+  }
+]

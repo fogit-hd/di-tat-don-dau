@@ -35,10 +35,7 @@ export function GovernanceRiskCard({ scene }: { scene: SceneView }) {
           <small>{successionChange > 0 ? `Kỳ sau: ${percent(followingSuccession)} (+${percent(successionChange)})` : `Kỳ sau: ${percent(followingSuccession)}`}</small>
         </div>
       </div>
-      <p>
-        Sau năm {scene.successionRiskStartsAt ?? 1}, tử vong tăng 0,2 điểm %/năm, kế nghiệp tăng 0,25 điểm %/năm, đến giới hạn thông thường 2% và 4%. Bạo bệnh có thể vượt giới hạn này. Tử vong luôn thấp hơn kế nghiệp; Trường thọ giữ mức rủi ro thấp.
-      </p>
-      {scene.annualConditions && <p>Điều kiện kỳ chốt tới: cơ hội bốc sự kiện đầu tiên {percent(scene.annualConditions.eventChance)} · sự kiện gia đình {percent(scene.annualConditions.familyChance)} · lãi nợ {percent(scene.annualConditions.interestRate)}/năm.</p>}
+      {scene.annualConditions && <dl className="finance-lines"><div><dt>Sự kiện kỳ tới</dt><dd>{percent(scene.annualConditions.eventChance)}</dd></div><div><dt>Sự kiện gia đình</dt><dd>{percent(scene.annualConditions.familyChance)}</dd></div><div><dt>Lãi nợ / năm</dt><dd>{percent(scene.annualConditions.interestRate)}</dd></div></dl>}
       <div className={`restructuring-status ${scene.secondLife}`}>
         <b>Chương trình hỗ trợ vốn khởi động lại</b>
         <span>{restructuring}</span>

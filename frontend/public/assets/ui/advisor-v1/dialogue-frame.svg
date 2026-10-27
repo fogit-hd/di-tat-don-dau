@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360" fill="none">
+ <defs><linearGradient id="gold" x2="0" y2="360" gradientUnits="userSpaceOnUse"><stop stop-color="#ffedb0"/><stop offset=".28" stop-color="#c18b3b"/><stop offset=".5" stop-color="#f8dc8c"/><stop offset="1" stop-color="#9c612d"/></linearGradient><g id="corner"><path d="M8 30V18Q8 8 18 8H30" stroke="#471d19" stroke-width="12"/><path d="M8 30V18Q8 8 18 8H30" stroke="url(#gold)" stroke-width="7"/><path d="M14 30V21Q14 14 21 14H30" stroke="#fff1c4" stroke-width="1.2"/><path d="m22 13 4 5-4 8-5-5z" fill="#76252b" stroke="#ffe6a0" stroke-width="1.2"/><path d="m22 15 2 4-2 4-3-3z" fill="#dca85b"/><circle cx="10" cy="10" r="3" fill="#fff0ae" stroke="#8b5425"/></g></defs>
+ <rect x="5" y="5" width="590" height="350" rx="16" stroke="#4b231a" stroke-width="10"/>
+ <rect x="5" y="5" width="590" height="350" rx="16" stroke="url(#gold)" stroke-width="6"/>
+ <rect x="11" y="11" width="578" height="338" rx="11" stroke="#702b2c" stroke-width="3"/>
+ <rect x="15" y="15" width="570" height="330" rx="8" stroke="#c49a55" stroke-width="1"/>
+ <path d="M30 3h540M30 357h540" stroke="#fff0b3" stroke-width="1" opacity=".65"/>
+ <use href="#corner"/><use href="#corner" transform="translate(600 0) scale(-1 1)"/><use href="#corner" transform="translate(0 360) scale(1 -1)"/><use href="#corner" transform="translate(600 360) scale(-1 -1)"/>
+</svg>

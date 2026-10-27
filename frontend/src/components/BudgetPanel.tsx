@@ -68,7 +68,6 @@ export function BudgetPanel({
       {([1, 5, 10, 'max'] as const).map(value => <button key={value} type="button" aria-pressed={quantity === value} disabled={busy || paused || Boolean(tutorialAction)} onClick={() => setQuantity(value)}>{value === 'max' ? 'Tối đa' : `×${value}`}</button>)}
     </div></div>
     {!modern && <p className="canvas-caption">Chọn số gói để xem trước kết quả nhận được.</p>}
-    {!modern && <p className="investment-help">Lượt chơi này dùng cơ chế trước. Cơ chế cụm sản xuất theo ngành áp dụng khi bắt đầu lượt chơi mới.</p>}
     {modern && scene.operating===0 && <div className="investment-start-guide"><b>{scene.machines===0?'Chưa có cụm hoạt động':`Còn thiếu ${Math.max(0,crew-scene.engineers)} công nhân cho tổ đầu tiên`}</b><div className="starter-actions">
       <button type="button" data-guide="starter-cluster" disabled={busy||paused||Boolean(tutorialAction&&tutorialAction!=='cluster')||scene.machines>0||!scene.investmentPreviews?.mac?.[1]||scene.cash<scene.investmentPreviews.mac[1].total} onClick={()=>void purchase('mac','Mở cụm đầu tiên',1)}>{scene.machines>0?'Đã có cụm đầu tiên':`Mở 1 cụm · ${money(scene.investmentPreviews?.mac?.[1]?.total??0)}`}</button>
       <button type="button" data-guide="starter-crew" disabled={busy||paused||Boolean(tutorialAction&&tutorialAction!=='crew')||scene.engineers>=crew||!scene.investmentPreviews?.eng?.crew||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>{scene.engineers>=crew?'Đã đủ tổ công nhân':`Tuyển ${scene.investmentPreviews?.eng?.crew?.count??crew} người · ${money(scene.investmentPreviews?.eng?.crew?.total??0)}`}</button>
@@ -97,31 +96,29 @@ export function BudgetPanel({
               {benefit ? <><strong>{benefit.gain}</strong><small>{benefit.change}</small></> : <small>{info.current}</small>}
               {!modern && <small>Hiệu quả năm nay: {Math.round((scene.upgradeEfficiency?.[line.id] ?? 1) * 100)}%</small>}
             </div>
-            <button type="button" className="choice-price investment-buy" disabled={!can} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => void purchase(line.id,benefit?.gain || line.label)}>
-              {feedback?.line === line.id && feedback.phase === 'sending' ? 'Đang gửi…' : `Đầu tư ×${count}`}<b>{money(total)}</b>
+            <button type="button" className="choice-price investment-buy" disabled={!can} aria-busy={feedback?.line===line.id&&feedback.phase==='sending'} aria-label={`${line.label}, ${count} gói, ${money(total)}`} onClick={() => void purchase(line.id,benefit?.gain || line.label)}>
+              Đầu tư ×{count}<b>{money(total)}</b>
             </button>
             {modern && line.id==='eng' && scene.investmentPreviews?.eng?.crew && <button type="button" className="recruit-crew" disabled={busy||paused||Boolean(tutorialAction)||scene.cash<scene.investmentPreviews.eng.crew.total} onClick={()=>void purchase('eng','Tổ công nhân đã sẵn sàng','crew')}>Tuyển đủ tổ: +{scene.investmentPreviews.eng.crew.count} người · {money(scene.investmentPreviews.eng.crew.total)}</button>}
-            {feedback?.line === line.id && <span key={feedback.version+feedback.phase} className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Chờ máy chủ xác nhận':feedback.phase==='confirmed'?'Đã nâng cấp · Máy chủ đã xác nhận':'Chưa nâng cấp · xem lỗi ở trên'}</span>}
+            {feedback?.line === line.id && feedback.phase!=='sending' && <span key={feedback.version+feedback.phase} className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='confirmed'?'Đã nâng cấp':'Chưa nâng cấp'}</span>}
             {preview && <details className="investment-projection"><summary>Xem tác động khi Sang năm</summary>
-              <p>{benefit?.detail}</p><p>Giá gói kế tiếp: {money(preview.nextPrice ?? price)}. Giá tăng theo số gói đã mua; mua nhiều cộng giá từng nấc.</p>
-              <p>Lãi/lỗ sản xuất ước tính: {money(scene.operatingForecast?.net ?? 0)} → {money(preview.net)}/năm (chưa trừ lạm phát, lãi nợ).</p>
+              <dl className="finance-lines"><div><dt>Cụm vận hành dự kiến</dt><dd>{wholeCount(scene.operatingForecast?.operating??scene.operating)} → {wholeCount(preview.operating)}</dd></div><div><dt>Lãi/lỗ sản xuất dự kiến / năm</dt><dd>{money(scene.operatingForecast?.net ?? 0)} → {money(preview.net)}</dd></div><div><dt>Giá gói kế tiếp</dt><dd>{money(preview.nextPrice??price)}</dd></div></dl>
             </details>}
           </article>
         )
       })}
     </div>
-    {modern && <details className="company-upgrades-panel" open={scene.operating>=3}><summary>Chất lượng & bảo dưỡng · 3 lựa chọn{(scene.condition??1)<.99?' · Có thể bảo dưỡng':''}</summary><p className="investment-help">Đào tạo và cải tiến mở khi có 3 cụm đang vận hành. Mỗi lần tăng 1 cấp, tối đa cấp 5; bảo dưỡng phục hồi tình trạng thiết bị.</p>
+    {modern && <details className="company-upgrades-panel" open={scene.operating>=3}><summary>Chất lượng & bảo dưỡng · 3 lựa chọn{(scene.condition??1)<.99?' · Có thể bảo dưỡng':''}</summary>
     <div className="choices company-upgrades">{scene.companyUpgrades?.map(upgrade=>{
       const label={training:'Đào tạo tay nghề',modernization:'Cải tiến thiết bị',maintenance:'Bảo dưỡng thiết bị'}[upgrade.kind]
       return <article className={`btn choice investment-card${feedback?.line===upgrade.kind?` purchase-${feedback.phase}`:''}`} key={upgrade.kind}>
         <PaintedIcon name={upgrade.kind==='training'?'eng':upgrade.kind==='modernization'?'tech':'investment'} className="quality-upgrade-art" />
-        <div className="choice-copy"><h4 className="choice-label">{label}</h4><span className="choice-benefit">{upgrade.kind==='training'?'+5% năng suất gốc/cấp tay nghề':upgrade.kind==='modernization'?'+8% năng suất gốc/cấp thiết bị':'Khôi phục tình trạng thiết bị về 100%'}</span><small>{upgrade.kind==='maintenance'?`Tình trạng: ${Math.round(upgrade.conditionBefore*100)}%`:`Cấp ${upgrade.level} → ${Math.min(5,upgrade.levelAfter)}`}</small>{upgrade.locked&&<small className="investment-warning">{upgrade.reason}</small>}</div>
+        <div className="choice-copy"><h4 className="choice-label">{label}</h4><span className="choice-benefit">{upgrade.kind==='maintenance'?'Khôi phục tình trạng thiết bị về 100%':'Tăng năng suất'}</span><small>{upgrade.kind==='maintenance'?`Tình trạng: ${Math.round(upgrade.conditionBefore*100)}%`:`Cấp ${upgrade.level} → ${Math.min(5,upgrade.levelAfter)}`}</small>{upgrade.locked&&<small className="investment-warning">{upgrade.reason}</small>}</div>
         <div className="choice-result"><strong>{wholeCount(upgrade.outputBefore)} → {wholeCount(upgrade.outputAfter)} sản phẩm/năm</strong><small>Lãi sản xuất: {money(upgrade.netBefore)} → {money(upgrade.netAfter)}/năm</small></div>
         <button type="button" className="choice-price investment-buy" disabled={busy||paused||Boolean(tutorialAction)||upgrade.locked||scene.cash<upgrade.price} onClick={async()=>{const version=++purchaseSequence.current;setFeedback({line:upgrade.kind,phase:'sending',version,gain:label});const ok=await onUpgrade?.(upgrade.kind);if(version===purchaseSequence.current)setFeedback({line:upgrade.kind,phase:ok?'confirmed':'failed',version,gain:label})}}>{upgrade.kind==='maintenance'?'Bảo dưỡng':'Nâng 1 cấp'}<b>{money(upgrade.price)}</b></button>
-        {feedback?.line===upgrade.kind && <span className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='sending'?'Đang nâng cấp…':feedback.phase==='confirmed'?'Đã nâng cấp · Chỉ số đã cập nhật':'Chưa nâng cấp · Xem lỗi ở trên'}</span>}
+        {feedback?.line===upgrade.kind && feedback.phase!=='sending' && <span className={`purchase-feedback ${feedback.phase}`} role="status">{feedback.phase==='confirmed'?'Đã nâng cấp':'Chưa nâng cấp'}</span>}
       </article>
     })}</div></details>}
-    <p className="investment-footnote"><PaintedIcon name="history" /> Chỉ số tăng ngay khi mua · Sản xuất khi Sang năm. Ước tính giữ nguyên các hiệu ứng đã biết; chưa tính sự kiện mới và dao động sản xuất.</p>
     <PollutionDetails scene={scene} />
     </>
   )
@@ -149,18 +146,13 @@ function previewInfo(scene: SceneView, line: SceneView['lines'][number]['id'], p
   const base = scene.operatingForecast
   switch (line) {
     case 'eng': return { gain: `+${wholeCount(p.gain)} công nhân`, change: `${wholeCount(scene.engineers)} → ${wholeCount(p.levelAfter)} người`,
-      warning: scene.machines>0 && scene.idle < .01 ? 'Hiện đủ người cho các cụm; tuyển thêm để chuẩn bị mở rộng.' : undefined,
-      detail: `Cụm đang vận hành ${wholeCount(base?.operating ?? scene.operating)} → ${wholeCount(p.operating)}. Sau mua còn thiếu ${wholeCount(p.staffMissing)} công nhân để chạy hết máy; nhân lực chưa phân công không tạo thêm sản phẩm; đào tạo tay nghề nằm ở nhóm nâng cấp chất lượng.` }
+      warning: scene.machines>0 && scene.idle < .01 ? 'Hiện đủ người cho các cụm; tuyển thêm để chuẩn bị mở rộng.' : undefined }
     case 'mac': return { gain: p.gain>0 ? `+${wholeCount(p.gain)} cụm sản xuất` : `Lắp đặt ${Math.floor((p.machineProgress??0)*100)}%`, change: `${wholeCount(scene.machines)} → ${wholeCount(p.levelAfter)} cụm`,
-      warning: p.staffMissing > 0 ? `Còn thiếu ${wholeCount(p.staffMissing)} công nhân; ${wholeCount(p.idle)} cụm chờ đủ nhân lực.` : 'Đủ nhân lực vận hành toàn bộ cụm.',
-      detail: `Cụm đang vận hành ${wholeCount(base?.operating ?? scene.operating)} → ${wholeCount(p.operating)}. Chi phí cụm chờ đủ nhân lực: ${money(p.idleCost)}/năm. Mở thêm cụm không bảo đảm tăng lãi nếu thiếu người.` }
-    case 'sup': return { gain: `Giảm ${percent(p.inputDiscount)} phí đầu vào`, change: `${percent(base?.inputDiscount ?? 0)} → ${percent(p.inputDiscount)}`, warning: undefined,
-      detail: `Phụ trợ cấp ${number(scene.support)} → ${number(p.levelAfter)}. Chỉ giảm phần chi phí nguyên liệu, không giảm toàn bộ chi phí. Giảm ${percent(p.disruptionProtection)} mức bất lợi của sự kiện thiếu nguồn cung mới (tối đa 50%); không xóa hiệu ứng cũ.` }
-    case 'inf': return { gain: `Bán được ${percent(p.delivery)} sản lượng`, change: `${percent(base?.delivery ?? .9)} → ${percent(p.delivery)}`, warning: undefined,
-      detail: `Hạ tầng cấp ${number(scene.infra)} → ${number(p.levelAfter)}. Giảm phí logistics ${percent(base?.logisticsDiscount ?? 0)} → ${percent(p.logisticsDiscount)}. Hàng chưa bán không tạo doanh thu; không có tồn kho tích lũy trong mô hình này. Hạ tầng không thay công nghệ sạch.` }
+      warning: p.staffMissing > 0 ? `Còn thiếu ${wholeCount(p.staffMissing)} công nhân; ${wholeCount(p.idle)} cụm chờ đủ nhân lực.` : 'Đủ nhân lực vận hành toàn bộ cụm.' }
+    case 'sup': return { gain: `Giảm ${percent(p.inputDiscount)} phí đầu vào`, change: `${percent(base?.inputDiscount ?? 0)} → ${percent(p.inputDiscount)}`, warning: undefined }
+    case 'inf': return { gain: `Bán được ${percent(p.delivery)} sản lượng`, change: `${percent(base?.delivery ?? .9)} → ${percent(p.delivery)}`, warning: undefined }
     case 'grn': return { gain: scene.pollution > p.pollutionNowAfter ? `−${number(scene.pollution - p.pollutionNowAfter)} ô nhiễm ngay` : `+${number(p.treatment - (base?.treatment ?? 0))} điểm xử lý/năm`, change: `${number(scene.pollution)} → ${number(p.pollutionNowAfter)}/100`,
-      warning: p.pricePenalty > 0 ? `Kỳ tới giá bán còn giảm ${percent(p.pricePenalty)} do ô nhiễm.` : 'Kỳ tới chưa bị giảm giá bán vì ô nhiễm.',
-      detail: `Công nghệ sạch cấp ${number(scene.green)} → ${number(p.levelAfter)}. Xử lý ${number(p.treatment)} điểm/năm. Ô nhiễm dự kiến kỳ tới: ${number(base?.pollution ?? scene.pollution)} → ${number(p.pollution)}; phạt giá bán ${percent(base?.pricePenalty ?? 0)} → ${percent(p.pricePenalty)}.` }
+      warning: p.pricePenalty > 0 ? `Kỳ tới giá bán còn giảm ${percent(p.pricePenalty)} do ô nhiễm.` : 'Kỳ tới chưa bị giảm giá bán vì ô nhiễm.' }
   }
 }
 
@@ -168,9 +160,7 @@ export function PollutionDetails({ scene }: { scene: SceneView }) {
   const p = scene.operatingForecast
   if (!p) return null
   return <details className="pollution-explainer"><summary>Ô nhiễm {number(scene.pollution)}/100 · {scene.pollution <= 30 ? 'Thấp' : scene.pollution <= 60 ? 'Cần xử lý' : 'Cao'}</summary>
-    <p>Đây là điểm ô nhiễm từ 0 đến 100, không phải cấp nâng cấp hay phần trăm. Điểm trên 30 làm giảm giá bán; tối đa giảm 35% ở mức 100. Sản lượng không bị trừ thêm lần nữa.</p>
-    <p>Kỳ tới: {number(p.retainedPollution)} ô nhiễm giữ lại + {number(p.emissions)} phát sinh − {number(p.treatment)} xử lý = {number(p.pollution)}/100 (giới hạn 0–100). Giá bán giảm {percent(p.pricePenalty)}.</p>
-    <p>Ô nhiễm hiện tại làm giảm {money(p.currentValuePenalty)} giá trị công ty, kể cả khi chưa chạm ngưỡng giảm giá bán. Công nghệ sạch vừa giảm điểm ngay, vừa tăng xử lý mỗi năm.</p>
+    <dl className="finance-lines"><div><dt>Ô nhiễm kỳ tới</dt><dd>{number(p.pollution)}/100</dd></div><div><dt>Xử lý / năm</dt><dd>{number(p.treatment)} điểm</dd></div><div><dt>Giảm giá bán kỳ tới</dt><dd>{percent(p.pricePenalty)}</dd></div><div><dt>Giảm giá trị hiện tại</dt><dd>−{money(p.currentValuePenalty)}</dd></div></dl>
   </details>
 }
 

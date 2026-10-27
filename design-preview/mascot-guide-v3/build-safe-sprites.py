@@ -54,6 +54,8 @@ for name in clips:
  if name not in ['talk','arrive'] and not name.endswith('-talk'):clips[name]['frames'][0]={'shared':'talk:0'}
 clips['blink']['frames'][7]={'shared':'talk:0'}
 clips['arrive']['frames'][7]={'shared':'talk:0'}
+for name in ['point-up','point-steep-right','point-steep-left']:
+ clips[name]['frames'][7]={'shared':name+'-talk:0'}
 payload={'referenceHeight':rb-rt,'waistFraction':((ref_b[1]+rh/2)-rt)/(rb-rt),
          'pointDuration':0.48,'returnDuration':0.32,'clips':clips}
 visible_frames=[f for c in clips.values() for f in c['frames'] if 'shared' not in f]

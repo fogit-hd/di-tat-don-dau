@@ -1,0 +1,603 @@
+{
+  "widths": [
+    360,
+    390,
+    768,
+    1024,
+    1440
+  ],
+  "errors": [],
+  "missing": [],
+  "requests": [
+    {
+      "width": 360,
+      "requests": [
+        {
+          "path": "/api/rooms/XTV45/exists",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/setup",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/join",
+          "body": {
+            "teamName": "WWWWWWWWWWWWWWWWWWWWWWWW"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/intro",
+          "body": {
+            "factoryName": "Đại Việt Chế biến trái cây sấy"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/pause",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/resume",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/end",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "requests": [
+        {
+          "path": "/api/rooms/XTV45/exists",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/setup",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/join",
+          "body": {
+            "teamName": "WWWWWWWWWWWWWWWWWWWWWWWW"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/intro",
+          "body": {
+            "factoryName": "Đại Việt Chế biến trái cây sấy"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/pause",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/resume",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/end",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "requests": [
+        {
+          "path": "/api/rooms/XTV45/exists",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/setup",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/join",
+          "body": {
+            "teamName": "WWWWWWWWWWWWWWWWWWWWWWWW"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/intro",
+          "body": {
+            "factoryName": "Đại Việt Chế biến trái cây sấy"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/pause",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/resume",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/end",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "requests": [
+        {
+          "path": "/api/rooms/XTV45/exists",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/setup",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/join",
+          "body": {
+            "teamName": "WWWWWWWWWWWWWWWWWWWWWWWW"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/intro",
+          "body": {
+            "factoryName": "Đại Việt Chế biến trái cây sấy"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/pause",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/resume",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/end",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "requests": [
+        {
+          "path": "/api/rooms/XTV45/exists",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/setup",
+          "body": null,
+          "headers": {
+            "accept": "*/*",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/join",
+          "body": {
+            "teamName": "WWWWWWWWWWWWWWWWWWWWWWWW"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/?code=XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/avatar",
+          "body": {
+            "body": "curvy-female",
+            "skin": "deep",
+            "outfit": "engineer"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/intro",
+          "body": {
+            "factoryName": "Đại Việt Chế biến trái cây sấy"
+          },
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/play/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-player-token": "qa-player"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/pause",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/resume",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        },
+        {
+          "path": "/api/rooms/XTV45/end",
+          "body": {},
+          "headers": {
+            "accept": "*/*",
+            "content-type": "application/json",
+            "origin": "http://game.test",
+            "referer": "http://game.test/host/XTV45",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+            "x-host-token": "qa-host"
+          }
+        }
+      ]
+    }
+  ]
+}

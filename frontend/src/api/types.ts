@@ -1,3 +1,4 @@
+import type { AvatarConfig } from '../lib/avatar'
 import type { CompanyBooksView, ProductionForecastView, ProductionReportView } from './production.ts'
 export type Ending = string
 
@@ -194,6 +195,7 @@ export type BoardRow = {
   rank: number
   teamId: string
   teamName: string
+  avatar?: AvatarConfig
   themeName: string
   industryId: string
   value: number
@@ -204,6 +206,9 @@ export type BoardRow = {
 export type TeamRow = {
   id: string
   teamName: string
+  avatar?: AvatarConfig
+  correct?: number
+  answered?: number
   connected: boolean
   themeName: string
   industryId: string
@@ -249,6 +254,7 @@ export type Snapshot = {
   you: {
     id: string
     teamName: string
+    avatar?: AvatarConfig
     rank: number
     correct: number
     answered: number
@@ -261,4 +267,3 @@ export type Snapshot = {
   } | null
   role: 'host' | 'player'
 }
-
