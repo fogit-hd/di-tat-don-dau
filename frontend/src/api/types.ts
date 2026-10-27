@@ -134,7 +134,7 @@ export type SceneView = {
   effects: EffectView[]
   pending: PendingView | null
   introDone: boolean
-  tutorial?: { version: 1; step: number; complete: boolean }
+  tutorial?: { version: 1 | 2; step: number; complete: boolean }
   eventLog?: EventLogView[]
   yearChanges?: YearChangeView[]
   activeEffects?: ActiveEffectView[]
@@ -192,6 +192,7 @@ export type SuccessionNotice = {
 }
 
 export type BoardRow = {
+  playerStatus?: string
   rank: number
   teamId: string
   teamName: string
@@ -204,6 +205,7 @@ export type BoardRow = {
 }
 
 export type TeamRow = {
+  playerStatus?: string
   id: string
   teamName: string
   avatar?: AvatarConfig

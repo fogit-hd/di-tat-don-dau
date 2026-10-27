@@ -222,7 +222,8 @@ export type TeamState = {
   pulseYear: number
   nextPromptAt: number
   introDone: boolean
-  tutorial?: { version: 1; step: number; complete: boolean }
+  tutorial?: { version: 1 | 2; step: number; complete: boolean }
+  finishReason?: 'mortality' | 'retirement' | 'succession'
   factoryName: string
   pending: Pending | null
   promptYearPausedAt?: number

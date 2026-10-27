@@ -33,7 +33,7 @@ import { LINES } from './game/engine'
 import { isBankrupt, productionPlan, productionForecast } from './game/production'
 import { investmentPreviews } from './game/investment-preview'
 import { introFactoryName } from './game/intro'
-import { TUTORIAL_ACTIONS, tutorialAction, tutorialActive } from './game/tutorial'
+import { tutorialActions, tutorialAction, tutorialActive, tutorialPurchase } from './game/tutorial'
 import { avatarOf, avatarSchema, type AvatarConfig } from './game/avatar'
 import { money, moneyTemplate } from './game/money'
 import { hashString, makeRng } from './game/rng'
@@ -677,21 +677,20 @@ export async function acknowledgeTutorial(code: string, token: string, action: s
   if (!state.tutorial) throw new HttpError(409, 'Lượt chơi này không có hướng dẫn năm đầu')
   if (action === 'confirm-existing-cluster' || action === 'confirm-existing-crew') {
     const expected=action==='confirm-existing-cluster'?'cluster':'crew'
-    if(state.tutorial.step>TUTORIAL_ACTIONS.indexOf(expected))return {ok:true}
+    if(state.tutorial.step>tutorialActions(state).indexOf(expected))return {ok:true}
     if(tutorialAction(state)!==expected||(expected==='cluster'?state.machines<1:state.engineers<(state.crewSize??1)))throw new HttpError(409,'Chưa có đủ nguồn lực để xác nhận bước này')
     state.tutorial.step++;await persist(room);push(room.code);return {ok:true}
   }
   if (action === 'continue-without-purchase' && team.theme) {
-    if(state.tutorial.step>=TUTORIAL_ACTIONS.indexOf('enterprise-ready'))return {ok:true}
-    const current = tutorialAction(state), line = current === 'cluster' ? 'mac' : 'eng'
-    if (current !== 'cluster' && current !== 'crew') throw new HttpError(409, 'Không phải bước đầu tư')
-    const quote = investmentQuote(state, line, teamBasePrices(team, room)[line], current === 'cluster' ? 1 : 'crew', Date.now())
+    const purchase = tutorialPurchase(state)
+    if (!purchase) throw new HttpError(409, 'Không phải bước đầu tư')
+    const quote = investmentQuote(state, purchase.line, teamBasePrices(team, room)[purchase.line], purchase.quantity, Date.now())
     if (quote.count > 0 && state.cash >= quote.total) throw new HttpError(409, 'Bạn vẫn đủ vốn cho khoản đầu tư được hướng dẫn')
-    state.tutorial.step = TUTORIAL_ACTIONS.indexOf('enterprise-ready')
+    state.tutorial.step = state.tutorial.version===2 ? state.tutorial.step+1 : tutorialActions(state).indexOf('enterprise-ready')
     await persist(room); push(room.code); return { ok: true }
   }
-  const index = TUTORIAL_ACTIONS.indexOf(action as typeof TUTORIAL_ACTIONS[number])
-  if (index < 0 || ['cluster', 'crew', 'year'].includes(action)) throw new HttpError(400, 'Thao tác hướng dẫn không hợp lệ')
+  const index = tutorialActions(state).indexOf(action)
+  if (index < 0 || ['cluster', 'crew', 'supply', 'infrastructure', 'green', 'year'].includes(action)) throw new HttpError(400, 'Thao tác hướng dẫn không hợp lệ')
   // A lost response or duplicate click must never move two steps forward.
   if (index < state.tutorial.step || state.tutorial.complete) return { ok: true }
   if (tutorialAction(state) !== action) throw new HttpError(409, 'Hãy thực hiện đúng bước đang được hướng dẫn')
@@ -722,7 +721,7 @@ export async function investLine(code: string, token: string, line: Line, quanti
   if (!team.state.introDone) throw new HttpError(409, 'Hãy xác nhận phần nhập vai trước')
   if (team.state.finished) throw new HttpError(409, 'CEO đã chốt kết quả')
   if (isBankrupt(team.state)) throw new HttpError(409, 'Công ty đã phá sản; cần nhận vốn hỗ trợ trước khi hoạt động trở lại')
-  if (tutorialActive(team.state) && !((tutorialAction(team.state) === 'cluster' && line === 'mac' && quantity === 1) || (tutorialAction(team.state) === 'crew' && line === 'eng' && quantity === 'crew'))) throw new HttpError(409, 'Hãy thực hiện khoản đầu tư đang được cố vấn hướng dẫn')
+  if (tutorialActive(team.state) && !(tutorialPurchase(team.state)?.line === line && tutorialPurchase(team.state)?.quantity === quantity)) throw new HttpError(409, 'Hãy thực hiện khoản đầu tư đang được cố vấn hướng dẫn')
   const basePrice = teamBasePrices(team,room)[line] ?? room.step
   const quote = investmentQuote(team.state,line,basePrice,quantity,Date.now())
   if (![1, 5, 10, 'max','crew'].includes(quantity) || (quantity==='crew' && line!=='eng')) throw new HttpError(400, 'Mức đầu tư không hợp lệ')
@@ -734,6 +733,7 @@ export async function investLine(code: string, token: string, line: Line, quanti
   team.state = result.state
   if (tutorialAction(team.state) === 'cluster' && team.state.machines >= 1) team.state.tutorial!.step++
   else if (tutorialAction(team.state) === 'crew' && team.state.engineers >= (team.state.crewSize ?? 1)) team.state.tutorial!.step++
+  else if (['supply','infrastructure','green'].includes(tutorialAction(team.state)??'')) team.state.tutorial!.step++
   await persist(room)
   push(room.code)
   return { ok: true, cash: team.state.cash }
@@ -898,7 +898,7 @@ function beginPlay(room: LiveRoom, now: number) {
     used.add(theme.id)
     const teamRng = makeRng(hashString(`${room.seed}:${team.id}`))
     const state = createState(theme, room.startingCapital, teamRng, balance, now)
-    state.tutorial = { version: 1, step: 0, complete: false }
+    state.tutorial = { version: 2, step: 0, complete: false }
     state.eventBag = shuffleIds(theme.eventIds, teamRng)
     state.yearOpenCash = state.cash
     state.yearOpenAssets = computeValue(state, theme, balance)
@@ -1093,6 +1093,7 @@ function rollSuccession(room: LiveRoom, team: LiveTeam, now: number, forced?: { 
     year: team.state.cycles,
   }
   team.state.succession = stored
+  team.state.finishReason = forced ? 'retirement' : 'succession'
   team.state.log = [stored.causeText, ...team.state.log].slice(0, balance.logLimit)
   // A natural succession is not drawn from the ordinary event deck, so make it visible
   // in exactly the same two event lists as any other event.
@@ -1177,6 +1178,7 @@ function rollMortality(room: LiveRoom, team: LiveTeam): SuccessionNotice | null 
   }
   team.state.rng = rng.getState()
   team.state.finished = true
+  team.state.finishReason = 'mortality'
   team.state.succession = stored
   team.state.nextYearAt = 0
   team.state.yearLockUntil = 0
@@ -1624,6 +1626,17 @@ function questionStats(room: LiveRoom) {
   return [...grouped.entries()].map(([questionId, row]) => ({ questionId, ...row }))
 }
 
+export function playerStatusOf(team: LiveTeam, room: LiveRoom) {
+  const state=team.state
+  if(state && isBankrupt(state))return !state.finished && state.secondLife==='available' && state.stateAidEligible ? 'restructuring' : 'bankrupt'
+  if(team.ending==='death'||state?.finishReason==='mortality')return 'deceased'
+  if(state?.centennial)return 'centennial'
+  if(state?.finished&&state.finishReason==='retirement')return 'retired'
+  if(state?.finished&&state.succession)return 'transferred'
+  if(state?.finished||room.status==='ended')return 'finished'
+  return state?.introDone?'operating':'joining'
+}
+
 export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) {
   const ranked = room.teams
     .slice()
@@ -1633,6 +1646,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
     teamId: team.id,
     teamName: team.teamName,
     avatar: avatarOf(team.avatar),
+    playerStatus: playerStatusOf(team,room),
     themeName: team.theme?.name ?? 'Chờ chủ đề',
     industryId: team.theme?.industryId ?? '',
     value: valueOf(team),
@@ -1671,6 +1685,7 @@ export function buildSnapshot(room: LiveRoom, viewer: Viewer, now = Date.now()) 
       correct: room.answers.filter(answer => answer.teamId === team.id && answer.correct).length,
       answered: room.answers.filter(answer => answer.teamId === team.id && answer.optionId).length,
       connected: team.connected,
+      playerStatus: playerStatusOf(team,room),
       themeName: team.theme?.name ?? '',
       industryId: team.theme?.industryId ?? '',
       factoryName: team.state?.factoryName ?? team.theme?.factoryName ?? '',

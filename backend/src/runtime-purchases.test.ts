@@ -29,7 +29,7 @@ vi.mock('./game/catalog', async () => {
 
 })
 import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom, saveAvatar, bootRooms, endRoom } from './runtime'
-import { TUTORIAL_ACTIONS } from './game/tutorial'
+import { TUTORIAL_ACTIONS, TUTORIAL_V2_ACTIONS } from './game/tutorial'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
 function theme(): ThemeDef {
@@ -356,7 +356,7 @@ describe('first-year advisor clock and required actions',()=>{
     vi.mocked((await import('./game/catalog')).pickFreshTheme).mockReturnValue(theme())
     const a=await roomWithTeam();await startRoom(a.code,a.hostToken)
     const start=a.room.countdownEndsAt!;tick(a.room,start)
-    expect(a.team.state!.tutorial).toEqual({version:1,step:0,complete:false})
+    expect(a.team.state!.tutorial).toEqual({version:2,step:0,complete:false})
     expect(a.room.endsAt).toBe(start+a.room.durationSec*1000)
     await confirmIntro(a.code,a.player.playerToken,factoryName)
     expect(a.team.state!.nextYearAt).toBe(0)
@@ -457,5 +457,55 @@ describe('CEO avatars remain separate from economic state',()=>{
   db.room.update.mockRejectedValueOnce(new Error('Database unavailable'))
   await expect(saveAvatar(a.code,a.player.playerToken,{body:'slim-female',skin:'tan',outfit:'shirt'})).rejects.toThrow('Database unavailable')
   expect(a.team.avatar).toEqual(previous);expect(JSON.stringify(a.team.state)).toBe(state)
+ })
+})
+
+
+describe('approved v2 tutorial and host lifecycle statuses',()=>{
+ it('requires every actual purchase, protects retry, visits six stats, and starts only the year-two timer',async()=>{
+  scenario.noRisks=true;scenario.family=false
+  const a=await roomWithTeam();a.team.state!.tutorial={version:2,step:0,complete:false};a.room.status='playing';a.room.endsAt=Date.now()+900000
+  await confirmIntro(a.code,a.player.playerToken,factoryName)
+  const deadline=a.room.endsAt
+  const purchases:Record<string, ['eng'|'mac'|'sup'|'inf'|'grn',1|'crew']>={cluster:['mac',1],crew:['eng','crew'],supply:['sup',1],infrastructure:['inf',1],green:['grn',1]}
+  for(const action of TUTORIAL_V2_ACTIONS){
+   const state=a.team.state!,step=state.tutorial!.step
+   expect(state.nextYearAt).toBe(0)
+   if(purchases[action]){
+    await expect(acknowledgeTutorial(a.code,a.player.playerToken,action)).rejects.toMatchObject({status:400})
+    const cash=state.cash,[line,quantity]=purchases[action]
+    await investLine(a.code,a.player.playerToken,line,quantity)
+    expect(a.team.state!.cash).toBeLessThan(cash)
+    const after=a.team.state!.cash
+    await expect(investLine(a.code,a.player.playerToken,line,quantity)).rejects.toMatchObject({status:409})
+    expect(a.team.state!.cash).toBe(after)
+   }else if(action==='year'){
+    await advanceTeamYear(a.code,a.player.playerToken)
+    expect(a.team.state!.cycles).toBe(1)
+   }else await acknowledgeTutorial(a.code,a.player.playerToken,action)
+   expect(a.team.state!.tutorial!.step).toBe(step+1)
+  }
+  expect(a.team.state!.tutorial!.complete).toBe(true)
+  expect(a.team.state!.nextYearAt).toBeGreaterThan(Date.now()+59000)
+  expect(a.room.endsAt).toBe(deadline)
+  expect(a.team.state!.machines).toBe(1);expect(a.team.state!.engineers).toBe(a.team.state!.crewSize)
+ })
+ it('skips only an unaffordable v2 purchase without granting cash or resources',async()=>{
+  const a=await roomWithTeam();a.team.state!.tutorial={version:2,step:TUTORIAL_V2_ACTIONS.indexOf('supply'),complete:false};a.team.state!.cash=1;a.team.state!.introDone=true;a.room.status='playing'
+  const support=a.team.state!.support
+  await acknowledgeTutorial(a.code,a.player.playerToken,'continue-without-purchase')
+  expect(a.team.state!.tutorial!.step).toBe(TUTORIAL_V2_ACTIONS.indexOf('infrastructure'));expect(a.team.state!.cash).toBe(1);expect(a.team.state!.support).toBe(support)
+ })
+ it('keeps mortality, retirement, succession and restructuring distinct even for identical heir multipliers',async()=>{
+  const a=await roomWithTeam(),state=a.team.state!
+  const status=()=>buildSnapshot(a.room,{role:'host',code:a.code}).teams[0].playerStatus
+  state.introDone=true;expect(status()).toBe('operating')
+  state.finished=true;state.succession={causeText:'x',outcome:'steady',outcomeLabel:'x',outcomeDetail:'x',assetsBefore:1,assetsAfter:1,year:1}
+  state.finishReason='mortality';expect(status()).toBe('deceased')
+  state.finishReason='retirement';expect(status()).toBe('retired')
+  state.finishReason='succession';expect(status()).toBe('transferred')
+  state.bankrupt=true;state.finished=false;state.stateAidEligible=true;state.secondLife='available';expect(status()).toBe('restructuring')
+  state.finished=true;expect(status()).toBe('bankrupt')
+  state.bankrupt=false;state.stateAidEligible=false;state.finished=false;state.succession=null;state.finishReason=undefined;expect(status()).toBe('operating')
  })
 })

@@ -8,8 +8,8 @@ let browser;
 (async () => {
   browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH, headless: true });
   const report = { widths: [], errors: [], missing: [], checks: [] };
-  for (const width of [390, 768, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : width === 768 ? 1024 : 900 } });
+  for (const width of [390, 768, 1366, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : width === 768 ? 1024 : width === 1366 ? 768 : 900 } });
     await context.addInitScript(() => {
       if(!localStorage.getItem('qa-no-session'))localStorage.setItem('host-session', 'mock-google-session');
       Object.defineProperty(navigator, 'clipboard', { value: { writeText: async text => { window.__copiedLink = text; } } });
@@ -51,6 +51,8 @@ let browser;
     await create.getByRole('textbox').fill('Chủ phòng QA');
     await create.locator('select').nth(0).selectOption('15');
     await create.locator('select').nth(1).selectOption('10000');
+    if(width===1366){await create.locator('summary').click();const btn=await create.getByRole('button',{name:'Mở phòng',exact:true}).boundingBox();assert(btn.y+btn.height<=768,'expanded create form fits laptop height')}
+    assert((await create.locator('select').first().evaluate(n=>getComputedStyle(n).borderImageSource)).includes('field-paper-normal.svg'));
     await page.screenshot({ path: path.join(out, `create-${width}.png`) });
     assert.equal(await create.getByRole('button', { name: 'Mở phòng', exact: true }).evaluate(el=>getComputedStyle(el).color), 'rgb(255, 242, 208)');
     assert.equal(await create.locator('.session-create-title').evaluate(el=>getComputedStyle(el).color),'rgb(255, 240, 191)');

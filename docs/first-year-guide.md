@@ -4,11 +4,11 @@
 
 ## Luồng
 
-19 bước: tên doanh nghiệp → tiền mặt → tài sản → số năm đã chốt → đồng hồ trận → thu nhập → thứ hạng → loa → Đầu tư → Doanh nghiệp → Rủi ro → Lịch sử sự kiện → Thay đổi từng năm → quay lại Đầu tư → mở một cụm → tuyển đủ tổ theo ngành → xem Doanh nghiệp đã cập nhật → chốt năm đầu → phản hồi hoàn tất.
+Phiên mới dùng **version 2, 28 bước**: tám mục HUD → bấm Đầu tư → mua cụm và tổ công nhân trên thẻ thật → thực hành phụ trợ, hạ tầng, công nghệ sạch → bấm Doanh nghiệp → lần lượt sáu chỉ số → ô nhiễm và chất lượng → bấm Rủi ro, Lịch sử sự kiện, Thay đổi từng năm → chốt năm đầu → hoàn tất. Version 1 cũ vẫn giữ nguyên 19 bước theo action để phiên đang dở không bị đổi chỉ số bước hoặc mua lặp.
 
 Phần giới thiệu thanh trên (8 mục đầu) cho phép chạm nền, lời thoại hoặc Enter/Space để chuyển ngay, không bắt bấm chỉ số. Các tab phải được người chơi bấm thật; không tự mở rồi tính như đã xem. Bước thực hành mua và Sang năm vẫn cần thao tác thật. Trong các đoạn thực hành, chạm khi đang nói sẽ hiện hết đoạn hiện tại; chạm sau đó phản hồi để tiếp tục. Đến yêu cầu thao tác, chỉ bấm đúng mục mới chuyển bước.
 
-Lời thoại được chia ở ranh giới câu thành các đoạn ngắn (tối đa khoảng 110 ký tự), khoảng 45ms mỗi cụm ký tự tiếng Việt, nghỉ lâu hơn ở dấu câu. Hết một đoạn, miệng khép lại và chờ 3 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ chỉ tự nối đoạn giải thích tiếp theo, không tự xác nhận thao tác. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
+Lời thoại được chia ở ranh giới câu thành các đoạn ngắn (tối đa khoảng 110 ký tự), **18ms mỗi cụm ký tự tiếng Việt**, ngắt dấu phẩy 80ms và hết câu 180ms. Hết một đoạn, miệng khép lại và chờ 3 giây hoặc một lần chạm/Enter/Space. Khoảng nghỉ chỉ tự nối đoạn giải thích tiếp theo, không tự xác nhận thao tác. Có dòng nhắc nhỏ phân biệt đang nói, đang nghỉ và đang chờ bấm đúng mục.
 
 ## Thời gian và trạng thái
 

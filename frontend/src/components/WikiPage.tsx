@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import catalog from '../lib/wiki-catalog.json'
-import { ArtText as T, PaintedArt as Art } from './ArtText'
+import { PaintedArt as Art } from './ArtText'
+import { PublicArtText as T } from './PublicArtText'
 import { factoryArt, investmentArt } from '../lib/art'
 
 type Industry = typeof catalog.industries[number]

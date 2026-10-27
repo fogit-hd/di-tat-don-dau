@@ -1,4 +1,4 @@
-export const LETTER_SECONDS = .045
+export const LETTER_SECONDS = .018
 export const RESPONSE_SECONDS = 3
 
 /** Short spoken turns; preserve every word and every Vietnamese diacritic. */

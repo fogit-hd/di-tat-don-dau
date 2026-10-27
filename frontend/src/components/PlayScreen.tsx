@@ -1,3 +1,4 @@
+import { RoomLoading } from './RoomLoading'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { api, ApiError } from '../api/client.ts'
@@ -106,7 +107,7 @@ export function PlayScreen() {
   return (
     <EventAttention events={scene?.eventLog ?? []} scope={`${upper}:${snap?.you?.id ?? 'loading'}`} available={Boolean(scene)}><main data-economy-model={scene?.economyVersion} className={showGame ? 'wrap game-shell gameplay gameplay-responsive' : 'wrap'}>
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
-      {!snap && <p className="lead">{error || 'Đang vào phòng…'}</p>}
+      {!snap && <RoomLoading code={upper} error={error||undefined}/>}
       {snap && status === 'lobby' && <CeoLobby key={snap.you?.id} snap={snap} onSave={avatar=>api<{avatar:AvatarConfig}>(`/api/rooms/${upper}/avatar`,{method:'POST',playerToken:token,body:avatar})}/>}
       {snap && status === 'countdown' && <SessionCountdown code={upper} ends={snap.room.countdownEndsAt} now={now} name={snap.you?.teamName} avatar={snap.you?.avatar}/>}
       {snap && scene && theme && (status === 'playing' || status === 'paused') && !scene.introDone && (
@@ -144,7 +145,7 @@ export function PlayScreen() {
                 ref={gameTabs}
                 finished={youFinished}
                 tutorialTarget={tutorial?(busy?null:tutorial.tab??null):undefined}
-                initialTab={tutorial?guideDisplayedTab(scene.tutorial!.step):'investment'}
+                initialTab={tutorial?guideDisplayedTab(scene.tutorial!.step,scene.tutorial!.version):'investment'}
                 onVisit={tab=>{if(tutorial?.tab===tab)void acknowledge(tutorial.action)}}
                 result={<InlineResult snap={snap} />}
                 enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}

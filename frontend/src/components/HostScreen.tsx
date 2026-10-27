@@ -1,3 +1,4 @@
+import { RoomLoading } from './RoomLoading'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import QRCode from 'qrcode'
@@ -25,7 +26,6 @@ export function HostScreen() {
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState('')
   const [confirmEnd, setConfirmEnd] = useState(false)
-  const [watch, setWatch] = useState<string | null>(null)
 
   useEffect(() => {
     const url = `${window.location.origin}/?code=${upper}`
@@ -67,7 +67,7 @@ export function HostScreen() {
   }
 
   const joinUrl = `${window.location.origin}/?code=${upper}`
-  const watched = snap?.teams.find((team) => team.id === watch) ?? snap?.teams[0]
+  const watched = snap?.teams[0]
   const centuryTeam = snap?.teams.find((team) => team.centennial)
   const centuryNotice =
     centennial ??
@@ -76,13 +76,13 @@ export function HostScreen() {
   return (
     <main className="wrap host">
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
-      {!snap && <p className="lead">{error || 'Đang mở phòng…'}</p>}
+      {!snap && <RoomLoading code={upper} error={error||undefined} host/>}
       {snap && snap.room.status === 'lobby' && <HostLobby snap={snap} qr={qr} joinUrl={joinUrl} busy={busy} note={note}
         settings={<SessionSettings minutes={minutes} capital={capital} cycle={cycle} yearMin={yearMin} onMinutes={setMinutes} onCapital={setCapital} onCycle={setCycle} onYearMin={setYearMin}/>}
         onStart={()=>void(async()=>{setBusy(true);setNote('');try{await api(`/api/rooms/${upper}`,{method:'PATCH',hostToken:token,body:{durationMin:minutes,startingCapital:capital,cycleSeconds:cycle,yearMinSeconds:yearMin}});await api(`/api/rooms/${upper}/start`,{method:'POST',hostToken:token,body:{}})}catch(err){setNote(err instanceof ApiError?err.message:'Không bắt đầu được')}finally{setBusy(false)}})()}
       />}
       {snap && snap.room.status === 'countdown' && <SessionCountdown code={upper} ends={snap.room.countdownEndsAt} now={now} />}
-      {snap && (snap.room.status === 'playing' || snap.room.status === 'paused') && <HostLive snap={snap} now={now} selected={watched} onSelect={setWatch} busy={busy} note={note} confirmEnd={confirmEnd}
+      {snap && (snap.room.status === 'playing' || snap.room.status === 'paused') && <HostLive snap={snap} now={now} busy={busy} note={note} confirmEnd={confirmEnd}
         onPause={()=>void call(snap.paused?'resume':'pause')}
         onEnd={()=>{if(!confirmEnd){setConfirmEnd(true);return}void call('end')}}
         notice={centuryNotice && centurySeen !== `${centuryNotice.teamId}-${centuryNotice.year}` ? <CentennialReveal notice={centuryNotice} industryId={snap.teams.find(team=>team.id===centuryNotice.teamId)?.industryId||watched?.industryId||''} teamName={snap.teams.find(team=>team.id===centuryNotice.teamId)?.teamName||'Một CEO'} onDone={()=>setCenturySeen(`${centuryNotice.teamId}-${centuryNotice.year}`)}/> : undefined}

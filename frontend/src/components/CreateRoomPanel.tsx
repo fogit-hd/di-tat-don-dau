@@ -27,7 +27,7 @@ export function CreateRoomPanel(p:{hostName:string;minutes:number;capital:number
   <h1 className="session-create-title session-ribbon"><T text="Tạo phòng" bold/></h1>
   <form ref={form} className="session-frame session-create-form" onSubmit={e=>{e.preventDefault();if(!p.busy)p.onSubmit()}}>
    <h2><T text="Thiết lập phiên chơi" bold/></h2><p><T text="Tạo phòng để mời bạn bè cùng tham gia và bắt đầu hành trình phát triển doanh nghiệp."/></p>
-   <label className="session-name-field"><span><T text="Tên chủ phòng" bold/></span><input value={p.hostName} maxLength={40} onChange={e=>p.onHostName(e.target.value)}/><small><T text={`${p.hostName.length}/40 ký tự`}/></small></label>
+   <label className="session-name-field"><span><T text="Tên chủ phòng" bold/></span><input value={p.hostName} maxLength={40} onBlur={e=>p.onHostName(e.currentTarget.value.normalize('NFC'))} onChange={e=>p.onHostName(e.target.value)}/><small><T text={`${p.hostName.length}/40 ký tự`}/></small></label>
    <SessionSettings {...p}/>
    <p className="session-small"><T text="Giá đầu tư thay đổi theo ngành và quy mô."/></p>
    {p.error&&<p className="session-error" role="alert"><T text={p.error}/></p>}

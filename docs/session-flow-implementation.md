@@ -1,5 +1,7 @@
 # Session UI implementation — 27/10/2026
 
+> Cập nhật: người dùng đã chốt và yêu cầu code. Đã triển khai; xem `docs/approved-session-v2.md` để biết trạng thái và báo cáo kiểm chứng cuối. Phần mô tả bên dưới giữ làm hồ sơ thiết kế.
+
 Current user authorization: implement already-reviewed canvases and prepare previews for surfaces without a canvas. Player terminology is CEO; company names are assigned, not entered again. Do not change economic rules or implement the separate 10-minute shared-round proposal as part of UI work.
 
 ## Approved references being implemented

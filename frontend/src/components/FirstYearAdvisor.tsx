@@ -36,7 +36,7 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       chunkIndex=index;responded=false;finishedAt=0;if(point)point.out=true
       const normalized=chunks[index].normalize('NFC')
       chars=segmenter?Array.from(segmenter.segment(normalized),part=>part.segment):Array.from(normalized);beats=[];speechTotal=0
-      for(const char of chars){beats.push(speechTotal);speechTotal+=/[.!?]/.test(char)?.3:/[,;:]/.test(char)?.14:LETTER_SECONDS}
+      for(const char of chars){beats.push(speechTotal);speechTotal+=/[.!?]/.test(char)?.18:/[,;:]/.test(char)?.08:LETTER_SECONDS}
       shown=Math.min(6,chars.length);speechTime=beats[shown]??0;reading=!reduced.matches;pauseUntil=reduced.matches?t+RESPONSE_SECONDS:Infinity;idleStart=t
       if(words.current)words.current.textContent=reduced.matches?normalized:chars.slice(0,shown).join('')
       if(announcement.current)announcement.current.textContent=normalized

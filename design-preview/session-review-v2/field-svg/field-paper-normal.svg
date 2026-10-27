@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 56" width="480" height="56" fill="none">
+<title>Khung nhập liệu paper normal</title>
+<defs><linearGradient id="metal" x1="0" y1="0" x2="0" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#f5d58a"/><stop offset=".45" stop-color="#b88a36"/><stop offset="1" stop-color="#f5d58a"/></linearGradient>
+<g id="corner"><path d="M5 15V9Q5 5 9 5H17M8 15V10Q8 8 10 8H17" stroke="url(#metal)" stroke-width="1.7" stroke-linecap="round"/><path d="M5 12Q15 13 12 5M7 8Q12 7 10 11" stroke="#f5d58a" stroke-width="1.2"/><path d="m7 5 3 3-3 3-3-3Z" fill="#b88a36" stroke="#f5d58a" stroke-width=".8"/></g></defs>
+<path d="M16 4H464Q476 4 476 16V40Q476 52 464 52H16Q4 52 4 40V16Q4 4 16 4Z" fill="#f4e1ba" stroke="#5b321d" stroke-width="1.4"/>
+<rect x="5.5" y="5.5" width="469" height="45" rx="4" stroke="url(#metal)" stroke-width="1.6"/><rect x="8" y="8" width="464" height="40" rx="2" stroke="#b88a36" stroke-width=".6"/>
+<use href="#corner"/><use href="#corner" transform="translate(480 0) scale(-1 1)"/><use href="#corner" transform="translate(0 56) scale(1 -1)"/><use href="#corner" transform="translate(480 56) scale(-1 -1)"/>
+</svg>

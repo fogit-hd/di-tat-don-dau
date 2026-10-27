@@ -1,0 +1,32 @@
+{
+  "tool": "built-in image_gen",
+  "purpose": "review only",
+  "commonPrompt": "Create a high-fidelity ui-mockup CANVAS for the Vietnamese browser game Đi Tắt Đón Đầu. Maintain the reference's hand-painted industrial board-game style: wine-red textile, restrained fine gold corner filigree, pale parchment panels, dark brown legible lettering, painted 2D CEO portraits, maritime industrial harbor. Polished compact game interface, not an academic dashboard. Exact Vietnamese diacritics. All numbers are illustrative design data. No new gameplay features. Entire screen inside the image, no browser chrome. No giant padding, no clipped text, no giant icons, no fake readiness controls. This is a design preview only.",
+  "files": [
+    {
+      "name": "01-host-live",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-1ca16890-50cc-473f-893d-e5ad3ef91599.png"
+    },
+    {
+      "name": "02-host-final",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-5f3ceca3-1e06-4ae1-9678-9f61b8369a8a.png"
+    },
+    {
+      "name": "03-create-room",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-7ab70251-e805-4796-9980-e0f634b37084.png"
+    },
+    {
+      "name": "04-player-results",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-d1902d9a-9b62-4fb5-9801-4bf09d55514c.png"
+    },
+    {
+      "name": "05-cash-events",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-088d6249-4607-474b-885b-607f05d1df2e.png"
+    },
+    {
+      "name": "06-controls-responsive",
+      "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-56beb303-5d56-4f7b-b7e8-0e98579775e1.png"
+    }
+  ],
+  "notes": "03 create and 06 controls refined once. Current application unchanged. Full review and motion timing in REVIEW.md."
+}

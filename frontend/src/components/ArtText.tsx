@@ -2,11 +2,12 @@ import type { CSSProperties } from 'react'
 import letters from '../lib/wiki-letter-paths.json'
 
 type Weight = 'regular' | 'bold'
+export type Lettering = Record<Weight, Record<string, [number, string]>>
 const glyphs = letters as unknown as Record<Weight, Record<string, [number, string]>>
 
 /** Public-page lettering is SVG geometry, not a browser font or an inaccessible screenshot. */
-export function ArtText({ text, bold = false, className = '', style }: { text: string; bold?: boolean; className?: string; style?: CSSProperties }) {
-  const face = glyphs[bold ? 'bold' : 'regular']
+export function ArtText({ text, bold = false, className = '', style, lettering = glyphs }: { text: string; bold?: boolean; className?: string; style?: CSSProperties; lettering?: Lettering }) {
+  const face = lettering[bold ? 'bold' : 'regular']
   return <span className={`art-text ${className}`} role="img" aria-label={text} style={style}>
     {text.normalize('NFC').split(/\s+/).filter(Boolean).map((word, index) => {
       let width = 0

@@ -30,6 +30,7 @@ export function useRoom(code: string, role: 'host' | 'player', token: string | n
     socket.on('team:centennial', (payload: CentennialNotice) => setCentennial(payload))
     socket.on('team:longevity', (payload: LongevityNotice) => setLongevity(payload))
     socket.on('problem', (payload: { error?: string }) => setError(payload.error || 'Không vào được phòng'))
+    socket.on('connect_error', () => { setOffline(true); setError('Chưa kết nối được với phòng. Hãy thử lại.') })
     socket.on('disconnect', () => setOffline(true))
     const onVisible = () => {
       if (document.visibilityState === 'visible') hello()

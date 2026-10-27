@@ -4,11 +4,13 @@ import { money, vnd } from '../lib/format'
 import { CeoAvatar, CeoName } from './CeoAvatar'
 import { ArtText as T } from './ArtText'
 
-export function SessionRanking({rows,teams=[],meId,onSelect,live=false}:{rows:BoardRow[];teams?:TeamRow[];meId?:string;onSelect?:(id:string)=>void;live?:boolean}){
+export function SessionRanking({rows,teams=[],meId,onSelect,live=false,ceremony=false}:{rows:BoardRow[];teams?:TeamRow[];meId?:string;onSelect?:(id:string)=>void;live?:boolean;ceremony?:boolean}){
  const [detail,setDetail]=useState<BoardRow|null>(null)
+ const [revealing,setRevealing]=useState(ceremony)
+ useEffect(()=>{if(!ceremony)return;const timer=setTimeout(()=>setRevealing(false),4200);return()=>clearTimeout(timer)},[ceremony])
  function choose(row:BoardRow){if(onSelect)onSelect(row.teamId);else setDetail(row)}
  const top=rows.slice(0,3),rest=rows.slice(3)
- return <div className="session-ranking">
+ return <div className={`session-ranking${ceremony?' awards-reveal':''}`} aria-busy={revealing} inert={revealing}>
   {top.length>0&&<section className="session-podium" aria-label="Top 3 CEO">
    {[top[1],top[0],top[2]].map((row,index)=>row?<article className={`podium-slot place-${row.rank}${row.teamId===meId?' is-me':''}`} key={row.teamId} data-rank={row.rank}>
     <button type="button" aria-label={`Hạng ${row.rank}, CEO ${row.teamName}, ${vnd(row.value)}. Xem chi tiết`} onClick={()=>choose(row)}>

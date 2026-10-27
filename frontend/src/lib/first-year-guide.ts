@@ -1,10 +1,12 @@
+import { guideV2 } from './first-year-guide-v2'
 import type { SceneView } from '../api/types'
 import { money, vnd } from './format'
 import { count, rate } from './production-format'
 
 export type GuideStep = { action: string; target: string; text: string; tab?: string; focus?: string; interaction?:'continue' }
-export function guideActive(scene: SceneView) { return scene.tutorial?.version === 1 && !scene.tutorial.complete && !scene.finished && !scene.bankrupt }
+export function guideActive(scene: SceneView) { return (scene.tutorial?.version === 1 || scene.tutorial?.version === 2) && !scene.tutorial.complete && !scene.finished && !scene.bankrupt }
 export function guideStep(scene: SceneView,context:{ceoName?:string;industryName?:string;rank?:number;durationSec?:number}={}): GuideStep {
+  if(scene.tutorial?.version===2)return guideV2(scene,context)
   const crew = scene.crewRequired ?? 1
   const ceo=context.ceoName?.trim()||'bạn',industry=context.industryName||'ngành này'
   const clusterQuote=scene.investmentPreviews?.mac?.[1],crewQuote=scene.investmentPreviews?.eng?.crew,hireQuote=scene.investmentPreviews?.eng?.[1]
@@ -23,8 +25,8 @@ export function guideStep(scene: SceneView,context:{ceoName?:string;industryName
     { action:'events', target:'[data-guide="tab-events"]', tab:'events', text:`Rủi ro kỳ tới của CEO ${ceo}: tử vong ${rate(scene.deathChance??0)}, kế nghiệp ${rate(scene.successionChance??0)}. Tình trạng hỗ trợ vốn nằm bên dưới. Bấm Lịch sử sự kiện để xem nơi theo dõi biến cố.` },
     { action:'years', target:'[data-guide="tab-years"]', tab:'years', text:'Lịch sử sự kiện có ba nhóm: Năm nay, Còn hiệu lực và Lịch sử. Bấm một sự kiện sẽ xem được tác động cụ thể. Hiệu ứng kinh tế tính theo năm. Bây giờ bấm Thay đổi từng năm để xem sổ thu–chi.' },
     { action:'investment-return', target:'[data-guide="tab-investment"]', tab:'investment', text:'Thay đổi từng năm ghi tiền vào, tiền ra và số dư sau mỗi lần chốt. Mở một năm để xem vì sao tăng hoặc giảm; năm đầu chưa chốt nên chưa có bản ghi. Bấm lại Đầu tư để thực hành.' },
-    { action:'cluster', target:'[data-guide="starter-cluster"]', text:`Ngành ${industry} của bạn cần ${crew} công nhân/cụm. Mở cụm đầu tiên hiện có giá ${clusterQuote?money(clusterQuote.total):'trên nút'}. Bấm Mở 1 cụm ở nút đang sáng để mua; sau đó cùng tuyển tổ vận hành.` },
-    { action:'crew', target:'[data-guide="starter-crew"]', text:`Bạn đã có ${count(scene.machines)} cụm và ${count(scene.engineers)} công nhân. Ngành này cần ${crew} người/cụm; tổ đầu còn thiếu ${count(crewQuote?.count??Math.max(0,crew-scene.engineers))} người. Bấm Tuyển đủ tổ${crewQuote?` với giá ${money(crewQuote.total)}`:''} để sẵn sàng vận hành.` },
+    { action:'cluster', target:'[data-guide="buy-mac"]', text:`Ngành ${industry} của bạn cần ${crew} công nhân/cụm. Mở cụm đầu tiên hiện có giá ${clusterQuote?money(clusterQuote.total):'trên nút'}. Bấm Đầu tư trên thẻ Mở cụm sản xuất để mua; sau đó cùng tuyển tổ vận hành.` },
+    { action:'crew', target:'[data-guide="buy-crew"]', text:`Bạn đã có ${count(scene.machines)} cụm và ${count(scene.engineers)} công nhân. Ngành này cần ${crew} người/cụm; tổ đầu còn thiếu ${count(crewQuote?.count??Math.max(0,crew-scene.engineers))} người. Bấm Tuyển đủ tổ${crewQuote?` với giá ${money(crewQuote.total)}`:''} để sẵn sàng vận hành.` },
     { action:'enterprise-ready', target:'[data-guide="tab-enterprise"]', tab:'enterprise', text:`Nguồn lực của CEO ${ceo}: ${count(scene.engineers)} công nhân, ${count(scene.machines)} cụm; ${count(scene.operating)} đang chạy và ${count(scene.idle)} chờ nhân lực. Bấm Doanh nghiệp để xem các chỉ số vừa cập nhật.` },
     { action:'year', target:'[data-guide="year"]', text:'Bạn đã biết các mục điều hành. Bấm Sang năm để chốt năm đầu: trò chơi tính sản xuất, chi phí, hiệu ứng và biến cố. Lần này không có thời gian chờ; sau hướng dẫn, chu kỳ tự Sang năm mới bắt đầu.' },
     { action:'complete', target:'', text:`CEO ${ceo} đã chốt Năm ${scene.cycles}! Sản lượng ${count(scene.lastProduction?.output??scene.lastOutput)} ${scene.unit}; lãi sản xuất ${money(scene.lastProduction?.net??scene.lastIncome)}. Kết quả ở Thay đổi từng năm. Từ bây giờ bạn tự điều hành; đồng hồ Sang năm sẽ bắt đầu.` },
@@ -39,6 +41,7 @@ export function guideStep(scene: SceneView,context:{ceoName?:string;industryName
   if ((step.action==='cluster'||step.action==='crew') && (!quote || quote.count<1 || scene.cash<quote.total)) return { action:'continue-without-purchase',target:'[data-guide="insufficient-capital"]',text:'Vốn hiện tại chưa đủ cho khoản mua này. Mình sẽ không tự cấp thêm tiền hay mua thay bạn. Bấm Tiếp tục với vốn hiện có để xem doanh nghiệp và chốt năm; phần chưa đủ nhân lực sẽ chưa tạo sản phẩm.' }
   return step
 }
-export function guideDisplayedTab(step: number) {
+export function guideDisplayedTab(step: number, version: number = 1) {
+  if(version===2)return step<=14?'investment':step<=23?'enterprise':step===24?'risk':step===25?'events':'years'
   return step<=9?'investment':step===10?'enterprise':step===11?'risk':step===12?'events':step===13?'years':step<=16?'investment':'enterprise'
 }

@@ -4,6 +4,7 @@ import { ArtText as T, PaintedArt as Art } from './ArtText'
 import { money } from '../lib/format'
 import './session-ui.css'
 import './session-flow.css'
+import './session-v2.css'
 
 export function SessionShell({title,subtitle,action,navigation,children,className='',dialog=false}:{title:string;subtitle?:string;action?:ReactNode;navigation?:ReactNode;children:ReactNode;className?:string;dialog?:boolean}){
  return <section className={`session-screen ${className}`} role={dialog?'dialog':undefined} aria-modal={dialog||undefined} aria-label={title} onContextMenu={e=>{if(e.target instanceof Element&&e.target.closest('img,svg'))e.preventDefault()}}>

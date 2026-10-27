@@ -2,16 +2,18 @@
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const {Server}=require('socket.io');const {createFixture}=require('./session-fixtures.cjs');
 const root=path.resolve(__dirname,'..'),dist=path.join(root,'frontend/dist'),fixture=createFixture(),clients=new Map();
-const toolbar='<div style="position:fixed;bottom:4px;right:4px;z-index:9999;background:#fff1d6;color:#4b170e;padding:6px 10px;font:12px Arial;border:1px solid #ad8439;border-radius:5px;max-width:95vw">Xem thử · dữ liệu mô phỏng: <a href="/preview/lobby">Nhân vật</a> · <a href="/preview/live">Top realtime</a> · <a href="/preview/player">Tổng kết CEO</a> · <a href="/preview/final">Tổng kết host</a></div>';
-let io;
-function push(){for(const [socket,role]of clients)socket.emit('snapshot',fixture.snapshot(role))}
+const toolbar='<div style="position:fixed;bottom:4px;right:4px;z-index:9999;background:#fff1d6;color:#4b170e;padding:6px 10px;font:12px Arial;border:1px solid #ad8439;border-radius:5px;max-width:95vw">Xem thử · dữ liệu mô phỏng: <a href="/preview/guide">Hướng dẫn năm 1</a> · <a href="/preview/loading">Đang vào phòng</a> · <a href="/preview/lobby">Nhân vật</a> · <a href="/preview/live">Top realtime</a> · <a href="/preview/player">Tổng kết CEO</a> · <a href="/preview/final">Tổng kết host</a></div>';
+fixture.teams[0].teamName='Minh';fixture.you.teamName='Minh';
+let io,guide=null,previewMode='normal';
+function push(){if(previewMode==='loading')return;for(const [socket,role]of clients)socket.emit('snapshot',guide?guide.snapshot(role):fixture.snapshot(role))}
 const server=http.createServer(async(req,res)=>{
  try{
   const url=new URL(req.url,'http://127.0.0.1');
-  if(url.pathname.startsWith('/preview/')){const state=url.pathname.split('/').pop();fixture.room.status=state==='lobby'?'lobby':state==='live'?'playing':'ended';fixture.room.endsAt=Date.now()+900000;push();res.writeHead(302,{Location:state==='lobby'||state==='player'?'/play/XTV45':'/host/XTV45'});return res.end()}
+  if(url.pathname.startsWith('/preview/')){const state=url.pathname.split('/').pop();previewMode=state==='loading'?'loading':'normal';guide=state==='guide'?await require('./guide-preview.cjs').makeGuidePreview(fixture):null;fixture.room.status=state==='lobby'||state==='loading'?'lobby':state==='live'||state==='guide'?'playing':'ended';fixture.room.endsAt=Date.now()+900000;push();res.writeHead(302,{Location:['lobby','player','guide','loading'].includes(state)?'/play/XTV45':'/host/XTV45'});return res.end()}
   if(url.pathname==='/health'){res.setHeader('Content-Type','application/json');return res.end('{"ok":true}')}
   if(url.pathname.startsWith('/api/')){
    const chunks=[];for await(const chunk of req)chunks.push(chunk);const body=chunks.length?JSON.parse(Buffer.concat(chunks).toString()):{};res.setHeader('Content-Type','application/json');
+   if(guide){guide.act(url.pathname,body);push();return res.end(JSON.stringify({ok:true}))}
    if(url.pathname.endsWith('/avatar')){const {avatarSchema}=await import('../backend/src/game/avatar.ts');const a=avatarSchema.safeParse(body);if(!a.success||fixture.room.status!=='lobby'){res.statusCode=400;return res.end('{"error":"Diện mạo không hợp lệ"}')}fixture.teams[0].avatar=a.data;push();return res.end(JSON.stringify({avatar:a.data}))}
    if(url.pathname.endsWith('/pause')){fixture.room.status='paused';fixture.room.remainingMs=500000;push()}
    if(url.pathname.endsWith('/resume')){fixture.room.status='playing';fixture.room.endsAt=Date.now()+500000;push()}
