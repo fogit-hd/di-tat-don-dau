@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { buildThemes, type IndustryPart, type ScenarioPart } from './catalog'
+import { makeRng } from './rng'
+import { buildThemes, pickFreshTheme, type ThemeBoard, type IndustryPart, type ScenarioPart } from './catalog'
 import type { LineDef } from './types'
 
 const lines: LineDef[] = [
@@ -83,4 +84,20 @@ describe('buildThemes', () => {
     expect(themes[1]?.role).toBe('Chủ xưởng tại Bắc Ninh')
     expect(themes[1]?.mission).toBe('Nhiệm vụ riêng ở Nhà máy Bắc Ninh')
   })
+})
+
+describe('50-CEO theme assignment',()=>{
+ it('assigns 50 distinct themes from a 64-theme board and finds the last unpicked theme after repeated collisions',()=>{
+  const board:ThemeBoard={...base,industries:Array.from({length:64},(_,i)=>({...industry,id:`industry-${i}`})),regions:[base.regions[0]!],scales:[{...base.scales[0]!,capitalFactor:1}],scenarios:[],nameParts:[]}
+  for(const seed of [1,5,32,1234,9999]){
+   const used=new Set<string>(),rng=makeRng(seed)
+   for(let i=0;i<50;i++){const theme=pickFreshTheme(board,rng,used);expect(used.has(theme.id)).toBe(false);used.add(theme.id)}
+   expect(used.size).toBe(50)
+  }
+  const used=new Set(board.industries.slice(0,63).map(row=>`${row.id}.ha-noi.nha-may.khoi-nghiep.base.ten`))
+  const repeated=makeRng(1);repeated.pick=((rows:unknown[])=>rows[0]) as typeof repeated.pick
+  expect(pickFreshTheme(board,repeated,used).industryId).toBe('industry-63')
+  used.add('industry-63.ha-noi.nha-may.khoi-nghiep.base.ten')
+  expect(()=>pickFreshTheme(board,repeated,used)).toThrow('Hết chủ đề')
+ })
 })

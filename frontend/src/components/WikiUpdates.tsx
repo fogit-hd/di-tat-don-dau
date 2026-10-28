@@ -4,7 +4,14 @@ import { PaintedArt as Art } from './ArtText'
 import { PublicArtText as T } from './PublicArtText'
 
 const updates = [
+  {title:'Phòng chờ & nhận diện CEO',paragraphs:[
+    'Mỗi phòng nhận tối đa 50 CEO khi đủ chủ đề doanh nghiệp. Màn hình host desktop từ 1280 × 700 hiển thị đủ 50 CEO trong lưới; màn hình nhỏ chia trang, có tìm tên và trạng thái kết nối. Đây là danh sách phòng chờ, chưa phải bảng xếp hạng.',
+    'Người chơi thấy toàn bộ dáng đứng và trang phục của mình. Bấm Thay đổi nhận diện để mở ngăn bên phải; nền phòng chờ được làm tối và giữ nguyên bố cục. Chọn dáng người, màu da, bộ đồ rồi Lưu diện mạo. Đóng khi chưa lưu sẽ bỏ các thay đổi thử.',
+    'Diện mạo đã lưu được dùng cho CEO đó trong phòng và khi tổng kết. Lỗi lưu giữ lại lựa chọn để thử lại; không thay đổi diện mạo của CEO khác. Khi host bắt đầu, ngăn nhận diện đóng và chuyển sang đếm ngược.',
+    'Giây mỗi năm và Khóa nút có thể nhập số hoặc bấm nút tăng/giảm được vẽ riêng. Hiệu ứng mở/đóng, đổi trang, thay trang phục và kết nối hỗ trợ tùy chọn giảm chuyển động của thiết bị.',
+  ]},
   {title:'Cụm sản xuất, nhân lực & giá đầu tư',paragraphs:[
+    'Chủ phòng tự nhập thời lượng 1–45 phút và vốn tham chiếu 2–100 tỷ VNĐ, tối đa một chữ số thập phân; ví dụ 2,5 tỷ. Các chỉ số của phiên được cố định khi tạo phòng và chỉ hiển thị để xem trong sảnh chờ. Muốn đổi thiết lập cần tạo phòng mới.',
     'Mỗi ngành có định mức tổ công nhân và giá riêng cho tuyển người, mở cụm, phụ trợ, hạ tầng, công nghệ sạch. Đủ người mới vận hành được cụm; số người, cụm hoạt động và sản phẩm luôn là số nguyên.',
     'Mua ×1, ×5, ×10 hoặc Tối đa cộng đúng giá từng gói khi quy mô tăng. Ưu đãi giảm giá chỉ giảm tiền trả, không giảm nguồn lực nhận: gói 100 triệu giảm 10% còn 90 triệu vẫn nhận đủ một gói.',
     'Đào tạo tay nghề và cải tiến thiết bị có 5 cấp; mở khi có 3 cụm đang vận hành. Bảo dưỡng khôi phục 100% độ bền, không thêm cụm. Mất cấp do sự kiện không xóa số lần đã mua, không làm giá nâng cấp rẻ trở lại.',

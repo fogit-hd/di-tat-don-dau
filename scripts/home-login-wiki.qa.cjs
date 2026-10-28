@@ -70,7 +70,7 @@ let browser;
   authFailure=true;await login.getByRole('button',{name:'Đăng nhập bằng Google (QA)',exact:true}).click();await login.getByRole('alert').waitFor();
   assert.equal(await page.getByRole('dialog',{name:'Tạo phòng',exact:true}).count(),0);await page.screenshot({path:path.join(out,`login-error-${width}.png`)});
   authFailure=false;await login.getByRole('button',{name:'Thử lại',exact:true}).click();await login.getByRole('button',{name:'Đăng nhập bằng Google (QA)',exact:true}).click();
-  const create=page.getByRole('dialog',{name:'Tạo phòng',exact:true});await create.waitFor();assert.equal(await create.getByRole('textbox').inputValue(),'Chủ phòng tiếng Việt');
+  const create=page.getByRole('dialog',{name:'Tạo phòng',exact:true});await create.waitFor();assert.equal(await create.locator('.session-name-field input').inputValue(),'Chủ phòng tiếng Việt');
   await page.keyboard.press('Escape');await create.waitFor({state:'detached'});
   for(const row of posts)assert.deepEqual(row.body,{credential:'local-qa-credential'});
   assert.equal(posts.length,3);

@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ArtText as T } from './ArtText'
+import { PublicArtText as T } from './PublicArtText'
 import { SessionShell, SessionSettings } from './SessionUI'
+import './create-room-fields.css'
 
 export function CreateRoomPanel(p:{hostName:string;minutes:number;capital:number;cycle:number;yearMin:number;busy:boolean;error:string;onHostName:(name:string)=>void;onMinutes:(n:number)=>void;onCapital:(n:number)=>void;onCycle:(n:number)=>void;onYearMin:(n:number)=>void;onSubmit:()=>void;onClose:()=>void;onLogout:()=>void}){
  const form = useRef<HTMLFormElement>(null)

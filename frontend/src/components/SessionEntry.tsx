@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import { lobbyMotion, riseIn } from '../lib/lobby-motion'
 import { Link } from 'react-router-dom'
 import type { AvatarConfig } from '../lib/avatar'
 import { CeoAvatar, CeoName } from './CeoAvatar'
@@ -12,7 +14,10 @@ export function CeoJoinPanel({code,name,busy,error,onCode,onName,onSubmit,onClos
 
 export function SessionCountdown({code,ends,now,name,avatar}:{code:string;ends:number|null;now:number;name?:string;avatar?:AvatarConfig}){
  const count=Math.max(1,Math.ceil(((ends??now+3000)-now)/1000))
+ const stage=useRef<HTMLDivElement>(null),dial=useRef<HTMLDivElement>(null)
+ useEffect(()=>{const a=riseIn(stage.current);return()=>a?.cancel()},[])
+ useEffect(()=>{const a=lobbyMotion(dial.current,[{opacity:0,transform:'scale(.72) rotate(-6deg)'},{opacity:1,transform:'scale(1.05) rotate(1deg)',offset:.7},{opacity:1,transform:'none'}],400);return()=>a?.cancel()},[count])
  return <SessionShell title={`Phòng ${code}`} className="session-countdown session-overlay" action={name?<div className="session-identity"><CeoAvatar avatar={avatar} portrait/><CeoName name={name} full/></div>:undefined}>
-  <div className="countdown-stage" role="status" aria-live="polite" aria-label={`Bắt đầu sau ${count} giây`}><h2><T text="Chuẩn bị bắt đầu" bold/></h2><div className="countdown-dial" key={count}><T text={String(count)} bold/></div><p><T text="Cùng xuất phát" bold/></p></div>
+  <div ref={stage} className="countdown-stage" role="status" aria-live="polite" aria-label={`Bắt đầu sau ${count} giây`}><h2><T text="Chuẩn bị bắt đầu" bold/></h2><div ref={dial} className="countdown-dial" key={count}><T text={String(count)} bold/></div><p><T text="Cùng xuất phát" bold/></p></div>
  </SessionShell>
 }

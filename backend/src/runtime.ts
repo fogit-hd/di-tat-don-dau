@@ -537,17 +537,10 @@ export async function updateRoom(
   const room = requireRoom(code)
   assertHost(room, token)
   if (room.status !== 'lobby') throw new HttpError(409, 'Phòng đã bắt đầu')
-  if (input.hostName) room.hostName = input.hostName.trim()
-  if (input.durationMin) room.durationSec = input.durationMin * 60
-  if (input.startingCapital) {
-    room.startingCapital = input.startingCapital
-    room.step = stepOf(input.startingCapital, rules().balance)
+  if (['durationMin','startingCapital','cycleSeconds','yearMinSeconds','linePrices'].some(key=>key in input)) {
+    throw new HttpError(409, 'Thông số phiên chơi đã được cố định khi tạo phòng. Hãy tạo phòng mới để đổi thiết lập.')
   }
-  if (input.linePrices) room.linePrices = linePricesOf({ ...room.linePrices, ...input.linePrices }, room.step)
-  else if (input.startingCapital && !input.linePrices) room.linePrices = linePricesOf(room.linePrices, room.step)
-  if (input.cycleSeconds) room.cycleSeconds = input.cycleSeconds
-  if (input.yearMinSeconds != null) room.yearMinSeconds = input.yearMinSeconds
-  room.yearMinSeconds = clampYearMin(room.yearMinSeconds, room.cycleSeconds)
+  if (input.hostName) room.hostName = input.hostName.trim()
   await persist(room)
   push(room.code)
   return lobbyView(room)
@@ -558,7 +551,7 @@ export async function joinRoom(code: string, teamName: string) {
   if (room.status !== 'lobby') throw new HttpError(409, 'Phòng không còn nhận CEO')
   const name = teamName.trim()
   if (name.length < 1 || name.length > 24) throw new HttpError(400, 'Tên CEO từ 1 đến 24 ký tự')
-  if (room.teams.length >= Math.min(24, Math.max(1, rules().themeCount))) throw new HttpError(409, 'Phòng đã đủ CEO')
+  if (room.teams.length >= Math.min(50, Math.max(1, rules().themeCount))) throw new HttpError(409, 'Phòng đã đủ CEO')
   const playerToken = nid(18)
   const team: LiveTeam = {
     id: nid(12),

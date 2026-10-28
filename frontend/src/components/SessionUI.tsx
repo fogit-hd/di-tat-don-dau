@@ -1,22 +1,25 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ArtText as T, PaintedArt as Art } from './ArtText'
-import { money } from '../lib/format'
+import { PublicArtText as PublicText } from './PublicArtText'
+import { PaintedStepper } from './PaintedStepper'
+import { parseCapitalBillions } from '../lib/room-settings'
 import './session-ui.css'
 import './session-flow.css'
 import './session-v2.css'
 
-export function SessionShell({title,subtitle,action,navigation,children,className='',dialog=false}:{title:string;subtitle?:string;action?:ReactNode;navigation?:ReactNode;children:ReactNode;className?:string;dialog?:boolean}){
+export function SessionShell({title,subtitle,action,navigation,children,className='',dialog=false,publicLettering=false}:{title:string;subtitle?:string;action?:ReactNode;navigation?:ReactNode;children:ReactNode;className?:string;dialog?:boolean;publicLettering?:boolean}){
+ const HeadingText=publicLettering?PublicText:T
  return <section className={`session-screen ${className}`} role={dialog?'dialog':undefined} aria-modal={dialog||undefined} aria-label={title} onContextMenu={e=>{if(e.target instanceof Element&&e.target.closest('img,svg'))e.preventDefault()}}>
-  <header className="session-header"><Link to="/" className="session-brand" aria-label="Đi Tắt Đón Đầu — Trang chủ"><Art src="/assets/landing-v2/brand-logo.webp"/></Link><div className="session-heading">{navigation||<><h1><T text={title} bold/></h1>{subtitle&&<p><T text={subtitle}/></p>}</>}</div><div className="session-header-actions">{action}</div></header>
+  <header className="session-header"><Link to="/" className="session-brand" aria-label="Đi Tắt Đón Đầu — Trang chủ"><Art src="/assets/landing-v2/brand-logo.webp"/></Link><div className="session-heading">{navigation||<><h1><HeadingText text={title} bold/></h1>{subtitle&&<p><HeadingText text={subtitle}/></p>}</>}</div><div className="session-header-actions">{action}</div></header>
   <div className="session-body">{children}</div>
  </section>
 }
 export function SessionSettings({minutes,capital,cycle,yearMin,onMinutes,onCapital,onCycle,onYearMin}:{minutes:number;capital:number;cycle:number;yearMin:number;onMinutes:(n:number)=>void;onCapital:(n:number)=>void;onCycle:(n:number)=>void;onYearMin:(n:number)=>void}){
  return <div className="session-settings">
-  <label><span><T text="Thời lượng" bold/></span><select value={minutes} onChange={e=>onMinutes(Number(e.target.value))}>{Array.from({length:45},(_,i)=><option key={i+1} value={i+1}>{i+1} phút</option>)}</select></label>
-  <label><span><T text="Vốn khởi đầu" bold/></span><select value={capital} onChange={e=>onCapital(Number(e.target.value))}>{![...Array(99)].some((_,i)=>(i+2)*1000===capital)&&<option value={capital}>{money(capital)} VNĐ</option>}{Array.from({length:99},(_,i)=><option key={i+2} value={(i+2)*1000}>{money((i+2)*1000)} VNĐ</option>)}</select></label>
-  <details className="session-advanced"><summary><T text="Thiết lập nâng cao" bold/></summary><div><label><span><T text="Giây mỗi năm"/></span><input type="number" min={10} max={180} value={cycle} onChange={e=>onCycle(Number(e.target.value))}/></label><label><span><T text="Khóa nút (giây)"/></span><input type="number" min={0} max={120} value={yearMin} onChange={e=>onYearMin(Number(e.target.value))}/></label></div></details>
+  <label><span><PublicText text="Thời lượng" bold/></span><span className="session-number-unit"><input aria-label="Thời lượng (phút)" type="number" inputMode="numeric" required min={1} max={45} step={1} defaultValue={minutes} onChange={e=>{if(Number.isFinite(e.target.valueAsNumber))onMinutes(e.target.valueAsNumber)}}/><span aria-hidden="true"><PublicText text="phút"/></span></span></label>
+  <label><span><PublicText text="Vốn khởi đầu" bold/></span><span className="session-number-unit"><input aria-label="Vốn khởi đầu (tỷ VNĐ)" type="text" inputMode="decimal" autoComplete="off" required pattern="[0-9]+([.,][0-9])?" defaultValue={(capital/1000).toLocaleString('vi-VN',{useGrouping:false,maximumFractionDigits:1})} onChange={e=>{const amount=parseCapitalBillions(e.target.value);e.target.setCustomValidity(amount===null?'Nhập từ 2 đến 100 tỷ VNĐ, tối đa một chữ số sau dấu phẩy.':'');if(amount!==null)onCapital(amount)}}/><span aria-hidden="true"><PublicText text="tỷ VNĐ"/></span></span></label>
+  <details className="session-advanced"><summary><PublicText text="Thiết lập nâng cao" bold/></summary><div><label><span><PublicText text="Giây mỗi năm"/></span><PaintedStepper label="Giây mỗi năm" value={cycle} min={10} max={180} onChange={onCycle}/></label><label><span><PublicText text="Khóa nút (giây)"/></span><PaintedStepper label="Khóa nút (giây)" value={yearMin} min={0} max={120} onChange={onYearMin}/></label></div></details>
  </div>
 }
 export function SessionTabs({items,value,onChange}:{items:readonly (readonly [string,string])[];value:string;onChange:(id:string)=>void}){

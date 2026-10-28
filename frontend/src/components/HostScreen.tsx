@@ -6,7 +6,6 @@ import { api, ApiError } from '../api/client.ts'
 import { useClock, useRoom } from '../realtime/useRoom.ts'
 import { CentennialReveal } from './CentennialReveal.tsx'
 import { HostLobby } from './HostLobby'
-import { SessionSettings } from './SessionUI'
 import { HostLive, HostResults } from './HostSessions'
 import { SessionCountdown } from './SessionEntry'
 
@@ -18,11 +17,6 @@ export function HostScreen() {
   const [centurySeen, setCenturySeen] = useState<string | null>(null)
   const now = useClock(snap)
   const [qr, setQr] = useState('')
-  const [minutes, setMinutes] = useState(15)
-  const [capital, setCapital] = useState(10000)
-  const [cycle, setCycle] = useState(60)
-  const [yearMin, setYearMin] = useState(5)
-  const [primed, setPrimed] = useState(false)
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState('')
   const [confirmEnd, setConfirmEnd] = useState(false)
@@ -31,15 +25,6 @@ export function HostScreen() {
     const url = `${window.location.origin}/?code=${upper}`
     void QRCode.toDataURL(url, { margin: 1, width: 320, color: { dark: '#3b2a22', light: '#fff8ec' } }).then(setQr)
   }, [upper])
-
-  useEffect(() => {
-    if (!snap || primed) return
-    setMinutes(Math.round(snap.room.durationSec / 60))
-    setCapital(snap.room.startingCapital)
-    setCycle(snap.room.cycleSeconds)
-    setYearMin(snap.room.yearMinSeconds)
-    setPrimed(true)
-  }, [snap, primed])
 
   async function call(path: string, body?: unknown) {
     if (!token) return
@@ -78,8 +63,7 @@ export function HostScreen() {
       {offline && <div className="offline">Mất kết nối, đang nối lại…</div>}
       {!snap && <RoomLoading code={upper} error={error||undefined} host/>}
       {snap && snap.room.status === 'lobby' && <HostLobby snap={snap} qr={qr} joinUrl={joinUrl} busy={busy} note={note}
-        settings={<SessionSettings minutes={minutes} capital={capital} cycle={cycle} yearMin={yearMin} onMinutes={setMinutes} onCapital={setCapital} onCycle={setCycle} onYearMin={setYearMin}/>}
-        onStart={()=>void(async()=>{setBusy(true);setNote('');try{await api(`/api/rooms/${upper}`,{method:'PATCH',hostToken:token,body:{durationMin:minutes,startingCapital:capital,cycleSeconds:cycle,yearMinSeconds:yearMin}});await api(`/api/rooms/${upper}/start`,{method:'POST',hostToken:token,body:{}})}catch(err){setNote(err instanceof ApiError?err.message:'Không bắt đầu được')}finally{setBusy(false)}})()}
+        onStart={()=>void call('start')}
       />}
       {snap && snap.room.status === 'countdown' && <SessionCountdown code={upper} ends={snap.room.countdownEndsAt} now={now} />}
       {snap && (snap.room.status === 'playing' || snap.room.status === 'paused') && <HostLive snap={snap} now={now} busy={busy} note={note} confirmEnd={confirmEnd}

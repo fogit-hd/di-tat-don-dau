@@ -1,0 +1,18 @@
+/* Create-room chrome uses the repaired public Vietnamese lettering, not gameplay glyphs. */
+.session-create {font-family:'Public UI',Arial,sans-serif;font-variant-numeric:lining-nums tabular-nums}
+.session-screen.session-create .session-create-form input {font-family:'Public UI',Arial,sans-serif;font-variant-numeric:lining-nums tabular-nums}
+.session-create .session-number-unit {position:relative;display:flex;align-items:center;min-width:0}
+.session-create .session-number-unit>input {width:100%;padding-right:84px}
+.session-create .session-number-unit>span {position:absolute;right:16px;pointer-events:none;font-size:15px;color:#68482d}
+.session-create .session-number-unit>span .art-text {flex-wrap:nowrap}
+.session-create .session-form-actions {display:grid;grid-template-columns:minmax(0,1fr) minmax(110px,.3fr);align-items:stretch;gap:12px}
+.session-create .session-form-actions .session-button {min-height:60px;height:60px;padding:6px 12px;font-size:20px}
+.session-create .session-form-actions .art-text {justify-content:center;flex-wrap:nowrap}
+.session-create .session-create-form .session-advanced label {font-size:16px}
+.session-locked-timing {margin-top:0;font-size:19px}
+@media(max-width:479px){
+  .session-create .session-form-actions {grid-template-columns:minmax(0,1fr) minmax(84px,.4fr);gap:8px}
+  .session-create .session-form-actions .session-button {font-size:18px;min-height:56px;height:56px;padding-inline:5px}
+  .session-create .session-number-unit>input {padding-right:76px}
+  .session-create .session-number-unit>span {right:13px;font-size:14px}
+}

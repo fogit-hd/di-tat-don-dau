@@ -1,0 +1,21 @@
+{
+  "size": 88,
+  "normal": 0,
+  "hover": [
+    1,
+    2,
+    3,
+    4,
+    0
+  ],
+  "press": [
+    5,
+    6,
+    0
+  ],
+  "disabled": 7,
+  "durationMs": {
+    "hover": 180,
+    "press": 160
+  }
+}

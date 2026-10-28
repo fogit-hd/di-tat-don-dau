@@ -657,6 +657,15 @@ export function pickFreshTheme(board: ThemeBoard, rng: Rng, used: Set<string>): 
     const theme = composeTheme(board, industry, region, scale, context, situation, part)
     if (!used.has(theme.id)) return theme
   }
+  // A crowded 50-player lobby must not fail merely because 40 random draws collided.
+  // Traverse lazily only on this rare path; never materialize the full theme cross product.
+  for(const industry of board.industries)for(const region of board.regions)for(const scale of board.scales)for(const context of board.contexts){
+    const situations=board.scenarios.filter(row=>row.industryId===industry.id)
+    for(const situation of situations.length?situations:[null])for(const part of board.nameParts.length?board.nameParts:[null]){
+      const theme=composeTheme(board,industry,region,scale,context,situation,part)
+      if(!used.has(theme.id))return theme
+    }
+  }
   throw new Error('Hết chủ đề khác nhau trong phòng')
 }
 

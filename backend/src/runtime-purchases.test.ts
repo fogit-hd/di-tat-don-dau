@@ -30,7 +30,7 @@ vi.mock('./game/catalog', async () => {
     successionPolicy: { baseChance: scenario.noRisks ? 0 : .01, stepPerYear: .0025, maxChance: .3, longevityChance: 0, illnessAdd: .1, traitRules: {} } }), pickFreshTheme: vi.fn() }
 
 })
-import { buildSnapshot, confirmIntro, createRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom, saveAvatar, bootRooms, endRoom } from './runtime'
+import { buildSnapshot, confirmIntro, createRoom, updateRoom, getRoom, investLine, joinRoom, advanceTeamYear, restartTeam, startLoop, answerPrompt, dismissPrompt, tick, acknowledgeTutorial, startRoom, saveAvatar, bootRooms, endRoom } from './runtime'
 import { TUTORIAL_ACTIONS, TUTORIAL_V2_ACTIONS } from './game/tutorial'
 
 const factoryName = 'Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)'
@@ -55,6 +55,38 @@ async function roomWithTeam() {
 
 describe('room-scoped names and purchases', () => {
   beforeEach(() => { vi.clearAllMocks(); scenario.family = false; scenario.outcome = 'steady'; scenario.noRisks = true; scenario.shared = false; scenario.inflation = false })
+
+  it('accepts 50 CEOs with independent identity/avatar state, rejects the 51st and starts everyone',async()=>{
+    const created=await createRoom({hostUserId:'host',hostName:'50 CEO',durationMin:10,startingCapital:2500})
+    const players=await Promise.all(Array.from({length:50},(_,i)=>joinRoom(created.code,i===0?'A'.repeat(24):'CEO trùng tên')))
+    const room=getRoom(created.code)!
+    expect(room.teams).toHaveLength(50);expect(new Set(players.map(p=>p.teamId)).size).toBe(50)
+    expect(new Set(players.map(p=>p.playerToken)).size).toBe(50)
+    await expect(joinRoom(created.code,'CEO 51')).rejects.toMatchObject({status:409})
+    await saveAvatar(created.code,players[49]!.playerToken,{body:'slim-female',skin:'tan',outfit:'engineer'})
+    expect(room.teams[0]!.avatar).not.toEqual(room.teams[49]!.avatar)
+    const pick=vi.mocked((await import('./game/catalog')).pickFreshTheme)
+    let n=0;pick.mockImplementation(()=>({...theme(),id:`theme-for-50-${n++}`}))
+    await startRoom(created.code,created.hostToken);tick(room,room.countdownEndsAt!)
+    expect(room.status).toBe('playing');expect(room.teams.every(t=>t.state&&t.theme)).toBe(true)
+    expect(new Set(room.teams.map(t=>t.theme!.id)).size).toBe(50)
+    expect(buildSnapshot(room,{role:'host',code:room.code}).teams).toHaveLength(50)
+    pick.mockReset()
+  })
+
+  it('keeps manually entered room settings fixed after creation, including 2.5 billion capital', async () => {
+    const created=await createRoom({hostUserId:'host',hostName:'Chủ phòng',durationMin:10,startingCapital:2500,cycleSeconds:45,yearMinSeconds:3})
+    const room=getRoom(created.code)!
+    expect(room).toMatchObject({durationSec:600,startingCapital:2500,cycleSeconds:45,yearMinSeconds:3})
+    for(const patch of [{durationMin:20},{startingCapital:5000},{cycleSeconds:60},{yearMinSeconds:5},{linePrices:{eng:90}}]){
+      await expect(updateRoom(created.code,created.hostToken,patch)).rejects.toMatchObject({status:409})
+    }
+    expect(room).toMatchObject({durationSec:600,startingCapital:2500,cycleSeconds:45,yearMinSeconds:3})
+    await expect(updateRoom(created.code,'incorrect-token',{durationMin:20})).rejects.toMatchObject({status:403})
+    await updateRoom(created.code,created.hostToken,{hostName:'Chủ phòng đổi tên'})
+    expect(room.hostName).toBe('Chủ phòng đổi tên')
+    expect(room.startingCapital).toBe(2500)
+  })
 
   it('publishes the same upgrade draw used for the actual purchase and never rerolls snapshots', async () => {
     const a = await roomWithTeam()

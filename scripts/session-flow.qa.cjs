@@ -31,7 +31,7 @@ let browser;
         const req = route.request(); const body = req.postData() ? req.postDataJSON() : null;
         requests.push({ path: url.pathname, method: req.method(), body, headers: req.headers() });
         if (url.pathname === '/api/setup') return route.fulfill({ json: { yearMinSeconds: 5 } });
-        if (url.pathname === '/api/rooms' && req.method() === 'POST') return route.fulfill({ json: { code: 'XTV45', hostToken: 'mock-host-token' } });
+        if (url.pathname === '/api/rooms' && req.method() === 'POST') {Object.assign(snap.room,{durationSec:body.durationMin*60,startingCapital:body.startingCapital,cycleSeconds:body.cycleSeconds,yearMinSeconds:body.yearMinSeconds});return route.fulfill({ json: { code: 'XTV45', hostToken: 'mock-host-token' } });}
         return route.fulfill({ json: { ok: true } });
       }
       if (url.pathname === '/config.js') return route.fulfill({ contentType: 'application/javascript', body: 'window.__APP_CONFIG__={};' });
@@ -49,12 +49,16 @@ let browser;
     await create.waitFor();
     {const alignment=await create.evaluate(el=>{const title=el.querySelector('.session-create-title').getBoundingClientRect(),form=el.querySelector('.session-create-form').getBoundingClientRect(),body=el.querySelector('.session-body').getBoundingClientRect();return {titleX:title.x,formX:form.x,titleWidth:title.width,formWidth:form.width,center:form.x+form.width/2,bodyCenter:body.x+body.width/2}});
     assert(Math.abs(alignment.titleX-alignment.formX)<1);assert(Math.abs(alignment.titleWidth-alignment.formWidth)<1);assert(Math.abs(alignment.center-alignment.bodyCenter)<1);}
-    assert.equal(await create.locator('input').count(), 3, 'Only host name and two advanced timing inputs; no room-level investment prices');
-    await create.getByRole('textbox').fill('Chủ phòng QA');
-    await create.locator('select').nth(0).selectOption('15');
-    await create.locator('select').nth(1).selectOption('10000');
+    await page.evaluate(()=>document.fonts.ready);
+    for(const field of await create.locator('input').all()){assert((await field.evaluate(n=>getComputedStyle(n).fontFamily)).includes('Public UI'),'Every create input uses the repaired public typeface');assert((await field.evaluate(n=>getComputedStyle(n).fontVariantNumeric)).includes('tabular-nums'));}
+    assert.equal(await create.locator('input').count(),5);assert.equal(await create.locator('select').count(),0,'All settings typed, no dropdowns');
+    await create.locator('.session-name-field input').fill('Chủ phòng QA');
+    await create.getByLabel('Thời lượng (phút)',{exact:true}).fill('10');
+    await create.getByLabel('Vốn khởi đầu (tỷ VNĐ)',{exact:true}).fill('2,5');
     if(width===1366){await create.locator('summary').click();const btn=await create.getByRole('button',{name:'Mở phòng',exact:true}).boundingBox();assert(btn.y+btn.height<=768,'expanded create form fits laptop height')}
-    assert((await create.locator('select').first().evaluate(n=>getComputedStyle(n).borderImageSource)).includes('field-paper-normal.svg'));
+    assert((await create.getByLabel('Thời lượng (phút)',{exact:true}).evaluate(n=>getComputedStyle(n).borderImageSource)).includes('field-paper-normal.svg'));
+    {const a=await create.getByRole('button',{name:'Mở phòng',exact:true}).boundingBox(),b=await create.getByRole('button',{name:'Đóng',exact:true}).boundingBox();assert(Math.abs(a.height-b.height)<1);assert(Math.abs(a.y-b.y)<1,'Actions stay side by side at every width')}
+    {const capitalField=create.getByLabel('Vốn khởi đầu (tỷ VNĐ)',{exact:true});await capitalField.fill('2,55');assert.equal(await capitalField.evaluate(n=>n.checkValidity()),false);await capitalField.fill('1,9');assert.equal(await capitalField.evaluate(n=>n.checkValidity()),false);await capitalField.fill('2.5');assert.equal(await capitalField.evaluate(n=>n.checkValidity()),true);await capitalField.fill('2,5')}
     await page.screenshot({ path: path.join(out, `create-${width}.png`) });
     assert.equal(await create.getByRole('button', { name: 'Mở phòng', exact: true }).evaluate(el=>getComputedStyle(el).color), 'rgb(255, 242, 208)');
     assert.equal(await create.locator('.session-create-title').evaluate(el=>getComputedStyle(el).color),'rgb(255, 240, 191)');
@@ -70,21 +74,21 @@ let browser;
     {const alignment=await create.evaluate(el=>{const title=el.querySelector('.session-create-title').getBoundingClientRect(),form=el.querySelector('.session-create-form').getBoundingClientRect(),body=el.querySelector('.session-body').getBoundingClientRect();return {titleX:title.x,formX:form.x,titleWidth:title.width,formWidth:form.width,center:form.x+form.width/2,bodyCenter:body.x+body.width/2}});
     assert(Math.abs(alignment.titleX-alignment.formX)<1);assert(Math.abs(alignment.titleWidth-alignment.formWidth)<1);assert(Math.abs(alignment.center-alignment.bodyCenter)<1);}
     await create.locator('summary').click();
-    await create.getByRole('spinbutton').nth(0).fill('45');
-    await create.getByRole('spinbutton').nth(1).fill('3');
+    await create.getByRole('spinbutton',{name:'Giây mỗi năm',exact:true}).fill('45');
+    await create.getByRole('spinbutton',{name:'Khóa nút (giây)',exact:true}).fill('3');
     await create.getByRole('button', { name: 'Mở phòng', exact: true }).click();
     await page.waitForURL('**/host/XTV45');
     await page.locator('.session-lobby').waitFor();
     const posted = requests.find(r => r.path === '/api/rooms' && r.method === 'POST');
-    assert.deepEqual(posted.body, { hostName: 'Chủ phòng QA', durationMin: 15, startingCapital: 10000, cycleSeconds: 45, yearMinSeconds: 3 });
+    assert.deepEqual(posted.body, { hostName: 'Chủ phòng QA', durationMin: 10, startingCapital: 2500, cycleSeconds: 45, yearMinSeconds: 3 });
     assert(Object.values(posted.headers).some(value => value.includes('mock-google-session')), 'existing Google host session must be sent');
     assert.equal(await page.evaluate(() => localStorage.getItem('host:XTV45')), 'mock-host-token');
     assert(await page.getByRole('button', { name: 'Chờ ít nhất một CEO', exact: true }).isDisabled());
     snap.teams = ['Minh', 'Lan', 'CEO có tên rất dài cần xuống dòng hợp lý không tràn khung'].map((teamName, i) => ({ id: String(i), teamName, connected: i !== 2, themeName: '', industryId: '', factoryName: '', introDone: false, cycles: 0, cash: null, value: 0, finished: false, succession: null, ending: null, endingTitle: null, score: null, scene: null }));
     emit();
-    await page.getByRole('heading', { name: 'CEO đã vào (3)', exact: true }).waitFor();
-    await page.locator('.session-qr img').waitFor();
-    assert((await page.locator('.session-qr img').getAttribute('src')).startsWith('data:image/png;base64,'), 'QR generated by existing QRCode library');
+    await page.getByRole('heading', { name: 'CEO trong phòng · 3', exact: true }).waitFor();
+    await page.locator('.lobby-qr img').waitFor();
+    assert((await page.locator('.lobby-qr img').getAttribute('src')).startsWith('data:image/png;base64,'), 'QR generated by existing QRCode library');
     await page.getByRole('button', { name: 'Sao chép liên kết', exact: true }).click();
     assert.equal(await page.evaluate(() => window.__copiedLink), 'http://game.test/?code=XTV45');
     await page.locator('.session-lobby img').evaluateAll(nodes=>Promise.all(nodes.map(img=>{img.loading='eager';return img.decode()})));
@@ -93,8 +97,9 @@ let browser;
     assert.equal(geometry.scroll, width, 'no horizontal overflow in host lobby');
     await page.getByRole('button', { name: 'Bắt đầu', exact: true }).click();
     await page.waitForFunction(() => !document.querySelector('.session-start')?.disabled);
-    const patch = requests.find(r => r.path === '/api/rooms/XTV45' && r.method === 'PATCH');
-    assert.deepEqual(patch.body, { durationMin: 15, startingCapital: 10000, cycleSeconds: 60, yearMinSeconds: 5 });
+    assert(!requests.some(r=>r.path==='/api/rooms/XTV45'&&r.method==='PATCH'),'Start must never resend or overwrite the created configuration');
+    assert.equal(await page.locator('.session-lobby select,.session-lobby input:not([readonly]):not([type=search])').count(),0,'Lobby settings are read-only; name search is not a setting');
+    assert.equal(snap.room.startingCapital,2500);assert.equal(snap.room.durationSec,600);assert.equal(snap.room.cycleSeconds,45);assert.equal(snap.room.yearMinSeconds,3);
     assert(requests.find(r => r.path.endsWith('/start') && r.method === 'POST'));
     snap.room.status = 'ended';
     snap.room.questionStats = Array.from({ length: 7 }, (_, i) => ({ questionId: `q${i}`, prompt: `Câu hỏi ${i + 1}: Trong bối cảnh công nghiệp hóa, phương án nào hỗ trợ doanh nghiệp phát triển hiệu quả và bền vững?`, correct: i === 0 ? 1 : i === 1 ? 0 : 2, total: i === 1 ? 0 : 3 }));
@@ -128,7 +133,7 @@ let browser;
   }
   await browser.close();
   assert.equal(report.errors.length, 0); assert.equal(report.missing.length, 0);
-  report.checks = ['create form Google-session forwarding, logged-out Google-login guard, no line prices, real existing create route and stored host token, Escape/focus restoration', 'real QR, clipboard, empty-room start guard, live connected states, long CEO name', 'existing settings PATCH/start POST', 'four question rows/page, real full prompt, attempts denominator, zero-attempt handling, expansion and pagination', '390/768/1440 screenshots and no horizontal scroll'];
+  report.checks = ['create form Google-session forwarding, logged-out Google-login guard, no line prices, real existing create route and stored host token, Escape/focus restoration', 'real QR, clipboard, empty-room start guard, live connected states, long CEO name', 'no settings PATCH after create; unchanged start POST, persisted 10 minutes / 2.5 billion / 45 seconds / 3 seconds', 'four question rows/page, real full prompt, attempts denominator, zero-attempt handling, expansion and pagination', '390/768/1440 screenshots and no horizontal scroll'];
   fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report));
 })().catch(async e => { console.error(e); await browser?.close(); process.exitCode = 1; });

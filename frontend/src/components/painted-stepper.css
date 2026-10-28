@@ -1,0 +1,9 @@
+.painted-stepper{display:grid;grid-template-columns:minmax(48px,1fr) 44px 44px;gap:5px;min-width:0;align-items:center}
+.painted-stepper>input{width:100%;appearance:textfield;-moz-appearance:textfield}
+.painted-stepper>input::-webkit-inner-spin-button,.painted-stepper>input::-webkit-outer-spin-button{appearance:none;margin:0}
+.session-create .painted-stepper-arrow{width:44px;height:44px;min-width:44px;padding:0;background:none;border:0;box-shadow:none;transform:none;transition:none;cursor:pointer;touch-action:manipulation}
+.session-create .painted-stepper-arrow:active{transform:none;box-shadow:none}
+.painted-stepper-arrow canvas{display:block;width:44px;height:44px;pointer-events:none}
+.painted-stepper-arrow:focus-visible{outline:2px solid #9d5816;outline-offset:2px}
+.painted-stepper-arrow:disabled{cursor:default}
+@media(max-width:480px){.session-screen.session-create .session-create-form .session-advanced>div{grid-template-columns:1fr;gap:12px}.session-screen.session-create .session-create-form .session-advanced label{grid-template-columns:minmax(0,1fr) minmax(168px,1.2fr);gap:8px;font-size:14px}}

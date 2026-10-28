@@ -1,0 +1,49 @@
+{
+  "widths": [
+    {
+      "width": 390,
+      "height": 844,
+      "avatarCalls": 2,
+      "hostCount": 50
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "avatarCalls": 2,
+      "hostCount": 50
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "avatarCalls": 2,
+      "hostCount": 50
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "avatarCalls": 2,
+      "hostCount": 50
+    },
+    {
+      "width": 1280,
+      "height": 700,
+      "avatarCalls": 2,
+      "hostCount": 50
+    },
+    {
+      "width": 360,
+      "height": 800,
+      "avatarCalls": 2,
+      "hostCount": 50
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "checks": [
+    "50-cell desktop host, paginated mobile/tablet, long names/search, live connection/join/remove",
+    "Full-body player stage, single room-code display, independent identity",
+    "Drawer no layout movement, scrim/inert/focus, saved/draft/error/retry, Escape/right-arrow close, countdown interruption",
+    "Reduced motion and real saved avatar payload",
+    "16 separate SVG control frames; Canvas hover changes pixels; click increments/decrements without CSS animation"
+  ]
+}
