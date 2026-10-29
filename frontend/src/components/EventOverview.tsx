@@ -2,10 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import type { EventEntry, EventGroup } from '../lib/ongoing-events.ts'
 import { useEventAttention } from '../lib/event-attention.ts'
 import { EventIcon } from './EventIcon.tsx'
+import { PAGE_SIZE } from '../lib/pagination'
+import { PageControls } from './PageControls'
 
 /** Only explicit row clicks open detail; new events never take focus from play. */
 export function EventRows({ entries, empty = 'Chưa có sự kiện nào.', compact = false }: { entries: EventEntry[]; empty?: string; compact?: boolean }) {
   const attention=useEventAttention()
+  const [page,setPage]=useState(0)
+  const current=Math.min(page,Math.max(0,Math.ceil(entries.length/PAGE_SIZE)-1))
   const signature=entries.map(e=>e.key).join('|')
   const [presence,setPresence]=useState(()=>({signature,rows:entries.map(entry=>({entry,arriving:false,exiting:false}))}))
   if(presence.signature!==signature) {
@@ -30,7 +34,7 @@ export function EventRows({ entries, empty = 'Chưa có sự kiện nào.', comp
   return <>
     <div className="event-rows">
       {!entries.length && <p className="quiet">{empty}</p>}
-      {presence.rows.map(row => {
+      {presence.rows.slice(current*PAGE_SIZE,(current+1)*PAGE_SIZE).map(row => {
         const entry=entries.find(item=>item.key===row.entry.key)??row.entry
         const unread=Boolean(entry.noticeKey&&attention.unread.has(entry.noticeKey))
         return <button type="button" key={entry.key} className={`event-row${entry.bad ? ' bad' : ' good'}${row.exiting?' event-exiting':row.arriving?' event-arriving':''}`} disabled={row.exiting} aria-hidden={row.exiting || undefined} aria-haspopup="dialog" onClick={() => {if(entry.noticeKey)attention.markSeen(entry.noticeKey);setSelectedKey(entry.key)}}>
@@ -41,6 +45,7 @@ export function EventRows({ entries, empty = 'Chưa có sự kiện nào.', comp
         </button>
       })}
     </div>
+    {!compact&&<PageControls page={current} count={entries.length} onChange={setPage} label="Trang sự kiện"/>}
     <dialog ref={dialog} className="event-detail-dialog" aria-label="Chi tiết sự kiện" onClose={() => setSelectedKey(null)}>
       {selected && <div><EventIcon name={selected.icon} tone={selected.bad?'bad':'good'} eventId={selected.eventId} title={selected.label} detail={`${selected.detail} ${selected.impact}`} /><h2>{selected.label}</h2><p>{selected.detail}</p><p className={selected.bad ? 'down' : 'up'}>{selected.impact}</p><small>{selected.remaining}</small></div>}
       <button type="button" className="btn" onClick={() => dialog.current?.close()}>Đóng</button>

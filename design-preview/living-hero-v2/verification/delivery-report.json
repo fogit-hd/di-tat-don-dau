@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "mobile": false,
+      "width": 1340,
+      "height": 754,
+      "frames": 9,
+      "endpointPixelIdentical": true
+    },
+    {
+      "mobile": true,
+      "width": 600,
+      "height": 800,
+      "frames": 9,
+      "endpointPixelIdentical": true
+    }
+  ],
+  "custody": "belt → forklift → crane → boat",
+  "checks": [
+    "Single parcel owner",
+    "Continuous handover positions",
+    "Fork contact",
+    "Vertical crane cable on jib",
+    "Boat stationary until hook release",
+    "No departing empty boat",
+    "Pixel-identical 24-second endpoints"
+  ]
+}

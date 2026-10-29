@@ -5,6 +5,7 @@
 .advisor-attention-frame[hidden]{display:none}
 .advisor-dialogue{position:fixed;margin:0;padding:14px 14px;color:#432719;background:#fff2d3 url('/assets/ui/advisor-v1/dialogue-paper.webp') center/cover;border:12px solid transparent;border-image:url('/assets/ui/advisor-v1/dialogue-frame.svg') 30 fill/18px;box-sizing:border-box;pointer-events:auto;max-height:calc(100svh - 24px);outline:none}
 .advisor-dialogue::before{content:"";position:absolute;left:-34px;top:var(--advisor-tail-top,48%);width:28px;height:44px;background:url('/assets/ui/advisor-v1/dialogue-tail.svg') center/100% 100% no-repeat;pointer-events:none}
+.advisor-dialogue[data-layout=stacked]::before{left:30px;top:auto;bottom:-32px;rotate:-90deg}
 .advisor-dialogue[hidden]{display:none}
 .advisor-dialogue>p:not(.advisor-sr):not(.advisor-cue){margin:0;min-height:84px;font:24px/1.4 "Times New Roman","Noto Serif",serif;color:#432719;overflow-wrap:break-word}
 .advisor-dialogue .advisor-cue{margin:10px 0 0;min-height:40px;font:16px/1.35 "Times New Roman",serif;color:#79522d}

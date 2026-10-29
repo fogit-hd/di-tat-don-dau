@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { PAGE_SIZE } from '../lib/pagination'
+import { PageControls } from './PageControls'
 import type { BoardRow } from '../api/types.ts'
 import { vnd } from '../lib/format.ts'
 
@@ -13,6 +15,7 @@ export function Leaderboard({
 }) {
   const prev = useRef<Record<string, number>>({})
   const body = rows ?? []
+  const [page,setPage]=useState(0),current=Math.min(page,Math.max(0,Math.ceil(body.length/PAGE_SIZE)-1))
   const moved: Record<string, boolean> = {}
   if (rows) {
     rows.forEach((row, index) => {
@@ -56,7 +59,7 @@ export function Leaderboard({
               </td>
             </tr>
           ) : (
-            body.map((row) => (
+            body.slice(current*PAGE_SIZE,(current+1)*PAGE_SIZE).map((row) => (
               <tr key={row.teamId} className={`${row.teamId === meId ? 'me' : ''} ${moved[row.teamId] ? 'moved' : ''}`}>
                 <td>{row.rank}</td>
                 <td>{row.teamName}</td>
@@ -69,6 +72,7 @@ export function Leaderboard({
           )}
         </tbody>
       </table>
+      <PageControls page={current} count={body.length} onChange={setPage} label="Trang bảng xếp hạng"/>
     </div>
   )
 }

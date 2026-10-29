@@ -1,4 +1,5 @@
 import { COMPANY_EVENTS } from './company-events'
+import { mergeQuestionBank } from './question-bank'
 import { z } from 'zod'
 import { prisma } from '../prisma'
 import { effectSchema, readStoredEffect } from './stored-effect'
@@ -218,7 +219,7 @@ export async function loadCatalog(): Promise<Catalog> {
       prisma.investmentLine.findMany({ orderBy: { sort: 'asc' } }),
       prisma.questionType.findMany(),
       prisma.question.findMany({
-        where: { active: true },
+        // Include inactive IDs so shipped additions never resurrect disabled questions.
         include: { type: true, options: { orderBy: { sort: 'asc' } } },
       }),
       prisma.gameEvent.findMany({
@@ -353,8 +354,9 @@ export async function loadCatalog(): Promise<Catalog> {
     sharedEvents,
   }
 
-  const questionDefs: QuestionDef[] = questions.map((row) => ({
+  const questionDefs: QuestionDef[] = mergeQuestionBank(questions.map((row) => ({
     id: row.id,
+    active:row.active,
     topic: row.topic,
     section: row.section,
     difficulty: row.difficulty,
@@ -364,7 +366,7 @@ export async function loadCatalog(): Promise<Catalog> {
     explanation: row.explanation,
     correctOptionId: row.correctOptionId,
     options: row.options.map((option) => ({ id: option.key, text: option.text })),
-  }))
+  })))
 
   const eventDefs: EventDef[] = events.map((row) => {
     const effect = readStoredEffect(row.effect, row.id)

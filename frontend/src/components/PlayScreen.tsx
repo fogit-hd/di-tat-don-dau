@@ -146,7 +146,6 @@ export function PlayScreen() {
                 finished={youFinished}
                 tutorialTarget={tutorial?(busy?null:tutorial.tab??null):undefined}
                 initialTab={tutorial?guideDisplayedTab(scene.tutorial!.step,scene.tutorial!.version):'investment'}
-                onVisit={tab=>{if(tutorial?.action==='investment'&&tab==='investment')void acknowledge(tutorial.action)}}
                 result={<InlineResult snap={snap} />}
                 enterprise={<><StatCards scene={scene} /><EffectBadges effects={[]} traits={scene.traits ?? []} centennial={Boolean(scene.centennial)} pulse={false} /></>}
                 risk={<GovernanceRiskCard scene={scene} />}

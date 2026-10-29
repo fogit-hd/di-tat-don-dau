@@ -40,8 +40,8 @@ export function LobbyAvatar({avatar}:{avatar:AvatarConfig}){
 }
 
 export const LobbyRoster=memo(function LobbyRoster({teams,host=false,you,total=teams.length}:{teams:TeamRow[];host?:boolean;you?:string;total?:number}){
- const size=useSyncExternalStore(subscribe,viewport,()=> '1440:900'),[width,height]=size.split(':').map(Number)
- const pageSize=host&&width>=1280&&height>=700?50:width<600?(host?8:4):host?20:16
+ const size=useSyncExternalStore(subscribe,viewport,()=> '1440:900'),[width]=size.split(':').map(Number)
+ const pageSize=width<600?(host?8:4):10
  const [query,setQuery]=useState(''),[page,setPage]=useState(0),[expanded,setExpanded]=useState<string|null>(null)
  const root=useRef<HTMLUListElement>(null),previous=useRef(new Map<string,{rect:DOMRect;connected:boolean;name:string}>())
  const filtered=teams.filter(t=>normalize(t.teamName).includes(normalize(query)))

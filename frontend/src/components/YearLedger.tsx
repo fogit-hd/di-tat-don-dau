@@ -6,6 +6,8 @@ import { CanvasHeading, DisclosureArrow, PaintedIcon, type PaintedIconName } fro
 import { investmentArt } from '../lib/art.ts'
 import { OperationIcon } from './OperationIcon.tsx'
 import { ProductionDetails } from './ProductionDetails.tsx'
+import { PAGE_SIZE } from '../lib/pagination'
+import { PageControls } from './PageControls'
 
 const LABELS: Record<string, string> = { production: 'Sản xuất', investment: 'Đầu tư', event: 'Sự kiện', ongoing: 'Khoản kéo dài', interest: 'Lãi nợ', insurance: 'Bảo hiểm', inflation: 'Lạm phát', quiz: 'Thưởng trả lời', centennial: 'Trăm năm' }
 const ICONS: Record<string, PaintedIconName> = { production: 'line', investment: 'investment', event: 'history', ongoing: 'coins', interest: 'coins', insurance: 'life_insurance', inflation: 'coins', quiz: 'heir_trained', centennial: 'centennial' }
@@ -16,11 +18,13 @@ export function YearLedger({ changes, lines = [], industryId = '', initialYear =
   const [openYear, setOpenYear] = useState<number | null>(initialYear)
   const [productionYear,setProductionYear]=useState<number | null>(null)
   const uid = useId()
+  const [page,setPage]=useState(Math.floor(Math.max(0,changes.findIndex(row=>row.year===initialYear))/PAGE_SIZE))
+  const current=Math.min(page,Math.max(0,Math.ceil(changes.length/PAGE_SIZE)-1))
   return <section className="year-canvas">
     <CanvasHeading icon="coins">Dòng tiền từng năm</CanvasHeading>
     {changes.length === 0 && <p className="quiet">Chưa sang năm nào.</p>}
     <div className="year-summary-list">
-      {changes.map(row => {
+      {changes.slice(current*PAGE_SIZE,(current+1)*PAGE_SIZE).map(row => {
         const open = openYear === row.year
         const categories = summarizeYear(row.causes)
         const groups = groupYearCauses(row.causes)
@@ -51,6 +55,7 @@ export function YearLedger({ changes, lines = [], industryId = '', initialYear =
         </article>
       })}
     </div>
+    <PageControls page={current} count={changes.length} onChange={setPage} label="Trang dòng tiền từng năm"/>
     {changes.length > 0 && <p className="canvas-help">Chọn năm để xem chi tiết.</p>}
   </section>
 }

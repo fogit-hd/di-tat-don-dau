@@ -1,0 +1,61 @@
+{
+  "assets": {
+    "scene-desktop": {
+      "width": 1672,
+      "height": 941,
+      "bytes": 556588
+    },
+    "scene-mobile": {
+      "width": 1086,
+      "height": 1448,
+      "bytes": 655182
+    },
+    "truck": {
+      "width": 1000,
+      "height": 499,
+      "bytes": 212828
+    },
+    "boat": {
+      "width": 700,
+      "height": 285,
+      "bytes": 80248
+    },
+    "hoist": {
+      "width": 700,
+      "height": 1012,
+      "bytes": 223558
+    },
+    "smoke": {
+      "width": 700,
+      "height": 512,
+      "bytes": 60254
+    },
+    "workers": {
+      "width": 1920,
+      "height": 960,
+      "bytes": 487104
+    },
+    "crate": {
+      "width": 360,
+      "height": 340,
+      "bytes": 64376
+    },
+    "water": {
+      "width": 468,
+      "height": 343,
+      "bytes": 76012
+    }
+  },
+  "imagegenSources": {
+    "scene-desktop": "188fd090-df97-4610-b8af-be222c4dc727",
+    "scene-mobile": "14a049b7-d4d4-4f0b-aeae-4151a89897ca",
+    "truck": "b4d6dbac-024d-4fa8-bff7-a1f4c5362aca",
+    "boat": "94cddade-9579-4463-97f1-e796e9b907db",
+    "hoist": "a1a3114c-b6fa-4a6a-baf7-a78dce16281c",
+    "smoke": "e83f328e-c24d-4669-a948-145806b39e71",
+    "workers": "36bbde5a-1b0f-4a74-8fbf-5818f427914a",
+    "props-source": "127efa11-65b4-470f-ab9d-d4884e31a508"
+  },
+  "loopSeconds": 12,
+  "workerCell": 480
+}

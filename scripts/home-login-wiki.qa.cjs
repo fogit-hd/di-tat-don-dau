@@ -1,7 +1,7 @@
 // Production-bundle browser regression. Google Identity and API responses are local fixtures.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/home-login-wiki-v1');
+const root=path.resolve(__dirname,'..'),out=path.resolve(process.env.HOME_QA_OUTPUT||path.join(root,'design-preview/home-login-wiki-v1'));
 const company=require('../frontend/src/lib/company-events.json');
 fs.mkdirSync(out,{recursive:true});
 let browser;
@@ -40,12 +40,12 @@ let browser;
   assert.equal(await page.locator('.public-landing>section').count(),1);assert.equal(await page.locator('.public-how,.public-features,.public-home>.public-footer').count(),0);
   assert.equal(await page.locator('.public-nav a').nth(0).getAttribute('href'),'/wiki?section=start');
   assert.equal(await page.locator('.public-nav a').nth(1).getAttribute('href'),'/wiki?section=events');
-  for(const selector of ['.public-header','.public-hero-copy','.public-join','.public-hero-art']){
+  for(const selector of ['.public-header','.public-hero-copy','.public-join','.living-hero']){
    const box=await page.locator(selector).boundingBox();assert(box.x>=0&&box.x+box.width<=width+1);assert(box.y>=0&&box.y+box.height<=height+1,`${selector} visible at ${width}x${height}`);
   }
-  {const copy=await page.locator('.public-hero-copy').boundingBox(),art=await page.locator('.public-hero-art').boundingBox();assert(copy.x+copy.width<=art.x+1||copy.y+copy.height<=art.y+1,'Hero content and artwork must not overlap');}
+  if(width<=900&&height>540){const copy=await page.locator('.public-hero-copy').boundingBox(),art=await page.locator('.living-hero').boundingBox();assert(copy.y+copy.height<=art.y+1,'Mobile copy and form precede the illustration');}
   assert.equal(await page.locator('.public-join input').evaluate(n=>getComputedStyle(n,'::placeholder').color),'rgb(229, 207, 170)');
-  assert.equal(await page.locator('.public-hero-art').evaluate(n=>getComputedStyle(n).objectFit),'contain');
+  assert.equal(await page.locator('.living-hero-fallback img').evaluate(n=>getComputedStyle(n).objectFit),'contain');
   await page.locator('.public-home img').evaluateAll(nodes=>Promise.all(nodes.map(img=>img.decode())));
   await page.screenshot({path:path.join(out,`home-${width}x${height}.png`)});
   // Join remains a real, visible form and validates Enter without opening login.
@@ -85,15 +85,18 @@ let browser;
    scriptFailure=false;await login.getByRole('button',{name:'Thử lại',exact:true}).click();await login.getByRole('button',{name:'Đăng nhập bằng Google (QA)',exact:true}).waitFor();await page.keyboard.press('Escape');
   }
   await page.goto('http://game.test/wiki?section=updates');await page.locator('.wiki-update-events').waitFor();await settle();
-  assert.equal(await page.locator('.wiki-update-event').count(),company.length);
-  for(const event of company)assert(await page.locator('.wiki-update-event').filter({has:page.getByRole('img',{name:event.title,exact:true})}).count()||await page.locator('.wiki-update-event').filter({hasText:event.title}).count());
+  for(let p=0;p<Math.ceil(company.length/10);p++){
+   assert.equal(await page.locator('.wiki-update-event').count(),Math.min(10,company.length-p*10));
+   for(const event of company.slice(p*10,p*10+10))assert(await page.locator('.wiki-update-event').filter({has:page.getByRole('img',{name:event.title,exact:true})}).count()||await page.locator('.wiki-update-event').filter({hasText:event.title}).count());
+   if(p<Math.ceil(company.length/10)-1)await page.getByRole('navigation',{name:'Trang cập nhật sự kiện',exact:true}).getByRole('button',{name:'Tiếp',exact:true}).click();
+  }
   await page.locator('.wiki-update-rules details').nth(4).locator('summary').click();
   assert((await geometry()).sw<=width);await page.screenshot({path:path.join(out,`wiki-updates-${width}.png`)});
   await page.locator('.wiki-update-event').last().getByRole('button',{name:'Xem chi tiết',exact:true}).click();await page.locator('.wiki-event-detail').waitFor();await settle();
   await page.locator('.wiki-event-detail').screenshot({path:path.join(out,`wiki-patent-${width}.png`)});
   assert((await geometry()).sw<=width);
   await page.goto('http://game.test/wiki?section=events');await page.getByLabel('Loại sự kiện',{exact:true}).selectOption('recent');
-  assert.equal(await page.locator('.wiki-event-row').count(),8);assert.equal(await page.locator('.wiki-meta').first().getAttribute('class'),'wiki-meta');
+  assert.equal(await page.locator('.wiki-event-row').count(),10);assert.equal(await page.locator('.wiki-meta').first().getAttribute('class'),'wiki-meta');
   if(width===1440){for(const event of company){
    await page.getByRole('searchbox',{name:'Tìm sự kiện',exact:true}).fill(event.title);
    await page.locator('.wiki-event-row').first().click();await page.locator('.wiki-event-detail').waitFor();

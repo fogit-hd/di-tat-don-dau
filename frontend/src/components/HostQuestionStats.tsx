@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from '../lib/pagination'
 import './quiz-review.css'
 import { useId, useState } from 'react'
 import type { Snapshot } from '../api/types'
@@ -10,12 +11,12 @@ export function HostQuestionStats({ rows }: { rows: Snapshot['room']['questionSt
   const [page, setPage] = useState(0)
   const [expanded, setExpanded] = useState<string | null>(null)
   const id = useId()
-  const current = Math.min(page, Math.max(0, Math.ceil(rows.length / 4) - 1))
-  const start = current * 4
+  const current = Math.min(page, Math.max(0, Math.ceil(rows.length / PAGE_SIZE) - 1))
+  const start = current * PAGE_SIZE
   return <section className="session-questions" aria-label="Kết quả trả lời">
     <header><div><h2><T text="Kết quả trả lời" bold /></h2><p><T text="Theo lượt xuất hiện · gồm lượt hết giờ" /></p></div><Art src={sessionArt('questions-art')} /></header>
     {!rows.length ? <p className="session-empty"><T text="Chưa có câu hỏi nào xuất hiện." /></p> : <>
-      <ol start={start + 1}>{rows.slice(start, start + 4).map((row, index) => {
+      <ol start={start + 1}>{rows.slice(start, start + PAGE_SIZE).map((row, index) => {
         const percent = row.total > 0 ? Math.round(100 * row.correct / row.total) : 0
         const open = expanded === row.questionId
         const panelId = `${id}-${start + index}`
@@ -32,8 +33,8 @@ export function HostQuestionStats({ rows }: { rows: Snapshot['room']['questionSt
       })}</ol>
       <nav className="session-pagination" aria-label="Trang kết quả câu hỏi">
         <button type="button" className="session-button secondary" aria-label="Trang trước" disabled={current === 0} onClick={() => { setPage(current - 1); setExpanded(null) }}>‹</button>
-        <span role="status"><T text={`${start + 1} – ${Math.min(start + 4, rows.length)} / ${rows.length} câu`} /></span>
-        <button type="button" className="session-button secondary" aria-label="Trang sau" disabled={start + 4 >= rows.length} onClick={() => { setPage(current + 1); setExpanded(null) }}>›</button>
+        <span role="status"><T text={`${start + 1} – ${Math.min(start + PAGE_SIZE, rows.length)} / ${rows.length} câu`} /></span>
+        <button type="button" className="session-button secondary" aria-label="Trang sau" disabled={start + PAGE_SIZE >= rows.length} onClick={() => { setPage(current + 1); setExpanded(null) }}>›</button>
       </nav>
     </>}
   </section>

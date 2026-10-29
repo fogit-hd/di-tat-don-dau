@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import {INDUSTRY_ECONOMY} from '../backend/src/game/industry-economy'
 import {effectPayload} from '../backend/prisma/seed/effects'
+import {QUESTIONS} from '../backend/src/game/questions.data'
 const load=(path:string)=>JSON.parse(fs.readFileSync(new URL('../'+path,import.meta.url),'utf8'))
 const source=load('backend/prisma/seed/industries.seed.json')
 const general=load('backend/prisma/seed/events.seed.json').events
@@ -12,4 +13,5 @@ const industries=source.industries.map((i:any)=>({id:i.slug,name:i.name,group:i.
 const events=[...source.industries.flatMap((i:any)=>i.events.map((e:any)=>row(e,i.slug))),...general.map((e:any)=>row(e,'general')),...family.map((e:any)=>row(e,'family'))]
 const catalog={version:3,asOf:'2026-10-26',industries,events,industryExpanded:10240,generalCount:100,familyCount:8}
 fs.writeFileSync(new URL('../frontend/src/lib/wiki-catalog.json',import.meta.url),JSON.stringify(catalog))
+fs.writeFileSync(new URL('../frontend/src/lib/wiki-questions.json',import.meta.url),JSON.stringify(QUESTIONS,null,2)+'\n')
 console.log(`Wiki: ${industries.length} industries, ${events.length} roots, 10,348 expanded seed entries`)

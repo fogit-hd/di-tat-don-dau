@@ -1,0 +1,126 @@
+{
+  "viewports": [
+    {
+      "width": 360,
+      "height": 800,
+      "home": {
+        "w": 360,
+        "h": 800,
+        "sw": 360,
+        "sh": 800,
+        "overflow": ""
+      },
+      "login": {
+        "x": 12,
+        "y": 203.625,
+        "width": 336,
+        "height": 392.734375
+      },
+      "events": 21,
+      "authPosts": 4
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "home": {
+        "w": 390,
+        "h": 844,
+        "sw": 390,
+        "sh": 844,
+        "overflow": ""
+      },
+      "login": {
+        "x": 12,
+        "y": 225.625,
+        "width": 366,
+        "height": 392.734375
+      },
+      "events": 21,
+      "authPosts": 4
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "home": {
+        "w": 768,
+        "h": 1024,
+        "sw": 768,
+        "sh": 1024,
+        "overflow": ""
+      },
+      "login": {
+        "x": 124,
+        "y": 306.0625,
+        "width": 520,
+        "height": 411.859375
+      },
+      "events": 21,
+      "authPosts": 4
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "home": {
+        "w": 1440,
+        "h": 900,
+        "sw": 1440,
+        "sh": 900,
+        "overflow": ""
+      },
+      "login": {
+        "x": 460,
+        "y": 244.0625,
+        "width": 520,
+        "height": 411.859375
+      },
+      "events": 21,
+      "authPosts": 4
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "home": {
+        "w": 844,
+        "h": 390,
+        "sw": 844,
+        "sh": 390,
+        "overflow": ""
+      },
+      "login": {
+        "x": 162,
+        "y": 20,
+        "width": 520,
+        "height": 350
+      },
+      "events": 21,
+      "authPosts": 4
+    }
+  ],
+  "checks": [
+    "Single hero fits five viewport sizes without hiding document overflow",
+    "Join input Enter validation and Wiki navigation",
+    "Compact login; loading, error, retry, cancel, Escape and focus restoration",
+    "Real GIS interface preserved; server token verification and create/login intents checked with fixtures",
+    "All 21 company events and current-rule notes accessible in Wiki; no horizontal overflow"
+  ],
+  "errors": [],
+  "missing": [],
+  "blockedExternal": [
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com",
+    "fonts.googleapis.com"
+  ],
+  "authentication": "Google Identity and credential verification mocked; no real Google account or live database"
+}

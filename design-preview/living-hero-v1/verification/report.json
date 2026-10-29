@@ -1,0 +1,69 @@
+{
+  "viewports": [
+    {
+      "sw": 390,
+      "sh": 844,
+      "w": 390,
+      "h": 844,
+      "overflow": "",
+      "layout": "portrait"
+    },
+    {
+      "sw": 768,
+      "sh": 1024,
+      "w": 768,
+      "h": 1024,
+      "overflow": "",
+      "layout": "portrait"
+    },
+    {
+      "sw": 1440,
+      "sh": 900,
+      "w": 1440,
+      "h": 900,
+      "overflow": "",
+      "layout": "landscape"
+    },
+    {
+      "sw": 360,
+      "sh": 800,
+      "w": 360,
+      "h": 800,
+      "overflow": "",
+      "layout": "portrait"
+    },
+    {
+      "sw": 844,
+      "sh": 390,
+      "w": 844,
+      "h": 390,
+      "overflow": "",
+      "layout": "landscape"
+    },
+    {
+      "sw": 1920,
+      "sh": 1080,
+      "w": 1920,
+      "h": 1080,
+      "overflow": "",
+      "layout": "landscape"
+    }
+  ],
+  "checks": [
+    "One hero; exact heading/copy; create only in navbar; real join Enter validation",
+    "No horizontal/vertical overflow at six sizes, including landscape",
+    "Painted full-body sprites animate; pause freezes pixels and clock; resume works",
+    "12-second start/end pixel-identical; midpoint differs",
+    "Reduced-motion preference freezes scene, including fresh loads",
+    "All production scene assets loaded without errors"
+  ],
+  "errors": [],
+  "missing": [],
+  "browser": "Playwright Chromium fallback: IAB localhost navigation returned ERR_CONNECTION_TIMED_OUT",
+  "loop": {
+    "endpointPixelIdentical": true,
+    "middleChanges": true,
+    "motionEqual": true
+  },
+  "visibilityCheck": "Simulated document.hidden + real visibilitychange listener (headless limitation)"
+}

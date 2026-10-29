@@ -1,41 +1,51 @@
-/* The landing is one viewport. Wiki and session pages keep their normal document scrolling. */
+/* Full-bleed living harbour. Wiki/session layouts are intentionally separate. */
 body:has(.public-home),#root:has(.public-home) {min-height:100svh}
-.public-home {height:100svh;min-height:0;display:flex;flex-direction:column;padding-bottom:12px}
-.public-home .public-header {flex:none}
+.public-home {height:100svh;min-height:0;display:flex;flex-direction:column;padding:0}
+.public-home .public-header {flex:none;width:100%;margin:0;padding:8px clamp(16px,3.5vw,72px);min-height:82px}
 .public-home .public-server {flex:none;padding:4px 12px;margin-block:0;font-size:13px}
-.public-home .public-landing {flex:1;min-height:0;display:flex;padding-top:10px}
-.public-home .public-hero {width:100%;height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;padding:clamp(18px,4svh,42px) clamp(18px,3vw,44px);overflow:clip}
-.public-home .public-hero-copy {grid-column:1;grid-row:1;width:100%;max-width:610px;padding:0;align-self:center}
-.public-home .public-title-art {max-height:clamp(150px,28svh,300px);object-position:left center}
+.public-home .public-landing {flex:1;min-height:0;display:flex;padding:0;width:100%;margin:0}
+.public-home .public-hero {width:100%;height:100%;min-height:0;display:block;padding:clamp(30px,8svh,90px) clamp(22px,4.5vw,90px);overflow:clip;border:0;border-image:none}
+.public-home .public-hero-copy {width:44%;max-width:610px;padding:0;position:relative;z-index:1}
+.public-home .public-title-art {width:100%;max-height:28svh;object-position:left center}
 .public-home .public-tagline {font-size:clamp(16px,1.4vw,21px);margin:18px 0 22px!important}
-.public-home .public-hero-art {position:relative;inset:auto;grid-column:2;grid-row:1;order:2;width:100%;height:100%;min-height:0;object-position:center}
 .public-home .public-join {padding:9px 7px}
 .public-home .public-join-form {grid-template-columns:minmax(0,1fr) auto}
 .public-home.public-site .public-join-form input {font-family:var(--public-ui-font);font-size:17px;color:#fff0d2;caret-color:#ffd47d}
 .public-home .public-join-form input::placeholder {color:#e5cfaa;opacity:1}
 .public-home .public-join-form input:-webkit-autofill {-webkit-text-fill-color:#fff0d2;box-shadow:0 0 0 1000px #43121b inset}
 .public-home .public-join-form .public-button {font-size:17px;padding-inline:14px;width:auto}
+.living-hero {position:absolute;inset:0;z-index:0;min-height:0;pointer-events:none}
+.living-hero-fallback,.living-hero-canvas {position:absolute;inset:0;width:100%;height:100%;display:block}
+.living-hero-fallback img {width:100%;height:100%;object-fit:contain;object-position:right center}
+.living-hero[data-ready=true] .living-hero-fallback {visibility:hidden}
+.living-hero-toggle {position:absolute;right:14px;bottom:14px;width:44px;height:44px;display:grid;place-items:center;pointer-events:auto;border:2px solid #e8bf6b;border-radius:50%;color:#ffe8ab!important;background:#53121d;box-shadow:0 2px 0 #2b1014;padding:0}
+.living-hero-toggle:hover {background:#7b1c20}
+.living-hero-toggle:active {translate:0 1px}
 @media(max-width:1023px) and (min-width:768px){
   .public-home .public-header {grid-template-columns:190px 1fr auto;gap:14px}
   .public-home .public-brand {width:190px}
   .public-home .public-nav {gap:16px}
   .public-home .public-nav a {font-size:16px}
   .public-home .public-account .public-button {padding-inline:10px;font-size:15px}
-  .public-home .public-hero-copy {width:100%}
 }
 @media(max-width:900px) and (min-height:541px){
-  .public-home .public-hero {display:flex;flex-direction:column;justify-content:center;gap:0;padding-block:22px}
-  .public-home .public-hero-copy {width:100%;max-width:540px;flex:none}
-  .public-home .public-hero-art {flex:0 1 auto;height:auto;max-height:38svh;width:100%;margin-top:24px;object-position:center}
+  .public-home .public-hero {display:flex;flex-direction:column;align-items:center;gap:0;padding:20px 0 0}
+  .public-home .public-hero-copy {width:100%;max-width:560px;flex:none;padding:0 18px;order:1}
+  .public-home .public-title-art {max-height:19svh;object-position:center}
+  .public-home .public-tagline {font-size:17px;margin:12px 0 16px!important}
+  .living-hero {position:relative;inset:auto;width:100%;flex:1;min-height:0;margin-top:4px;order:2;mask-image:linear-gradient(transparent,#000 4%,#000);-webkit-mask-image:linear-gradient(transparent,#000 4%,#000)}
+  .living-hero::before {content:'';position:absolute;inset:0;background:url('/assets/landing-v2/paper.webp');background-size:512px;z-index:-1}
+  .living-hero-toggle {right:10px;bottom:10px}
+  .living-hero-fallback img {object-position:center}
 }
 @media(max-width:767px){
-  .public-home {padding-bottom:8px}
-  .public-home .public-landing {padding-top:6px}
-  .public-home .public-hero {display:flex;flex-direction:column;justify-content:center;gap:0;padding:clamp(12px,2svh,22px) 12px}
-  .public-home .public-hero-copy {width:100%;max-width:460px;flex:none}
-  .public-home .public-title-art {max-height:min(22svh,190px);object-position:center}
-  .public-home .public-tagline {font-size:16px;margin:12px 0 15px!important}
-  .public-home .public-hero-art {position:relative;inset:auto;order:2;flex:0 1 auto;min-height:0;width:100%;height:auto;max-width:100%;max-height:36svh;margin:24px 0 0;object-position:center}
+  .public-home {padding:0}
+  .public-home .public-header {padding:5px 10px;min-height:94px}
+  .public-home .public-landing {padding:0}
+  .public-home .public-hero {padding-top:clamp(10px,2svh,18px)}
+  .public-home .public-hero-copy {max-width:510px;padding-inline:10px}
+  .public-home .public-title-art {max-height:min(17svh,155px)}
+  .public-home .public-tagline {font-size:16px;margin:8px 0 12px!important}
   .public-home .public-join {padding:5px;border-width:9px;border-image-width:17px}
   .public-home .public-join-form {grid-template-columns:minmax(0,1fr) auto;gap:5px}
   .public-home.public-site .public-join-form input {height:46px;font-size:16px;padding-inline:8px}
@@ -48,10 +58,9 @@ body:has(.public-home),#root:has(.public-home) {min-height:100svh}
   .public-home .public-nav {grid-row:auto;grid-column:auto;gap:18px}
   .public-home .public-nav a {font-size:14px;min-height:40px}
   .public-home .public-account .public-button {font-size:13px;min-height:38px;padding-inline:9px}
-  .public-home .public-hero {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:10px 16px}
-  .public-home .public-hero-copy {width:100%;max-width:500px}
+  .public-home .public-hero {padding:14px 16px}
+  .public-home .public-hero-copy {width:46%;max-width:500px}
   .public-home .public-title-art {max-height:24svh;object-position:left center}
   .public-home .public-tagline {font-size:14px;margin:5px 0 9px!important}
-  .public-home .public-hero-art {position:relative;inset:auto;width:100%;height:100%;max-height:none;margin:0;object-position:center}
   .public-home .public-join {padding:2px;border-width:7px}
 }

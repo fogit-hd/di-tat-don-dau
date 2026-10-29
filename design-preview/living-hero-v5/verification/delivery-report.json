@@ -1,0 +1,48 @@
+{
+  "results": [
+    {
+      "mobile": false,
+      "width": 1340,
+      "height": 754,
+      "continuous": true,
+      "craneWaitsForHands": true,
+      "moored": true,
+      "verticalCable": true,
+      "receiverContact": true,
+      "releaseBeforeDeparture": true,
+      "warehouseConcealsReset": true,
+      "truckResetsOffscreen": true,
+      "truckOnPavedLane": true,
+      "truckReturnsFacingLeft": true,
+      "boatLocalFloor": true,
+      "turnsBeforeDeparture": true,
+      "walkPhaseNeverResets": true,
+      "walkRootContinuous": true,
+      "noStandingSlide": true,
+      "frames": 33,
+      "endpointPixelIdentical": true
+    },
+    {
+      "mobile": true,
+      "width": 600,
+      "height": 800,
+      "continuous": true,
+      "craneWaitsForHands": true,
+      "moored": true,
+      "verticalCable": true,
+      "receiverContact": true,
+      "releaseBeforeDeparture": true,
+      "warehouseConcealsReset": true,
+      "truckResetsOffscreen": true,
+      "truckOnPavedLane": true,
+      "truckReturnsFacingLeft": true,
+      "boatLocalFloor": true,
+      "turnsBeforeDeparture": true,
+      "walkPhaseNeverResets": true,
+      "walkRootContinuous": true,
+      "noStandingSlide": true,
+      "frames": 33,
+      "endpointPixelIdentical": true
+    }
+  ]
+}

@@ -7,11 +7,13 @@ import catalog from '../lib/wiki-catalog.json'
 import { PaintedArt as Art } from './ArtText'
 import { PublicArtText as T } from './PublicArtText'
 import { factoryArt, investmentArt } from '../lib/art'
+import { PAGE_SIZE } from '../lib/pagination'
+import { WikiQuestions } from './WikiQuestions'
 
 type Industry = typeof catalog.industries[number]
 const events=[...catalog.events,...companyEvents]
 type EventRow = typeof events[number]
-type Section = 'start' | 'industries' | 'upgrades' | 'production' | 'events' | 'risk' | 'updates'
+type Section = 'start' | 'industries' | 'upgrades' | 'production' | 'events' | 'risk' | 'updates' | 'questions'
 const sections: { id: Section; label: string; art: string }[] = [
   {id:'start',label:'Bắt đầu',art:'/assets/landing-v2/book.webp'},
   {id:'updates',label:'Cập nhật & luật hiện hành',art:'/assets/ui/static-events-v3/patent.webp'},
@@ -19,6 +21,7 @@ const sections: { id: Section; label: string; art: string }[] = [
   {id:'upgrades',label:'Đầu tư & nâng cấp',art:'/assets/ui/static-events-v3/new-machinery.webp'},
   {id:'production',label:'Sản lượng & thu nhập',art:'/assets/ui/static-events-v3/market-recovery.webp'},
   {id:'events',label:'Sự kiện',art:'/assets/ui/static-events-v3/storm.webp'},
+  {id:'questions',label:'Câu hỏi & đáp án',art:'/assets/landing-v2/book.webp'},
   {id:'risk',label:'Rủi ro & chuyển giao',art:'/assets/ui/static-events-v3/longevity.webp'},
 ]
 const contexts = [
@@ -106,7 +109,7 @@ export function WikiPage(){
         <Heading title="Tra cứu 64 ngành" body="Giá cơ sở và định mức của cụm sản xuất đầu tiên"/>
         <div className="wiki-toolbar"><input type="search" placeholder="Tìm ngành…" aria-label="Tìm ngành" value={search} onChange={e=>{setSearch(e.target.value);setPage(0)}}/><select aria-label="Nhóm ngành" value={group} onChange={e=>{setGroup(e.target.value);setPage(0)}}><option value="">Tất cả nhóm ngành</option>{groups.map(([id,name])=><option key={id} value={id}>{name}</option>)}</select></div>
         <div className="wiki-industry-head" aria-hidden="true">{['Ngành','Người / cụm','Tuyển 1 người','Mở 1 cụm','Vốn đủ tổ'].map(t=><T text={t} key={t}/>)}</div>
-        <div className="wiki-industry-list">{filteredIndustries.slice(page*8,page*8+8).map(i=><button type="button" className={`wiki-industry-row ${i.id===industry.id?'selected':''}`} key={i.id} onClick={()=>selectIndustry(i.id)} aria-label={`Xem ${i.name}`}>
+        <div className="wiki-industry-list">{filteredIndustries.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE).map(i=><button type="button" className={`wiki-industry-row ${i.id===industry.id?'selected':''}`} key={i.id} onClick={()=>selectIndustry(i.id)} aria-label={`Xem ${i.name}`}>
           <div className="wiki-industry-name"><Art src={factoryArt(i.id)}/><T text={i.name} bold/></div>
           <span><small><T text="Người / cụm"/></small><T text={String(i.crew)}/></span>
           <span><small><T text="Tuyển 1 người"/></small><T text={money(i.prices.eng)}/></span>
@@ -114,7 +117,7 @@ export function WikiPage(){
           <span><small><T text="Vốn đủ tổ"/></small><T text={money(i.prices.mac+i.crew*i.prices.eng)} bold/></span>
         </button>)}</div>
         {!filteredIndustries.length&&<p role="status"><T text="Không tìm thấy ngành phù hợp."/></p>}
-        <Pager page={page} total={Math.ceil(filteredIndustries.length/8)} onChange={setPage}/>
+        <Pager page={page} total={Math.ceil(filteredIndustries.length/PAGE_SIZE)} onChange={setPage}/>
         <div className="wiki-industry-summary"><Art src={factoryArt(industry.id)}/><div><h2><T text={industry.name} bold/></h2><p><T text="Giá cơ sở cho lượt mới; ưu đãi, số lần mua và cấu hình phòng làm thay đổi giá thực trả."/></p><div className="wiki-inline-actions"><button onClick={()=>navigate('production',industry.id)}><T text="Sản lượng & thu nhập"/></button><button onClick={()=>navigate('upgrades',industry.id)}><T text="Nâng cấp theo ngành"/></button><button onClick={()=>{navigate('events',industry.id);setEventKind('industry')}}><T text="Sự kiện liên quan"/></button></div></div></div>
       </>}
       {section==='production'&&<ProductionArticle industry={industry} selector={select}/>}
@@ -124,13 +127,14 @@ export function WikiPage(){
         <div className="wiki-toolbar"><input type="search" aria-label="Tìm sự kiện" placeholder="Tìm tên sự kiện, tác động…" value={search} onChange={e=>{setSearch(e.target.value);setPage(0);setSelectedEvent(null)}}/><select aria-label="Loại sự kiện" value={eventKind} onChange={e=>{setEventKind(e.target.value);setPage(0);setSelectedEvent(null)}}><option value="all">Tất cả sự kiện</option><option value="recent">Sự kiện doanh nghiệp mới</option><option value="industry">Ngành đang chọn</option><option value="general">Sự kiện chung</option><option value="family">Gia đình & quản trị</option></select><select value={tone} aria-label="Sắc thái gốc" onChange={e=>{setTone(e.target.value);setPage(0);setSelectedEvent(null)}}><option value="all">Tất cả sắc thái gốc</option><option value="true">Gốc có lợi</option><option value="false">Gốc bất lợi</option></select></div>
         {eventKind==='industry'&&select}
         <p className="wiki-meta"><T text={`${filteredEvents.length} sự kiện gốc phù hợp. Biến thể ngữ cảnh được gom trong từng sự kiện.`}/></p>
-        <div className="wiki-events-list">{filteredEvents.slice(page*8,page*8+8).map(e=><button type="button" key={e.id} className={`wiki-event-row ${selectedEvent?.id===e.id?'selected':''}`} onClick={()=>openEvent(e)}><Art src={artwork(e.art)}/><div><h2><T text={e.title} bold/></h2><p><T text={e.industry==='general'?'Sự kiện chung':e.industry==='family'?'Gia đình & quản trị':catalog.industries.find(i=>i.id===e.industry)?.name??''}/></p></div><span aria-hidden="true" className="wiki-chevron"><T text="›"/></span></button>)}</div>
+        <div className="wiki-events-list">{filteredEvents.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE).map(e=><button type="button" key={e.id} className={`wiki-event-row ${selectedEvent?.id===e.id?'selected':''}`} onClick={()=>openEvent(e)}><Art src={artwork(e.art)}/><div><h2><T text={e.title} bold/></h2><p><T text={e.industry==='general'?'Sự kiện chung':e.industry==='family'?'Gia đình & quản trị':catalog.industries.find(i=>i.id===e.industry)?.name??''}/></p></div><span aria-hidden="true" className="wiki-chevron"><T text="›"/></span></button>)}</div>
         {!filteredEvents.length&&<p role="status"><T text="Không tìm thấy sự kiện phù hợp."/></p>}
-        <Pager page={page} total={Math.ceil(filteredEvents.length/8)} onChange={setPage}/>
+        <Pager page={page} total={Math.ceil(filteredEvents.length/PAGE_SIZE)} onChange={setPage}/>
         {selectedEvent&&<EventDetail row={selectedEvent} context={context} setContext={setContext}/>}
         <Fold title="Sự kiện hệ thống và kết quả chuyển giao"><p><T text="Ngoài bộ bốc thường còn có tử vong, doanh nghiệp trăm năm, Nhà nước duyệt hỗ trợ, giải ngân khởi động lại và năm kết quả chuyển giao: phá sản, mất tài sản, giữ nguyên, tăng tài sản, nhân tài sản."/></p><div className="wiki-system-grid">{[['mortality','Tử vong'],['centennial','Doanh nghiệp trăm năm'],['state-support','Hỗ trợ vốn'],['bankruptcy','Phá sản'],['inheritance-loss','Mất tài sản'],['inheritance-steady','Giữ nguyên'],['inheritance-growth','Tăng tài sản']].map(([art,title])=><div key={title}><Art src={artwork(art==='mortality'?'illness':art==='centennial'?'patent':art)}/><T text={title}/></div>)}</div><p><T text="Thời hạn kinh tế tính theo năm. Các câu hỏi và hoạt cảnh mới dùng giây. Tử vong kết thúc lượt; chỉ phá sản trong chuyển giao và đã được duyệt hỗ trợ mới có thể khởi động lại."/></p></Fold>
       </>}
       {section==='risk'&&<RiskArticle/>}
+      {section==='questions'&&<WikiQuestions/>}
     </section>
   </main>
 }

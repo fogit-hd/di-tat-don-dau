@@ -1,0 +1,64 @@
+{
+  "errors": [],
+  "missing": [],
+  "widths": [
+    {
+      "width": 390,
+      "seen": [
+        "enterprise-ready",
+        "stat-workers",
+        "stat-clusters",
+        "stat-products",
+        "stat-tech",
+        "stat-supply",
+        "stat-infra",
+        "stat-environment",
+        "stat-quality",
+        "risk",
+        "events",
+        "years"
+      ],
+      "realPurchases": 5,
+      "year": 1
+    },
+    {
+      "width": 768,
+      "seen": [
+        "enterprise-ready",
+        "stat-workers",
+        "stat-clusters",
+        "stat-products",
+        "stat-tech",
+        "stat-supply",
+        "stat-infra",
+        "stat-environment",
+        "stat-quality",
+        "risk",
+        "events",
+        "years"
+      ],
+      "realPurchases": 5,
+      "year": 1
+    },
+    {
+      "width": 1440,
+      "seen": [
+        "enterprise-ready",
+        "stat-workers",
+        "stat-clusters",
+        "stat-products",
+        "stat-tech",
+        "stat-supply",
+        "stat-infra",
+        "stat-environment",
+        "stat-quality",
+        "risk",
+        "events",
+        "years"
+      ],
+      "realPurchases": 5,
+      "year": 1
+    }
+  ],
+  "requests": []
+}

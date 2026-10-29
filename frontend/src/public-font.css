@@ -1,4 +1,4 @@
-/* Shared by public-page lettering and connection screens, never applied to gameplay. */
+/* Shared local Vietnamese-complete face for public pages and gameplay. */
 @font-face {
   font-family: 'Public UI';
   src: url('/assets/fonts/public-ui/DejaVuSans.ttf') format('truetype');

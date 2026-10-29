@@ -1,0 +1,19 @@
+.wiki-question-scope{color:#6d5134;font-size:15px!important;line-height:1.6}
+.wiki-question-list{display:grid;gap:10px}
+.wiki-question-card{border:1px solid #b9904b;background:#fff5dcbb;border-radius:6px;color:#432719;min-width:0}
+.wiki-question-card>summary{list-style:none;display:grid;grid-template-columns:32px minmax(0,1fr) 20px;align-items:start;gap:12px;padding:14px;cursor:pointer;line-height:1.5}
+.wiki-question-card>summary::-webkit-details-marker{display:none}
+.wiki-question-card>summary b{font-size:16px;line-height:1.6}
+.wiki-question-card>summary small{display:block;font-size:12px;color:#785c39;margin-top:4px}
+.wiki-question-card[open] .wiki-question-expand{rotate:180deg}
+.wiki-question-number{border:1px solid #b9904b;border-radius:50%;width:30px;height:30px;display:grid;place-items:center;font-size:13px;background:#e9cf99}
+.wiki-question-answer{padding:0 14px 14px}
+.wiki-question-answer>ol{list-style:none;display:grid;gap:8px;padding:0;margin:0 0 12px}
+.wiki-question-answer li{display:flex;align-items:flex-start;gap:10px;border:1px solid #d2b782;padding:10px;background:#fff9ec;line-height:1.6;font-size:15px}
+.wiki-question-answer li>span{flex:1;min-width:0}
+.wiki-question-answer li.is-correct{border:2px solid #347347;background:#e5f0df;color:#204b2d}
+.wiki-question-answer li>strong{font-size:12px;flex:none}
+.wiki-question-answer>p{margin:0!important;padding:12px;background:#ead6ae66;font-size:15px!important;line-height:1.65}
+.wiki-question-sources{margin-top:18px}
+.wiki-question-sources a{color:#814c15;text-decoration:underline}
+@media(max-width:600px){.wiki-question-card>summary{padding:10px;gap:8px;grid-template-columns:28px minmax(0,1fr) 14px}.wiki-question-number{width:26px;height:26px}.wiki-question-card>summary b{font-size:14px}.wiki-question-answer{padding:0 10px 10px}.wiki-question-answer li{flex-wrap:wrap;font-size:14px;gap:6px}.wiki-question-answer li>strong{width:100%;padding-left:20px}}

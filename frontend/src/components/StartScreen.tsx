@@ -9,6 +9,7 @@ import { PaintedArt as Art } from './ArtText'
 import { PublicArtText as T } from './PublicArtText'
 import { CreateRoomPanel } from './CreateRoomPanel'
 import { CeoJoinPanel } from './SessionEntry'
+import { LivingHeroScene } from './LivingHeroScene'
 const WikiPage = lazy(() => import('./WikiPage').then(module => ({default:module.WikiPage})))
 
 function readCode(params: URLSearchParams) {
@@ -154,8 +155,8 @@ export function StartScreen({ wiki = false }: { wiki?: boolean }) {
       </header>
       {server==='down'&&<p className="public-server public-wrap" role="status"><T text="Máy chủ chưa sẵn sàng. Vui lòng thử lại sau."/></p>}
       {wiki?<Suspense fallback={<div className="public-loading public-wrap" role="status"><T text="Đang mở Wiki…"/></div>}><WikiPage/></Suspense>:<main className="public-wrap public-landing">
-        <section className="public-hero painted-frame" data-painted-frame aria-labelledby="hero-title">
-          <Art className="public-hero-art" src="/assets/landing-v2/hero-art.webp" alt="Nhân sự xây dựng doanh nghiệp bên cảng biển và nhà máy Việt Nam" eager/>
+        <section className="public-hero" aria-labelledby="hero-title">
+          <LivingHeroScene suspended={loginOpen || hostOpen || joinStep === 'name'}/>
           <div className="public-hero-copy">
             <h1 id="hero-title"><span className="sr-only">Xây doanh nghiệp. Chốt vận mệnh.</span><Art src="/assets/landing-v2/hero-title.webp" className="public-title-art" eager/></h1>
             <p className="public-tagline"><T text="Trở thành CEO, đầu tư, vượt biến cố và đưa doanh nghiệp vươn lên dẫn đầu."/></p>

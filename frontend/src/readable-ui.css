@@ -1,0 +1,28 @@
+/* One local Vietnamese-complete face and lining/tabular numerals across every
+   native control/report. SVG lettering uses outlines of this same face. */
+:root {--readable-font:'Public UI',Arial,sans-serif}
+body {font-family:var(--readable-font);font-variant-numeric:lining-nums tabular-nums}
+:is(.public-site,.session-screen,.gameplay,.first-year-advisor,.modal,.card) :is(h1,h2,h3,h4,p,small,b,strong,span,label,button,input,select,textarea,summary,dt,dd,li,td,th) {
+  font-family:var(--readable-font)!important;
+  font-variant-numeric:lining-nums tabular-nums;
+  font-feature-settings:'lnum' 1,'tnum' 1;
+}
+.gameplay.game-shell .company-full,.gameplay.game-shell .company-full :is(b,span) {color:#432719!important;text-shadow:none}
+.gameplay.game-shell .company-full b {display:block;font-size:16px;line-height:1.5;margin-bottom:5px}
+.gameplay.game-shell .company-full span {font-size:15px;line-height:1.5}
+.list-pagination {display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0 4px;color:#4b291c;font:14px/1.5 var(--readable-font)}
+.list-pagination button {min-height:44px;padding:6px 12px;border:1px solid #b7863c;background:#f4e0b4;color:#4b291c;cursor:pointer;font:inherit}
+.list-pagination button:disabled {opacity:.45;cursor:default}
+.list-pagination button:focus-visible {outline:3px solid #a35b1a;outline-offset:2px}
+@media(max-width:699px){
+  /* The company picture is optional on a phone; the detailed stats stay in
+     Doanh nghiệp. Give decisions, events and the year action the space. */
+  .gameplay.game-shell .factory-scene.scene {display:none!important}
+  .gameplay.game-shell .top-main {grid-template-columns:repeat(6,minmax(0,1fr));gap:5px 6px}
+  .gameplay.game-shell .hud-year {grid-column:1;grid-row:3}
+  .gameplay.game-shell .top-tools>.hud-clock,.gameplay.game-shell .top-tools>.top-ended {grid-column:2/5!important;grid-row:3;text-align:center;font-size:11px;min-width:0;white-space:normal!important;line-height:1.35}
+  .gameplay.game-shell .top-tools>.rank {grid-column:5/7!important;grid-row:3;font-size:11px;justify-self:end}
+  .gameplay.game-shell .top-tools>.up,.gameplay.game-shell .top-tools>.down {display:none!important}
+  .gameplay.game-shell .year-finish.btn {font-size:21px;line-height:1.15;display:flex;flex-direction:column;justify-content:center;gap:2px}
+  .gameplay.game-shell .year-finish.btn small {font-size:11px;line-height:1.2;margin:0}
+}

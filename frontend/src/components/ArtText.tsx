@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import letters from '../lib/wiki-letter-paths.json'
+import letters from '../lib/public-letter-paths.json'
 
 type Weight = 'regular' | 'bold'
 export type Lettering = Record<Weight, Record<string, [number, string]>>

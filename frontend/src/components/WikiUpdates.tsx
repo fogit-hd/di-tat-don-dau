@@ -2,10 +2,13 @@ import companyEvents from '../lib/company-events.json'
 import { companyRules } from '../lib/wiki-company-rules'
 import { PaintedArt as Art } from './ArtText'
 import { PublicArtText as T } from './PublicArtText'
+import { useState } from 'react'
+import { PAGE_SIZE } from '../lib/pagination'
+import { PageControls } from './PageControls'
 
 const updates = [
   {title:'Phòng chờ & nhận diện CEO',paragraphs:[
-    'Mỗi phòng nhận tối đa 50 CEO khi đủ chủ đề doanh nghiệp. Màn hình host desktop từ 1280 × 700 hiển thị đủ 50 CEO trong lưới; màn hình nhỏ chia trang, có tìm tên và trạng thái kết nối. Đây là danh sách phòng chờ, chưa phải bảng xếp hạng.',
+    'Mỗi phòng nhận tối đa 50 CEO khi đủ chủ đề doanh nghiệp. Danh sách chia trang tối đa 10 CEO, có tìm tên và trạng thái kết nối. Đây là danh sách phòng chờ, chưa phải bảng xếp hạng.',
     'Người chơi thấy toàn bộ dáng đứng và trang phục của mình. Bấm Thay đổi nhận diện để mở ngăn bên phải; nền phòng chờ được làm tối và giữ nguyên bố cục. Chọn dáng người, màu da, bộ đồ rồi Lưu diện mạo. Đóng khi chưa lưu sẽ bỏ các thay đổi thử.',
     'Diện mạo đã lưu được dùng cho CEO đó trong phòng và khi tổng kết. Lỗi lưu giữ lại lựa chọn để thử lại; không thay đổi diện mạo của CEO khác. Khi host bắt đầu, ngăn nhận diện đóng và chuyển sang đếm ngược.',
     'Giây mỗi năm và Khóa nút có thể nhập số hoặc bấm nút tăng/giảm được vẽ riêng. Hiệu ứng mở/đóng, đổi trang, thay trang phục và kết nối hỗ trợ tùy chọn giảm chuyển động của thiết bị.',
@@ -50,11 +53,13 @@ const updates = [
 ] as const
 
 export function WikiUpdates({onEvent}:{onEvent:(id:string)=>void}) {
+  const [page,setPage]=useState(0)
   return <>
     <div className="wiki-heading"><h1><T text="Cập nhật & luật hiện hành" bold/></h1><p><T text="Các thay đổi đã áp dụng cho mô hình doanh nghiệp mới"/></p></div>
     <div className="wiki-notice"><T text="Các công thức chi tiết nằm trong mục Sản lượng & thu nhập và Đầu tư & nâng cấp. Phòng cũ hoặc cấu hình riêng có thể khác; dự báo trong gameplay phản ánh thông số thực tế của CEO."/></div>
     <div className="wiki-update-rules">{updates.map(update=><details className="wiki-fold" key={update.title}><summary><T text={update.title} bold/><span aria-hidden="true" className="wiki-fold-arrow"><T text="›"/></span></summary><div>{update.paragraphs.map(text=><p key={text}><T text={text}/></p>)}</div></details>)}</div>
     <h2><T text={`${companyEvents.length} sự kiện mới đã áp dụng`} bold/></h2>
-    <div className="wiki-update-events">{companyEvents.map(event=><article key={event.id} className="wiki-update-event"><Art src={`/assets/ui/company-events-v1/${event.art}.svg`}/><div><h3><T text={event.title} bold/></h3><p><T text={companyRules[event.id]}/></p><button type="button" className="public-button public-button-dark" onClick={()=>onEvent(event.id)}><T text="Xem chi tiết"/></button></div></article>)}</div>
+    <div className="wiki-update-events">{companyEvents.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE).map(event=><article key={event.id} className="wiki-update-event"><Art src={`/assets/ui/company-events-v1/${event.art}.svg`}/><div><h3><T text={event.title} bold/></h3><p><T text={companyRules[event.id]}/></p><button type="button" className="public-button public-button-dark" onClick={()=>onEvent(event.id)}><T text="Xem chi tiết"/></button></div></article>)}</div>
+    <PageControls page={page} count={companyEvents.length} onChange={setPage} label="Trang cập nhật sự kiện"/>
   </>
 }

@@ -1,0 +1,21 @@
+{
+  "sizes": [
+    {
+      "width": 390,
+      "height": 844,
+      "allAnswersChecked": 10
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "allAnswersChecked": 10
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "allAnswersChecked": 80
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

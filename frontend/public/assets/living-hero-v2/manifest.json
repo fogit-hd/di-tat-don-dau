@@ -1,0 +1,18 @@
+{
+  "artSource": "builtin-imagegen/native-alpha",
+  "loopSeconds": 24,
+  "assets": {
+    "forklift": {
+      "imagegenSource": "ac23e709-ec26-4772-8642-632c7bbcf16b",
+      "width": 900,
+      "height": 570,
+      "bytes": 164926
+    },
+    "boat-empty": {
+      "imagegenSource": "0b8c07ab-3bcf-417e-9832-9f8679cb99c4",
+      "width": 900,
+      "height": 365,
+      "bytes": 126084
+    }
+  }
+}

@@ -3,6 +3,8 @@ import type { BoardRow, TeamRow } from '../api/types'
 import { money } from '../lib/format'
 import { ArtText as T } from './ArtText'
 import { CeoAvatar, CeoName } from './CeoAvatar'
+import { PAGE_SIZE } from '../lib/pagination'
+import { PageControls } from './PageControls'
 
 export function AnimatedValue({value}:{value:number}) {
  const [shown,setShown]=useState(value),current=useRef(value)
@@ -22,6 +24,7 @@ function StatusIcon({status}:{status:string}){
  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[status]??paths.finished}/></svg>
 }
 export function LiveRanking({rows,teams}:{rows:BoardRow[];teams:TeamRow[]}){
+ const [page,setPage]=useState(0),current=Math.min(page,Math.max(0,Math.ceil(rows.length/PAGE_SIZE)-1))
  const list=useRef<HTMLOListElement>(null),announce=useRef<HTMLParagraphElement>(null)
  const prior=useRef(new Map<string,{top:number;rank:number}>())
  const signature=rows.map(row=>`${row.teamId}:${row.rank}`).join('|')
@@ -46,14 +49,15 @@ export function LiveRanking({rows,teams}:{rows:BoardRow[];teams:TeamRow[]}){
   if(announce.current)announce.current.textContent=moved.join('. ')
   // Keep running transforms across snapshots; cancel only when this list unmounts.
   return()=>{timers.forEach(clearTimeout);for(const node of root?.querySelectorAll<HTMLElement>('[data-movement]')??[])delete node.dataset.movement}
- },[signature])
+ },[signature,current])
  return <section className="session-frame live-ranking" aria-label="Bảng xếp hạng trực tiếp">
   <h2 className="session-ribbon"><T text="Bảng xếp hạng trực tiếp" bold/></h2>
   <div className="live-ranking-head" aria-hidden="true">{['Hạng','CEO · Ngành','Giá trị','Năm','Trạng thái'].map(text=><span key={text}><T text={text} bold/></span>)}</div>
-  <ol ref={list}>{rows.map(row=>{const team=teams.find(t=>t.id===row.teamId),status=team?.playerStatus??row.playerStatus??(team?.finished?'finished':team?.introDone===false?'joining':'operating');return <li key={row.teamId} data-ceo-id={row.teamId} data-ceo-name={row.teamName} data-rank={row.rank}>
+  <ol ref={list} start={current*PAGE_SIZE+1}>{rows.slice(current*PAGE_SIZE,(current+1)*PAGE_SIZE).map(row=>{const team=teams.find(t=>t.id===row.teamId),status=team?.playerStatus??row.playerStatus??(team?.finished?'finished':team?.introDone===false?'joining':'operating');return <li key={row.teamId} data-ceo-id={row.teamId} data-ceo-name={row.teamName} data-rank={row.rank}>
    <b className="live-rank"><T text={String(row.rank)} bold/></b><div className="live-person"><CeoAvatar avatar={row.avatar} portrait/><div><CeoName name={row.teamName}/><small><T text={row.themeName}/></small></div></div>
    <b className="live-value"><AnimatedValue value={row.value}/></b><span className="live-year"><T text={String(team?.cycles??0)}/></span><span className={`ceo-status status-${status}`}><StatusIcon status={status}/><T text={labels[status]??labels.finished}/></span>
   </li>})}</ol>{!rows.length&&<p className="session-empty"><T text="Chưa có CEO nào."/></p>}
   <p ref={announce} className="sr-only" aria-live="polite"/>
+  <PageControls page={current} count={rows.length} onChange={next=>{prior.current.clear();setPage(next)}} label="Trang bảng xếp hạng trực tiếp"/>
  </section>
 }

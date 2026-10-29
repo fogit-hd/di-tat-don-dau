@@ -22,7 +22,8 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
   const readyRef=useRef(false)
   const respond=useRef<()=> 'consumed'|'action'>(()=>'consumed')
   useEffect(()=>{
-    let alive=true,raf=0,last=0,t=0,entered=false,stepSeen='',speechTime=0,speechTotal=0,shown=0,reading=false,arrival=0,finishedAt=0,finishSent=false
+    let alive=true,raf=0,last=0,t=0,entered=false,stepSeen='',speechTime=0,speechTotal=0,shown=0,reading=false,arrival=0,finishedAt=0,finishSent=false,gestureWait=0
+    const requestedGestures=new Set<string>()
     let chars:string[]=[],beats:number[]=[],point:{name:string;progress:number;out:boolean;hold:number;subject:string}|null=null,confirm=0,idleStart=0,measureKey=''
     let chunks:string[]=[],chunkIndex=0,pauseUntil=Infinity,responded=false,continueSent=false,focusMark:HTMLElement|null=null,actionMark:HTMLElement|null=null,originalAria:string|null=null
     const pointer={x:-1,y:-1}
@@ -37,7 +38,7 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       const normalized=chunks[index].normalize('NFC')
       chars=segmenter?Array.from(segmenter.segment(normalized),part=>part.segment):Array.from(normalized);beats=[];speechTotal=0
       for(const char of chars){beats.push(speechTotal);speechTotal+=/[.!?]/.test(char)?.18:/[,;:]/.test(char)?.08:LETTER_SECONDS}
-      shown=Math.min(6,chars.length);speechTime=beats[shown]??0;reading=!reduced.matches;pauseUntil=reduced.matches?t+RESPONSE_SECONDS:Infinity;idleStart=t
+      shown=0;speechTime=0;gestureWait=0;reading=!reduced.matches;pauseUntil=reduced.matches?t+RESPONSE_SECONDS:Infinity;idleStart=t
       if(words.current)words.current.textContent=reduced.matches?normalized:chars.slice(0,shown).join('')
       if(announcement.current)announcement.current.textContent=normalized
       focusSelect()?.scrollIntoView({block:'nearest',inline:'nearest',behavior:reduced.matches?'instant':'smooth'})
@@ -54,11 +55,13 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
     }
     respond.current=()=>{
       if(!entered||latest.current.paused||latest.current.busy)return 'consumed'
+      if(stepSeen!==`${latest.current.stepIndex}:${latest.current.step.action}`)return 'consumed'
+      if(latest.current.step.skip)return 'consumed'
+      if(reading){finishSpeech();return 'consumed'}
       if(latest.current.step.interaction==='continue'){
         if(!continueSent){continueSent=true;void latest.current.onAcknowledge(latest.current.step.action).then(ok=>{if(alive&&!ok)continueSent=false})}
         return 'consumed'
       }
-      if(reading){finishSpeech();return 'consumed'}
       if(chunkIndex<chunks.length-1){beginChunk(chunkIndex+1);return 'consumed'}
       responded=true
       return latest.current.step.action==='complete'?'consumed':'action'
@@ -70,18 +73,30 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       const stage=document.querySelector('.game-stage')?.getBoundingClientRect(),events=document.querySelector('.event-overview')?.getBoundingClientRect(),content=document.querySelector('.game-content')?.getBoundingClientRect(),dock=document.querySelector('.year-dock')?.getBoundingClientRect(),r=target?.getBoundingClientRect()
       const available=Math.min(stage?.width??vw-24,vw-24),small=available<400||vh<600
       const h=vh<600?88:small?118:145,plateW=small?132:174,plateH=plateW*48/260
-      const bw=vh<600?Math.min(420,vw-plateW-48):Math.max(140,Math.min(360,available-plateW-24))
+      const stacked=vw<700
+      const bw=stacked?Math.min(360,vw-28):vh<600?Math.min(420,vw-plateW-48):Math.max(140,Math.min(360,available-plateW-24))
       bubble.current?.classList.toggle('is-compact',small)
+      if(bubble.current)bubble.current.dataset.layout=stacked?'stacked':'side'
       const spoken=chunks.length?chunks:dialogueChunks(latest.current.step.text)
       const key=`${latest.current.stepIndex}:${bw}:${spoken.join(' ')}`
       if(key!==measureKey&&words.current){
-        const measure=canvas.current?.getContext('2d');if(measure){measure.font=`${small?21:24}px "Times New Roman",serif`;let line='',lines=1
+        const measure=canvas.current?.getContext('2d');if(measure){measure.font=`${small?21:24}px "Public UI",Arial,sans-serif`;let line='',lines=1
           let maxLines=1
           for(const chunk of spoken){line='';lines=1;for(const word of chunk.split(/\s+/)){const test=line?line+' '+word:word;if(measure.measureText(test).width>bw-(small?40:52)){lines++;line=word}else line=test}maxLines=Math.max(maxLines,lines)}
           words.current.style.minHeight=Math.ceil(maxLines*(small?29.4:33.6))+'px';measureKey=key
         }
       }
       const bh=bubble.current?.getBoundingClientRect().height||170
+      if(stacked){
+        const left=clamp(stage?.left??12,12,vw-plateW-12),top=Math.max(12,Math.min(dock?.top??vh-12,vh-12)-h-plateH-12)
+        const bx=clamp(left+8,12,vw-bw-12)
+        let by=Math.max(10,top-bh-22)
+        if(r&&intersects({left:bx,right:bx+bw,top:by,bottom:by+bh},r)){
+          by=r.top>bh+20?r.top-bh-14:Math.min(vh-bh-12,r.bottom+14)
+        }
+        if(bubble.current){bubble.current.style.left=bx+'px';bubble.current.style.top=by+'px';bubble.current.style.width=bw+'px'}
+        return {x:left+plateW/2,top,height:h,plateW,plateH,target:r,origin:[left+plateW/2,top+h*.42]}
+      }
       const rise=vh<600?20:28,total=Math.max(h+plateH+rise,bh),bottom=Math.min(content?.bottom??vh-16,dock?.top??vh-16)-10
       const left=clamp(stage?.left??12,12,vw-plateW-12)
       let groupTop=clamp(Math.max((events?.bottom??16)+12,bottom-total),16,Math.max(16,vh-total-12)),top=groupTop+rise
@@ -112,19 +127,29 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
         name='arrive';index=Math.min(7,Math.floor(progress*8));alpha=reduced.matches?1:clamp(arrival/.32,0,1);shift=-24*(1-(1-(1-progress)**3))
         if(progress===1){entered=true;readyRef.current=true;setReady(true);prepareStep()}
       }else{
-        if(reading&&!point?.out&&confirm<=0){
+        const wanted=box.target?advisorDirection(box.target.left+box.target.width/2-box.origin[0],box.target.top+box.target.height/2-box.origin[1]):'point-right'
+        if(reading&&box.target&&!requestedGestures.has(wanted)){
+          requestedGestures.add(wanted);void Promise.allSettled([assets.load(wanted),assets.load(wanted+'-talk')])
+        }
+        const gestureReady=assets.frames.has(resolveFrame(wanted,7).key)&&assets.frames.has(resolveFrame(wanted+'-talk',0).key)
+        if(reading&&!point&&confirm<=0&&!reduced.matches&&box.target&&gestureReady&&shown===0&&gestureWait>.25)point={name:wanted,progress:0,out:false,hold:0,subject:focusSelector()}
+        gestureWait+=dt
+        // The pointing entrance has a closed mouth. Start revealing words only
+        // once the talking pose is on screen, driven by the same speech clock.
+        const canSpeak=!box.target||reduced.matches||point?.progress===1&&!point.out||!gestureReady&&gestureWait>2
+        if(reading&&!point?.out&&confirm<=0&&canSpeak){
           speechTime+=dt;while(shown<chars.length&&speechTime>=beats[shown])shown++
           if(words.current){const text=chars.slice(0,shown).join('');if(words.current.textContent!==text)words.current.textContent=text}
           if(speechTime>=speechTotal)finishSpeech()
         }
-        const wanted=box.target?advisorDirection(box.target.left+box.target.width/2-box.origin[0],box.target.top+box.target.height/2-box.origin[1]):'point-right'
-        if(reading&&!point&&confirm<=0&&!reduced.matches&&box.target&&assets.frames.has(resolveFrame(wanted,7).key)&&assets.frames.has(wanted+'-talk:0'))point={name:wanted,progress:0,out:false,hold:0,subject:focusSelector()}
         const sequence=[0,1,2,1,0,4,1,0]
         let mouth=sequence[Math.floor(speechTime*7)%sequence.length]
         if(/[\s.!?,;:]/.test(chars[Math.max(0,shown-1)]??''))mouth=0
         if(point){
-          if(wanted!==point.name||point.subject!==focusSelector())point.out=true
-          point.progress=clamp(point.progress+(point.out?-dt/.32:dt/.48),0,1)
+          // Smooth scrolling can move a target across a direction threshold.
+          // Finish this authored gesture before choosing a direction for the next sentence.
+          if(point.subject!==focusSelector())point.out=true
+          point.progress=clamp(point.progress+(point.out?-dt/.24:dt/.32),0,1)
           if(point.progress===1&&!reading){point.hold+=dt;if(point.hold>1.1)point.out=true}
           name=point.name;index=Math.min(7,Math.floor(point.progress*7.999))
           if(point.progress===1&&!point.out){name=point.name+'-talk';index=reading?mouth:0}
@@ -152,14 +177,12 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       const waiting=entered&&!reading,remaining=waiting?Math.max(0,Math.ceil(pauseUntil-t)):0
       const responseReady=waiting&&chunkIndex===chunks.length-1&&(responded||t>=pauseUntil)&&!p.busy&&!p.paused
       // Only explanations and tab visits advance automatically. Never buy or settle a year here.
-      if(responseReady && !p.error && !continueSent && (p.step.interaction==='continue'||p.step.tab)){
-        if(p.step.action==='investment'){/* The player opens the investment tab. */}
-        else if(p.step.tab){continueSent=true;void p.onAcknowledge(p.step.action).then(ok=>{if(alive&&!ok)continueSent=false})}
-        else{continueSent=true;void p.onAcknowledge(p.step.action).then(ok=>{if(alive&&!ok)continueSent=false})}
+      if(responseReady && !p.step.manual && !p.error && !continueSent && (p.step.interaction==='continue'||p.step.tab)){
+        continueSent=true;void p.onAcknowledge(p.step.action).then(ok=>{if(alive&&!ok)continueSent=false})
       }
       const canAct=responseReady&&p.step.action!=='complete'&&p.step.interaction!=='continue'
       const dialogueState=!entered?'arriving':reading?'speaking':responseReady&&p.step.action==='complete'?'completing':responseReady&&p.step.interaction==='continue'?'awaiting-continue':chunkIndex<chunks.length-1?'pause':canAct?'awaiting-action':'pause'
-      const cueText=!entered||p.busy||continueSent?'':reading?'Chạm để xem hết đoạn này':dialogueState==='completing'?'':p.step.interaction==='continue'||p.step.tab&&p.step.action!=='investment'?`Chạm để tiếp tục · tự chuyển sau ${remaining}s`:dialogueState==='awaiting-action'?'Bấm mục đang sáng để tiếp tục':`Chạm để tiếp tục${responded?'':` · ${remaining}s`}`
+      const cueText=!entered||p.busy||continueSent?'':reading?'Chạm để hiện hết lời thoại':dialogueState==='completing'?'':p.step.manual?'Chạm để bắt đầu':p.step.interaction==='continue'||p.step.tab?`Chạm để tiếp tục · tự chuyển sau ${remaining}s`:dialogueState==='awaiting-action'?'Bấm nút đang sáng để tiếp tục':`Chạm để tiếp tục${responded?'':` · ${remaining}s`}`
       if(cue.current&&cue.current.textContent!==cueText)cue.current.textContent=cueText
       const focus=focusSelect(),action=p.step.interaction==='continue'?null:select()
       if(focus!==focusMark){focusMark?.removeAttribute('data-advisor-highlighted');focusMark=focus;focusMark?.setAttribute('data-advisor-highlighted','')}
@@ -185,13 +208,14 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
       // There is no reserved atlas gutter between jeans and the nameplate.
       const plateTop=y+f.body[3]*scale-3
       ctx.drawImage(assets.plate,box.x-box.plateW/2+shift,plateTop,box.plateW,box.plateH)
-      ctx.fillStyle='#ffedba';ctx.font=`700 ${box.plateW<160?12:box.plateW<190?14:17}px "Times New Roman",serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Cố vấn doanh nghiệp',box.x+shift,plateTop+box.plateH/2,box.plateW-25)
+      ctx.fillStyle='#ffedba';ctx.font=`700 ${box.plateW<160?11:box.plateW<190?13:16}px "Public UI",Arial,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Cố vấn doanh nghiệp',box.x+shift,plateTop+box.plateH/2,box.plateW-18)
       ctx.restore()
       el.dataset.phase=!entered?'arriving':reading?'talking':point?'pointing':p.step.action==='complete'?'celebrating':'waiting'
       el.dataset.pose=name;el.dataset.frame=String(index);el.dataset.alpha=String(alpha);el.dataset.step=String(p.stepIndex)
       el.dataset.plaqueGap=String(plateTop-(y+f.body[3]*scale))
       el.dataset.portrait=JSON.stringify({left:box.x-box.plateW/2,top:box.top,width:box.plateW,height:box.height+box.plateH})
       el.dataset.dialogue=dialogueState;el.dataset.chunk=String(chunkIndex);el.dataset.chunks=String(chunks.length);el.dataset.pauseRemaining=String(remaining);el.dataset.focus=focusSelector();el.dataset.shadeOpacity=String(.34*alpha)
+      el.dataset.speech=JSON.stringify({shown,total:chars.length,time:speechTime,point:point?{name:point.name,progress:point.progress,out:point.out}:null})
     }
     void preloadAdvisor().then(assets=>{
       if(!alive)return
@@ -230,24 +254,23 @@ export function FirstYearAdvisor(props:{step:GuideStep;stepIndex:number;paused:b
     return ()=>{document.removeEventListener('click',capture,true);document.removeEventListener('keydown',keyboard,true)}
   },[])
   useEffect(()=>{
-    if(!loadError||props.busy||props.paused||props.error||!(props.step.interaction==='continue'||props.step.tab))return
+    if(props.busy||props.paused||props.error||props.step.manual)return
+    if(props.step.skip){void latest.current.onAcknowledge(latest.current.step.action);return}
+    if(!loadError||!(props.step.interaction==='continue'||props.step.tab))return
     const timeout=window.setTimeout(()=>{
-      if(props.step.action==='investment')return
       if(props.step.tab)void latest.current.onAcknowledge(latest.current.step.action)
       else void latest.current.onAcknowledge(latest.current.step.action)
     },RESPONSE_SECONDS*1000)
     return()=>window.clearTimeout(timeout)
-  },[loadError,props.busy,props.paused,props.error,props.stepIndex,props.step.action,props.step.tab,props.step.target,props.step.interaction])
+  },[loadError,props.busy,props.paused,props.error,props.stepIndex,props.step.action,props.step.tab,props.step.target,props.step.interaction,props.step.manual,props.step.skip])
   const retry=()=>void props.onAcknowledge(props.step.action).then(ok=>{if(ok)setFinishError(false)})
   return <aside className="first-year-advisor" aria-label="Cố vấn doanh nghiệp">
     <canvas ref={canvas} aria-hidden="true" />
     <div ref={attentionFrame} className="advisor-attention-frame" hidden aria-hidden="true" />
-    <section ref={bubble} className="advisor-dialogue" hidden={!ready} tabIndex={-1} aria-label="Lời hướng dẫn">
+    <section ref={bubble} className="advisor-dialogue" hidden={!ready||props.step.skip} tabIndex={-1} aria-label="Lời hướng dẫn">
       <p ref={words} aria-hidden="true">{loadError?props.step.text:undefined}</p>
       <p ref={announcement} className="advisor-sr" aria-live="polite" aria-atomic="true">{loadError?props.step.text:undefined}</p>
       <p ref={cue} className="advisor-cue" aria-live="off" />
-      {props.step.action==='continue-without-purchase'&&<button type="button" data-guide="insufficient-capital" disabled={props.busy||props.paused} onClick={retry}>Tiếp tục với vốn hiện có</button>}
-      {props.step.action.startsWith('confirm-existing-')&&<button type="button" data-guide="existing-resource" disabled={props.busy||props.paused} onClick={retry}>Đã kiểm tra</button>}
       {(finishError||props.error||loadError&&props.step.action==='complete')&&<div className="advisor-error"><span>{props.error||'Chưa thể tiếp tục. Hãy thử lại.'}</span><button type="button" data-guide-retry disabled={props.busy||props.paused} onClick={retry}>Thử lại</button></div>}
     </section>
   </aside>
