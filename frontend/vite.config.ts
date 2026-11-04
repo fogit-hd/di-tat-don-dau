@@ -58,7 +58,11 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         codeSplitting: {
-          groups: [{ name: 'vendor', test: /[/\\]node_modules[/\\]/ }],
+          groups: [
+            { name: 'preload-helper', test: /preload-helper/, priority: 40 },
+            { name: 'duck-renderer', test: /[/\\]node_modules[/\\](?:pixi\.js|@pixi|gsap)[/\\]/, priority: 20 },
+            { name: 'vendor', test: /[/\\]node_modules[/\\]/ },
+          ],
         },
       },
     },
@@ -68,6 +72,8 @@ export default defineConfig({
     port: 4517,
     strictPort: true,
     proxy: {
+      '/api/duck-race': { target: process.env.DUCK_API_PROXY || 'http://127.0.0.1:4608', changeOrigin: true },
+      '/duck-socket': { target: process.env.DUCK_API_PROXY || 'http://127.0.0.1:4608', ws: true, changeOrigin: true },
       '/api': { target, changeOrigin: true },
       '/health': { target, changeOrigin: true },
       '/socket.io': { target, ws: true, changeOrigin: true },

@@ -21,7 +21,7 @@ OUT=ROOT/'frontend/public/assets/living-hero-v4'
 QA=ROOT/'design-preview/living-hero-v4'
 OUT.mkdir(exist_ok=True);QA.mkdir(exist_ok=True)
 IDS={'carry':'7024744b-b82b-48be-ab1e-a957592da4fb','return':'67038f45-331f-46ff-ade5-c5208ce78486','turn':'aecd192d-91b0-44da-9313-0d79518981d6','pivot':'d54cdffc-915b-4a06-9776-52ff0a0938d6','setdown':'769904a9-2adb-4c1b-9fd7-68a2a808825e'}
-meta=json.loads((ROOT/'frontend/src/lib/porter-sprites.json').read_text())
+meta=json.loads((ROOT/'frontend/src/games/di-tat-don-dau/lib/porter-sprites.json').read_text())
 meta['sources'].update(IDS)
 
 def sole(im,front):
@@ -101,6 +101,6 @@ for name in IDS:
         draw.line((x-8,y,x+8,y),fill='red',width=2)
     review.thumbnail((1000,1000));review.convert('RGB').save(QA/f'{name}-review.jpg',quality=94)
 
-(ROOT/'frontend/src/lib/porter-sprites-v4.json').write_text(json.dumps(meta,separators=(',',':'))+'\n',encoding='utf-8')
+(ROOT/'frontend/src/games/di-tat-don-dau/lib/porter-sprites-v4.json').write_text(json.dumps(meta,separators=(',',':'))+'\n',encoding='utf-8')
 (OUT/'porter.json').write_text(json.dumps(meta,indent=2)+'\n',encoding='utf-8')
 print(json.dumps({n:{k:v for k,v in c.items() if k in ['stepLength','hipOffsets','contacts']} for n,c in meta['clips'].items() if n in ['carry','return']}))

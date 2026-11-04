@@ -1,11 +1,11 @@
 // Validate the self-contained SVG assets and show the approved painting style on both backgrounds.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),rows=require('../backend/src/game/company-events.data.json');
+const root=path.resolve(__dirname,'..'),rows=require('../backend/src/games/di-tat-don-dau/game/company-events.data.json');
 const out=path.join(root,'design-preview/company-events-v1');fs.mkdirSync(out,{recursive:true});
 let browser;
 (async()=>{
- assert.deepEqual(rows,require('../frontend/src/lib/company-events.json'),'Frontend/backend event data must match in independent Docker contexts');
+ assert.deepEqual(rows,require('../frontend/src/games/di-tat-don-dau/lib/company-events.json'),'Frontend/backend event data must match in independent Docker contexts');
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
  const entries=[...rows.map(r=>({id:r.id,title:r.title})),{id:'gen-lop-nghe',title:'Lớp nghề tại chỗ'}];

@@ -1,4 +1,4 @@
-import type { Balance } from '../../src/game/types'
+import type { Balance } from '../../src/games/di-tat-don-dau/game/types'
 
 export const balance = {
   engPerTy: 0.65,

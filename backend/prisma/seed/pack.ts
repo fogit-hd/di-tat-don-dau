@@ -1,4 +1,4 @@
-import type { EventDef, ThemeStart } from '../../src/game/types'
+import type { EventDef, ThemeStart } from '../../src/games/di-tat-don-dau/game/types'
 
 export type IndustrySeed = {
   id: string
@@ -129,7 +129,7 @@ export const CONTEXTS: { id: string; name: string; line: string; start: ThemeSta
   },
 ]
 
-export { QUESTIONS } from '../../src/game/questions.data'
+export { QUESTIONS } from '../../src/games/di-tat-don-dau/game/questions.data'
 
 const neutral = { outputMul: [1, 1] as [number, number], priceMul: [1, 1] as [number, number], inflationMul: [1, 1] as [number, number] }
 

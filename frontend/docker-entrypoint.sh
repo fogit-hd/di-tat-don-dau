@@ -4,6 +4,8 @@ set -eu
 API_URL="${API_URL:-${VITE_API_URL:-}}"
 SOCKET_URL="${SOCKET_URL:-${VITE_SOCKET_URL:-$API_URL}}"
 GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID:-${VITE_GOOGLE_CLIENT_ID:-}}"
+DUCK_API_URL="${DUCK_API_URL:-${VITE_DUCK_API_URL:-}}"
+DUCK_SOCKET_URL="${DUCK_SOCKET_URL:-${VITE_DUCK_SOCKET_URL:-$DUCK_API_URL}}"
 
 js_escape() {
   printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
@@ -14,6 +16,10 @@ window.__APP_CONFIG__ = {
   apiUrl: "$(js_escape "$API_URL")",
   socketUrl: "$(js_escape "$SOCKET_URL")",
   googleClientId: "$(js_escape "$GOOGLE_CLIENT_ID")"
+};
+window.__DUCK_CONFIG__ = {
+  apiUrl: "$(js_escape "$DUCK_API_URL")",
+  socketUrl: "$(js_escape "$DUCK_SOCKET_URL")"
 };
 EOF
 

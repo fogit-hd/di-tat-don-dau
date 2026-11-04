@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { currentEventEntries, ongoingEventEntries } from '../frontend/src/lib/ongoing-events.ts';
-import { EVENT_ICON_KINDS, ICON_KIND, iconKind } from '../frontend/src/components/icon-kind.ts';
+import { currentEventEntries, ongoingEventEntries } from '../frontend/src/games/di-tat-don-dau/lib/ongoing-events.ts';
+import { EVENT_ICON_KINDS, ICON_KIND, iconKind } from '../frontend/src/games/di-tat-don-dau/components/icon-kind.ts';
 const folder='frontend/public/assets/ui/event-loops-v1';
 const manifest=JSON.parse(fs.readFileSync(`${folder}/manifest.json`,'utf8'));
 assert.equal(EVENT_ICON_KINDS.length,33);

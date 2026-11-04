@@ -2,7 +2,7 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),out=path.resolve(process.env.HOME_QA_OUTPUT||path.join(root,'design-preview/home-login-wiki-v1'));
-const company=require('../frontend/src/lib/company-events.json');
+const company=require('../frontend/src/games/di-tat-don-dau/lib/company-events.json');
 fs.mkdirSync(out,{recursive:true});
 let browser;
 (async()=>{

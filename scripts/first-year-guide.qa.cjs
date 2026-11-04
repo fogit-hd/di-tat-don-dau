@@ -4,17 +4,17 @@ const demo=process.env.ADVISOR_DEMO==='1',fallback=process.env.ADVISOR_FALLBACK=
 const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/mascot-guide-v3/'+(process.env.ADVISOR_OUTPUT||(demo?'verification-demo':'verification-production')));fs.mkdirSync(out,{recursive:true});
 const actions=['company','cash','assets','year-count','clock','income','rank','sound','investment','enterprise','risk','events','years','investment-return','cluster','crew','enterprise-ready','year','complete'];
 (async()=>{
- const {createState,computeValue,invest,runCycle,openYearEffects}=await import('../backend/src/game/engine.ts');
+ const {createState,computeValue,invest,runCycle,openYearEffects}=await import('../backend/src/games/di-tat-don-dau/game/engine.ts');
  const {balance}=await import('../backend/prisma/seed/balance.ts');
- const {makeRng}=await import('../backend/src/game/rng.ts');
- const {industryEconomy}=await import('../backend/src/game/industry-economy.ts');
- const {investmentPreviews}=await import('../backend/src/game/investment-preview.ts');
- const {investmentQuote}=await import('../backend/src/game/investment-pricing.ts');
- const {annualBalance,annualEconomy}=await import('../backend/src/game/random-economy.ts');
- const {productionPlan,productionForecast}=await import('../backend/src/game/production.ts');
- const {guideStep}=await import('../frontend/src/lib/first-year-guide.ts');
- const {advisorDirection}=await import('../frontend/src/lib/advisor-direction.ts');
- const {money}=await import('../frontend/src/lib/format.ts');
+ const {makeRng}=await import('../backend/src/games/di-tat-don-dau/game/rng.ts');
+ const {industryEconomy}=await import('../backend/src/games/di-tat-don-dau/game/industry-economy.ts');
+ const {investmentPreviews}=await import('../backend/src/games/di-tat-don-dau/game/investment-preview.ts');
+ const {investmentQuote}=await import('../backend/src/games/di-tat-don-dau/game/investment-pricing.ts');
+ const {annualBalance,annualEconomy}=await import('../backend/src/games/di-tat-don-dau/game/random-economy.ts');
+ const {productionPlan,productionForecast}=await import('../backend/src/games/di-tat-don-dau/game/production.ts');
+ const {guideStep}=await import('../frontend/src/games/di-tat-don-dau/lib/first-year-guide.ts');
+ const {advisorDirection}=await import('../frontend/src/games/di-tat-don-dau/lib/advisor-direction.ts');
+ const {money}=await import('../frontend/src/games/di-tat-don-dau/lib/format.ts');
  assert.equal(advisorDirection(0,-600),'point-up');assert.equal(advisorDirection(150,-400),'point-steep-right');assert.equal(advisorDirection(-150,-400),'point-steep-left');assert.equal(advisorDirection(600,-400),'point');
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
  const report={errors:[],missing:[],widths:[],requests:[]};

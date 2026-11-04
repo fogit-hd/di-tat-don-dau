@@ -1,5 +1,5 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/usability-v5/wiki');fs.mkdirSync(out,{recursive:true});let browser;
+const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/living-hero-v6/wiki');fs.mkdirSync(out,{recursive:true});let browser;
 (async()=>{
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});const report={sizes:[],errors:[],missing:[]};
  for(const [width,height]of [[390,844],[768,1024],[1440,900]]){
@@ -13,7 +13,8 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/usabi
   });
   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(String(e)));page.setDefaultTimeout(15000);
   await page.goto('http://game.test/wiki?section=questions');await page.locator('.wiki-question-card').first().waitFor();await page.evaluate(()=>document.fonts.ready);
-  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.wiki-question-card>summary')).display==='grid');
+  assert.equal(await page.locator('.wiki-question-card>summary').first().evaluate(n=>getComputedStyle(n).display),'grid','Question layout must be styled on first render');
+  assert(await page.locator('.wiki-question-card').first().evaluate(n=>getComputedStyle(n).borderImageSource.includes('public-frame.webp')),'Existing painted frame is applied');
   const seen=new Set();
   for(let p=0;p<(width===1440?8:1);p++){
    assert.equal(await page.locator('.wiki-question-card').count(),10);

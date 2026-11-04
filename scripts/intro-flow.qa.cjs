@@ -22,15 +22,15 @@ scene.yearChanges=[
 const defaultFactoryName='Hồng Hà Chế tạo máy công cụ (máy tiện, máy phay CNC)';
 scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factoryName=defaultFactoryName;
 (async()=>{
- const {COMPANY_UPGRADES,companyUpgradePreview,upgradeCompany}=await import('../backend/src/game/company-upgrades.ts');
- const {industryEconomy}=await import('../backend/src/game/industry-economy.ts');
- const {investmentQuote}=await import('../backend/src/game/investment-pricing.ts');
- const {createState,openYearEffects,runCycle,invest,computeValue}=await import('../backend/src/game/engine.ts');
+ const {COMPANY_UPGRADES,companyUpgradePreview,upgradeCompany}=await import('../backend/src/games/di-tat-don-dau/game/company-upgrades.ts');
+ const {industryEconomy}=await import('../backend/src/games/di-tat-don-dau/game/industry-economy.ts');
+ const {investmentQuote}=await import('../backend/src/games/di-tat-don-dau/game/investment-pricing.ts');
+ const {createState,openYearEffects,runCycle,invest,computeValue}=await import('../backend/src/games/di-tat-don-dau/game/engine.ts');
  const {balance}=await import('../backend/prisma/seed/balance.ts');
- const {investmentPreviews}=await import('../backend/src/game/investment-preview.ts');
- const {productionPlan,productionForecast}=await import('../backend/src/game/production.ts');
- const {annualBalance,annualEconomy}=await import('../backend/src/game/random-economy.ts');
- const {makeRng}=await import('../backend/src/game/rng.ts');
+ const {investmentPreviews}=await import('../backend/src/games/di-tat-don-dau/game/investment-preview.ts');
+ const {productionPlan,productionForecast}=await import('../backend/src/games/di-tat-don-dau/game/production.ts');
+ const {annualBalance,annualEconomy}=await import('../backend/src/games/di-tat-don-dau/game/random-economy.ts');
+ const {makeRng}=await import('../backend/src/games/di-tat-don-dau/game/rng.ts');
  const target=(balance.priceCapitalBase+1400/balance.engPerTy)*balance.priceRevenueShare;
  const modelTheme={...snap.you.theme,lines:scene.lines,coefs:{epl:1400,tech:.12,support:.08,infra:.08,emission:1,baseOutput:10,basePrice:target/10,opex:target*.3,idleCost:34},start:{cashMul:1,engineers:730,machines:.4,pollution:4,dependency:0,condition:1},eventIds:[]};
  let modelSeed=1;while(annualEconomy({seed:modelSeed,cycles:scene.cycles}).upgrade.sup!==1.07)modelSeed++;
@@ -247,7 +247,7 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  snap.paused=true;snap.frozenNow=Date.now();await update();assert.equal(await staticIcon.getAttribute('src'),stableSrc);
  snap.paused=false;snap.frozenNow=null;await update();
  const savedEvents=scene.eventLog;
- const {EVENT_ICON_KINDS}=await import('../frontend/src/components/icon-kind.ts');
+ const {EVENT_ICON_KINDS}=await import('../frontend/src/games/di-tat-don-dau/components/icon-kind.ts');
  scene.eventLog=EVENT_ICON_KINDS.map((kind,index)=>({year:scene.cycles,eventId:'static-'+kind,title:'Sự kiện '+kind,body:'Kiểm tra biểu tượng có đúng loại.',icon:kind,good:index%2===0,effect:'Hiệu ứng minh họa'}));await update();
  await page.getByRole('tab',{name:'Lịch sử sự kiện',exact:true}).click();
  assert.equal(await page.locator('.game-panel .event-static').count(),33);
@@ -338,4 +338,3 @@ scene.factoryName=defaultFactoryName;scene.introDone=false;snap.you.theme.factor
  console.log(JSON.stringify({passed:true,defaultNameLength:defaultFactoryName.length,maxLength:256,errorVisible:true,enterSubmits:true,invoice:900,bulkAndMax:true,yearCountdownConsistent:true,widths:sizes.map(s=>s[0]),successionLossVisible:'50%',sameAfterReload:true,enterpriseCanvas:true,groupedYearLedger:true,economyV2Receipts:true,pollutionExplainer:true,zeroCashCanProduce:true,bankruptcyStopsTimer:true,companyV3ZeroStart:true,industrySpecificPrices:true,crewRecruitment:true,qualityAndMaintenance:true,staticFallbacks:33,staticOnlyNetwork:true,canvasHistoryAndDetailWidths:sizes.map(s=>s[0]),staticNodeStableAcrossClocks:true,reducedMotionStatic:true,pausedStatic:true,imageDraggingBlocked:true,imageContextMenuBlocked:true,textContextMenuPreserved:true,errors},null,2));
  await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
-

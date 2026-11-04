@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {eventCatalog,root} from './event-art-catalog.mjs';
-import {eventArtwork,fallbackEventArt} from '../frontend/src/lib/event-art.ts';
-import {currentEventEntries,ongoingEventEntries} from '../frontend/src/lib/ongoing-events.ts';
+import {eventArtwork,fallbackEventArt} from '../frontend/src/games/di-tat-don-dau/lib/event-art.ts';
+import {currentEventEntries,ongoingEventEntries} from '../frontend/src/games/di-tat-don-dau/lib/ongoing-events.ts';
 
 const catalog=eventCatalog(),folder=path.join(root,'frontend/public/assets/ui/static-events-v3');
 const manifest=JSON.parse(fs.readFileSync(path.join(folder,'manifest.json'),'utf8'));

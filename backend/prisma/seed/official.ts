@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 import { Prisma, type PrismaClient } from '@prisma/client'
-import { normalizeAnchors } from '../../src/game/anchors'
+import { normalizeAnchors } from '../../src/games/di-tat-don-dau/game/anchors'
 import { balance } from './balance'
 import { authoredEffectDocument, effectPayload } from './effects'
 import { normalizeIndustryEvent } from './event-file'

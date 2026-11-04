@@ -134,5 +134,5 @@ padded=Image.new('RGBA',(truck.width+16,truck.height+16));padded.alpha_composite
 hook=Image.open(ROOT/'frontend/public/assets/living-hero-v1/hoist.webp').convert('RGBA')
 hook.crop((round(hook.width*.385),0,round(hook.width*.615),round(hook.height*.27))).save(OUT/'hook.webp',quality=95,method=6)
 (OUT/'porter.json').write_text(json.dumps(meta,indent=2)+'\n',encoding='utf-8')
-(ROOT/'frontend/src/lib/porter-sprites.json').write_text(json.dumps(meta,separators=(',',':'))+'\n',encoding='utf-8')
+(ROOT/'frontend/src/games/di-tat-don-dau/lib/porter-sprites.json').write_text(json.dumps(meta,separators=(',',':'))+'\n',encoding='utf-8')
 print(json.dumps({k:v for k,v in meta.items() if k!='clips'}))

@@ -29,7 +29,7 @@ export function startDbKeepAlive(options?: {
   const ping =
     options?.ping ??
     (async () => {
-      const { prisma } = await import('../prisma')
+      const { prisma } = await import('../shared/prisma')
       await prisma.$queryRaw`SELECT 1`
     })
   if (!options) {

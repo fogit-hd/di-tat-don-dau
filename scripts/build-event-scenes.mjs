@@ -168,7 +168,7 @@ fs.writeFileSync(ledgerPath,JSON.stringify(generated,null,2));
 fs.writeFileSync(path.join(review,'catalog.json'),JSON.stringify({version:VERSION,...catalog},null,2));
 const available=entries.filter(e=>fs.existsSync(path.join(folder,`${e.id}.gif`)));
 const index={version:VERSION,ids:available.filter(e=>e.source!=='context').map(e=>e.id),contexts:catalog.contexts.filter(e=>fs.existsSync(path.join(folder,`context-${e.id}.gif`))).map(e=>e.id),narrations:catalog.entries.filter(e=>e.source==='narration').map(e=>({id:e.id,parent:e.parent,title:e.title}))};
-fs.writeFileSync(path.join(root,'frontend/src/lib/event-art-index.json'),JSON.stringify(index));
+fs.writeFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/event-art-index.json'),JSON.stringify(index));
 const duplicates=new Map();for(const [id,row]of Object.entries(generated)){const list=duplicates.get(row.posterHash)??[];list.push(id);duplicates.set(row.posterHash,list);}
 const collisions=[...duplicates.values()].filter(group=>group.length>1);
 fs.writeFileSync(path.join(review,'duplicate-posters.json'),JSON.stringify(collisions,null,2));

@@ -14,7 +14,7 @@ const server=http.createServer(async(req,res)=>{
   if(url.pathname.startsWith('/api/')){
    const chunks=[];for await(const chunk of req)chunks.push(chunk);const body=chunks.length?JSON.parse(Buffer.concat(chunks).toString()):{};res.setHeader('Content-Type','application/json');
    if(guide){guide.act(url.pathname,body);push();return res.end(JSON.stringify({ok:true}))}
-   if(url.pathname.endsWith('/avatar')){const {avatarSchema}=await import('../backend/src/game/avatar.ts');const a=avatarSchema.safeParse(body);if(!a.success||fixture.room.status!=='lobby'){res.statusCode=400;return res.end('{"error":"Diện mạo không hợp lệ"}')}fixture.teams[0].avatar=a.data;push();return res.end(JSON.stringify({avatar:a.data}))}
+   if(url.pathname.endsWith('/avatar')){const {avatarSchema}=await import('../backend/src/games/di-tat-don-dau/game/avatar.ts');const a=avatarSchema.safeParse(body);if(!a.success||fixture.room.status!=='lobby'){res.statusCode=400;return res.end('{"error":"Diện mạo không hợp lệ"}')}fixture.teams[0].avatar=a.data;push();return res.end(JSON.stringify({avatar:a.data}))}
    if(url.pathname.endsWith('/pause')){fixture.room.status='paused';fixture.room.remainingMs=500000;push()}
    if(url.pathname.endsWith('/resume')){fixture.room.status='playing';fixture.room.endsAt=Date.now()+500000;push()}
    if(url.pathname.endsWith('/end')){fixture.room.status='ended';push()}

@@ -50,5 +50,5 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'frontend/public/assets
 const allowed=new Set(manifest.artworks.map(a=>a.id));
 for(const [id,image]of Object.entries(art))if(!allowed.has(image))throw Error(`${id}: missing ${image}`);
 const index={version:3,art,contexts:catalog.contexts.map(c=>c.id),narrations:catalog.entries.filter(e=>e.parent).map(e=>({id:e.id,parent:e.parent,title:e.title}))};
-fs.writeFileSync(path.join(root,'frontend/src/lib/static-event-art-index.json'),JSON.stringify(index));
+fs.writeFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/static-event-art-index.json'),JSON.stringify(index));
 console.log(JSON.stringify({mappedOriginals:Object.keys(art).length,paintedIllustrations:allowed.size,industryCases:catalog.entries.filter(e=>e.source==='industry').length*8}));

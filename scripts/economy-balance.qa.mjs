@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { balance } from '../backend/prisma/seed/balance.ts';
 import { LINES } from '../backend/prisma/seed/rules.ts';
-import { createState, invest, runCycle, computeValue } from '../backend/src/game/engine.ts';
-import { productionPlan } from '../backend/src/game/production.ts';
-import { annualBalance, annualEconomy, annualPolicy } from '../backend/src/game/random-economy.ts';
-import { mortalityChanceFor, deathChanceFor } from '../backend/src/game/succession.ts';
-import { makeRng } from '../backend/src/game/rng.ts';
+import { createState, invest, runCycle, computeValue } from '../backend/src/games/di-tat-don-dau/games/di-tat-don-dau/game/engine.ts';
+import { productionPlan } from '../backend/src/games/di-tat-don-dau/games/di-tat-don-dau/game/production.ts';
+import { annualBalance, annualEconomy, annualPolicy } from '../backend/src/games/di-tat-don-dau/games/di-tat-don-dau/game/random-economy.ts';
+import { mortalityChanceFor, deathChanceFor } from '../backend/src/games/di-tat-don-dau/games/di-tat-don-dau/game/succession.ts';
+import { makeRng } from '../backend/src/games/di-tat-don-dau/games/di-tat-don-dau/game/rng.ts';
 
 const target = (balance.priceCapitalBase + 1400 / balance.engPerTy) * balance.priceRevenueShare;
 const theme = {

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { groupYearCauses, summarizeYear } from '../frontend/src/lib/year-ledger.ts'
+import { groupYearCauses, summarizeYear } from '../frontend/src/games/di-tat-don-dau/lib/year-ledger.ts'
 
 const input = [
   { kind: 'investment', label: 'Công nghệ sạch', cash: -4500, packages: 5, detail: '5 gói · giá ưu đãi' },

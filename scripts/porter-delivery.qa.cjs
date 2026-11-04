@@ -1,16 +1,16 @@
 // Exercise the actual renderer, serving local files only; no account or backend.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/living-hero-v5/verification');fs.mkdirSync(out,{recursive:true});let browser;
+const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/living-hero-v7/verification');fs.mkdirSync(out,{recursive:true});let browser;
 (async()=>{
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});const page=await browser.newPage();
  await page.route('**/*',route=>{
   const u=new URL(route.request().url());if(u.hostname!=='harbor.test')return route.abort();
   if(u.pathname==='/')return route.fulfill({contentType:'text/html',body:'<!doctype html><html><body style="margin:0;background:#fff1d6"><canvas id="scene"></canvas></body></html>'});
   if(u.pathname==='/renderer.js'){
-   let source=fs.readFileSync(path.join(root,'frontend/src/lib/living-hero.ts'),'utf8');
-   source=source.replace("import poses from './porter-sprites-v4.json'",'const poses='+fs.readFileSync(path.join(root,'frontend/src/lib/porter-sprites-v4.json'),'utf8'));
-   source=source.replace("import { groundedRoute, groundedStep, walkingProgress } from './grounded-walk'",fs.readFileSync(path.join(root,'frontend/src/lib/grounded-walk.ts'),'utf8'));
+   let source=fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/living-hero.ts'),'utf8');
+   source=source.replace("import poses from './porter-sprites-v4.json'",'const poses='+fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/porter-sprites-v4.json'),'utf8'));
+   source=source.replace("import { groundedRoute, groundedStep, walkingProgress } from './grounded-walk'",fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/grounded-walk.ts'),'utf8'));
    return route.fulfill({contentType:'application/javascript',body:require('typescript').transpileModule(source,{compilerOptions:{target:9,module:99}}).outputText});
   }
   return route.fulfill({contentType:'image/webp',body:fs.readFileSync(path.join(root,'frontend/public',u.pathname))});
@@ -22,29 +22,36 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/livin
    const m=await import('/renderer.js'),load=async name=>{const im=new Image();im.src=m.heroAssetUrl(name);await im.decode();return im};
    const sprites=Object.fromEntries(await Promise.all(m.HERO_SPRITES.map(async key=>[key,await load(key)]))),bg=await load(mobile?'scene-mobile':'scene-desktop');
    const c=document.getElementById('scene');c.width=width;c.height=height;const ctx=c.getContext('2d'),frames=[];
-   for(const time of [0,1,2.1,3.3,4.39,4.4,4.8,5.2,5.5,5.8,6,6.3,6.6,7.2,8,8.7,9.2,9.6,10.2,10.8,12,13.5,14,14.8,15.2,15.8,16.5,18,19,20.5,22,23.99,24]){m.paintHero(ctx,width,height,bg,sprites,time,mobile);frames.push({time,png:c.toDataURL()});}
-   const checks={continuous:true,craneWaitsForHands:true,moored:true,verticalCable:true};
+   for(const time of [0,1,2.1,3.3,4.39,4.4,4.8,5.2,5.5,5.8,6,6.3,6.6,7.2,8,8.7,9.2,9.6,10.2,10.8,12,13.5,14,14.8,15.2,15.8,16.5,18,19,20.5,22,23.99,24,27,29,32,35,38,41,44,47.99,48]){m.paintHero(ctx,width,height,bg,sprites,time,mobile);frames.push({time,png:c.toDataURL()});}
+   const support=document.createElement('canvas');support.width=bg.naturalWidth;support.height=bg.naturalHeight;const supportCtx=support.getContext('2d');supportCtx.drawImage(bg,0,0);
+   const checks={continuous:true,craneWaitsForHands:true,moored:true,verticalCable:true,hoistOnPaintedBoom:true};
    for(const boundary of [6.6,8.6,10.6,13]){const a=m.heroMotion(boundary-1e-6,mobile),b=m.heroMotion(boundary+1e-6,mobile);checks.continuous&&=Math.hypot(a.cargo[0]-b.cargo[0],a.cargo[1]-b.cargo[1])<1e-5;}
    for(let t=0;t<24;t+=.02){const s=m.heroMotion(t,mobile),l=m.heroLayout(mobile);
     checks.craneWaitsForHands&&=s.owner!=='crane'||t>=6.6;
     checks.moored&&=t<4||t>=16||s.boatX===l.boatDock;
     checks.verticalCable&&=Math.abs(s.anchor[0]-s.hookX)<1e-10&&s.anchor[1]<s.hookY;
+    const x=Math.round(s.anchor[0]*bg.naturalWidth),y=Math.round(s.anchor[1]*bg.naturalHeight),pixels=supportCtx.getImageData(x-3,y-3,7,7).data;
+    let structural=false;for(let i=0;i<pixels.length;i+=4)if(pixels[i]<110&&pixels[i+1]<110&&pixels[i+2]<110)structural=true;
+    checks.hoistOnPaintedBoom&&=structural;
    }
    const meta=await fetch('/assets/living-hero-v4/porter.json').then(r=>r.json()),contact=m.heroMotion(13.6,mobile),layout=m.heroLayout(mobile),aspect=bg.naturalWidth/bg.naturalHeight;
    checks.receiverContact=Math.hypot(contact.receiver[0]+meta.receiverContact[0]*layout.receiverHeight/aspect-contact.hookX,contact.receiver[1]+meta.receiverContact[1]*layout.receiverHeight-contact.hookY)<.00001;
    checks.releaseBeforeDeparture=m.heroMotion(15,mobile).sling===0&&m.heroMotion(16.1,mobile).owner==='boat';
-   checks.warehouseConcealsReset=m.heroMotion(0,mobile).inside&&m.heroMotion(23.99,mobile).inside;
-   const start=m.heroMotion(0,mobile),end=m.heroMotion(23.99,mobile);
-   checks.truckResetsOffscreen=start.tyreX+start.truckWidth<0&&end.tyreX+end.truckWidth<0&&m.heroMotion(12,mobile).tyreX>1;
-   checks.truckOnPavedLane=true;checks.truckReturnsFacingLeft=true;checks.boatLocalFloor=true;
-   for(let t=0;t<24;t+=.02){
-    const s=m.heroMotion(t,mobile),l=m.heroLayout(mobile);
-    checks.truckReturnsFacingLeft&&=t<13||s.truckDirection===-1;
-    const tw=s.truckWidth*bg.naturalWidth,th=tw*514/1016,dx=(.165-.604)*tw,dy=(.916-.984)*th;
-    const slope=l.road[1]/aspect,shear=slope*s.truckDirection-dy/dx;
-    const rearX=s.tyreX+s.truckDirection*dx/bg.naturalWidth,rearY=s.tyreY+(shear*dx+dy)/bg.naturalHeight;
-    checks.truckOnPavedLane&&=Math.abs(rearY-(l.road[0]+l.road[1]*rearX))<1e-10;
-    if(t>=13){const u=(s.cargo[0]-s.boatX)/l.boatWidth+.5,v=(s.cargo[1]-(l.boatBase+s.boatBob-l.boatHeight))/l.boatHeight;
+   checks.warehouseConcealsReset=m.heroMotion(0,mobile).inside&&m.heroMotion(47.99,mobile).inside;
+   const start=m.heroMotion(0,mobile),end=m.heroMotion(47.99,mobile);
+   checks.truckResetsOffscreen=start.tyreX+start.truckWidth<0&&end.tyreX+end.truckWidth<0&&m.heroMotion(24,mobile).tyreX>1;
+   checks.truckOnPavedLane=true;checks.nativeReturnView=true;checks.boatLocalFloor=true;checks.fixedCamera=true;checks.visibleTravelSteady=true;
+   for(let time=0;time<m.HERO_LOOP_SECONDS;time+=.02){
+    const s=m.heroMotion(time,mobile),l=m.heroLayout(mobile),view=m.TRUCK_VIEWS[s.truckSource],next=m.heroTruckMotion(time+.01,mobile);
+    checks.nativeReturnView&&=time<25||s.truckSource==='truck-return';
+    const tw=s.truckWidth*bg.naturalWidth,th=tw*view.size[1]/view.size[0],dx=(view.rear[0]-view.front[0])*tw,dy=(view.rear[1]-view.front[1])*th;
+    const rearX=s.tyreX+(Math.cos(s.truckRotation)*dx-Math.sin(s.truckRotation)*dy)/bg.naturalWidth;
+    const rearY=s.tyreY+(Math.sin(s.truckRotation)*dx+Math.cos(s.truckRotation)*dy)/bg.naturalHeight;
+    const lane=s.truckDirection===-1?(mobile?.010:.012):0;
+    checks.truckOnPavedLane&&=Math.abs(rearY-(l.road[0]+l.road[1]*rearX+lane))<1e-10;
+    if(s.truckVisible&&next.truckVisible){checks.fixedCamera&&=s.truckWidth===next.truckWidth&&s.truckRotation===next.truckRotation&&s.truckSource===next.truckSource;}
+    if(s.tyreX>.05&&s.tyreX<.95)checks.visibleTravelSteady&&=Math.abs(Math.abs(next.tyreX-s.tyreX)/.01-1.8/(16-.22))<1e-7;
+    if(s.t>=13){const u=(s.cargo[0]-s.boatX)/l.boatWidth+.5,v=(s.cargo[1]-(l.boatBase+s.boatBob-l.boatHeight))/l.boatHeight;
      checks.boatLocalFloor&&=Math.abs(u-.43)<1e-10&&Math.abs(v-.74)<1e-10;
     }
    }

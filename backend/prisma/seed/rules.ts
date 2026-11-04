@@ -1,4 +1,4 @@
-import type { EndingRule, Line } from '../../src/game/types'
+import type { EndingRule, Line } from '../../src/games/di-tat-don-dau/game/types'
 
 export const LINES: { id: Line; label: string; hint: string; log: string; sort: number }[] = [
   { id: 'eng', label: 'Đào tạo', hint: 'Nhân lực – yếu tố cốt lõi', log: 'Tuyển và đào tạo +{{hired}} kỹ sư.', sort: 1 },

@@ -5,7 +5,7 @@ const {createFixture}=require('./session-fixtures.cjs');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/'+(process.env.QUIZ_OUTPUT||'quiz-review-v1'));fs.mkdirSync(out,{recursive:true});
 let browser;
 (async()=>{
- const {quizStatistics}=await import('../backend/src/game/quiz-review.ts');
+ const {quizStatistics}=await import('../backend/src/games/di-tat-don-dau/game/quiz-review.ts');
  const options=[{id:'a',text:'Mua thêm thiết bị mà chưa chuẩn bị tổ công nhân vận hành.'},{id:'b',text:'Phối hợp thiết bị, nhân lực và công nghệ phù hợp với quy mô.'},{id:'c',text:'Chỉ mở rộng kho bãi để tự động tăng số công nhân.'},{id:'d',text:'Bỏ bảo dưỡng dù độ bền đã thấp.'}];
  const visits=Array.from({length:8},(_,i)=>({id:'visit-'+i,questionId:i<4?'shared':'q'+i,prompt:i<4?'Phương án nào giúp doanh nghiệp vận hành hiệu quả?':`Câu hỏi ${i}: Chọn chiến lược nâng cấp phù hợp với doanh nghiệp của bạn.`,options:i%2?[...options].reverse():options,correctOptionId:'b',explanation:'Nhân lực đủ tổ, thiết bị được bảo dưỡng và công nghệ hỗ trợ cùng nhau.',year:i+1,chosenOptionId:i===2?undefined:i===0?'a':'b',correct:i!==0&&i!==2,resolved:true}));
  const report={errors:[],missing:[],widths:[],checks:['selected wrong answer red','correct answer green','timeout unselected','own answers survive reload','host appearances and four option distributions','animated bars/reduced motion','pagination','no horizontal overflow','full final-transfer receipt in event history']};

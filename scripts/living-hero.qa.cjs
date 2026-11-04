@@ -1,7 +1,7 @@
 // Local production bundle only. No Google account, external request or database.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/living-hero-v5/verification');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/living-hero-v6/verification');
 fs.mkdirSync(out,{recursive:true});
 let browser;
 (async()=>{
@@ -17,7 +17,7 @@ let browser;
    if(url.pathname.startsWith('/api/'))return route.fulfill({json:{yearMinSeconds:5}});
    if(url.pathname==='/__hero-renderer.js'){
     const ts=require('typescript');
-    const source=fs.readFileSync(path.join(root,'frontend/src/lib/living-hero.ts'),'utf8').replace("import poses from './porter-sprites-v4.json'",'const poses='+fs.readFileSync(path.join(root,'frontend/src/lib/porter-sprites-v4.json'),'utf8')).replace("import { groundedRoute, groundedStep, walkingProgress } from './grounded-walk'",fs.readFileSync(path.join(root,'frontend/src/lib/grounded-walk.ts'),'utf8'));
+    const source=fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/living-hero.ts'),'utf8').replace("import poses from './porter-sprites-v4.json'",'const poses='+fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/porter-sprites-v4.json'),'utf8')).replace("import { groundedRoute, groundedStep, walkingProgress } from './grounded-walk'",fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/grounded-walk.ts'),'utf8'));
     return route.fulfill({contentType:'application/javascript',body:ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText});
    }
    let file=path.join(root,'frontend/dist',decodeURIComponent(url.pathname));
@@ -85,6 +85,6 @@ let browser;
   report.viewports.push(geometry);await context.close();
  }
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.missing,[]);
- report.checks=['One hero; exact heading/copy; create only in navbar; real join Enter validation','No horizontal/vertical overflow at six sizes, including landscape','Porter carries from warehouse, rigs load, crane loads moored boat, deckhand unhooks; pause freezes pixels and clock; resume works','24-second start/end pixel-identical; midpoint differs','Reduced-motion preference freezes scene, including fresh loads','All production scene assets loaded without errors'];
+ report.checks=['One hero; exact heading/copy; create only in navbar; real join Enter validation','No horizontal/vertical overflow at six sizes, including landscape','Porter carries from warehouse, rigs load, crane loads moored boat, deckhand unhooks; pause freezes pixels and clock; resume works','48-second start/end pixel-identical; midpoint differs','Reduced-motion preference freezes scene, including fresh loads','All production scene assets loaded without errors'];
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));await browser.close();
 })().catch(async e=>{console.error(e);await browser?.close();process.exitCode=1});

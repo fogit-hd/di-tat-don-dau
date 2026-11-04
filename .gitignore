@@ -11,3 +11,8 @@ backend/dist/
 coverage/
 # Temporary files and directories at any depth
 .tmp*
+# Development logs; persistent game data lives outside these files.
+*.log
+
+design-preview/*
+

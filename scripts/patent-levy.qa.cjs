@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {createFixture}=require('./session-fixtures.cjs');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'design-preview/patent-levy-v1/'+(process.env.PATENT_OUTPUT||'verification-final'));fs.mkdirSync(out,{recursive:true});let browser;
 (async()=>{
- const {finalSettlementPlans,PATENT_LEVY_ID}=await import('../backend/src/game/strategic-events.ts');const {money}=await import('../frontend/src/lib/format.ts');
+ const {finalSettlementPlans,PATENT_LEVY_ID}=await import('../backend/src/games/di-tat-don-dau/game/strategic-events.ts');const {money}=await import('../frontend/src/games/di-tat-don-dau/lib/format.ts');
  browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH});
  const report={widths:[],errors:[],missing:[],blockedExternal:[],checks:['two asset owners pay one collector','paired full histories with SVG','no cash debit','new final ranking','long CEO names','host individual receipts','right shown before final','Wiki explanation','reload does not change score','no horizontal overflow']};
  for(const width of [390,768,1440]){

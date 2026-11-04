@@ -1,7 +1,7 @@
 const fs=require('node:fs');const path=require('node:path');const assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..');const glyphs=JSON.parse(fs.readFileSync(path.join(root,'frontend/src/lib/public-letter-paths.json'),'utf8'));
-const catalog=JSON.parse(fs.readFileSync(path.join(root,'frontend/src/lib/wiki-catalog.json'),'utf8'));
-const source=['StartScreen.tsx','WikiPage.tsx','ArtText.tsx'].map(name=>fs.readFileSync(path.join(root,'frontend/src/components',name),'utf8')).join('');
+const root=path.resolve(__dirname,'..');const glyphs=JSON.parse(fs.readFileSync(path.join(root,'frontend/src/shared/ui/public-letter-paths.json'),'utf8'));
+const catalog=JSON.parse(fs.readFileSync(path.join(root,'frontend/src/games/di-tat-don-dau/lib/wiki-catalog.json'),'utf8'));
+const source=['frontend/src/games/di-tat-don-dau/components/StartScreen.tsx','frontend/src/games/di-tat-don-dau/components/WikiPage.tsx','frontend/src/shared/ui/ArtText.tsx'].map(name=>fs.readFileSync(path.join(root,name),'utf8')).join('');
 const required=new Set((JSON.stringify(catalog)+source+'Đi Tắt Đón Đầu Cách chơi Sự kiện Đăng nhập Đăng xuất Tạo phòng Xây doanh nghiệp. Chốt vận mệnh. Ươ ưƠ').normalize('NFC'));
 for(const weight of ['regular','bold']){
  assert.notEqual(glyphs[weight].a[1],glyphs[weight].A[1],'a/A outlines must be distinct');

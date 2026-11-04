@@ -1,14 +1,14 @@
 // Local-only interactive tutorial preview. Not imported by, or deployed with, the app.
 exports.makeGuidePreview=async fixture=>{
- const {createState,computeValue,invest,runCycle,openYearEffects}=await import('../backend/src/game/engine.ts');
+ const {createState,computeValue,invest,runCycle,openYearEffects}=await import('../backend/src/games/di-tat-don-dau/game/engine.ts');
  const {balance}=await import('../backend/prisma/seed/balance.ts');
- const {makeRng}=await import('../backend/src/game/rng.ts');
- const {industryEconomy}=await import('../backend/src/game/industry-economy.ts');
- const {investmentPreviews}=await import('../backend/src/game/investment-preview.ts');
- const {investmentQuote}=await import('../backend/src/game/investment-pricing.ts');
- const {annualBalance,annualEconomy}=await import('../backend/src/game/random-economy.ts');
- const {productionPlan,productionForecast}=await import('../backend/src/game/production.ts');
- const {tutorialAction,tutorialPurchase}=await import('../backend/src/game/tutorial.ts');
+ const {makeRng}=await import('../backend/src/games/di-tat-don-dau/game/rng.ts');
+ const {industryEconomy}=await import('../backend/src/games/di-tat-don-dau/game/industry-economy.ts');
+ const {investmentPreviews}=await import('../backend/src/games/di-tat-don-dau/game/investment-preview.ts');
+ const {investmentQuote}=await import('../backend/src/games/di-tat-don-dau/game/investment-pricing.ts');
+ const {annualBalance,annualEconomy}=await import('../backend/src/games/di-tat-don-dau/game/random-economy.ts');
+ const {productionPlan,productionForecast}=await import('../backend/src/games/di-tat-don-dau/game/production.ts');
+ const {tutorialAction,tutorialPurchase}=await import('../backend/src/games/di-tat-don-dau/game/tutorial.ts');
  const lines=[['eng','Tuyển công nhân'],['mac','Mở cụm sản xuất'],['sup','Liên kết nhà cung cấp'],['inf','Mở rộng hạ tầng'],['grn','Công nghệ sạch']].map(([id,label])=>({id,label,hint:label}));
  const theme={...fixture.theme,lines,eventIds:[],coefs:{epl:1000,tech:.1,support:.1,infra:.1,emission:1,baseOutput:10,basePrice:20,opex:30,idleCost:2},start:{cashMul:1,engineers:0,machines:0,pollution:0,dependency:0,condition:1}};
  const eco=industryEconomy(theme.industryId);let state=createState(theme,10000,makeRng(7),balance);state.introDone=true;state.tutorial={version:2,step:0,complete:false};

@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client'
 import { loadOfficialFile, slugify } from './official'
-import { HEIR_MULTIPLIER_RANGES } from '../../src/game/succession'
+import { HEIR_MULTIPLIER_RANGES } from '../../src/games/di-tat-don-dau/game/succession'
 
 const RANGES: Record<string, [number, number]> = HEIR_MULTIPLIER_RANGES
 

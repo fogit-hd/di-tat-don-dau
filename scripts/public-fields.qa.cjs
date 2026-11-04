@@ -4,8 +4,8 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'design-preview/public-fields/'+(process.env.PUBLIC_QA_OUTPUT||'verification'));
 fs.mkdirSync(out, { recursive: true });
-const letters = require('../frontend/src/lib/public-letter-paths.json');
-const catalog = require('../frontend/src/lib/wiki-catalog.json');
+const letters = require('../frontend/src/shared/ui/public-letter-paths.json');
+const catalog = require('../frontend/src/games/di-tat-don-dau/lib/wiki-catalog.json');
 const required = new Set((JSON.stringify(catalog) + 'ĂăĐđĨĩŨũƠơƯư' + Array.from({length: 90}, (_, i) => String.fromCodePoint(7840 + i)).join('')).normalize('NFC'));
 for (const face of Object.values(letters)) {
   for (const char of required) if (!/\s/.test(char)) {
