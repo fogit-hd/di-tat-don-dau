@@ -9,11 +9,11 @@
 - `shared/duck-*.ts`: canonical, Duck-specific pure contracts/motor/geometry. The sync script emits deployment-local copies because Render builds each Docker context independently.
 - `node scripts/check-game-boundaries.cjs` rejects cross-game source imports and game imports from shared code.
 
-`npm run dev` starts both backend processes and the web hub. `npm run dev:duck` starts the independent Duck backend and its web preview on 4525. Existing public routes and room tokens are retained.
+`npm run dev` starts one combined backend and the web hub. Both games use the same HTTP port; routes, state, namespaces and simulation loops remain game-local. `npm run dev:duck` optionally starts the standalone Duck backend and its web preview on 4525. Existing public routes and room tokens are retained. See [the shared Render setup](RENDER-SHARED-BACKEND.md).
 
 ## One account, independent backends
 
-Both backends mount the same `createAuthRouter()`: factory at `/api/auth`, Duck at `/api/duck-race/auth`. Both must use the **same `DATABASE_URL`, `AUTH_SESSION_SECRET` and `GOOGLE_CLIENT_ID`**. No key or credential is stored in source or public assets. Frontend Google client id remains runtime/Vite configuration.
+Both games use the same `createAuthRouter()` at `/api/auth` and one shared account session. The old `/api/duck-race/auth` prefix remains a compatibility alias only. An optional separate Duck deployment must use the **same `DATABASE_URL`, `AUTH_SESSION_SECRET` and `GOOGLE_CLIENT_ID`**. No key or credential is stored in source or public assets. Frontend Google client id remains runtime/Vite configuration.
 
 The browser uses the same `host-session` key, native storage events across tabs and an in-document event across mounted screens. Expired/revoked sessions are cleared after a 401. Logout revokes the hashed server session before clearing local account state. Duck room creation now verifies the host account server-side. A local label or fabricated browser token cannot authorize it. Existing room-scoped host/player tokens keep their existing semantics.
 

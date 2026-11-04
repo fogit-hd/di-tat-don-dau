@@ -2,8 +2,6 @@ import react from '@vitejs/plugin-react'
 import JavaScriptObfuscator from 'javascript-obfuscator'
 import { defineConfig, type Plugin } from 'vite'
 
-const target = process.env.API_PROXY || 'http://127.0.0.1:4607'
-
 /** Build-time only: keep dev/HMR readable and avoid transforming third-party libraries. */
 function moderateObfuscation(): Plugin {
   return {
@@ -50,7 +48,9 @@ function moderateObfuscation(): Plugin {
   }
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+ const target = process.env.API_PROXY || (mode === 'duck' ? 'http://127.0.0.1:4608' : 'http://127.0.0.1:4607')
+ return ({
   plugins: [react(), moderateObfuscation()],
   build: {
     sourcemap: false,
@@ -72,11 +72,12 @@ export default defineConfig({
     port: 4517,
     strictPort: true,
     proxy: {
-      '/api/duck-race': { target: process.env.DUCK_API_PROXY || 'http://127.0.0.1:4608', changeOrigin: true },
-      '/duck-socket': { target: process.env.DUCK_API_PROXY || 'http://127.0.0.1:4608', ws: true, changeOrigin: true },
+      '/api/duck-race': { target: process.env.DUCK_API_PROXY || (mode === 'duck' ? 'http://127.0.0.1:4608' : target), changeOrigin: true },
+      '/duck-socket': { target: process.env.DUCK_API_PROXY || (mode === 'duck' ? 'http://127.0.0.1:4608' : target), ws: true, changeOrigin: true },
       '/api': { target, changeOrigin: true },
       '/health': { target, changeOrigin: true },
       '/socket.io': { target, ws: true, changeOrigin: true },
     },
   },
+})
 })

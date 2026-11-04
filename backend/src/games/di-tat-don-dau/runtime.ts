@@ -1667,10 +1667,11 @@ export function tick(room: LiveRoom, now: number): 'none' | 'clock' | 'dirty' {
 }
 
 let loopStarted = false
+let loopTimer: ReturnType<typeof setInterval> | undefined
 export function startLoop() {
   if (loopStarted) return
   loopStarted = true
-  setInterval(() => {
+  loopTimer = setInterval(() => {
     const now = Date.now()
     for (const code of [...rooms.keys()]) {
       void withRoom(code, async () => {
@@ -1682,6 +1683,12 @@ export function startLoop() {
       })
     }
   }, 400)
+}
+
+export function stopLoop() {
+  if (loopTimer) clearInterval(loopTimer)
+  loopTimer = undefined
+  loopStarted = false
 }
 
 function valueOf(team: LiveTeam) {

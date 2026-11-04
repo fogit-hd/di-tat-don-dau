@@ -1,4 +1,5 @@
 import { useHostAuth } from '../../shared/auth/useHostAuth'
+import { duckApiBase, duckSocketBase } from './endpoints'
 import { GoogleHostLogin } from '../../shared/auth/GoogleHostLogin'
 import { GameWebBar } from '../../shared/ui/GameWebBar'
 import { FieldFocus } from './FieldFocus'
@@ -21,10 +22,7 @@ import './gameplay-v8.css'
 import './frames-v14.css'
 
 type Session = { token: string; role: 'host' | 'player' }
-declare global { interface Window { __DUCK_CONFIG__?: { apiUrl?: string; socketUrl?: string } } }
 const sessionKey = (code: string) => `quiz-duck-race:v1:${code}`
-const duckApiBase = () => (window.__DUCK_CONFIG__?.apiUrl || import.meta.env.VITE_DUCK_API_URL || '').trim().replace(/\/$/, '')
-const duckSocketBase = () => (window.__DUCK_CONFIG__?.socketUrl || import.meta.env.VITE_DUCK_SOCKET_URL || duckApiBase()).trim().replace(/\/$/, '')
 function readSession(code: string): Session | null { try { return JSON.parse(localStorage.getItem(sessionKey(code)) || 'null') } catch { return null } }
 async function request<T>(path: string, body?: unknown, token?: string): Promise<T> {
   const r = await fetch(`${duckApiBase()}/api/duck-race${path}`, { method: body === undefined ? 'GET' : 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { 'x-duck-token': token } : {}), ...(localStorage.getItem('host-session') ? { 'x-host-session': localStorage.getItem('host-session')! } : {}) }, body: body === undefined ? undefined : JSON.stringify(body) })
@@ -42,7 +40,7 @@ function DuckRaceScreen() {
   const [session, setSession] = useState<Session | null>(() => readSession(code)), [snap, setSnap] = useState<RaceSnapshot | null>(null)
   const [roomCode, setRoomCode] = useState(code), [name, setName] = useState(''), [color] = useState<DuckColor>('yellow'), [model] = useState<'duckee' | 'ducky'>('duckee')
   const [error, setError] = useState(''), [busy, setBusy] = useState(false), [connected, setConnected] = useState(false), [now, setNow] = useState(() => Date.now()), [rules, setRules] = useState(false), [page, setPage] = useState(0), [qr, setQr] = useState(''), [copied, setCopied] = useState(false), [equipment,setEquipment]=useState(false),[questionOpen,setQuestionOpen]=useState(false),[cameraMode, setCameraMode] = useState<'leader' | 'wealth'>('leader')
-  const { token:hostSession, setToken:setHostSession, logout } = useHostAuth({baseUrl:duckApiBase(),pathPrefix:"/api/duck-race/auth"})
+  const { token:hostSession, setToken:setHostSession, logout } = useHostAuth()
   const [loginOpen,setLoginOpen]=useState(false), [loginIntent,setLoginIntent]=useState<'create'|'login'>('login')
   const [guide,setGuide]=useState(true)
   useEffect(()=>{if(snap?.phase!=='racing')return;const timer=setTimeout(()=>setGuide(false),9000);return()=>clearTimeout(timer)},[snap?.phase])
@@ -150,7 +148,7 @@ function DuckRaceScreen() {
       <div className="dq-nav-center">{code ? <><span className={`dq-dot ${connected ? 'is-online' : ''}`} /><span><S text="Phòng"/> <strong>{code}</strong></span></> : <span><S text="Đua Vịt Chiến Thuật"/></span>}</div>
       <div className="dq-nav-actions">{racing ? <strong className="dq-clock">{clock(snap!.endsAt - now)}</strong> : <button className="dq-link" onClick={() => setRules(true)}><S text="Cách chơi" bold/></button>}<Link className="dq-link" to="/"><S text="Đổi game"/></Link></div>
     </header>}
-    {loginOpen&&<GoogleHostLogin authBase={duckApiBase()} authPrefix="/api/duck-race/auth" brand={{src:"/assets/duck-race/lettering-ai-v5/brand-title.svg",title:"Quiz Duck Race"}} intent={loginIntent} onClose={()=>setLoginOpen(false)} onSuccess={({token})=>{setHostSession(token);setLoginOpen(false);if(loginIntent==='create')void create(true)}}/>}
+    {loginOpen&&<GoogleHostLogin brand={{src:"/assets/duck-race/lettering-ai-v5/brand-title.svg",title:"Quiz Duck Race"}} intent={loginIntent} onClose={()=>setLoginOpen(false)} onSuccess={({token})=>{setHostSession(token);setLoginOpen(false);if(loginIntent==='create')void create(true)}}/>}
     {error && <div className="dq-toast" role="alert">{error}<button onClick={() => setError('')} aria-label="Đóng thông báo"><Icon name="close" /></button></div>}
     {!snap && (!session || !code) ? <div className="dq-home">
       <section className="dq-intro"><h1><img className="dq-lettering-image" src="/assets/duck-race/lettering-ai-v5/hero-title.svg" width="590" height="295" alt="Biết đáp án. Chọn thời điểm bứt phá." draggable="false"/></h1><p><S text="Trả lời để kiếm vốn. Đầu tư để lăn bứt tốc."/><br /><S text="Giữ quỹ hay dốc điểm về đích — bạn quyết định."/></p><button className="dq-primary" disabled={busy} onClick={()=>void create()}><Icon name="flag" /><S text="Tạo đường đua" bold/><Icon name="arrow" /></button><span className="dq-home-note"><S text="10 phút · Tối đa 50 người chơi"/></span></section>

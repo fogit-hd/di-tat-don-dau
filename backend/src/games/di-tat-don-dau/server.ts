@@ -1,5 +1,5 @@
 import { createAuthRouter } from '../../shared/auth-routes'
-import { createServer } from 'http'
+import type { Server as HttpServer } from 'node:http'
 import express from 'express'
 import cors from 'cors'
 import { Server } from 'socket.io'
@@ -33,6 +33,7 @@ import {
   setRoomEventEmitter,
   setSuccessionEmitter,
   startLoop,
+  stopLoop,
   startRoom,
   touchTeam,
   updateRoom,
@@ -44,16 +45,15 @@ import { introRequestSchema } from './game/intro'
 import { startDbKeepAlive } from '../../db/keep-alive'
 import { loadEnv } from '../../load-env'
 import { requireHostUser } from '../../shared/auth'
+import { allowedOrigins } from '../../shared/server-config'
 
 loadEnv()
 
-const port = Number(process.env.PORT || 4607)
+/** Own routes, sockets and loop; the deployment root owns the HTTP listener. */
+export function createFactoryGame(server: HttpServer) {
 const app = express()
 app.use(express.json({ limit: '1mb' }))
-const origins = (process.env.CORS_ORIGINS || 'https://neoforcelab.com,http://localhost:4517,http://127.0.0.1:4517,http://localhost:4607,http://127.0.0.1:4607')
-  .split(',')
-  .map((item) => item.trim())
-  .filter(Boolean)
+const origins = allowedOrigins()
 app.use(
   cors({
     origin: origins.includes('*') ? true : origins,
@@ -321,9 +321,9 @@ app.use((error: unknown, _req: express.Request, res: express.Response, _next: ex
   return res.status(500).json({ error: 'Lỗi máy chủ' })
 })
 
-const server = createServer(app)
 const io = new Server(server, {
   cors: { origin: origins.includes('*') ? true : origins, credentials: true },
+  destroyUpgrade: false,
 })
 
 setRoomEventEmitter((code, event, payload) => {
@@ -402,18 +402,18 @@ io.on('connection', (socket) => {
   })
 })
 
-async function main() {
+let started = false
+let stopKeepAlive: (() => void) | undefined
+async function start() {
+  if (started) return
   const { loadCatalog } = await import('./game/catalog')
   await loadCatalog()
   await bootRooms()
   startLoop()
-  startDbKeepAlive()
-  server.listen(port, '0.0.0.0', () => {
-    console.log(`API listening on ${port}`)
-  })
+  stopKeepAlive = startDbKeepAlive()
+  started = true
 }
-
-void main()
+function stop() { stopLoop(); stopKeepAlive?.(); started = false }
 
 function hostToken(req: express.Request) {
   return String(req.header('x-host-token') || '')
@@ -423,6 +423,9 @@ function playerToken(req: express.Request) {
 }
 function param(value: string | string[]) {
   return String(Array.isArray(value) ? value[0] : value).toUpperCase()
+}
+
+return { app, io, start, stop }
 }
 
 

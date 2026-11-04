@@ -1,22 +1,27 @@
 import { createAuthRouter } from '../../shared/auth-routes'
 import { requireHostUser } from '../../shared/auth'
 import { HttpError } from '../../shared/http-error'
-import { createServer } from 'node:http'
+import type { Server as HttpServer } from 'node:http'
 import express from 'express'
 import cors from 'cors'
 import { Server } from 'socket.io'
 import Redis from 'ioredis'
 import { z } from 'zod'
 import { loadEnv } from '../../shared/load-env'
+import { allowedOrigins } from '../../shared/server-config'
 import { customizeRace, armStar, answerRace, attackRace, buyMove, createRace, finishRace, joinRace, jumpRace, playCard, RaceError, RULES, snapshot, startRace, steerRace, tickRace, type RaceRoom } from './engine'
 
 loadEnv()
-const app = express(), http = createServer(app)
-const origins = (process.env.CORS_ORIGINS || 'http://localhost:4525,http://127.0.0.1:4525').split(',').map(s => s.trim())
+/** Own state and simulation; can be mounted beside another game on one HTTP port. */
+export function createDuckGame(http: HttpServer) {
+const app = express()
+const origins = allowedOrigins()
 app.use(cors({ origin: origins.includes('*') ? true : origins }))
 app.use(express.json({ limit: '16kb' }))
-app.use('/api/duck-race/auth',createAuthRouter())
-const io = new Server(http, { path: '/duck-socket', cors: { origin: origins.includes('*') ? true : origins } })
+// Canonical identity path is identical in combined and optional standalone mode.
+app.use('/api/auth',createAuthRouter())
+app.use('/api/duck-race/auth',createAuthRouter()) // Compatibility for older clients.
+const io = new Server(http, { path: '/duck-socket', destroyUpgrade: false, cors: { origin: origins.includes('*') ? true : origins } })
 const ns = io.of('/duck-race'), rooms = new Map<string, RaceRoom>(), locks = new Map<string, Promise<unknown>>()
 const redis = process.env.DUCK_REDIS_URL ? new Redis(process.env.DUCK_REDIS_URL, { lazyConnect: true, maxRetriesPerRequest: 1 }) : undefined
 redis?.on('error', error => console.error('[duck-race Redis]', error.message))
@@ -123,22 +128,25 @@ ns.on('connection', socket => {
   })
 })
 app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  if (err instanceof Error && 'status' in err && err.status === 413) return res.status(413).json({ error: 'Dữ liệu phòng đua quá lớn.' })
   if (err instanceof RaceError || err instanceof HttpError) return res.status(err.status).json({ error: err.message })
   if (err instanceof z.ZodError) return res.status(400).json({ error: 'Dữ liệu phòng đua không hợp lệ.' })
   console.error('[duck-race]', err); res.status(503).json({ error: 'Máy chủ đua vịt tạm gián đoạn. Vui lòng thử lại.' })
 })
-async function main() {
+let timer: ReturnType<typeof setInterval> | undefined
+async function start() {
+  if (timer) return
   if (redis) await redis.connect()
   let count = 0
-  setInterval(() => {
+  timer = setInterval(() => {
     const now = Date.now(); count++
     for (const [code, room] of rooms) {
       if (now - room.createdAt > 7200_000) { rooms.delete(code); continue }
       void serial(code, async () => { tickRace(room, now); if (count % 2 === 0) publish(room); if (count % 20 === 0) await save(room) }).catch(e => console.error('[duck-race tick]', e))
     }
   }, RULES.tickMs)
-  const port = Number(process.env.DUCK_PORT || process.env.PORT || 4608)
-  http.listen(port, '0.0.0.0', () => console.log(`Quiz Duck Race API :${port} (${redis ? 'Redis' : 'local memory'})`))
 }
-void main().catch(e => { redis?.disconnect(); console.error('[duck-race startup]', e); process.exitCode = 1 })
+function stop() { if (timer) clearInterval(timer); timer = undefined; redis?.disconnect() }
+return { app, io, start, stop }
+}
 

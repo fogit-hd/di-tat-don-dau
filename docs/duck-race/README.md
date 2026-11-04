@@ -4,7 +4,7 @@
 
 The root `/` is the two-game selection portal (`/games` remains an alias). The factory landing is `/di-tat-don-dau`; its `/host/:code`, `/play/:code`, `/wiki` routes and existing API remain unchanged. Old root QR links `/?code=ABCDE` redirect to the factory landing with the same query. Factory home links return to its own landing; “Chọn game” returns to the portal.
 
-The selector is `/`. The new game is `/duck-race`, `/duck-race/host/:code`, `/duck-race/play/:code`. It has its own Express entry point, room codes (`D` + six hexadecimal characters), tokens, localStorage prefix, API prefix and Socket.io path/namespace. It does not require the factory database to run.
+The selector is `/`. The new game is `/duck-race`, `/duck-race/host/:code`, `/duck-race/play/:code`. It has its own room codes (`D` + six hexadecimal characters), room tokens, localStorage prefix, API prefix and Socket.io path/namespace. The normal deployment runs both game modules on one backend HTTP port. Google host identity uses the shared database and session.
 
 Run from the repository root:
 
@@ -43,7 +43,9 @@ Source attribution and license status are in `frontend/public/assets/duck-race/S
 
 ## Deployment and Redis
 
-Keep the existing factory service. Add a separate Render Web Service using this same repository. For Docker, use root directory `backend`, Dockerfile `Dockerfile.duck`; this entry point does not run the factory database migration. For a native Node service from the repository root:
+**Normal setup: one Render backend + one frontend.** Keep the existing service with root directory `backend` and `Dockerfile`. `src/index.ts` starts both games on the Render `PORT`. Both games use `/api/auth` for login; Duck API/socket URLs fall back to the main frontend `API_URL` / `SOCKET_URL`. See [exact settings and verification](RENDER-SHARED-BACKEND.md).
+
+An optional separate Duck Web Service is still supported. Use root directory `backend`, Dockerfile `Dockerfile.duck`; this entry point does not run database migrations, so prepare the shared identity schema with the main backend first. For that optional native Node service from the repository root:
 
 ```text
 Build: npm ci
@@ -64,7 +66,7 @@ Frontend can use an origin-level reverse proxy:
 /socket.io/*   → existing factory service
 ```
 
-With the existing frontend Docker image, set runtime `DUCK_API_URL` and `DUCK_SOCKET_URL` to the new service URL. Alternatively set `VITE_DUCK_API_URL` and `VITE_DUCK_SOCKET_URL` before building. The duck API configuration is intentionally separate from the existing `VITE_API_URL`.
+Only for a separate Duck service, set runtime `DUCK_API_URL` and `DUCK_SOCKET_URL` to its URL (or the corresponding `VITE_DUCK_*` build variables). Leave them blank for the normal combined backend. Account sign-in still uses the main `/api/auth` route.
 
 Without `DUCK_REDIS_URL`, development uses process memory and a server restart loses rooms. With Redis, room state is saved once per second and after successful actions, expires after two hours, and reloads on authenticated reconnect. A Redis connection failure at startup fails startup instead of silently discarding durable storage.
 
