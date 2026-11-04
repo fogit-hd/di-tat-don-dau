@@ -1,0 +1,2322 @@
+[
+  {
+    "id": "q01",
+    "topic": "cmcn1",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Cách mạng công nghiệp lần thứ nhất (khởi đầu ở Anh, cuối thế kỷ XVIII) có đặc trưng cơ bản là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sử dụng năng lượng nước, hơi nước để cơ khí hóa sản xuất"
+      },
+      {
+        "id": "b",
+        "text": "Sử dụng năng lượng điện và dây chuyền sản xuất hàng loạt"
+      },
+      {
+        "id": "c",
+        "text": "Sử dụng điện tử và công nghệ thông tin để tự động hóa"
+      },
+      {
+        "id": "d",
+        "text": "Liên kết thế giới thực và ảo qua hệ thống số"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "CMCN 1.0 chuyển lao động thủ công sang lao động sử dụng máy móc, với động cơ hơi nước là biểu tượng."
+  },
+  {
+    "id": "q02",
+    "topic": "cmcn2",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Cách mạng công nghiệp lần thứ hai (nửa cuối thế kỷ XIX – đầu thế kỷ XX) gắn với:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Máy hơi nước"
+      },
+      {
+        "id": "b",
+        "text": "Điện năng và dây chuyền sản xuất hàng loạt"
+      },
+      {
+        "id": "c",
+        "text": "Internet vạn vật"
+      },
+      {
+        "id": "d",
+        "text": "Trí tuệ nhân tạo"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "CMCN 2.0 sử dụng năng lượng điện, tạo ra dây chuyền sản xuất hàng loạt."
+  },
+  {
+    "id": "q03",
+    "topic": "cmcn3",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Cách mạng công nghiệp lần thứ ba (từ khoảng những năm 60 thế kỷ XX) có đặc trưng là:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sử dụng công nghệ thông tin, máy tính để tự động hóa sản xuất"
+      },
+      {
+        "id": "b",
+        "text": "Phát minh máy dệt"
+      },
+      {
+        "id": "c",
+        "text": "Sử dụng sức kéo động vật"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ phát triển nông nghiệp"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "CMCN 3.0 gắn với điện tử, máy tính, Internet và tự động hóa sản xuất."
+  },
+  {
+    "id": "q04",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Đặc trưng nổi bật của Cách mạng công nghiệp lần thứ tư là:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cơ khí hóa bằng máy hơi nước"
+      },
+      {
+        "id": "b",
+        "text": "Liên kết giữa thế giới thực và ảo, dựa trên trí tuệ nhân tạo, Internet vạn vật, dữ liệu lớn"
+      },
+      {
+        "id": "c",
+        "text": "Điện khí hóa"
+      },
+      {
+        "id": "d",
+        "text": "Thủ công nghiệp"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "CMCN 4.0 (Hội chợ Hannover, Đức, 2011) dựa trên hệ thống thực – ảo, AI, IoT và dữ liệu lớn."
+  },
+  {
+    "id": "q05",
+    "topic": "vai-tro",
+    "section": "6.1.1",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Theo giáo trình, cách mạng công nghiệp có vai trò gì đối với phát triển?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ thay đổi văn hóa"
+      },
+      {
+        "id": "b",
+        "text": "Thúc đẩy phát triển lực lượng sản xuất, hoàn thiện quan hệ sản xuất, đổi mới phương thức quản trị"
+      },
+      {
+        "id": "c",
+        "text": "Làm giảm năng suất lao động"
+      },
+      {
+        "id": "d",
+        "text": "Không ảnh hưởng đến kinh tế"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "CMCN thúc đẩy lực lượng sản xuất, hoàn thiện quan hệ sản xuất và đổi mới phương thức quản trị."
+  },
+  {
+    "id": "q06",
+    "topic": "mo-hinh-anh",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Mô hình công nghiệp hóa cổ điển (Anh và các nước Tây Âu) thường bắt đầu từ:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Công nghiệp nặng"
+      },
+      {
+        "id": "b",
+        "text": "Công nghiệp nhẹ (nhất là dệt), sau đó mới đến công nghiệp nặng"
+      },
+      {
+        "id": "c",
+        "text": "Công nghệ thông tin"
+      },
+      {
+        "id": "d",
+        "text": "Dịch vụ tài chính"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "CNH cổ điển đi tuần tự từ công nghiệp nhẹ đến công nghiệp nặng, khoảng 60–80 năm."
+  },
+  {
+    "id": "q07",
+    "topic": "mo-hinh-lx",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Mô hình công nghiệp hóa kiểu Liên Xô (cũ) có đặc điểm:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Ưu tiên phát triển công nghiệp nặng, huy động nguồn lực tập trung"
+      },
+      {
+        "id": "b",
+        "text": "Bắt đầu từ công nghiệp nhẹ"
+      },
+      {
+        "id": "c",
+        "text": "Dựa chủ yếu vào đầu tư nước ngoài"
+      },
+      {
+        "id": "d",
+        "text": "Dựa vào xâm chiếm thuộc địa"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Liên Xô ưu tiên công nghiệp nặng trong thời gian ngắn nhờ kế hoạch hóa tập trung."
+  },
+  {
+    "id": "q08",
+    "topic": "mo-hinh-nb",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Nhật Bản và các nước công nghiệp mới (NICs) rút ngắn thời gian công nghiệp hóa chủ yếu nhờ:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Đóng cửa nền kinh tế"
+      },
+      {
+        "id": "b",
+        "text": "Đi tuần tự từng bước như nước Anh"
+      },
+      {
+        "id": "c",
+        "text": "Tiếp nhận, chuyển giao công nghệ từ các nước đi trước, kết hợp phát triển nguồn nhân lực"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ phát triển nông nghiệp"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Mô hình Nhật Bản và NICs dựa vào chuyển giao công nghệ và giáo dục, khoảng 20–30 năm."
+  },
+  {
+    "id": "q09",
+    "topic": "khai-niem",
+    "section": "6.1.1",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Công nghiệp hóa, hiện đại hóa ở Việt Nam là quá trình chuyển từ sử dụng sức lao động thủ công là chính sang:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sử dụng một cách phổ biến sức lao động cùng với công nghệ, phương tiện và phương pháp tiên tiến, hiện đại"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ nhập khẩu máy móc"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ phát triển dịch vụ"
+      },
+      {
+        "id": "d",
+        "text": "Giảm vai trò của khoa học – công nghệ"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Mục đích là tạo năng suất lao động xã hội cao, dựa trên công nghiệp và tiến bộ khoa học – công nghệ."
+  },
+  {
+    "id": "q10",
+    "topic": "dac-diem",
+    "section": "6.1.1",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Đặc điểm nào KHÔNG phải là đặc điểm của CNH-HĐH ở Việt Nam hiện nay?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Gắn với phát triển kinh tế tri thức"
+      },
+      {
+        "id": "b",
+        "text": "Trong điều kiện kinh tế thị trường định hướng xã hội chủ nghĩa"
+      },
+      {
+        "id": "c",
+        "text": "Trong bối cảnh hội nhập kinh tế quốc tế"
+      },
+      {
+        "id": "d",
+        "text": "Tách biệt hoàn toàn khỏi kinh tế thế giới"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "CNH-HĐH ở Việt Nam gắn với kinh tế tri thức, kinh tế thị trường định hướng XHCN và hội nhập."
+  },
+  {
+    "id": "q11",
+    "topic": "tat-yeu",
+    "section": "6.1.1",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Tính tất yếu khách quan của CNH-HĐH ở Việt Nam thể hiện ở chỗ:",
+    "options": [
+      {
+        "id": "a",
+        "text": "CNH là quy luật phổ biến của sự phát triển lực lượng sản xuất; tạo cơ sở vật chất – kỹ thuật cho CNXH"
+      },
+      {
+        "id": "b",
+        "text": "CNH chỉ là lựa chọn tạm thời"
+      },
+      {
+        "id": "c",
+        "text": "CNH chỉ cần cho nông nghiệp"
+      },
+      {
+        "id": "d",
+        "text": "CNH không liên quan đến năng suất"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Với nước đi lên CNXH từ nền sản xuất nhỏ, CNH-HĐH là con đường tạo cơ sở vật chất – kỹ thuật."
+  },
+  {
+    "id": "q12",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Nội dung nào thuộc nội dung cơ bản của CNH-HĐH ở Việt Nam?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tạo lập điều kiện để chuyển đổi nền sản xuất sang nền sản xuất hiện đại"
+      },
+      {
+        "id": "b",
+        "text": "Chuyển dịch cơ cấu kinh tế theo hướng hiện đại, hợp lý, hiệu quả"
+      },
+      {
+        "id": "c",
+        "text": "Ứng dụng thành tựu khoa học – công nghệ; từng bước hoàn thiện quan hệ sản xuất"
+      },
+      {
+        "id": "d",
+        "text": "Tất cả các phương án trên"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Giáo trình nêu đủ các nội dung: điều kiện, chuyển dịch cơ cấu, ứng dụng khoa học – công nghệ và quan hệ sản xuất."
+  },
+  {
+    "id": "q13",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Trong bối cảnh CMCN 4.0, nước đi sau có thể \"đi tắt, đón đầu\" nghĩa là:",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bỏ qua mọi bước, không cần nhân lực"
+      },
+      {
+        "id": "b",
+        "text": "Tận dụng công nghệ mới để rút ngắn khoảng cách, đi thẳng vào một số lĩnh vực hiện đại"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ nhập khẩu hàng tiêu dùng"
+      },
+      {
+        "id": "d",
+        "text": "Ngừng phát triển nông nghiệp"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Có thể kết hợp tuần tự với nhảy vọt ở khâu có lợi thế, không có nghĩa là bỏ qua con người."
+  },
+  {
+    "id": "q14",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Để thích ứng với CMCN 4.0, Việt Nam cần tập trung vào yếu tố nào được coi là then chốt?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Phát triển nguồn nhân lực, nhất là nguồn nhân lực chất lượng cao"
+      },
+      {
+        "id": "b",
+        "text": "Tăng khai thác tài nguyên thô"
+      },
+      {
+        "id": "c",
+        "text": "Giảm đầu tư cho giáo dục"
+      },
+      {
+        "id": "d",
+        "text": "Hạn chế ứng dụng công nghệ"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Nguồn nhân lực chất lượng cao là yếu tố quyết định để tiếp thu và làm chủ công nghệ."
+  },
+  {
+    "id": "q15",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Giải pháp nào giúp Việt Nam thích ứng với CMCN 4.0 theo giáo trình?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hoàn thiện thể chế, xây dựng nền kinh tế dựa trên đổi mới sáng tạo"
+      },
+      {
+        "id": "b",
+        "text": "Nắm bắt và đẩy mạnh ứng dụng thành tựu CMCN 4.0"
+      },
+      {
+        "id": "c",
+        "text": "Chuẩn bị điều kiện cần thiết, phát triển hạ tầng và nhân lực"
+      },
+      {
+        "id": "d",
+        "text": "Tất cả các phương án trên"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Các nhóm giải pháp gồm thể chế, ứng dụng CMCN 4.0, nhân lực và hạ tầng."
+  },
+  {
+    "id": "q16",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Mốc nào gắn với việc nêu khái niệm Công nghiệp 4.0 tại Hannover (Đức)?",
+    "options": [
+      {
+        "id": "dung",
+        "text": "Năm 2011"
+      },
+      {
+        "id": "sai",
+        "text": "Cuối thế kỷ XVIII"
+      },
+      {
+        "id": "c",
+        "text": "Nửa đầu thế kỷ XIX"
+      },
+      {
+        "id": "d",
+        "text": "Đầu thế kỷ XX"
+      }
+    ],
+    "correctOptionId": "dung",
+    "explanation": "Mốc 2011 tại Hannover thường được dùng để đánh dấu khái niệm CMCN 4.0."
+  },
+  {
+    "id": "q17",
+    "topic": "dac-diem",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Quan điểm nào phù hợp với CNH-HĐH và hội nhập của Việt Nam?",
+    "options": [
+      {
+        "id": "dung",
+        "text": "Tách biệt hoàn toàn khỏi kinh tế thế giới"
+      },
+      {
+        "id": "sai",
+        "text": "Chủ động hội nhập gắn với nâng năng lực tự chủ"
+      },
+      {
+        "id": "c",
+        "text": "Phụ thuộc hoàn toàn vào một đối tác"
+      },
+      {
+        "id": "d",
+        "text": "Ngừng mọi hợp tác công nghệ"
+      }
+    ],
+    "correctOptionId": "sai",
+    "explanation": "Hội nhập quốc tế là một đặc điểm của CNH-HĐH ở Việt Nam, không phải tách biệt."
+  },
+  {
+    "id": "q18",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "",
+    "prompt": "Nhập máy hiện đại nhưng thiếu người làm chủ. Quyết định nào hợp lý?",
+    "options": [
+      {
+        "id": "dung",
+        "text": "Đào tạo nhân lực và tổ chức tiếp thu công nghệ"
+      },
+      {
+        "id": "sai",
+        "text": "Chỉ mua thêm máy mà không đào tạo"
+      },
+      {
+        "id": "c",
+        "text": "Bỏ việc bảo trì và kiểm soát chất lượng"
+      },
+      {
+        "id": "d",
+        "text": "Coi việc nhập máy là đã hoàn tất hiện đại hóa"
+      }
+    ],
+    "correctOptionId": "dung",
+    "explanation": "Máy móc phải đi cùng nhân lực, chuyển giao công nghệ và công nghiệp phụ trợ."
+  },
+  {
+    "id": "q19",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "match",
+    "typeTitle": "",
+    "prompt": "Với ngành {{industry}} tại {{region}}, phương án nào minh họa đúng \"đi tắt, đón đầu\"?",
+    "options": [
+      {
+        "id": "a",
+        "text": "{{leap}}"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ mua thật nhiều máy và để đối tác nước ngoài vận hành hộ"
+      },
+      {
+        "id": "c",
+        "text": "Bán nguyên liệu thô rồi dừng đầu tư cho {{worker}}"
+      },
+      {
+        "id": "d",
+        "text": "Đóng cửa, không tham gia chuỗi cung ứng"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Đi tắt đón đầu là vào khâu có giá trị cao nhờ công nghệ và con người — ví dụ: {{leap}}."
+  },
+  {
+    "id": "q20",
+    "topic": "khai-niem",
+    "section": "6.1.1",
+    "difficulty": 2,
+    "type": "fill",
+    "typeTitle": "",
+    "prompt": "Điền khái niệm: quá trình chuyển đổi căn bản, toàn diện từ lao động thủ công sang công nghệ hiện đại ở Việt Nam được gọi là ____.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Công nghiệp hóa, hiện đại hóa"
+      },
+      {
+        "id": "b",
+        "text": "Toàn cầu hóa tài chính"
+      },
+      {
+        "id": "c",
+        "text": "Kinh tế tự cung tự cấp"
+      },
+      {
+        "id": "d",
+        "text": "Cải cách ruộng đất"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Đó chính là công nghiệp hóa, hiện đại hóa."
+  },
+  {
+    "id": "cq021",
+    "topic": "cmcn1",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Một xưởng thay sức người bằng máy chạy hơi nước. Xưởng minh họa bước chuyển nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cơ khí hóa sản xuất"
+      },
+      {
+        "id": "b",
+        "text": "Điện khí hóa hàng loạt"
+      },
+      {
+        "id": "c",
+        "text": "Kết nối hệ thống thực–ảo"
+      },
+      {
+        "id": "d",
+        "text": "Tự động hóa bằng máy tính"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Máy hơi nước đặc trưng cho bước cơ khí hóa của CMCN lần thứ nhất."
+  },
+  {
+    "id": "cq022",
+    "topic": "cmcn2",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Điểm nào phân biệt CMCN lần thứ hai với lần thứ nhất?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Máy hơi nước xuất hiện lần đầu"
+      },
+      {
+        "id": "b",
+        "text": "Điện năng và tổ chức sản xuất hàng loạt"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ dùng lao động thủ công"
+      },
+      {
+        "id": "d",
+        "text": "Trí tuệ nhân tạo điều khiển mọi xưởng"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Điện năng tạo điều kiện mở rộng dây chuyền và sản xuất hàng loạt."
+  },
+  {
+    "id": "cq023",
+    "topic": "cmcn3",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Máy CNC được điều khiển bằng chương trình máy tính minh họa rõ nhất thành tựu nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cơ khí hóa bằng hơi nước"
+      },
+      {
+        "id": "b",
+        "text": "Sản xuất thủ công phân tán"
+      },
+      {
+        "id": "c",
+        "text": "Tự động hóa dựa trên điện tử và công nghệ thông tin"
+      },
+      {
+        "id": "d",
+        "text": "Thay điện năng bằng sức kéo"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Máy tính và điện tử là nền tảng của làn sóng tự động hóa trong CMCN lần thứ ba."
+  },
+  {
+    "id": "cq024",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Cảm biến gửi dữ liệu về nhà máy, phần mềm phân tích rồi điều chỉnh máy thật. Điểm cốt lõi là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ tăng số công nhân"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ thay động cơ hơi nước"
+      },
+      {
+        "id": "c",
+        "text": "Tách dữ liệu khỏi sản xuất"
+      },
+      {
+        "id": "d",
+        "text": "Kết nối hệ thống vật lý với hệ thống số"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Phản hồi giữa thiết bị thật và hệ thống số là nét tiêu biểu của sản xuất thông minh."
+  },
+  {
+    "id": "cq025",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "IoT hỗ trợ một nhà máy thông minh chủ yếu bằng cách nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Kết nối thiết bị để thu thập và trao đổi dữ liệu"
+      },
+      {
+        "id": "b",
+        "text": "Thay mọi kỹ sư bằng lao động phổ thông"
+      },
+      {
+        "id": "c",
+        "text": "Bảo đảm mọi sản phẩm đều bán được"
+      },
+      {
+        "id": "d",
+        "text": "Loại bỏ nhu cầu bảo dưỡng"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Thiết bị kết nối cung cấp dữ liệu vận hành; con người vẫn phải thiết kế và quản trị hệ thống."
+  },
+  {
+    "id": "cq026",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vai trò phù hợp của dữ liệu lớn trong sản xuất là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tự tạo nguyên liệu đầu vào"
+      },
+      {
+        "id": "b",
+        "text": "Phân tích dữ liệu để hỗ trợ dự báo và quyết định"
+      },
+      {
+        "id": "c",
+        "text": "Thay toàn bộ hạ tầng điện"
+      },
+      {
+        "id": "d",
+        "text": "Bảo đảm doanh nghiệp không có rủi ro"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Dữ liệu giúp nhận diện quy luật và tối ưu quyết định, không tự xóa các giới hạn vật chất."
+  },
+  {
+    "id": "cq027",
+    "topic": "vai-tro",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Công nghệ mới làm thay đổi cách phối hợp, giám sát và ra quyết định. Đây là tác động nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ tăng sản lượng vật chất"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ thay đổi tên doanh nghiệp"
+      },
+      {
+        "id": "c",
+        "text": "Đổi mới phương thức quản trị"
+      },
+      {
+        "id": "d",
+        "text": "Xóa bỏ mọi quan hệ lao động"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Cách mạng công nghiệp tác động cả quản trị và tổ chức kinh tế, không chỉ máy móc."
+  },
+  {
+    "id": "cq028",
+    "topic": "vai-tro",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao công nghệ có thể thúc đẩy lực lượng sản xuất?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ làm tăng giá bán"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ làm tăng số nhà xưởng"
+      },
+      {
+        "id": "c",
+        "text": "Loại bỏ vai trò của tri thức"
+      },
+      {
+        "id": "d",
+        "text": "Nâng trình độ công cụ và năng lực của người lao động"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Lực lượng sản xuất phát triển qua cả tư liệu sản xuất và năng lực con người sử dụng chúng."
+  },
+  {
+    "id": "cq029",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nhà máy mua máy mới nhưng dữ liệu giữa các khâu không kết nối. Nhận định nào hợp lý?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chưa thể chỉ từ việc mua máy mà kết luận đã có hệ thống thông minh"
+      },
+      {
+        "id": "b",
+        "text": "Đã hoàn thành CMCN 4.0 chỉ vì máy đắt"
+      },
+      {
+        "id": "c",
+        "text": "Không cần thay đổi quản trị nữa"
+      },
+      {
+        "id": "d",
+        "text": "Không cần đào tạo người vận hành"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Sản xuất thông minh cần kết nối, dữ liệu, tổ chức và nhân lực, không chỉ thiết bị hiện đại."
+  },
+  {
+    "id": "cq030",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Rủi ro nào cần chú ý khi phụ thuộc hoàn toàn vào nền tảng số bên ngoài?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Năng suất chắc chắn tăng vô hạn"
+      },
+      {
+        "id": "b",
+        "text": "Phụ thuộc dữ liệu và năng lực công nghệ"
+      },
+      {
+        "id": "c",
+        "text": "Không còn cần bảo mật"
+      },
+      {
+        "id": "d",
+        "text": "Không còn cần hạ tầng"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Ứng dụng số phải đi cùng khả năng kiểm soát dữ liệu, bảo mật và làm chủ công nghệ."
+  },
+  {
+    "id": "cq031",
+    "topic": "mo-hinh-anh",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Mô hình công nghiệp hóa cổ điển có đặc điểm nổi bật nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bỏ qua mọi ngành truyền thống ngay lập tức"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ dựa vào trí tuệ nhân tạo"
+      },
+      {
+        "id": "c",
+        "text": "Phát triển chủ yếu theo trình tự, qua thời gian tương đối dài"
+      },
+      {
+        "id": "d",
+        "text": "Không cần tích lũy vốn"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Mô hình cổ điển hình thành trong điều kiện lịch sử khác với cơ hội tiếp thu công nghệ ngày nay."
+  },
+  {
+    "id": "cq032",
+    "topic": "mo-hinh-nb",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Bài học phù hợp từ các nước công nghiệp hóa sau là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sao chép nguyên xi mọi mô hình"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ nhập máy mà không học vận hành"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ dùng lao động giá rẻ lâu dài"
+      },
+      {
+        "id": "d",
+        "text": "Tiếp thu công nghệ gắn với xây dựng năng lực trong nước"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Tận dụng thành tựu bên ngoài hiệu quả khi nâng được năng lực hấp thụ và làm chủ ở trong nước."
+  },
+  {
+    "id": "cq033",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nước A yếu cơ khí nhưng muốn tham gia ngành chip. Phương án biện luận chặt chẽ nhất là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chọn khâu phù hợp và đầu tư đồng thời nhân lực, công nghệ, hạ tầng"
+      },
+      {
+        "id": "b",
+        "text": "Làm ngay toàn bộ chuỗi chip bằng mọi giá"
+      },
+      {
+        "id": "c",
+        "text": "Chờ mọi ngành truyền thống hoàn hảo rồi mới thử"
+      },
+      {
+        "id": "d",
+        "text": "Bỏ hẳn công nghiệp hỗ trợ"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Đi tắt có chọn lọc không đồng nghĩa bỏ qua các điều kiện cần cho khâu đã lựa chọn."
+  },
+  {
+    "id": "cq034",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao CNH-HĐH ngày nay không nhất thiết lặp nguyên trình tự thế kỷ XIX?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Vì vốn và nhân lực không còn quan trọng"
+      },
+      {
+        "id": "b",
+        "text": "Có thể tiếp thu thành tựu và tham gia các khâu của chuỗi giá trị"
+      },
+      {
+        "id": "c",
+        "text": "Vì công nghệ tự vận hành không cần người"
+      },
+      {
+        "id": "d",
+        "text": "Vì mọi nước có điều kiện giống nhau"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Thành tựu đã có và phân công lao động tạo cơ hội rút ngắn, nhưng mức tận dụng phụ thuộc năng lực mỗi nước."
+  },
+  {
+    "id": "cq035",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Đi tắt đón đầu khác duy ý chí ở điểm nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Đặt mục tiêu càng cao càng đúng"
+      },
+      {
+        "id": "b",
+        "text": "Không cần khảo sát năng lực"
+      },
+      {
+        "id": "c",
+        "text": "Dựa vào điều kiện thực tế và lộ trình có nguồn lực bảo đảm"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ cần mua dây chuyền đắt nhất"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Chiến lược khả thi phải nhận diện nguồn lực, điểm nghẽn và bước đi, không chỉ nêu mong muốn."
+  },
+  {
+    "id": "cq036",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "A chọn thiết kế, đóng gói và kiểm thử trước khi mở rộng sang khâu khó hơn. Đây là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Từ bỏ hoàn toàn công nghiệp hóa"
+      },
+      {
+        "id": "b",
+        "text": "Đồng nhất mọi khâu của ngành chip"
+      },
+      {
+        "id": "c",
+        "text": "Bỏ qua yêu cầu học công nghệ"
+      },
+      {
+        "id": "d",
+        "text": "Lựa chọn mắt xích phù hợp để tích lũy năng lực"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Một nước có thể xây năng lực ở những khâu phù hợp thay vì phải tự làm toàn bộ chuỗi ngay từ đầu."
+  },
+  {
+    "id": "cq037",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Phản biện nào hợp lý với câu “chưa làm tốt ốc vít thì không được làm chip”?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Năng lực khác nhau theo từng khâu; cần đánh giá điều kiện cụ thể"
+      },
+      {
+        "id": "b",
+        "text": "Cơ khí không bao giờ liên quan ngành chip"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ cần tuyên bố là sẽ làm được chip"
+      },
+      {
+        "id": "d",
+        "text": "Mọi ngành cũ nên đóng cửa"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Không nên dùng một hạn chế để phủ nhận mọi cơ hội; cũng không được xem nhẹ các năng lực bổ trợ cần thiết."
+  },
+  {
+    "id": "cq038",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Mục tiêu đào tạo 50.000 kỹ sư trong tình huống A cần được đánh giá ra sao?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ đếm số bằng tốt nghiệp"
+      },
+      {
+        "id": "b",
+        "text": "Gắn số lượng với năng lực thực hành và nhu cầu từng khâu"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ xét mức học phí"
+      },
+      {
+        "id": "d",
+        "text": "Càng nhiều chứng chỉ càng thay được hạ tầng"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Số lượng chỉ có ý nghĩa khi người học đủ năng lực làm việc và được bố trí đúng nhu cầu phát triển."
+  },
+  {
+    "id": "cq039",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nhập công nghệ nhưng không được đào tạo, không có tài liệu kỹ thuật. Điểm yếu lớn nhất là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Đã chắc chắn tự chủ công nghệ"
+      },
+      {
+        "id": "b",
+        "text": "Không cần đội kỹ thuật nội địa"
+      },
+      {
+        "id": "c",
+        "text": "Khả năng tiếp thu và làm chủ công nghệ thấp"
+      },
+      {
+        "id": "d",
+        "text": "Đã có đổi mới sáng tạo nội sinh"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Sở hữu thiết bị không đồng nghĩa sở hữu tri thức vận hành, cải tiến và giải quyết sự cố."
+  },
+  {
+    "id": "cq040",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Kết hợp tuần tự với nhảy vọt nên hiểu thế nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mọi ngành đều phải nhảy vọt cùng lúc"
+      },
+      {
+        "id": "b",
+        "text": "Mọi ngành đều phải chờ một trình tự cứng"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ ưu tiên quảng bá hình ảnh"
+      },
+      {
+        "id": "d",
+        "text": "Củng cố nền tảng và đi nhanh ở khâu có điều kiện"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Bước đi khác nhau theo ngành và khâu cho phép vừa xây nền tảng vừa tận dụng cơ hội công nghệ."
+  },
+  {
+    "id": "cq041",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Doanh nghiệp chỉ gia công theo thiết kế nhập khẩu. Hướng nâng giá trị phù hợp là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Học để tham gia thiết kế, cải tiến và khâu giá trị cao hơn"
+      },
+      {
+        "id": "b",
+        "text": "Cắt toàn bộ ngân sách đào tạo"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ tăng thời gian làm việc"
+      },
+      {
+        "id": "d",
+        "text": "Không cần liên kết nghiên cứu"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Chuyển lên khâu có hàm lượng tri thức cao cần tích lũy năng lực công nghệ và con người."
+  },
+  {
+    "id": "cq042",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Chỉ báo nào phản ánh năng lực làm chủ tốt hơn số máy nhập về?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Giá mua thiết bị cao nhất"
+      },
+      {
+        "id": "b",
+        "text": "Khả năng tự vận hành, xử lý lỗi và cải tiến quy trình"
+      },
+      {
+        "id": "c",
+        "text": "Số khẩu hiệu về chuyển đổi số"
+      },
+      {
+        "id": "d",
+        "text": "Số tầng của trụ sở"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Năng lực công nghệ thể hiện ở việc sử dụng và phát triển tri thức, không chỉ ở tài sản mua sắm."
+  },
+  {
+    "id": "cq043",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Một dự án chip thiếu điện ổn định. Ưu tiên nào hợp lý?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tăng mục tiêu sản lượng trên giấy"
+      },
+      {
+        "id": "b",
+        "text": "Bỏ yêu cầu kiểm soát chất lượng"
+      },
+      {
+        "id": "c",
+        "text": "Khắc phục hạ tầng thiết yếu cùng với đầu tư công nghệ"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ tuyển thêm người bán hàng"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Công nghệ cao vẫn cần điều kiện vật chất và tổ chức phù hợp để hoạt động ổn định."
+  },
+  {
+    "id": "cq044",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vai trò phù hợp của đối tác quốc tế trong chiến lược A là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Thay thế vĩnh viễn toàn bộ năng lực trong nước"
+      },
+      {
+        "id": "b",
+        "text": "Bảo đảm không cần nghiên cứu nội địa"
+      },
+      {
+        "id": "c",
+        "text": "Loại bỏ mọi rủi ro phụ thuộc"
+      },
+      {
+        "id": "d",
+        "text": "Bổ sung công nghệ, thị trường và cơ hội học hỏi"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Hợp tác tạo cơ hội nhưng cần chủ động tiếp thu để xây dựng năng lực tự chủ."
+  },
+  {
+    "id": "cq045",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Trong tình huống chip, vì sao con người giữ vai trò cốt lõi?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Con người lựa chọn, vận hành, hấp thụ và cải tiến công nghệ"
+      },
+      {
+        "id": "b",
+        "text": "Con người có thể bỏ qua mọi máy móc"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ cần đủ người là không cần hạ tầng"
+      },
+      {
+        "id": "d",
+        "text": "Máy móc không có vai trò trong sản xuất"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Nhân lực là chủ thể làm chủ công nghệ; điều đó không phủ nhận vai trò thiết yếu của thiết bị."
+  },
+  {
+    "id": "cq046",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Hai nhà máy có máy giống nhau nhưng năng suất khác nhau. Nguyên nhân hợp lý là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Máy giống nhau thì năng suất luôn bằng nhau"
+      },
+      {
+        "id": "b",
+        "text": "Tay nghề, tổ chức vận hành và khả năng làm chủ khác nhau"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ do tên công ty khác nhau"
+      },
+      {
+        "id": "d",
+        "text": "Không liên quan việc đào tạo"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Hiệu quả dùng cùng công nghệ còn phụ thuộc nhân lực, quản trị và điều kiện vận hành."
+  },
+  {
+    "id": "cq047",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Đào tạo nhân lực chất lượng cao nên ưu tiên cách nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ học tên các loại máy"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ lấy bằng mà không cần thực hành"
+      },
+      {
+        "id": "c",
+        "text": "Kết hợp nền tảng lý thuyết, thực hành và giải quyết vấn đề"
+      },
+      {
+        "id": "d",
+        "text": "Ngừng cập nhật sau khi tốt nghiệp"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Làm chủ công nghệ đòi hỏi hiểu nguyên lý và áp dụng được vào vấn đề thực tiễn."
+  },
+  {
+    "id": "cq048",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao doanh nghiệp nên liên kết với cơ sở đào tạo?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Để không cần đào tạo tại nơi làm việc"
+      },
+      {
+        "id": "b",
+        "text": "Để bảo đảm mọi kỹ sư đều có cùng chuyên môn"
+      },
+      {
+        "id": "c",
+        "text": "Để bỏ việc đánh giá năng lực"
+      },
+      {
+        "id": "d",
+        "text": "Gắn đào tạo với kỹ năng và nhu cầu sử dụng thực tế"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Liên kết giúp phản hồi nhu cầu kỹ năng và tạo môi trường thực hành sát công việc."
+  },
+  {
+    "id": "cq049",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nhà máy có chuyên gia giỏi nhưng không chia sẻ tri thức. Rủi ro nào tăng?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Phụ thuộc vào một số cá nhân, khó phát triển năng lực tập thể"
+      },
+      {
+        "id": "b",
+        "text": "Chắc chắn tăng tự chủ của mọi bộ phận"
+      },
+      {
+        "id": "c",
+        "text": "Không cần đào tạo người kế cận"
+      },
+      {
+        "id": "d",
+        "text": "Không cần quy trình kỹ thuật"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Năng lực bền vững cần lan tỏa tri thức, quy trình và đội ngũ kế cận."
+  },
+  {
+    "id": "cq050",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Học tập suốt đời quan trọng trong CMCN 4.0 vì sao?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bằng cấp ban đầu không có giá trị nào"
+      },
+      {
+        "id": "b",
+        "text": "Công nghệ và yêu cầu kỹ năng liên tục thay đổi"
+      },
+      {
+        "id": "c",
+        "text": "Mọi kỹ năng cũ phải bỏ ngay"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ người quản lý mới cần học"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Cập nhật kỹ năng giúp người lao động thích ứng và khai thác công nghệ mới hiệu quả."
+  },
+  {
+    "id": "cq051",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Tự động hóa làm thay đổi yêu cầu nhân lực theo hướng nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mọi công việc đều biến mất lập tức"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ còn cần sức lao động cơ bắp"
+      },
+      {
+        "id": "c",
+        "text": "Tăng nhu cầu kỹ năng vận hành, phân tích và bảo trì phù hợp"
+      },
+      {
+        "id": "d",
+        "text": "Không cần đổi nội dung đào tạo"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Tự động hóa thay đổi cơ cấu việc làm và kỹ năng, không đơn giản xóa toàn bộ vai trò con người."
+  },
+  {
+    "id": "cq052",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Một dây chuyền thường lỗi nhưng chỉ tăng tuyển dụng đại trà. Điểm thiếu là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ cần tăng số người là đủ"
+      },
+      {
+        "id": "b",
+        "text": "Đào tạo không liên quan chất lượng"
+      },
+      {
+        "id": "c",
+        "text": "Không cần tìm nguyên nhân lỗi"
+      },
+      {
+        "id": "d",
+        "text": "Chưa xử lý nhu cầu kỹ năng và năng lực kỹ thuật cụ thể"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Số lượng lao động không thay thế kỹ năng đúng và việc chẩn đoán, cải tiến quy trình."
+  },
+  {
+    "id": "cq053",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Kỹ sư có thể vận hành máy nhưng không được quyền thử cải tiến. Điều gì cần thay đổi?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cơ chế khuyến khích sáng kiến và tổ chức quản trị"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ đổi màu đồng phục"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ tăng số máy cùng loại"
+      },
+      {
+        "id": "d",
+        "text": "Ngừng thu thập dữ liệu"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Phát huy nhân lực cần môi trường tổ chức cho học hỏi, thử nghiệm và ứng dụng sáng kiến."
+  },
+  {
+    "id": "cq054",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nhận định nào cân bằng đúng quan hệ máy móc và con người?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ có con người, không cần thiết bị"
+      },
+      {
+        "id": "b",
+        "text": "Thiết bị cần thiết; con người quyết định khả năng khai thác và làm chủ"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ có máy, không cần kỹ sư"
+      },
+      {
+        "id": "d",
+        "text": "Hai yếu tố không liên quan nhau"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Chiến lược công nghệ phải đầu tư đồng bộ, trong đó nhân lực là chủ thể sử dụng và phát triển công nghệ."
+  },
+  {
+    "id": "cq055",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Làm sao đánh giá khóa đào tạo kỹ sư thay vì chỉ đếm người hoàn thành?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ đếm số buổi khai giảng"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ đo kích thước phòng học"
+      },
+      {
+        "id": "c",
+        "text": "Đo khả năng giải quyết nhiệm vụ kỹ thuật thực tế"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ so số trang tài liệu"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Kết quả học tập cần thể hiện bằng năng lực làm việc và khả năng áp dụng tri thức."
+  },
+  {
+    "id": "cq056",
+    "topic": "nhan-luc",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Tại sao kỹ năng quản trị cũng cần trong phát triển công nghệ?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Để thay thế mọi chuyên môn kỹ thuật"
+      },
+      {
+        "id": "b",
+        "text": "Để không cần kế hoạch sản xuất"
+      },
+      {
+        "id": "c",
+        "text": "Để máy móc không bị hao mòn"
+      },
+      {
+        "id": "d",
+        "text": "Để phối hợp con người, thiết bị và quy trình hiệu quả"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Quản trị tốt biến các nguồn lực thành năng lực vận hành đồng bộ."
+  },
+  {
+    "id": "cq057",
+    "topic": "tat-yeu",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao nước có nền sản xuất nhỏ cần CNH-HĐH?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tạo cơ sở vật chất–kỹ thuật và nâng năng suất xã hội"
+      },
+      {
+        "id": "b",
+        "text": "Để giữ nguyên trình độ thủ công"
+      },
+      {
+        "id": "c",
+        "text": "Để chỉ phát triển một ngành duy nhất"
+      },
+      {
+        "id": "d",
+        "text": "Để không cần khoa học–công nghệ"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "CNH-HĐH thúc đẩy lực lượng sản xuất và hình thành nền tảng vật chất cho phát triển."
+  },
+  {
+    "id": "cq058",
+    "topic": "tat-yeu",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Tính khách quan của CNH-HĐH có nghĩa là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mọi dự án công nghiệp đều đúng bất kể điều kiện"
+      },
+      {
+        "id": "b",
+        "text": "Xuất phát từ yêu cầu phát triển lực lượng sản xuất"
+      },
+      {
+        "id": "c",
+        "text": "Không cần lựa chọn chính sách"
+      },
+      {
+        "id": "d",
+        "text": "Mọi quốc gia có cùng lộ trình"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Tính tất yếu của quá trình không làm mọi lựa chọn dự án, tốc độ hay cách làm trở nên đúng tự động."
+  },
+  {
+    "id": "cq059",
+    "topic": "dac-diem",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "CNH-HĐH gắn với kinh tế tri thức nhấn mạnh điều gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ mở rộng khai thác tài nguyên"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ tăng lao động giản đơn"
+      },
+      {
+        "id": "c",
+        "text": "Vai trò của tri thức, khoa học–công nghệ và đổi mới sáng tạo"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ mua nhiều đất công nghiệp"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Tri thức được ứng dụng vào sản xuất và quản trị là nguồn lực quan trọng để nâng năng suất."
+  },
+  {
+    "id": "cq060",
+    "topic": "dac-diem",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Phát triển nhanh nhưng gây ô nhiễm nghiêm trọng cho thấy yêu cầu nào chưa được đáp ứng?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ cần tăng quy mô là đủ"
+      },
+      {
+        "id": "b",
+        "text": "Môi trường không liên quan chất lượng phát triển"
+      },
+      {
+        "id": "c",
+        "text": "Năng suất luôn đồng nghĩa không có ô nhiễm"
+      },
+      {
+        "id": "d",
+        "text": "Kết hợp hiện đại hóa với phát triển bền vững"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Đánh giá CNH-HĐH phải xét hiệu quả kinh tế cùng tác động xã hội và môi trường."
+  },
+  {
+    "id": "cq061",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Chuyển dịch cơ cấu kinh tế hiện đại nên dựa vào đâu?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Năng suất, hiệu quả và điều kiện thực tế của các ngành"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ giảm nông nghiệp bằng mọi giá"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ đổi tên ngành nghề"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ tăng số doanh nghiệp đăng ký"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Cơ cấu hợp lý phải nâng hiệu quả và năng lực phát triển, không chỉ thay đổi tỷ trọng hình thức."
+  },
+  {
+    "id": "cq062",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Ứng dụng công nghệ trong nông nghiệp có thuộc CNH-HĐH không?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Không, chỉ nhà máy mới được hiện đại hóa"
+      },
+      {
+        "id": "b",
+        "text": "Có, vì hiện đại hóa diễn ra cả trong nông nghiệp"
+      },
+      {
+        "id": "c",
+        "text": "Không, nông nghiệp luôn phải thủ công"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ khi ngừng sản xuất nông sản"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "CNH-HĐH tác động toàn nền kinh tế, gồm nông nghiệp, công nghiệp và dịch vụ."
+  },
+  {
+    "id": "cq063",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Một vùng có thế mạnh nông sản nên chọn hướng nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bỏ ngay nông nghiệp bất kể lợi thế"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ xuất nguyên liệu thô mãi mãi"
+      },
+      {
+        "id": "c",
+        "text": "Chế biến, bảo quản và liên kết logistics để tăng giá trị"
+      },
+      {
+        "id": "d",
+        "text": "Đầu tư mọi ngành như các vùng khác"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Hiện đại hóa cần phát huy lợi thế, tăng giá trị và liên kết giữa các khâu sản xuất."
+  },
+  {
+    "id": "cq064",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Hiện đại hóa quan hệ sản xuất cần chú ý điều gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Giữ nguyên mọi cơ chế dù công nghệ đổi"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ tăng số máy mà không đổi quản lý"
+      },
+      {
+        "id": "c",
+        "text": "Xóa mọi hình thức hợp tác"
+      },
+      {
+        "id": "d",
+        "text": "Sự phù hợp của tổ chức, quản lý và phân phối với lực lượng sản xuất"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Sự phát triển lực lượng sản xuất đòi hỏi hoàn thiện các quan hệ kinh tế tương ứng."
+  },
+  {
+    "id": "cq065",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao hạ tầng số là điều kiện quan trọng?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hỗ trợ kết nối, lưu chuyển dữ liệu và dịch vụ số"
+      },
+      {
+        "id": "b",
+        "text": "Tự tạo đội ngũ kỹ sư"
+      },
+      {
+        "id": "c",
+        "text": "Thay toàn bộ hạ tầng giao thông"
+      },
+      {
+        "id": "d",
+        "text": "Bảo đảm mọi doanh nghiệp có lãi"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Hạ tầng số tạo điều kiện triển khai công nghệ, nhưng vẫn cần nhân lực và hạ tầng vật chất khác."
+  },
+  {
+    "id": "cq066",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Thể chế phù hợp hỗ trợ đổi mới sáng tạo bằng cách nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cấm mọi thử nghiệm công nghệ"
+      },
+      {
+        "id": "b",
+        "text": "Tạo môi trường khuyến khích nghiên cứu, ứng dụng và cạnh tranh lành mạnh"
+      },
+      {
+        "id": "c",
+        "text": "Giữ thủ tục bất hợp lý để giảm đầu tư"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ bảo vệ doanh nghiệp không đổi mới"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Cơ chế và chính sách ảnh hưởng động lực đầu tư, học hỏi và áp dụng thành tựu mới."
+  },
+  {
+    "id": "cq067",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Khi công nghệ thay đổi nhanh, kế hoạch đào tạo nên làm gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Giữ nguyên nội dung bất kể thay đổi"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ tăng chỉ tiêu mà không đổi chất lượng"
+      },
+      {
+        "id": "c",
+        "text": "Cập nhật kỹ năng theo nhu cầu và xu hướng công nghệ"
+      },
+      {
+        "id": "d",
+        "text": "Bỏ nền tảng khoa học cơ bản"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Đào tạo cần vừa có nền tảng vững vừa thích ứng với yêu cầu mới."
+  },
+  {
+    "id": "cq068",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vai trò phù hợp của Nhà nước trong CNH-HĐH là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Làm thay mọi quyết định kỹ thuật của doanh nghiệp"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ đặt khẩu hiệu thay cho chính sách"
+      },
+      {
+        "id": "c",
+        "text": "Không quan tâm giáo dục và hạ tầng"
+      },
+      {
+        "id": "d",
+        "text": "Kiến tạo điều kiện, định hướng và hoàn thiện thể chế"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Nhà nước hỗ trợ môi trường và nguồn lực phát triển; doanh nghiệp và người lao động vẫn là các chủ thể hành động."
+  },
+  {
+    "id": "cq069",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Vì sao cần phát triển công nghiệp hỗ trợ?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tăng khả năng cung ứng và liên kết của sản xuất trong nước"
+      },
+      {
+        "id": "b",
+        "text": "Để mọi doanh nghiệp tự làm mọi linh kiện"
+      },
+      {
+        "id": "c",
+        "text": "Để không cần tiêu chuẩn chất lượng"
+      },
+      {
+        "id": "d",
+        "text": "Để không cần tham gia chuỗi giá trị"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Công nghiệp hỗ trợ cung cấp đầu vào và năng lực liên kết, góp phần nâng giá trị trong nước."
+  },
+  {
+    "id": "cq070",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Muốn nhận chuyển giao công nghệ có hiệu quả cần ưu tiên gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ ký hợp đồng mua thiết bị"
+      },
+      {
+        "id": "b",
+        "text": "Năng lực hấp thụ, nhân lực và tổ chức học hỏi"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ tổ chức lễ khánh thành"
+      },
+      {
+        "id": "d",
+        "text": "Không cho kỹ sư tiếp cận tài liệu"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Chuyển giao hiệu quả cần biến tri thức tiếp nhận thành năng lực vận hành và cải tiến."
+  },
+  {
+    "id": "cq071",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Dịch vụ logistics hiện đại hỗ trợ công nghiệp bằng cách nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Thay toàn bộ hoạt động sản xuất"
+      },
+      {
+        "id": "b",
+        "text": "Bảo đảm không còn tồn kho ở mọi doanh nghiệp"
+      },
+      {
+        "id": "c",
+        "text": "Kết nối và giảm trở ngại trong lưu thông đầu vào, đầu ra"
+      },
+      {
+        "id": "d",
+        "text": "Tự tạo thêm nguyên liệu"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Dịch vụ có chất lượng giúp các khâu sản xuất và thị trường phối hợp hiệu quả hơn."
+  },
+  {
+    "id": "cq072",
+    "topic": "dac-diem",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Hội nhập gắn với tự chủ nên được hiểu thế nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Đóng cửa hoàn toàn để không phụ thuộc"
+      },
+      {
+        "id": "b",
+        "text": "Phụ thuộc hoàn toàn vào một đối tác"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ xuất khẩu mà không học công nghệ"
+      },
+      {
+        "id": "d",
+        "text": "Hợp tác bên ngoài đi cùng nâng năng lực bên trong"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Tự chủ và hợp tác không loại trừ nhau; mục tiêu là có năng lực chủ động trong quan hệ kinh tế."
+  },
+  {
+    "id": "cq073",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "A thiếu năng lực ở một khâu chip. Giải pháp nào phù hợp nhất?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Liên kết để học hỏi và xây năng lực theo lộ trình"
+      },
+      {
+        "id": "b",
+        "text": "Công bố đã tự chủ toàn ngành"
+      },
+      {
+        "id": "c",
+        "text": "Bỏ mọi hoạt động nghiên cứu"
+      },
+      {
+        "id": "d",
+        "text": "Cấm hợp tác trong mọi trường hợp"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Nhận diện đúng khoảng thiếu giúp thiết kế hợp tác và đầu tư có mục tiêu."
+  },
+  {
+    "id": "cq074",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nhiều doanh nghiệp nhỏ khó tự đầu tư nghiên cứu. Hướng hỗ trợ nào hợp lý?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Buộc từng đơn vị tự làm toàn bộ chuỗi"
+      },
+      {
+        "id": "b",
+        "text": "Liên kết doanh nghiệp, viện và trường để chia sẻ năng lực"
+      },
+      {
+        "id": "c",
+        "text": "Chỉ đổi tên sản phẩm"
+      },
+      {
+        "id": "d",
+        "text": "Ngừng mọi hoạt động cải tiến"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Hợp tác giúp tập hợp nguồn lực, chia sẻ tri thức và tăng khả năng ứng dụng."
+  },
+  {
+    "id": "cq075",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Tiêu chí nào thể hiện hiện đại hóa thực chất hơn?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Số lễ ra mắt dự án tăng"
+      },
+      {
+        "id": "b",
+        "text": "Mọi xưởng đều đổi tên thành thông minh"
+      },
+      {
+        "id": "c",
+        "text": "Năng suất, chất lượng và hiệu quả sử dụng nguồn lực tăng"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ mua máy đắt hơn"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Hiện đại hóa được đánh giá bằng năng lực và kết quả thực tế, không chỉ nhãn gọi hay chi tiêu."
+  },
+  {
+    "id": "cq076",
+    "topic": "giai-phap",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Nếu chỉ ưu tiên tăng trưởng ngắn hạn và cắt đào tạo, rủi ro dài hạn là gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tự động làm chủ công nghệ tốt hơn"
+      },
+      {
+        "id": "b",
+        "text": "Không ảnh hưởng khả năng cạnh tranh"
+      },
+      {
+        "id": "c",
+        "text": "Bảo đảm lao động luôn có kỹ năng phù hợp"
+      },
+      {
+        "id": "d",
+        "text": "Yếu năng lực tiếp thu và đổi mới công nghệ"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "Đào tạo là đầu tư cho năng lực công nghệ và thích ứng, nên việc cắt giảm kéo dài có thể làm suy yếu nền tảng."
+  },
+  {
+    "id": "cq077",
+    "topic": "noi-dung",
+    "section": "6.1.2",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Đưa quy trình số vào nhưng vẫn xử lý dữ liệu thủ công rời rạc cho thấy điều gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cần thay đổi đồng bộ quy trình và tổ chức vận hành"
+      },
+      {
+        "id": "b",
+        "text": "Chỉ cần mua thêm phần mềm là đủ"
+      },
+      {
+        "id": "c",
+        "text": "Đã chắc chắn tăng năng suất"
+      },
+      {
+        "id": "d",
+        "text": "Không cần đánh giá hiệu quả"
+      }
+    ],
+    "correctOptionId": "a",
+    "explanation": "Công nghệ phát huy tác dụng khi cách tổ chức và luồng dữ liệu được thiết kế phù hợp."
+  },
+  {
+    "id": "cq078",
+    "topic": "di-tat",
+    "section": "6.1.2",
+    "difficulty": 2,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Kết luận nào phù hợp nhất cho tranh luận về chiến lược chip của A?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Mục tiêu cao luôn là duy ý chí"
+      },
+      {
+        "id": "b",
+        "text": "Có cơ hội rút ngắn, nhưng phải gắn tham vọng với năng lực và điều kiện cụ thể"
+      },
+      {
+        "id": "c",
+        "text": "CMCN 4.0 bảo đảm mọi dự án đều thành công"
+      },
+      {
+        "id": "d",
+        "text": "Nhân lực có thể thay toàn bộ máy móc"
+      }
+    ],
+    "correctOptionId": "b",
+    "explanation": "Đi tắt đón đầu là lựa chọn chiến lược có điều kiện, kết hợp con người, công nghệ và các nền tảng bổ trợ."
+  },
+  {
+    "id": "cq079",
+    "topic": "vai-tro",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Công nghệ mới khiến ngành nghề và kỹ năng lao động dịch chuyển. Đây là thay đổi nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ thay đổi hình thức quảng cáo"
+      },
+      {
+        "id": "b",
+        "text": "Không liên quan lực lượng sản xuất"
+      },
+      {
+        "id": "c",
+        "text": "Tác động đến phân công lao động và tổ chức sản xuất"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ làm thay đổi giá nguyên liệu"
+      }
+    ],
+    "correctOptionId": "c",
+    "explanation": "Cách mạng công nghiệp tác động rộng đến lao động, các ngành và cách tổ chức nền kinh tế."
+  },
+  {
+    "id": "cq080",
+    "topic": "cmcn4",
+    "section": "6.1.1",
+    "difficulty": 1,
+    "type": "mc",
+    "typeTitle": "Câu hỏi ôn tập",
+    "prompt": "Dùng AI để phát hiện lỗi sản phẩm có thể giúp gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Bảo đảm tuyệt đối không còn sai sót"
+      },
+      {
+        "id": "b",
+        "text": "Thay toàn bộ trách nhiệm kiểm soát của con người"
+      },
+      {
+        "id": "c",
+        "text": "Không cần dữ liệu huấn luyện phù hợp"
+      },
+      {
+        "id": "d",
+        "text": "Hỗ trợ kiểm tra chất lượng dựa trên dữ liệu"
+      }
+    ],
+    "correctOptionId": "d",
+    "explanation": "AI là công cụ hỗ trợ; hiệu quả phụ thuộc dữ liệu, cách triển khai và kiểm soát của con người."
+  }
+]

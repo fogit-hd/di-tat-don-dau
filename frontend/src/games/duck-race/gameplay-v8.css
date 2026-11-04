@@ -1,0 +1,94 @@
+/* New play shell only. Painted frame corners stay inside every control. */
+.dq-shell .dq-toast{position:fixed;right:16px;top:84px;z-index:100;width:min(380px,calc(100vw - 32px));padding:18px 44px 18px 22px;background:#f7e8c4 url('/assets/duck-race/materials-v4/parchment.svg') center/420px;color:#442719;border-image:url('/assets/duck-race/painted-frames-v2/panel-normal.svg') 22% fill / 14px / 0 stretch;font-size:14px;overflow-wrap:anywhere}
+.dq-shell.dq-shell .dq-toast button{position:absolute;right:8px;top:8px;border-image:none;padding:6px;background:none;color:#543624;font-size:11px}
+.dq-shell.dq-playing{height:100svh;min-height:0;overflow:clip;position:relative}
+.dq-playing .dq-nav{height:64px}
+.dq-playing .dq-brand img{height:48px;width:48px}
+.dq-playing .dq-brand .dq-lettering-image{width:100px;height:48px}
+.dq-playing .dq-race-layout,.dq-playing.dq-player .dq-race-layout{display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,28vw,420px);height:calc(100svh - 64px);min-height:0;position:relative}
+.dq-playing .dq-race-stage{height:100%;min-height:0}
+.dq-playing .dq-race-stage>.dq-track{min-height:0;height:100%}
+.dq-playing.dq-shell .dq-stage-title{padding:12px 22px}
+.dq-playing .dq-stage-title h1{font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.dq-playing .dq-stage-title>span{display:none}
+.dq-playing .dq-stage-bottom{min-height:38px;padding:8px 20px;font-size:10px}
+.dq-playing.dq-shell .dq-controls{min-height:0;overflow:hidden;padding:14px;display:flex;flex-direction:column;gap:10px}
+.dq-playing .dq-wallet{padding:4px 4px 8px;gap:10px;flex:none}
+.dq-playing .dq-wallet strong{font-size:20px;flex-wrap:wrap;gap:3px}
+.dq-playing .dq-wallet span,.dq-playing .dq-wallet small{font-size:10px}
+.dq-playing .dq-driving{flex:none;margin:0;grid-template-columns:86px 1fr;gap:8px;touch-action:none}
+.dq-playing .dq-driving>p{display:none}
+.dq-playing .dq-dpad{grid-template-columns:repeat(3,27px);grid-template-rows:32px 32px;gap:2px}
+.dq-playing.dq-shell .dq-dpad button{font-size:11px;border-image-width:7px;padding:2px}
+.dq-playing .dq-arcade-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.dq-playing.dq-shell .dq-arcade-actions button{min-height:32px;padding:6px;font-size:10px;border-image-width:7px 9px}
+.dq-playing .dq-arcade-actions kbd{display:none}
+.dq-playing .dq-study-panel{overflow:auto;min-height:0;scrollbar-width:thin;overscroll-behavior:contain;padding-bottom:8px}
+.dq-playing.dq-shell .dq-question{padding:20px;border-image-width:18px;position:relative}
+.dq-playing .dq-question h2{font-size:clamp(14px,1.15vw,17px);line-height:1.35;margin:8px 0 12px}
+.dq-playing .dq-answers{gap:6px}
+.dq-playing.dq-shell .dq-answers button{padding:10px 13px;min-height:40px;font-size:12px;border-image-width:8px;gap:8px}
+.dq-playing .dq-star{font-size:10px!important}
+.dq-playing .dq-star small{font-size:9px}
+.dq-playing .dq-invest,.dq-playing .dq-cards{margin-top:12px}
+.dq-playing .dq-invest h2,.dq-playing .dq-cards h2{font-size:14px}
+.dq-playing .dq-section-heading>span{font-size:10px}
+.dq-playing .dq-buy-row{gap:6px}
+.dq-playing.dq-shell .dq-buy-row button{padding:10px 14px;min-height:44px;font-size:12px;border-image-width:9px 15px}
+.dq-playing .dq-cards p,.dq-playing .dq-queued{font-size:10px}
+.dq-playing .dq-card-list{display:grid;grid-template-columns:1fr;gap:6px}
+.dq-playing .dq-card-list>button{min-width:0;padding:14px!important;font-size:12px}
+.dq-question-toggle,.dq-question-close{display:none!important}
+.dq-playing.dq-shell .dq-rank-panel{padding:20px;overflow:auto;min-height:0}
+.dq-equipment-backdrop{position:fixed;inset:0;background:#061c20b8;z-index:70;display:flex;justify-content:flex-end}
+.dq-shell.dq-shell .dq-equipment{position:relative;width:min(480px,100%);height:100%;overflow:auto;overscroll-behavior:contain;background:#f7e8c4 url('/assets/duck-race/materials-v4/parchment.svg') center/560px;color:#29412c;padding:28px;border-image:url('/assets/duck-race/painted-frames-v2/panel-normal.svg') 22% fill / 22px / 0 stretch}
+.dq-equipment h2{font-size:21px;padding-right:52px}
+.dq-shell.dq-shell .dq-equipment-close{position:absolute;right:20px;top:22px;padding:8px 12px;min-height:36px;font-size:11px;border-image-width:8px 12px}
+.dq-equipment-preview{height:170px;background:url('/assets/duck-race/background-v3/park.webp') center/cover;margin:12px 0}
+.dq-equipment-preview canvas{display:block}
+.dq-colors{display:flex;gap:6px;flex-wrap:wrap}
+.dq-shell.dq-shell .dq-colors button{width:32px;min-height:32px;padding:0;border-image-width:5px;background-image:none}
+.dq-shell.dq-shell .dq-colors button:last-child{width:65px;font-size:12px}
+.dq-colors button[aria-pressed=true]{outline:2px solid #b65c19;outline-offset:2px}
+.dq-equipment>p{font-size:12px;margin:10px 0}
+.dq-equipment-items{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.dq-shell.dq-shell .dq-equipment-items button{padding:12px;display:flex;gap:6px;align-items:center;text-align:left;border-image-width:10px;color:#f5e9c2}
+.dq-equipment-items img{width:40px;height:48px;image-rendering:pixelated}
+.dq-colors img{width:26px;height:26px;display:block;image-rendering:pixelated;margin:auto}
+.dq-shell.dq-shell .dq-roster-person strong{color:#28422c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.dq-equipment-items strong,.dq-equipment-items small{display:block;font-size:10px;line-height:1.5}
+.dq-equipment-items strong{font-size:12px}
+.dq-equipment-items button[aria-pressed=true]{border-image-source:url('/assets/duck-race/painted-frames-v2/button-amber-normal.svg')!important;color:#3c2c15!important}
+@media(max-width:900px){
+ .dq-playing.dq-player .dq-race-layout{display:block;height:calc(100svh - 56px)}
+ .dq-playing .dq-nav{height:56px;gap:6px;padding:0 10px!important;grid-template-columns:auto 1fr auto}
+ .dq-playing .dq-brand img{display:none}
+ .dq-playing .dq-brand .dq-lettering-image{display:block;width:85px;height:44px}
+ .dq-playing .dq-nav-center{display:none}
+ .dq-playing .dq-nav-actions{gap:6px;font-size:12px}
+ .dq-playing .dq-nav-actions .dq-link{display:none}
+ .dq-playing.dq-shell .dq-stage-title{padding:10px 16px}
+ .dq-playing .dq-stage-title h1{font-size:12px}
+ .dq-playing.dq-player .dq-race-stage{height:100%}
+ .dq-playing.dq-player .dq-stage-bottom{display:none}
+ .dq-shell.dq-shell.dq-playing .dq-controls{position:absolute;inset:42px 0 0;padding:0;background:none;pointer-events:none;overflow:visible}
+ .dq-playing .dq-wallet{position:absolute;top:0;left:12px;right:12px;padding:10px 16px;background:#123d31e8;border-image:url('/assets/duck-race/painted-frames-v2/panel-normal.svg') 22% fill / 12px / 0 stretch;pointer-events:none}
+ .dq-playing .dq-wallet strong{font-size:16px;flex-wrap:nowrap}
+ .dq-playing .dq-wallet small{font-size:8px}
+ .dq-playing .dq-driving{position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:12px;right:12px;grid-template-columns:116px minmax(0,220px);justify-content:space-between;pointer-events:auto;gap:12px}
+ .dq-playing .dq-dpad{grid-template-columns:repeat(3,36px);grid-template-rows:44px 44px;gap:4px}
+ .dq-playing .dq-arcade-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ .dq-playing.dq-shell .dq-arcade-actions button{min-height:44px;font-size:11px;padding:8px;border-image-width:9px 11px}
+ .dq-playing .dq-arcade-actions button:last-child{grid-column:1/-1}
+ .dq-playing .dq-question-toggle{display:block!important;position:absolute;right:12px;bottom:165px;min-height:44px;font-size:12px;pointer-events:auto;padding:10px 18px!important;border-image-width:10px 16px!important}
+ .dq-playing .dq-study-panel{display:none;position:fixed;z-index:35;inset:56px 0 0 auto;width:min(420px,100%);background:#123b30 url('/assets/duck-race/materials-v4/forest.svg') center/560px;padding:16px;overflow:auto;pointer-events:auto;box-shadow:-100vw 0 #061c2077}
+ .dq-playing .dq-study-panel.is-open{display:block}
+ .dq-playing .dq-question-close{display:block!important;margin:0 0 12px auto;padding:8px 14px!important;min-height:38px}
+ .dq-playing .dq-question h2{font-size:16px}
+ .dq-playing.dq-shell .dq-answers button{font-size:14px;min-height:48px}
+ .dq-playing.dq-host .dq-race-layout{height:calc(100svh - 56px);grid-template-columns:minmax(0,1fr) 240px;display:grid}
+ .dq-playing .dq-stage-bottom{font-size:9px;flex-wrap:wrap}
+}
+@media(max-width:600px){.dq-playing.dq-host .dq-race-layout{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 180px}.dq-playing.dq-host .dq-rank-panel{padding:12px}.dq-equipment-items{gap:6px}.dq-equipment-items img{width:30px}.dq-shell.dq-shell .dq-equipment{padding:24px 20px}}
+@media(max-height:500px) and (max-width:900px){.dq-playing .dq-wallet{left:10px;right:auto;gap:20px;padding:6px 14px}.dq-playing .dq-driving{grid-template-columns:116px 280px;bottom:8px}.dq-playing .dq-arcade-actions{grid-template-columns:repeat(3,1fr)}.dq-playing .dq-arcade-actions button:last-child{grid-column:auto}.dq-playing .dq-question-toggle{bottom:110px}.dq-playing .dq-stage-title{display:none}.dq-playing.dq-shell .dq-controls{top:0}}
+.dq-playing .dq-stage-guide{position:absolute;top:100px;left:20px;z-index:4;max-width:calc(100% - 40px);padding:18px;background:#f8ebca url("/assets/duck-race/materials-v4/parchment.svg") center/420px;border-image:url("/assets/duck-race/painted-frames-v2/panel-normal.svg") 22% fill / 14px / 0 stretch;color:#29412c;font-size:12px}.dq-stage-guide p{margin:3px 0}.dq-shell.dq-shell .dq-stage-guide button{display:block;margin:8px 0 0 auto;padding:8px 16px;font-size:12px;border-image-width:8px 12px}@media(max-width:900px){.dq-playing .dq-stage-guide{top:110px;left:12px;max-width:calc(100% - 24px);font-size:11px;padding:16px}}

@@ -1,0 +1,52 @@
+export const DUCK_COLORS = ['yellow', 'aqua', 'blue', 'green', 'orange', 'purple', 'red', 'tan'] as const
+export type DuckColor = typeof DUCK_COLORS[number]
+export type RacePhase = 'lobby' | 'countdown' | 'racing' | 'finished'
+export type CardKind = 'discount' | 'shield' | 'boost' | 'grant' | 'steal' | 'interest' | 'tailwind' | 'refund'
+export const CARDS: Record<CardKind, { title: string; description: string }> = {
+  discount: { title: 'Phiếu ưu đãi', description: 'Giảm 20% giá của 3 lần mua quãng đường tiếp theo.' },
+  shield: { title: 'Khiên bảo hộ', description: 'Chặn một lần va chạm với chướng ngại vật.' },
+  boost: { title: 'Lối tắt', description: 'Nhận 3% đường đua bứt tốc miễn phí. Giữ hướng tiến để sử dụng; vẫn chịu va chạm.' },
+  grant: { title: 'Quỹ may mắn', description: 'Nhận ngay 120 điểm vào quỹ dự trữ.' },
+  steal: { title: 'Thu phí trạm đua', description: 'Thu 10% điểm từ người có quỹ cao nhất, tối đa 75 điểm.' },
+  interest: { title: 'Lãi dự trữ', description: 'Nhận thêm 20% quỹ hiện tại, tối đa 100 điểm.' },
+  tailwind: { title: 'Giày tăng tốc', description: 'Hai lần mua kế tiếp nhận thêm 1 xung lăn mỗi lần.' },
+  refund: { title: 'Hoàn vốn', description: 'Nhận lại 50 điểm, kèm một khiên bảo hộ.' },
+}
+export type GearId = 'goggles' | 'leaf' | 'helmet' | 'crown' | 'scarf' | 'fins' | 'boots' | 'feather'
+export const EQUIPMENT: Record<GearId,{slot:'head'|'body';title:string;benefit:string;cost:string}> = {
+ goggles:{slot:'head',title:'Kính gió',benefit:'Chạy +10%',cost:'Bơi -10%'},leaf:{slot:'head',title:'Mũ lá',benefit:'Giảm phạt bùn 30%',cost:'Lăn -10%'},helmet:{slot:'head',title:'Mũ bảo hộ',benefit:'Giảm choáng vật cản 25%',cost:'Chạy -8%'},crown:{slot:'head',title:'Vương miện quỹ',benefit:'Thưởng đúng +10%',cost:'Giá lăn +20%'},
+ scarf:{slot:'body',title:'Khăn đỏ',benefit:'Lăn +12%',cost:'Nhảy xa -10%'},fins:{slot:'body',title:'Chân vịt',benefit:'Bơi +25%',cost:'Chạy -10%'},boots:{slot:'body',title:'Ủng bùn',benefit:'Giảm phạt bùn 50%',cost:'Bơi -15%'},feather:{slot:'body',title:'Bùa lông',benefit:'Nhảy đôi xa +15%',cost:'Thưởng đúng -10%'}
+}
+export function gearStats(p:{gearHead?:GearId;gearBody?:GearId}) {
+ const g=new Set([p.gearHead,p.gearBody]);return {walk:96*(g.has('goggles')?1.1:1)*(g.has('helmet')?.92:1)*(g.has('fins')?.9:1),roll:390*(g.has('leaf')?.9:1)*(g.has('scarf')?1.12:1),swim:125*(g.has('goggles')?.9:1)*(g.has('fins')?1.25:1)*(g.has('boots')?.85:1),mud:96*(1-.4*(g.has('leaf')?.7:1)*(g.has('boots')?.5:1)),reward:(g.has('crown')?1.1:1)*(g.has('feather')?.9:1),price:g.has('crown')?1.2:1,jump:(g.has('scarf')?.9:1),double:g.has('feather')?1.15:1,obstacleStun:g.has('helmet')?1125:1500}
+}
+export function flightHeight(p:{jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;jumpUntil:number},now:number) {
+ if(p.jumpUntil<=now)return 0;const duration=p.jumpDuration||1100,t=Math.max(0,Math.min(1,(now-(p.jumpStartedAt||p.jumpUntil-duration))/duration));return (p.jumpFrom||0)*(1-t)+Math.sin(t*Math.PI)*52
+}
+export type RaceLog = { id: string; at: number; text: string; kind: 'answer' | 'move' | 'card' | 'collision' | 'system' }
+export const OBSTACLE_RULES = {
+  hop: { title: 'Rào thấp', hint: 'Nhảy qua · không cúi/lăn xuyên rào', height: 26 },
+  roots: { title: 'Rễ gai', hint: 'Nhảy qua hoặc đi vòng', height: 32 },
+  double: { title: 'Ụ rơm cao', hint: 'Nhảy đôi hoặc đi vòng · nhảy đơn chưa đủ cao', height: 63 },
+  underpass: { title: 'Thanh treo', hint: 'Cúi/lăn dưới khoảng hở · không nhảy xuyên thanh', height: 120 },
+  wall: { title: 'Tường chắn', hint: 'Đi vòng qua khoảng trống · không thể nhảy hay lăn xuyên', height: 180 },
+  cart: { title: 'Xe hàng', hint: 'Đi vòng qua khoảng trống', height: 180 },
+  catcher: { title: 'Người bắt vịt', hint: 'Né tầm lưới · bị bắt sẽ chốt điểm và kết thúc lượt', height: 180 },
+} as const
+export type RacerView = {
+  id: string; name: string; color: DuckColor; model: 'duckee' | 'ducky'; points: number;
+  progress: number; target: number; x: number; y: number; lateral: number; facingX: number; facingY: number; rank: number; connected: boolean; correct: number; answered: number;
+  gearHead?:GearId;gearBody?:GearId;mode?:'ground'|'water'|'mud';jumpCount?:number;jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;airSpeed?:number;guardHeld?:boolean;guardUntil?:number;parryUntil?:number;attackStyle?:'idle'|'run'|'air';recoveryUntil?:number;knockUntil?:number;
+  speed: number; rolling: boolean; rollReadyAt: number;
+  jumpUntil: number; crouching: boolean; attackingUntil: number; invulnerableUntil: number;
+  stunnedUntil: number; shield: number; discount: number; tailwind: number; finishedAt?: number; capturedAt?: number; capturedBy?: string
+}
+export type HazardView = { id: string; position: number; offset: number; worldX?:number;worldY?:number;rowId?:string;lane?:0|1|2;freeLane?:0|1|2;category?: 'obstacle' | 'environment'; kind: keyof typeof OBSTACLE_RULES | 'rock' | 'whirlwind' | 'gate' | 'hurdle' | 'beam' | 'boulder' | 'rain' | 'tailwind' | 'headwind'; spanY?:number; thicknessX?:number; heightZ?:number; alertedAt?:number; caughtAt?:number; caughtRacerId?:string; width?:number; moving?:boolean; phase?:number; expiresAt: number }
+export type QuestionView = { id: string; prompt: string; options: { id: string; text: string }[]; deadline: number; number: number }
+export type AnswerView = { selected: string | null; correct: string; explanation: string; reward: number; stake: number; nextAt: number }
+export type RaceSnapshot = {
+  code: string; phase: RacePhase; serverTime: number; revision?: number; startedAt: number; endsAt: number; duration: number;
+  players: RacerView[]; hazards: HazardView[]; me?: RacerView; question?: QuestionView; answer?: AnswerView;
+  starArmed?: boolean; starUsed?: boolean; stake?: number; logs: RaceLog[]; cards?: CardKind[];
+  questionCount: number; winnerId?: string; finishReason?: 'finish' | 'time' | 'host'; storage: 'memory' | 'redis'
+}

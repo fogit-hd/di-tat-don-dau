@@ -1,0 +1,57 @@
+/* Each role owns a different painted silhouette/material. Nine-slice keeps corners intact. */
+.dq-shell.dq-shell.dq-shell :is(.dq-nav,.dq-stage-title){background:none;border:14px solid transparent;border-image:url('/assets/duck-race/v14/frame-hud.svg') 24% fill / 14px / 0 stretch;padding:2px 18px}
+.dq-shell.dq-shell.dq-shell :is(.dq-question,.dq-join,.dq-rules,.dq-lobby-invite,.dq-equipment){background:none;border:22px solid transparent;border-image:url('/assets/duck-race/v14/frame-question.svg') 20% fill / 22px / 0 stretch;color:#233b2a;padding:8px 10px}
+.dq-shell.dq-shell.dq-shell :is(.dq-intro,.dq-roster,.dq-rank-panel){background:none;border:22px solid transparent;border-image:url('/assets/duck-race/v14/frame-result.svg') 20% fill / 22px / 0 stretch;color:#233b2a;padding:12px}
+.dq-shell.dq-shell.dq-shell :is(.dq-results,.dq-winner,.dq-personal-result){background:none;border:24px solid transparent;border-image:url('/assets/duck-race/v14/frame-result.svg') 20% fill / 24px / 0 stretch;color:#233b2a}
+.dq-shell.dq-shell.dq-shell :is(input,.dq-roster-person,.dq-answers button){background:none;border:12px solid transparent;border-image:url('/assets/duck-race/v14/frame-field.svg') 24% fill / 12px / 0 stretch;color:#fff0cd;padding:2px 12px}
+.dq-shell.dq-shell.dq-shell :is(.dq-primary,.dq-secondary,.dq-arcade-actions button,.dq-dpad button){background:none;border:12px solid transparent;border-image:url('/assets/duck-race/v14/frame-action.svg') 24% fill / 12px / 0 stretch;border-radius:0;color:#fff3d6;padding:2px 12px;min-height:44px}
+.dq-shell.dq-shell.dq-shell .dq-card-list>button{background:none;border:18px solid transparent;border-image:url('/assets/duck-race/v14/frame-lucky.svg') 22% fill / 18px / 0 stretch;color:#462823;padding:8px}
+.dq-shell.dq-shell.dq-shell .dq-answers button.is-correct{border-image-source:url('/assets/duck-race/frames-v9/correct.svg');color:#183c2b}
+.dq-shell.dq-shell.dq-shell .dq-answers button.is-wrong{border-image-source:url('/assets/duck-race/frames-v9/wrong.svg');color:#842b24}
+.dq-shell.dq-shell.dq-shell .dq-field-art{background:none;border-image:none;position:relative}
+.dq-shell.dq-shell.dq-shell .dq-field-art input{width:100%;border-image-outset:0;min-height:52px}
+.dq-shell .dq-field-art input::placeholder{color:#eadbb6;opacity:1}
+.dq-shell.dq-shell .dq-placeholder-art{color:#f4dfad}
+.dq-shell.dq-shell.dq-shell .dq-roster-person{min-width:0;padding:8px 12px;grid-template-columns:42px minmax(0,1fr) 8px}
+.dq-shell .dq-roster-person strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dq-playing .dq-race-stage{position:relative;overflow:clip}
+.dq-playing.dq-shell.dq-shell .dq-race-stage>.dq-driving{position:absolute;z-index:3;bottom:45px;left:20px;right:20px;display:grid;grid-template-columns:140px minmax(0,520px);justify-content:space-between;gap:20px;pointer-events:auto;touch-action:none}
+.dq-playing .dq-race-stage .dq-driving>p{display:none}
+.dq-playing .dq-race-stage .dq-dpad{grid-template-columns:repeat(3,44px);grid-template-rows:44px 44px;gap:3px}
+.dq-playing.dq-shell.dq-shell .dq-race-stage .dq-dpad button{width:100%;min-width:0;padding:0;border-width:9px;border-image-width:9px;min-height:44px}
+.dq-playing .dq-race-stage .dq-arcade-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.dq-playing.dq-shell.dq-shell .dq-race-stage .dq-arcade-actions button{font-size:12px;padding:1px 8px;min-height:44px}
+.dq-playing .dq-race-stage .dq-arcade-actions button:last-child{grid-column:2/4}
+.dq-playing.dq-shell.dq-shell .dq-controls{overflow:hidden}
+.dq-playing .dq-wallet strong{white-space:nowrap}
+.dq-playing.dq-shell.dq-shell .dq-stage-title{min-height:54px}
+.dq-playing .dq-study-panel{padding:6px;scrollbar-width:thin}
+.dq-shell .dq-card-list{display:grid;grid-template-columns:1fr;gap:8px}
+.dq-shell .dq-intro .dq-lettering-image,.dq-shell .dq-brand .dq-lettering-image{image-rendering:auto}
+.dq-shell.dq-shell .dq-intro :is(p,.dq-home-note){color:#29412e}
+.dq-shell.dq-shell .dq-question-meta{color:#314d36}
+.dq-shell.dq-shell .dq-star{color:#314d36}
+.dq-shell.dq-shell.dq-shell .dq-results{padding:72px 24px 24px}
+.dq-shell.dq-shell.dq-shell :is(.dq-intro,.dq-roster,.dq-rank-panel,.dq-results){border-image-slice:120 150 90 150 fill;border-image-width:60px 24px 32px;padding-top:68px}
+.dq-shell.dq-shell.dq-shell .dq-results :is(p,small,span,strong,b,h2,h3){color:#29412e}
+.dq-shell.dq-shell.dq-shell :is(.dq-personal-result,.dq-winner){border-image-source:url('/assets/duck-race/v14/frame-lucky.svg');padding:24px}
+.dq-shell.dq-shell.dq-shell .dq-personal-result strong{color:#975112}
+.dq-shell.dq-shell.dq-shell .dq-log p{color:#42533d}
+.dq-playing.dq-shell.dq-shell .dq-results{min-height:0;overflow:auto;scrollbar-width:thin}
+.dq-playing .dq-stage-title h1{white-space:nowrap}
+.dq-shell .dq-stage-title h1 :is(.dq-static-art,span[data-art-missing]){display:inline;white-space:nowrap;font-size:inherit;margin:0}
+.dq-shell.dq-shell.dq-shell .dq-answers button:is(:hover,:active):not(:disabled){background:none;border-image-source:url('/assets/duck-race/v14/frame-field.svg');color:#ffebad}
+@media(max-width:900px){
+ .dq-playing.dq-shell.dq-shell .dq-race-stage>.dq-driving{left:10px;right:10px;bottom:max(14px,env(safe-area-inset-bottom));grid-template-columns:138px minmax(0,240px);gap:8px}
+ .dq-playing .dq-race-stage .dq-arcade-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ .dq-playing .dq-race-stage .dq-arcade-actions button:last-child{grid-column:1/-1}
+ .dq-playing.dq-shell.dq-shell .dq-race-stage .dq-arcade-actions button{font-size:11px;padding:0 4px;min-height:44px;border-image-width:9px}
+ .dq-playing .dq-question-toggle{bottom:178px}
+ .dq-playing.dq-shell.dq-shell .dq-wallet{background:none;border:12px solid transparent;border-image:url('/assets/duck-race/v14/frame-hud.svg') 24% fill / 12px / 0 stretch;padding:4px 8px}
+ .dq-playing.dq-shell.dq-shell .dq-question{overflow:visible}
+ .dq-shell.dq-shell.dq-shell .dq-home{gap:14px;padding:16px}
+ .dq-shell.dq-shell.dq-shell .dq-intro{padding:8px}
+ .dq-playing.dq-player .dq-race-layout.is-finished{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(220px,45%) minmax(0,55%);height:calc(100svh - 56px)}
+}
+@media(max-width:480px){.dq-playing .dq-race-stage .dq-dpad{grid-template-columns:repeat(3,44px);grid-template-rows:44px 44px}.dq-playing.dq-shell.dq-shell .dq-race-stage>.dq-driving{grid-template-columns:138px minmax(0,210px)}.dq-shell.dq-shell.dq-shell .dq-join{padding:8px;border-width:17px}.dq-shell .dq-roster-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-height:540px) and (min-width:600px){.dq-playing.dq-shell.dq-shell .dq-race-stage>.dq-driving{bottom:8px;grid-template-columns:138px minmax(0,400px)}.dq-playing .dq-race-stage .dq-arcade-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.dq-playing .dq-race-stage .dq-arcade-actions button:last-child{grid-column:auto}}

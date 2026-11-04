@@ -1,0 +1,764 @@
+[
+  {
+    "id": "company-staff-arrival",
+    "title": "Tổ công nhân mới gia nhập",
+    "body": "Đón thêm người vận hành đã được hỗ trợ tuyển dụng.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-staff-arrival",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "engineersAdd": [
+        1,
+        5
+      ]
+    }
+  },
+  {
+    "id": "company-staff-resignation",
+    "title": "Một nhóm công nhân nghỉ việc",
+    "body": "Nhân lực giảm; các cụm thiếu tổ sẽ chờ người.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-staff-resignation",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "engineersAdd": [
+        -3,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-supplier-cooperation",
+    "title": "Liên kết nhà cung ứng mới",
+    "body": "Trả phí kết nối để tăng năng lực phụ trợ.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-supplier-cooperation",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "support": [
+        1,
+        2
+      ],
+      "cash": [
+        -60,
+        -30
+      ]
+    }
+  },
+  {
+    "id": "company-supplier-withdrawal",
+    "title": "Nhà cung ứng rút khỏi chuỗi",
+    "body": "Năng lực phụ trợ giảm. Giá nâng cấp không được giảm lại.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-supplier-withdrawal",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "support": [
+        -2,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-warehouse-modernization",
+    "title": "Cải tạo kho và luồng giao hàng",
+    "body": "Chi phí cải tạo giúp tăng cấp hạ tầng.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-warehouse-modernization",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "infra": [
+        1,
+        2
+      ],
+      "cash": [
+        -70,
+        -30
+      ]
+    }
+  },
+  {
+    "id": "company-depot-damage",
+    "title": "Kho trung chuyển bị hư hại",
+    "body": "Khả năng giao nhận giảm; lịch sử giá mua được giữ.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-depot-damage",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "infra": [
+        -2,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-filter-installation",
+    "title": "Lắp thêm bộ xử lý môi trường",
+    "body": "Thêm năng lực công nghệ sạch để xử lý ô nhiễm.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-filter-installation",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "green": [
+        1,
+        2
+      ],
+      "cash": [
+        -50,
+        -20
+      ]
+    }
+  },
+  {
+    "id": "company-filter-failure",
+    "title": "Hệ thống xử lý mất hiệu quả",
+    "body": "Công nghệ sạch giảm cấp, tác động từ kỳ sản xuất tới.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-filter-failure",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "green": [
+        -2,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-mentor-visit",
+    "title": "Chuyên gia kèm cặp tại xưởng",
+    "body": "Tay nghề tăng, giúp các cụm đủ người sản xuất hiệu quả hơn.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-mentor-visit",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "workerSkill": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": "company-key-crew-loss",
+    "title": "Thiếu thợ lành nghề dẫn ca",
+    "body": "Tay nghề chung giảm; số công nhân hiện có được giữ.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-key-crew-loss",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "workerSkill": [
+        -2,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-upgrade-sponsor",
+    "title": "Hỗ trợ cải tiến thiết bị",
+    "body": "Chi phí đối ứng nâng chất lượng thiết bị, không thêm cụm.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-upgrade-sponsor",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "machineQuality": [
+        1,
+        2
+      ],
+      "cash": [
+        -140,
+        -80
+      ]
+    }
+  },
+  {
+    "id": "company-control-fault",
+    "title": "Bộ điều khiển mất độ chính xác",
+    "body": "Chất lượng thiết bị giảm, giá cải tiến không bị lùi lại.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-control-fault",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "machineQuality": [
+        -2,
+        -1
+      ]
+    }
+  },
+  {
+    "id": "company-preventive-service",
+    "title": "Đội kỹ thuật phục hồi thiết bị",
+    "body": "Trả phí dịch vụ để phục hồi một phần độ bền máy.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-preventive-service",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "conditionPct": [
+        15,
+        30
+      ],
+      "cash": [
+        -60,
+        -20
+      ]
+    }
+  },
+  {
+    "id": "company-bearing-failure",
+    "title": "Ổ trục bị mài mòn bất thường",
+    "body": "Độ bền giảm ngay. Về 0% phải bảo dưỡng để sản xuất lại.",
+    "industry": "general",
+    "visual": "breakdown",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-bearing-failure",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1,
+      "workforceUnits": true,
+      "conditionPct": [
+        -25,
+        -10
+      ]
+    }
+  },
+  {
+    "id": "company-exclusive-technology",
+    "title": "Công nghệ độc quyền được công nhận",
+    "body": "Quy trình riêng giúp tăng sản lượng 5–12% và giá bán 3–8% trong các năm có hiệu lực; mở quyền nhận phí bản quyền.",
+    "industry": "general",
+    "visual": "research",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-exclusive-technology",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1.05,
+        1.12
+      ],
+      "priceMul": [
+        1.03,
+        1.08
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 2
+    }
+  },
+  {
+    "id": "company-royalty",
+    "title": "Thu phí bản quyền công nghệ",
+    "body": "Một CEO đang điều hành trả 3–6% tiền mặt cho quyền dùng công nghệ, tối đa 100 triệu; không vượt tiền mặt khả dụng. Xử lý khi đối tác sang năm; nếu còn chờ lúc hết trận, quyết toán khi tổng kết và ghi lịch sử cho cả hai CEO.",
+    "industry": "general",
+    "visual": "trade",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-royalty",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1
+    }
+  },
+  {
+    "id": "company-commission",
+    "title": "Nhận hoa hồng giao dịch",
+    "body": "Một CEO đang điều hành trả hoa hồng 2–5% tiền mặt, tối đa 75 triệu; cả hai cùng nhận chứng từ. Xử lý khi đối tác sang năm; nếu còn chờ lúc hết trận, quyết toán khi tổng kết và ghi lịch sử cho cả hai CEO.",
+    "industry": "general",
+    "visual": "trade",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-commission",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1
+    }
+  },
+  {
+    "id": "company-monopoly-scale",
+    "title": "Lợi thế quy mô và giám sát thị trường",
+    "body": "Từ ba cụm sản xuất: doanh thu tăng 6–12%, chi phí tuân thủ tăng 2–5% trong các năm có hiệu lực.",
+    "industry": "general",
+    "visual": "expansion",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-monopoly-scale",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 2
+    }
+  },
+  {
+    "id": "company-final-benchmark",
+    "title": "Cam kết thưởng tăng trưởng cuối trận",
+    "body": "Khi chốt trận, nhận thêm 1–3% tài sản CEO giàu nhất trước thưởng/phạt; tối đa 20% tài sản của mình và 500 triệu.",
+    "industry": "general",
+    "visual": "market",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-final-benchmark",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1
+    }
+  },
+  {
+    "id": "company-final-levy",
+    "title": "Nghĩa vụ tài sản khi chốt trận",
+    "body": "Khi chốt trận, mất 3–8% tài sản của mình trước thưởng/phạt; tối đa 500 triệu, không làm tài sản âm.",
+    "industry": "general",
+    "visual": "market",
+    "good": false,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-final-levy",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1
+    }
+  },
+  {
+    "id": "company-patent-expiry",
+    "title": "Hết hạn bảo hộ",
+    "body": "Bạn nhận quyền thu ngẫu nhiên 1–3% tổng tài sản chốt trận từ mỗi CEO khác có Công nghệ độc quyền. Chỉ chuyển tài sản khi kết thúc, không trừ tiền mặt thêm lần nữa. Tổng khấu trừ mỗi bên tối đa 10% tài sản và 1 tỷ; tổng nhận của bạn tối đa 20% tài sản và 1 tỷ. Nhiều bên thu được phân bổ theo trần chung.",
+    "industry": "general",
+    "visual": "trade",
+    "good": true,
+    "trait": "",
+    "groups": [],
+    "contexts": [],
+    "narrations": [],
+    "art": "company-patent-expiry",
+    "effect": {
+      "durationSec": [
+        1,
+        1
+      ],
+      "outputMul": [
+        1,
+        1
+      ],
+      "priceMul": [
+        1,
+        1
+      ],
+      "inflationMul": [
+        1,
+        1
+      ],
+      "years": 1
+    }
+  }
+]

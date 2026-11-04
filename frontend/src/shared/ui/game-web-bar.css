@@ -1,0 +1,21 @@
+.game-web-bar{--bar-paper:#fff1d6;display:grid;grid-template-columns:minmax(150px,1fr) auto minmax(230px,1fr);align-items:center;gap:24px;min-height:84px;padding:10px clamp(16px,3.5vw,64px);position:relative;z-index:10;color:var(--bar-paper);border-bottom:1px solid #caa64e;font:16px/1.4 'Public UI',sans-serif}
+.game-web-bar.theme-wine{background:#691b24 url('/assets/shared/webbar/wine.webp') center/600px}
+.game-web-bar.theme-forest{background:#173b2c url('/assets/shared/webbar/forest.svg') center/560px}
+.game-web-bar .game-web-brand img{display:block;width:clamp(142px,14vw,216px);height:64px;object-fit:contain}
+.game-web-bar nav,.game-web-account{display:flex;align-items:center;gap:24px;min-width:0}
+.game-web-account{justify-self:end;gap:12px}
+.game-web-bar :is(a,button){color:inherit;text-decoration:none;font:inherit;white-space:nowrap;cursor:pointer}
+.game-web-bar button{border:0;border-radius:0;box-shadow:none;background:none;min-height:44px;padding:10px 18px}
+.game-web-bar nav button{padding:8px 0}
+.game-web-account button{border:12px solid transparent;border-image:url('/assets/shared/webbar/frame-field.svg') 24% fill / 12px / 0 stretch;color:#fff1d6;padding:2px 16px}
+.game-web-account .game-web-create{border-image-source:url('/assets/shared/webbar/frame-action.svg');color:#fff6df}
+.game-web-bar :is(a,button):focus-visible{outline:2px solid #ffe091;outline-offset:4px}
+.game-web-bar :is(a,button):hover{color:#ffe091}
+.game-web-bar .art-text{font-size:clamp(13px,1.2vw,18px)}
+.game-web-bar :is(a,button) .art-text{flex-wrap:nowrap}
+.dq-shell .game-web-bar.game-web-bar button{background:none;box-shadow:none;border-radius:0;color:#fff1d6;min-height:44px;padding:2px 16px}
+.dq-shell .game-web-bar.game-web-bar nav button{border:0;border-image:none;padding:8px 0}
+.dq-shell .game-web-bar.game-web-bar .game-web-account button{border:12px solid transparent;border-image:url('/assets/shared/webbar/frame-field.svg') 24% fill / 12px / 0 stretch}
+.dq-shell .game-web-bar.game-web-bar .game-web-account .game-web-create{border-image-source:url('/assets/shared/webbar/frame-action.svg')}
+@media(max-width:800px){.game-web-bar{grid-template-columns:minmax(100px,1fr) auto;gap:8px;min-height:68px;padding:6px 12px}.game-web-bar .game-web-brand img{width:130px;height:52px}.game-web-bar nav{grid-column:1/-1;grid-row:2;justify-content:center;gap:22px}.game-web-account{grid-row:1;grid-column:2;gap:5px}.game-web-account button,.dq-shell .game-web-bar.game-web-bar .game-web-account button{padding:0 7px;border-width:9px;border-image-width:9px;min-height:44px}.game-web-bar .art-text{font-size:13px}}
+@media(max-width:360px){.game-web-bar .game-web-brand img{width:100px}.game-web-bar nav{gap:14px}.game-web-bar .art-text{font-size:12px}}

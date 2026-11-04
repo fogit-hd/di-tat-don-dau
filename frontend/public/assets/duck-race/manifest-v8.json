@@ -1,0 +1,1199 @@
+{
+  "duckee/aqua/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/aqua/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/aqua/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/aqua/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/aqua/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/aqua/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/aqua/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/aqua/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/aqua/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/aqua/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/blue/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/blue/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/blue/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/blue/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/blue/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/blue/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/blue/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/blue/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/blue/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/blue/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/green/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/green/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/green/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/green/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/green/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/green/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/green/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/green/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/green/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/green/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/orange/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/orange/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/orange/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/orange/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/orange/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/orange/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/orange/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/orange/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/orange/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/orange/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/purple/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/purple/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/purple/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/purple/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/purple/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/purple/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/purple/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/purple/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/purple/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/purple/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/red/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/red/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/red/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/red/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/red/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/red/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/red/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/red/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/red/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/red/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/tan/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/tan/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/tan/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/tan/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/tan/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/tan/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/tan/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/tan/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/tan/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/tan/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "duckee/yellow/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "duckee/yellow/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/yellow/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "duckee/yellow/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "duckee/yellow/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "duckee/yellow/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "duckee/yellow/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "duckee/yellow/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "duckee/yellow/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "duckee/yellow/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "ducky/yellow/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/idle.png; exact native palette mapping"
+  },
+  "ducky/yellow/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "ducky/yellow/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/jump.png; exact native palette mapping"
+  },
+  "ducky/yellow/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_flap.png; exact native palette mapping"
+  },
+  "ducky/yellow/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/floating_fall.png; exact native palette mapping"
+  },
+  "ducky/yellow/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/land.png; exact native palette mapping"
+  },
+  "ducky/yellow/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/roll_1.png; exact native palette mapping"
+  },
+  "ducky/yellow/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/hit.png; exact native palette mapping"
+  },
+  "ducky/yellow/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crouch.png; exact native palette mapping"
+  },
+  "ducky/yellow/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/crawl.png; exact native palette mapping"
+  },
+  "ducky/yellow/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "ducky/yellow/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "ducky/yellow/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "ducky/yellow/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "ducky/yellow/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "ducky/yellow/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "ducky/yellow/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/yellow/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/yellow/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/yellow/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/yellow/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/yellow/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/yellow/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/yellow/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/yellow/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/yellow/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/aqua/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/aqua/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/aqua/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/aqua/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/aqua/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/aqua/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/aqua/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/aqua/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/aqua/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/blue/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/blue/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/blue/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/blue/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/blue/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/blue/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/blue/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/blue/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/blue/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/green/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/green/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/green/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/green/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/green/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/green/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/green/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/green/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/green/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/orange/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/orange/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/orange/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/orange/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/orange/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/orange/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/orange/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/orange/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/orange/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/purple/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/purple/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/purple/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/purple/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/purple/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/purple/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/purple/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/purple/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/purple/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/red/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/red/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/red/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/red/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/red/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/red/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/red/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/red/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/red/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "duckee/tan/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/right_hook.png; exact native palette mapping"
+  },
+  "duckee/tan/attack_idle": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_smash.png; exact native palette mapping"
+  },
+  "duckee/tan/attack_run": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/f_tilt.png; exact native palette mapping"
+  },
+  "duckee/tan/attack_air": {
+    "frames": 6,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/down_smash.png; exact native palette mapping"
+  },
+  "duckee/tan/guard": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/shield.png; exact native palette mapping"
+  },
+  "duckee/tan/knockout": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/death.png; exact native palette mapping"
+  },
+  "duckee/tan/double_jump": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/multi_jump.png; exact native palette mapping"
+  },
+  "duckee/tan/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "duckee/tan/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  },
+  "ducky/yellow/swim": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping; waterline occlusion"
+  },
+  "ducky/yellow/mud_walk": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10,
+    "source": "DuckyV2/Spritesheets/walk.png; exact native palette mapping"
+  }
+}

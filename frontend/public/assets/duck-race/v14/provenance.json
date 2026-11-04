@@ -1,0 +1,36 @@
+{
+  "generation": "built-in image generation",
+  "sources": {
+    "frames": "exec-19478137-2293-41c8-8d27-f8f423bec679.png",
+    "obstacles": "exec-f003bdc2-09fd-4019-bcd6-5c369e8f82e4.png",
+    "catcher": "exec-4cdd5f45-ef51-443c-8a46-b86b103e6a62.png",
+    "canvas": "exec-27509b1b-4a1f-4e68-929d-05b9c9c52c57.png"
+  },
+  "frames": {
+    "hud": {
+      "width": 497,
+      "height": 124
+    },
+    "question": {
+      "width": 389,
+      "height": 485
+    },
+    "action": {
+      "width": 493,
+      "height": 409
+    },
+    "field": {
+      "width": 492,
+      "height": 163
+    },
+    "lucky": {
+      "width": 368,
+      "height": 476
+    },
+    "result": {
+      "width": 503,
+      "height": 375
+    }
+  },
+  "capture": "Native duck colour/pose baked inside an offline-authored sagging rope bag, behind its foreground mesh; one complete RGBA sprite per frame, no runtime duck/net layers."
+}

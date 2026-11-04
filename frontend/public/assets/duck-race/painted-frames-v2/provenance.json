@@ -1,0 +1,26 @@
+{
+  "panel": {
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-26ca7b99-22b9-472c-91bc-c5b798fd62a5.png",
+    "size": [
+      1186,
+      1166
+    ],
+    "alpha_center": 0
+  },
+  "button-amber": {
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-88020214-6bb3-4ba4-84cd-963ec9a969a7.png",
+    "size": [
+      1280,
+      287
+    ],
+    "alpha_center": 253
+  },
+  "button-teal": {
+    "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-f6b04750-935b-4f77-9e55-bf4f907424d7.png",
+    "size": [
+      1280,
+      228
+    ],
+    "alpha_center": 253
+  }
+}

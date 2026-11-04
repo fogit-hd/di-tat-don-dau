@@ -1,0 +1,4 @@
+// Local-only disposable UI test room. Never run against a remote deployment.
+const fs=require('node:fs');const base='http://127.0.0.1:4608/api/duck-race'
+async function post(path,body,token){const r=await fetch(base+path,{method:'POST',headers:{'content-type':'application/json',...(token?{'x-duck-token':token}:{})},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw Error(d.error);return d}
+;(async()=>{const file='design-preview/duck-race-v10/.tmp-preview-session.json';if(process.argv.includes('--start')){const r=JSON.parse(fs.readFileSync(file,'utf8'));await post(`/rooms/${r.code}/action`,{type:'start'},r.token);console.log('Started '+r.code);return}const r=await post('/rooms',{});fs.mkdirSync('design-preview/duck-race-v10',{recursive:true});fs.writeFileSync(file,JSON.stringify(r));console.log(r.code)})().catch(e=>{console.error(e);process.exitCode=1})

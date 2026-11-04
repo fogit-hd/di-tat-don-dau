@@ -1,0 +1,564 @@
+{
+  "duckee/aqua/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/aqua/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/aqua/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/aqua/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/blue/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/blue/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/blue/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/blue/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/green/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/green/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/green/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/green/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/orange/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/orange/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/orange/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/orange/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/purple/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/purple/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/purple/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/purple/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/red/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/red/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/red/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/red/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/tan/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/tan/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/tan/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/tan/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "duckee/yellow/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "duckee/yellow/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/crouch": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "duckee/yellow/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 9,
+    "derived": "whole-frame low-posture native walk; feet stay at y=48"
+  },
+  "duckee/yellow/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 7,
+    "derived": "native mid-air tumble frames"
+  },
+  "ducky/yellow/idle": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 8
+  },
+  "ducky/yellow/walk_run": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/jump": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/air": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/fall": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/land": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/roll": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/take_damage": {
+    "frames": 2,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/crouch": {
+    "frames": 1,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/crawl": {
+    "frames": 4,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  },
+  "ducky/yellow/attack": {
+    "frames": 5,
+    "width": 64,
+    "height": 64,
+    "fps": 10
+  }
+}

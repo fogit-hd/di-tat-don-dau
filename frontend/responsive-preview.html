@@ -1,0 +1,5 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Kiểm thử viewport — Duck Race</title><style>body{margin:0;background:#142f28;color:#fff1cc;font:16px Arial}header{height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;position:sticky;left:0}button{padding:8px 16px;cursor:pointer}iframe{display:block;border:0;max-width:none}</style></head><body><header>Viewport thực của game: <button data-w="390" data-h="844">390</button><button data-w="768" data-h="1024">768</button><button data-w="1440" data-h="900">1440</button><output></output></header><iframe title="Màn chơi kiểm thử" width="390" height="844"></iframe><script>
+const frame=document.querySelector('iframe'),output=document.querySelector('output');
+frame.src='/duck-race/play/'+new URLSearchParams(location.search).get('code');
+document.querySelectorAll('button').forEach(button=>button.onclick=()=>{frame.width=button.dataset.w;frame.height=button.dataset.h;output.value=frame.width+' × '+frame.height});
+</script></body></html>

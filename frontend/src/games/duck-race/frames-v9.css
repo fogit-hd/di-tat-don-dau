@@ -1,0 +1,9 @@
+/* The painted asset includes its own material fill inside its actual aperture.
+   A rectangular CSS fill must never show through its transparent outer corners. */
+.dq-shell.dq-shell.dq-shell :is(.dq-question,.dq-join,.dq-rules,.dq-lobby-invite,.dq-equipment,.dq-roster-person,input,.dq-answers button){background:none;border-image-source:url('/assets/duck-race/frames-v9/paper.svg');border-image-outset:0}
+.dq-shell.dq-shell.dq-shell :is(.dq-nav,.dq-intro,.dq-roster,.dq-stage-title,.dq-rank-panel,.dq-results,.dq-winner,.dq-personal-result,.dq-card-list>button){background:none;border-image-source:url('/assets/duck-race/frames-v9/forest.svg');border-image-outset:0}
+.dq-shell.dq-shell.dq-shell .dq-answers button.is-correct{background:none;border-image-source:url('/assets/duck-race/frames-v9/correct.svg')}
+.dq-shell.dq-shell.dq-shell .dq-answers button.is-wrong{background:none;border-image-source:url('/assets/duck-race/frames-v9/wrong.svg')}
+.dq-playing .dq-study-panel{scrollbar-gutter:stable;padding:4px 10px 10px 2px}
+.dq-shell.dq-shell .dq-question{overflow:clip}
+@media(max-width:900px){.dq-playing .dq-study-panel{padding:16px}}

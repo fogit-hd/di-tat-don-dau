@@ -1,0 +1,1 @@
+Original bespoke AI lettering generated in Codex, one attempt each for hero and logo. Exact headline: Biết đáp án. / Chọn thời điểm / bứt phá. Original transparency preserved. SVG files embed the painted WebP artwork; they are not font-outline conversions and are not claimed as pure vector. Body UI labels retain accessible outlined SVG for legibility.

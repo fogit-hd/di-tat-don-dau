@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "sources": {
+    "water": "exec-5b67677d-c6e6-43a6-b3d8-302d655a0d2f.png",
+    "mud": "exec-1d2eec15-ae7b-4b85-8004-2b5850933656.png",
+    "contact": "exec-f28c9c92-c738-4394-84ca-80ad44947b47.png",
+    "environment": "exec-7199764d-9201-4923-9c9d-e3fbdf2605e5.png",
+    "water-loop": "exec-fe59b6c4-ddbb-49eb-a8e4-799089f89b9e.png"
+  },
+  "mode": "frame-by-frame animated spritesheets; finite transparent terrain"
+}

@@ -1,0 +1,14 @@
+.dq-static-art{display:inline;white-space:normal;letter-spacing:normal;color:inherit}
+.dq-shell .dq-static-art>svg,.game-portal .dq-static-art>svg{display:inline-block;height:1.34375em;max-width:none;vertical-align:-.25em;fill:currentColor;overflow:visible;pointer-events:none}
+.dq-lettering-image{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.dq-shell .dq-brand .dq-lettering-image{width:160px;height:auto;image-rendering:auto}
+.dq-shell .dq-intro h1{max-width:620px;margin-bottom:20px}
+.dq-shell .dq-intro h1 .dq-lettering-image{image-rendering:auto}
+.dq-field-art{display:block;position:relative;margin:8px 0 16px}
+.dq-field-art input{position:relative;margin:0}
+.dq-field-art input::placeholder{color:transparent!important}
+.dq-field-art .dq-placeholder-art{position:absolute;left:18px;right:18px;top:12px;pointer-events:none;color:#3a634d;font-weight:400;line-height:26px;font-size:16px;white-space:nowrap}
+.dq-field-art .dq-placeholder-art .dq-static-art{white-space:nowrap}
+@media(max-width:767px){.dq-shell .dq-brand .dq-lettering-image{width:112px}.dq-shell .dq-intro h1{max-width:560px}.dq-shell .dq-intro{padding:24px}}
+
+.dq-shell .dq-brand .dq-lettering-image{width:200px;max-height:76px;object-fit:contain}.dq-shell .dq-brand>img:first-child{display:none}@media(max-width:767px){.dq-shell .dq-brand .dq-lettering-image{width:140px;max-height:60px}}
