@@ -14,8 +14,17 @@ function moderateObfuscation(): Plugin {
       )
       if (!hasAppCode) return null
 
-      return {
-        code: JavaScriptObfuscator.obfuscate(code, {
+      // Vite discovers lazy chunks' CSS after renderChunk. A computed import
+      // such as import(stringTable(index)) hides that dependency from Vite,
+      // even though the JavaScript module itself can still load in a browser.
+      const literalImports = (source: string) => new Set(
+        [...source.matchAll(/\bimport\s*\(\s*(['"`])([^'"`\n]+)\1\s*\)/g)].map(match => match[2]),
+      )
+      const importsBefore = literalImports(code)
+      const obfuscated = JavaScriptObfuscator.obfuscate(code, {
+          ignoreImports: true,
+          reservedStrings: ['\\.(?:m?js|css)(?:[?#].*)?$'],
+          // Keep this moderate: module paths must stay visible to Vite.
           target: 'browser-no-eval',
           compact: true,
           identifierNamesGenerator: 'hexadecimal',
@@ -41,7 +50,13 @@ function moderateObfuscation(): Plugin {
           numbersToExpressions: false,
           unicodeEscapeSequence: false,
           sourceMap: false,
-        }).getObfuscatedCode(),
+        }).getObfuscatedCode()
+      const importsAfter = literalImports(obfuscated)
+      for (const path of importsBefore) {
+        if (!importsAfter.has(path)) this.error(`Obfuscation hid a lazy import in ${chunk.fileName}: ${path}. Its CSS would not load.`)
+      }
+      return {
+        code: obfuscated,
         map: null,
       }
     },
