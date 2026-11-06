@@ -1,0 +1,197 @@
+{
+  "status": "Revised V3 approval canvas only",
+  "sceneCount": 4,
+  "sceneLength": 1024,
+  "matchSeconds": 720,
+  "secondsPerEra": 120,
+  "smoke": "exec-c27e90c7-2488-4b35-90ae-5b4408498f89.png",
+  "rejectedSmokeMatte": "exec-4a7788f4-051c-4f63-a41c-b33f3e45519c.png",
+  "eras": [
+    {
+      "id": 1,
+      "name": "Hơi nước & cơ khí",
+      "source": "exec-d2754ab5-6757-4606-9513-6556493ee0a5.png",
+      "roadCuts": [
+        [
+          0.56,
+          0.74
+        ],
+        [
+          0.56,
+          0.74
+        ],
+        [
+          0.55,
+          0.74
+        ],
+        [
+          0.55,
+          0.74
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Era1 steam/mechanization, warm morning. Broad compacted ochre dirt running path with pebbles. Four vistas: cultivated valley with tiny distant waterwheel mill; distant railway embankment and low stone bridge; rolling farmland with a small steam-era works far away; wooded canal countryside with distant chimneys (NO drawn smoke). Rural early industrial materials.",
+      "speculative": false,
+      "files": [
+        "1/scene-1.webp",
+        "1/scene-2.webp",
+        "1/scene-3.webp",
+        "1/scene-4.webp"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Điện & sản xuất hàng loạt",
+      "source": "exec-59dac35f-2ce3-400c-9095-ff4779378350.png",
+      "roadCuts": [
+        [
+          0.52,
+          0.74
+        ],
+        [
+          0.52,
+          0.74
+        ],
+        [
+          0.52,
+          0.74
+        ],
+        [
+          0.52,
+          0.74
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Era2 electricity and mass production, warm afternoon. Broad horizontal weathered dark asphalt track with subtle patched aggregate, no lane stripes. Four vistas: distant power pylons and overhead wires; low distant brick factory horizon; far rail freight yard and steel trusses; distant substation and brick industrial district. No futuristic robotics or AI architecture.",
+      "speculative": false,
+      "files": [
+        "2/scene-1.webp",
+        "2/scene-2.webp",
+        "2/scene-3.webp",
+        "2/scene-4.webp"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Điện tử & tự động hóa",
+      "source": "exec-878f5876-49ed-472b-ba1d-d700a02d10fa.png",
+      "roadCuts": [
+        [
+          0.52,
+          0.71
+        ],
+        [
+          0.52,
+          0.71
+        ],
+        [
+          0.52,
+          0.73
+        ],
+        [
+          0.52,
+          0.73
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Era3 electronics and computer automation, bright overcast day. Broad clean light-gray industrial concrete running surface with expansion joints. Four vistas: distant low electronics factory campus; a distant radio communications mast; a far logistics yard with plain low warehouses; a distant early automated works and water tower. Recognizable late-20th-century functional engineering, not sci-fi.",
+      "speculative": false,
+      "files": [
+        "3/scene-1.webp",
+        "3/scene-2.webp",
+        "3/scene-3.webp",
+        "3/scene-4.webp"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Nhà máy thông minh",
+      "source": "exec-25f5f8df-5028-44a5-a8ba-1a708624f0e4.png",
+      "roadCuts": [
+        [
+          0.51,
+          0.74
+        ],
+        [
+          0.51,
+          0.74
+        ],
+        [
+          0.51,
+          0.74
+        ],
+        [
+          0.51,
+          0.74
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Era4 connected smart industry, crisp blue daylight. Broad horizontal dark blue-gray engineered paving with subtle pale inset edge reflectors, no glowing arrows or lane stripes. Four vistas: distant compact modern manufacturing campus; small distant communications antenna network; far solar power field and utility structures; low distant data infrastructure and logistics district. Grounded contemporary engineering, no giant foreground buildings.",
+      "speculative": false,
+      "files": [
+        "4/scene-1.webp",
+        "4/scene-2.webp",
+        "4/scene-3.webp",
+        "4/scene-4.webp"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Cộng tác & phát triển bền vững",
+      "source": "exec-36127519-1ed5-4404-ae1c-c341f7d77383.png",
+      "roadCuts": [
+        [
+          0.54,
+          0.75
+        ],
+        [
+          0.54,
+          0.75
+        ],
+        [
+          0.54,
+          0.75
+        ],
+        [
+          0.54,
+          0.75
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Speculative Era5 collaborative sustainable industry. Soft clear daylight. Broad horizontal pale recycled aggregate running track. Four vistas: open restored landscape with tiny distant collaborative workshop campus; distant solar canopies and orchard belt; open bioswale fields and small timber-and-steel engineering structures far away; far green-roof infrastructure on a country horizon. Practical human-scale civil engineering, no organic fantasy domes.",
+      "speculative": true,
+      "files": [
+        "5/scene-1.webp",
+        "5/scene-2.webp",
+        "5/scene-3.webp",
+        "5/scene-4.webp"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Sản xuất thích ứng & tuần hoàn",
+      "source": "exec-9448eaa1-71db-4185-8e8e-7172de7eb1bd.png",
+      "roadCuts": [
+        [
+          0.56,
+          0.72
+        ],
+        [
+          0.56,
+          0.72
+        ],
+        [
+          0.56,
+          0.74
+        ],
+        [
+          0.56,
+          0.74
+        ]
+      ],
+      "prompt": "Create a professional hand-painted semi-realistic 2D SIDE-SCROLLING game background asset sheet for Quiz Duck Race. Reference image ONLY for grounded brushwork and camera geometry. Output EXACTLY FOUR DIFFERENT wide panoramic scenes in a precisely equal 2x2 grid, no frames, no text, no gutters, no labels; each quadrant is an independent landscape tile. The game ducks run from LEFT to RIGHT, not toward the horizon. Within EACH quadrant: sky and DISTANT horizon in top 50%; a totally clear straight horizontal running surface spanning full width between 52% and 76% of tile height; a cutaway of soil/material below 76%. Exactly same horizon and road Y in all four quadrants. No foreground buildings, no architecture assets standing on the road, no central roads receding into depth, no ducks, no characters, no obstacles, no smoke, no steam, no fog, no UI. Road top and bottom edges stay horizontal. Paint convincing material details on the road so camera scrolling reads clearly. All four scenes share consistent lighting, road material, and edge colors for sequential cross-blending, but show different surrounding vistas. Industry should be identifiable by SMALL DISTANT machinery/infrastructure silhouettes on the horizon, never huge buildings blocking the view. Do not mirror or repeat one image four times. Clean lush scenic art, natural materials, no fantasy glow, no crystals, no floating buildings. Speculative Era6 adaptive circular industry. Clear early evening with natural lighting. Broad horizontal track of realistic modular recycled composite plates with restrained inset joints, not bright neon. Four vistas: distant modular microfactories; distant circular recycling and water-treatment infrastructure; far low adaptive production campus and plain energy storage units; rolling restored fields with a distant compact clean engineering district. No crystalline city, no floating structures, no monumental fantasy buildings.",
+      "speculative": true,
+      "files": [
+        "6/scene-1.webp",
+        "6/scene-2.webp",
+        "6/scene-3.webp",
+        "6/scene-4.webp"
+      ]
+    }
+  ]
+}

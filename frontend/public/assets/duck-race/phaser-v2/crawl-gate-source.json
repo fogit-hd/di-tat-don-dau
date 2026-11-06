@@ -1,0 +1,19 @@
+{
+  "approvedReference": "approved-reference.png",
+  "source": "exec-a1aa6257-92cd-45d3-ac42-1d5c2fb778cd.png",
+  "method": "built-in ImageGen transparent isolation, then alpha-bounds packaging only",
+  "crop": [
+    344,
+    149,
+    796,
+    1229
+  ],
+  "size": [
+    452,
+    1080
+  ],
+  "axisX": 228,
+  "farFootY": 155,
+  "nearFootY": 1030,
+  "approvedScope": "Only this vertically aligned Shift crawl obstacle; no other V2 silhouettes approved."
+}

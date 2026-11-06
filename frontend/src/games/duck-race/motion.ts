@@ -1,6 +1,7 @@
-import type { RacerView } from './contracts'
-import { STEP_PX } from './track'
+import type { RacerView, WindGust } from './contracts'
+import { STEP_PX, roadPosition } from './track'
 import { DuckMotor } from './motor'
+import { windFlightStep } from './wind'
 const motor = new DuckMotor()
 
 type Point = { x: number; y: number }
@@ -41,7 +42,7 @@ export class MotionBuffer {
 }
 
 /** Replay local intent over only the unacknowledged tail; server still owns collisions. */
-export function predictLocal(p: RacerView, authorityAt: number, now: number, intent: LocalIntent, wind=1): Point {
+export function predictLocal(p: RacerView, authorityAt: number, now: number, intent: LocalIntent, wind=1, gust?:WindGust): Point {
   let point = { x: p.x, y: p.y }
   let reserve = Math.max(0,(p.target-p.progress)*STEP_PX)
   const end = Math.min(now, authorityAt + 250)
@@ -57,7 +58,9 @@ export function predictLocal(p: RacerView, authorityAt: number, now: number, int
       const fresh=start-active.at<400
       const next=motor.advance({...p,...point,reserve,crouching:crouch,airborne,guardHeld:fresh&&!!active.guard},fresh?active:{x:0,y:0},dt,wind)
       reserve=next.reserve
-      point = { x: next.x, y: next.y }
+      const effect=windFlightStep(p,gust,start,dt,fresh?active.x:0)
+      const drift=roadPosition(next.x+effect.dx,next.y)
+      point = { x: drift.x, y: drift.y }
     }
     at = change.at; active = change
   }

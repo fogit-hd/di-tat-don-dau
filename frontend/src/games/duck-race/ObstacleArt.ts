@@ -1,5 +1,6 @@
 import { Assets, AnimatedSprite, Container, Sprite, Text, type Spritesheet, type Texture } from 'pixi.js'
 import { OBSTACLE_RULES, type HazardView, type RacerView } from './contracts'
+import { CRAWL_ART, crawlGateRegistration } from './phaser/world/crawlGate'
 
 /** Painted models have their own ground pivot; Z height never changes their collision footprint. */
 export class ObstacleArt {
@@ -10,7 +11,7 @@ export class ObstacleArt {
   constructor(world: Container) { this.world=world }
   async load() {
     await Promise.all(Object.keys(OBSTACLE_RULES).filter(k=>k!=='catcher').map(async k=>{
-      this.textures.set(k,await Assets.load<Texture>(`/assets/duck-race/v14/obstacle-${k}.webp`))
+      this.textures.set(k,await Assets.load<Texture>(k==='underpass'?'/assets/duck-race/phaser-v2/crawl-gate.webp':`/assets/duck-race/v14/obstacle-${k}.webp`))
     }))
     this.textures.set('shadow',await Assets.load<Texture>('/assets/duck-race/svg/shadow.svg'))
     this.catcher=await Assets.load<Spritesheet>('/assets/duck-race/v14/catcher.json')
@@ -41,12 +42,16 @@ export class ObstacleArt {
         if(!item.label){item.label=new Text({text:'',style:{fontFamily:'Public UI',fontSize:14,fontWeight:'bold',fill:0xffedb3,stroke:{color:0x14372a,width:4}}});item.label.anchor.set(.5);root.addChild(item.label)}
         item.label.text=caught.name.length>22?caught.name.slice(0,21)+'…':caught.name;item.label.position.set(40,-190)
       }
+    }else if(h.kind==='underpass'){
+      const r=crawlGateRegistration(h)
+      image.anchor.set(CRAWL_ART.axisX/CRAWL_ART.width,0);image.scale.set(r.scale)
+      image.position.set(0,r.topY-y);shadow.y=0
     }else{
       image.anchor.set(.5,1)
       // The art runs along depth (screen Y), presenting its left face to a duck moving +X.
       // Fixed X thickness, randomized ground span; front foot is exactly at the footprint end.
-      image.width=h.kind==='cart'?84:h.kind==='wall'?72:h.kind==='underpass'?64:58
-      image.height=span+(h.kind==='underpass'?80:h.kind==='double'?68:h.kind==='wall'||h.kind==='cart'?110:24)
+      image.width=h.kind==='cart'?84:h.kind==='wall'?72:58
+      image.height=span+(h.kind==='double'?68:h.kind==='wall'||h.kind==='cart'?110:24)
       image.y=span/2
       shadow.y=0
     }

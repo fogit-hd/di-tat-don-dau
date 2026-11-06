@@ -1,0 +1,20 @@
+// Setup verification only; does not create a Phaser.Game or activate a gameplay route.
+const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict')
+const root = path.resolve(__dirname, '..')
+const frontend = JSON.parse(fs.readFileSync(path.join(root, 'frontend/package.json'), 'utf8'))
+const installed = JSON.parse(fs.readFileSync(require.resolve('phaser/package.json', { paths: [path.join(root, 'frontend')] }), 'utf8'))
+assert.equal(frontend.dependencies.phaser, '4.2.1')
+assert.equal(installed.version, '4.2.1')
+assert.ok(fs.existsSync(path.join(path.dirname(require.resolve('phaser/package.json')), installed.types)))
+const source = JSON.parse(fs.readFileSync(path.join(root, '.agents/skills/PHASER-SOURCE.json'), 'utf8'))
+assert.equal(source.skills.length, 28)
+for (const name of source.skills) {
+  const file = path.join(root, '.agents/skills', name, 'SKILL.md')
+  const text = fs.readFileSync(file, 'utf8')
+  assert.ok(text.includes('name: ' + name), 'Skill frontmatter mismatch: ' + name)
+  assert.ok(/Phaser 4/i.test(text), 'Wrong engine documentation: ' + name)
+}
+const ledger = fs.readFileSync(path.join(root, 'docs/duck-race/phaser/APPROVALS.md'), 'utf8')
+assert.ok(ledger.includes('V1: native duck'))
+const approved = ledger.includes('Approved;')
+console.log(JSON.stringify({ engine: installed.version, officialSkills: source.skills.length, commit: source.commit, gameplay: approved ? 'V1 approved; isolated Phaser preview; live rooms await V2 parity' : 'not activated; awaiting V1 canvas approval' }))

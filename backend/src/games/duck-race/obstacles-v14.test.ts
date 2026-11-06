@@ -1,5 +1,5 @@
 import { describe,it,expect } from 'vitest'
-import { spawnObstacles,obstacleCollision,clearsObstacle } from './motor'
+import { spawnObstacles,obstacleCollision,clearsObstacle,CRAWL_GATE_LAYOUT } from './motor'
 import { ROAD_Y,ROAD_HALF_WIDTH,STEP_PX,obstaclePoint } from './track'
 import { OBSTACLE_RULES,type HazardView } from './contracts'
 import { createRace,joinRace,startRace,tickRace,steerRace,jumpRace,attackRace,buyMove,armStar,playCard,answerRace,snapshot } from './engine'
@@ -8,7 +8,7 @@ describe('continuous, fixed world obstacle grammar',()=>{
  it('migrates persisted old courses once without changing player funds or coordinates',()=>{
   const r=createRace(1000),p=joinRace(r,'Old room','yellow','duckee',1000)
   r.courseVersion=2;r.hazards=[];p.points=456;p.x=100;p.y=520
-  tickRace(r,1100);expect(r.courseVersion).toBe(3);expect(p.points).toBe(456);expect(p.x).toBe(100);expect(p.y).toBe(520)
+  tickRace(r,1100);expect(r.courseVersion).toBe(5);expect(p.points).toBe(456);expect(p.x).toBe(100);expect(p.y).toBe(520)
   const course=JSON.stringify(r.hazards);tickRace(r,1200);expect(JSON.stringify(r.hazards)).toBe(course)
  })
  it('varies depth and center with no lanes, preserving a walkable gap or an actionable barrier',()=>{
@@ -18,8 +18,9 @@ describe('continuous, fixed world obstacle grammar',()=>{
    expect(course).toEqual(spawnObstacles(seed))
    for(const h of course){
     expect(h.lane).toBeUndefined();expect(h.freeLane).toBeUndefined()
-    expect(h.worldX).toBeCloseTo(h.position*STEP_PX);expect(h.worldY!-(h.spanY??0)/2).toBeGreaterThanOrEqual(ROAD_Y-ROAD_HALF_WIDTH-.001)
-    expect(h.worldY!+(h.spanY??0)/2).toBeLessThanOrEqual(ROAD_Y+ROAD_HALF_WIDTH+.001)
+    const bankOverlap=h.kind==='underpass'?CRAWL_GATE_LAYOUT.bankOverlap:0
+    expect(h.worldX).toBeCloseTo(h.position*STEP_PX);expect(h.worldY!-(h.spanY??0)/2).toBeGreaterThanOrEqual(ROAD_Y-ROAD_HALF_WIDTH-bankOverlap-.001)
+    expect(h.worldY!+(h.spanY??0)/2).toBeLessThanOrEqual(ROAD_Y+ROAD_HALF_WIDTH+bankOverlap+.001)
     centers.add(h.worldY!);spans.add(h.spanY!);kinds.add(h.kind)
     rows.set(h.rowId!,[...rows.get(h.rowId!)||[],h])
    }

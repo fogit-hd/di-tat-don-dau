@@ -1,0 +1,26 @@
+import { flightHeight, type RacerView, type WindGust } from './contracts'
+
+/** Physics values, shared by the authority and local fixture. All distances are world px. */
+export const WIND_RULES = { intervalMs: 30_000, durationMs: 10_000, riseMs: 700, fadeMs: 1400,
+  airDriftSpeed: 110, headwindPush: 48, fallMs: 180, stunMs: 300, knockThreshold: .3 } as const
+
+const smooth = (t: number) => { t = Math.max(0, Math.min(1, t)); return t*t*(3-2*t) }
+export function windStrength(gust: WindGust | undefined, now: number): number {
+  if (!gust || now < gust.startedAt || now >= gust.endsAt) return 0
+  return Math.max(0, Math.min(1, gust.strength)) * Math.min(
+    smooth((now-gust.startedAt)/WIND_RULES.riseMs), smooth((gust.endsAt-now)/WIND_RULES.fadeMs))
+}
+export function windFlightStep(p: Pick<RacerView,'jumpUntil'|'facingX'>, gust: WindGust | undefined,
+  now: number, seconds: number, inputX = 0) {
+  const strength = windStrength(gust, now)
+  if (!gust || !strength || p.jumpUntil <= now) return { dx: 0, headwind: false }
+  const heading = Math.sign(inputX) || p.facingX || 1
+  const headwind = heading !== gust.direction && strength >= WIND_RULES.knockThreshold
+  return { dx: headwind ? 0 : gust.direction * WIND_RULES.airDriftSpeed * strength * Math.max(0,Math.min(.25,seconds)), headwind }
+}
+/** Falling has its own Z curve; the 300ms knockout begins at ground contact. */
+export function windFallState(p: Parameters<typeof flightHeight>[0], now: number) {
+  return { windFallStartedAt: now, windFallUntil: now+WIND_RULES.fallMs, windFallFrom: flightHeight(p,now),
+    stunnedUntil: now+WIND_RULES.fallMs+WIND_RULES.stunMs, jumpUntil: now, jumpCount: 0,
+    speed: 0, rolling: false, crouching: false, guardHeld: false, attackingUntil: now }
+}

@@ -60,6 +60,7 @@ export default defineConfig(({ mode }) => {
         codeSplitting: {
           groups: [
             { name: 'preload-helper', test: /preload-helper/, priority: 40 },
+            { name: 'phaser-renderer', test: /[/\\]node_modules[/\\]phaser[/\\]/, priority: 30 },
             { name: 'duck-renderer', test: /[/\\]node_modules[/\\](?:pixi\.js|@pixi|gsap)[/\\]/, priority: 20 },
             { name: 'vendor', test: /[/\\]node_modules[/\\]/ },
           ],

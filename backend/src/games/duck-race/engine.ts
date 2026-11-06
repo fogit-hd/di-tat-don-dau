@@ -2,7 +2,9 @@ import { randomBytes, randomInt, randomUUID } from 'node:crypto'
 import { CARDS, DUCK_COLORS, EQUIPMENT, gearStats, flightHeight, type GearId, type CardKind, type DuckColor, type HazardView, type RaceLog, type RacePhase, type RaceSnapshot, type AnswerView } from './contracts'
 import { QUESTIONS } from '../../shared/questions/bank'
 import { roadPosition, trackPoint, STEP_PX, ROAD_Y, ROAD_HALF_WIDTH, WORLD, terrainAt, obstaclePoint } from './track'
-import { DuckMotor, spawnObstacles, obstacleCollision, clearsObstacle } from './motor'
+import { DuckMotor, spawnObstacles, blockingObstacleContact, COURSE_LAYOUT } from './motor'
+import { WIND_RULES, windFlightStep, windFallState } from './wind'
+import type { WindGust } from './contracts'
 
 export const RULES = { duration: 600_000, questionMs: 20_000, feedbackMs: 3_500, track: 100, capacity: 50, tickMs: 50, walkSpeed: 96, rollSpeed: 390, inputTimeout: 400, jumpMs: 1100, jumpCooldown: 0 }
 export class RaceError extends Error { constructor(message: string, public status = 400) { super(message) } }
@@ -16,11 +18,13 @@ export type Racer = {
   x: number; y: number; facingX: number; facingY: number; rollRemaining: number; crouching: boolean; jumpUntil: number; jumpReadyAt: number;
   gearHead?:GearId;gearBody?:GearId;mode?:'ground'|'water'|'mud';jumpCount?:number;jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;firstJumpAt?:number;airSpeed?:number;guardHeld?:boolean;guardUntil?:number;parryUntil?:number;attackStyle?:'idle'|'run'|'air';recoveryUntil?:number;knockUntil?:number;knockStart?:number;knockFromX?:number;knockFromY?:number;knockToX?:number;knockToY?:number;
   attackingUntil: number; attackReadyAt: number; invulnerableUntil: number; jumpQueued?: boolean;
+  windFallStartedAt?:number;windFallUntil?:number;windFallFrom?:number;
 }
 export type RaceRoom = {
   code: string; hostToken: string; phase: RacePhase; createdAt: number; startedAt: number; endsAt: number;
   duration: number; lastTick: number; lastSpawn: number; players: Racer[]; hazards: HazardView[]; courseVersion?:number;
   logs: RaceLog[]; winnerId?: string; finishReason?: 'finish' | 'time' | 'host'; storage: 'memory' | 'redis'; revision?: number
+  wind?: WindGust;
 }
 const bank = QUESTIONS.filter(q => q.options.length === 4)
 const motor = new DuckMotor()
@@ -34,13 +38,14 @@ export function createRace(now = Date.now()): RaceRoom {
   const code = `D${randomBytes(3).toString('hex').toUpperCase()}`
   const hazards = spawnObstacles(parseInt(code.slice(1),16) || 1)
   return { code, hostToken: token(), phase: 'lobby', createdAt: now,
-    startedAt: 0, endsAt: 0, duration: RULES.duration, lastTick: now, lastSpawn: now, players: [], hazards, courseVersion:3, logs: [], storage: 'memory' }
+    startedAt: 0, endsAt: 0, duration: RULES.duration, lastTick: now, lastSpawn: now, players: [], hazards, courseVersion:COURSE_LAYOUT.version, logs: [], storage: 'memory' }
 }
 /** Upgrade persisted courses without changing player funds, progress or room identity. */
 export function ensureObstacleCourse(room:RaceRoom){
-  if(room.courseVersion===3||room.phase==='finished')return
+  // Never replace obstacles under racers halfway through an active match.
+  if(room.courseVersion===COURSE_LAYOUT.version||room.phase==='finished'||room.phase==='racing')return
   room.hazards=spawnObstacles(parseInt(room.code.slice(1),16)||1)
-  room.courseVersion=3
+  room.courseVersion=COURSE_LAYOUT.version
 }
 export function joinRace(room: RaceRoom, name: string, color: string, model: string, now = Date.now()) {
   if (room.phase !== 'lobby') throw new RaceError('Ván đua đã bắt đầu. Hãy tham gia phòng mới.')
@@ -151,7 +156,7 @@ function knock(p:Racer,x:number,y:number,now:number,obstacle=false){
  p.stunnedUntil=now+(obstacle?gearStats(p).obstacleStun:1500);p.recoveryUntil=p.stunnedUntil+1200;p.invulnerableUntil=p.recoveryUntil;p.speed=0;p.rolling=false;p.jumpUntil=0;p.jumpCount=0;p.jumpQueued=false;p.guardHeld=false
 }
 export function attackRace(room: RaceRoom, p: Racer, now = Date.now()) {
- ensureRacing(room,now);ensureActive(p);if(p.stunnedUntil>now||p.guardHeld)return
+ ensureRacing(room,now);ensureActive(p);if(p.stunnedUntil>now||p.guardHeld||p.crouching)return
   p.attackStyle=p.jumpUntil>now?'air':p.speed>.1?'run':'idle';p.attackingUntil=now+400
  const other=room.players.filter(q=>q.id!==p.id&&!q.finishedAt&&!q.capturedAt&&q.invulnerableUntil<=now&&Math.hypot(q.x-p.x,q.y-p.y)<=80).filter(q=>{const dx=q.x-p.x,dy=q.y-p.y;return dx*p.facingX+dy*p.facingY>=-2}).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0]
  if(!other)return
@@ -189,11 +194,13 @@ export function tickRace(room: RaceRoom, now = Date.now()) {
   if (now >= room.endsAt) { finishRace(room, 'time', now); return }
   const dt = Math.min(.25, Math.max(0, (now - Math.max(room.lastTick, room.startedAt)) / 1000)); room.lastTick = now
   room.hazards = room.hazards.filter(h => h.expiresAt > now)
-  if (now - room.lastSpawn >= 30_000) {
+  if (room.wind && now >= room.wind.endsAt) room.wind = undefined
+  if (now - room.lastSpawn >= WIND_RULES.intervalMs) {
     room.lastSpawn = now
     const course=room.hazards.filter(h=>h.category==='obstacle')
-    for (let i=0;i<6;i++){
-      const kind=(['whirlwind','rain','tailwind','headwind'] as const)[i%4]
+    room.wind = { id:randomUUID(),direction:randomInt(2)?1:-1,startedAt:now,endsAt:now+WIND_RULES.durationMs,strength:1 }
+    for (let i=0;i<4;i++){
+      const kind=(['whirlwind','rain'] as const)[i%2]
       // Damaging weather stays on an already blocked footprint, preserving its walk-around gap.
       const anchor=kind==='whirlwind'&&course.length?course[randomInt(course.length)]:undefined
       const worldX=anchor?.worldX??randomInt(900,WORLD-1000)
@@ -202,6 +209,7 @@ export function tickRace(room: RaceRoom, now = Date.now()) {
         position:worldX/STEP_PX,offset:worldY-trackPoint(0).y,category:'environment',kind,expiresAt:now+10000})
     }
     log(room, null, 'Môi trường thay đổi: gió, mưa và lốc bụi trong 10 giây.', 'system', now)
+    log(room,null,room.wind.direction===1?'Gió xuôi chiều →: nhảy cùng gió được đưa xa hơn.':'Gió ngược chiều ←: nhảy ngược gió bị đẩy lùi, rơi và choáng 0,3 giây.','system',now)
   }
   for (let i = 0; i < room.players.length; i++) {
     const p = room.players[i]
@@ -230,18 +238,36 @@ export function tickRace(room: RaceRoom, now = Date.now()) {
     if(input&&p.inputX)p.facingX=Math.sign(p.inputX)
     p.facingY = 0
     const airborne=p.jumpUntil>now
-    const weather=room.hazards.find(h=>h.category==='environment'&&Math.abs(h.position-p.progress)<2)
-    const wind=weather?.kind==='tailwind'?1.15:weather?.kind==='headwind'?.85:1
-    const next = motor.advance({...p,reserve:p.rollRemaining,airborne},{x:input?p.inputX:0,y:input?p.inputY:0},dt,wind)
+    const effect=windFlightStep(p,room.wind,now,dt,input?p.inputX:0)
+    if(effect.headwind&&room.wind){
+      const target=roadPosition(p.x+room.wind.direction*WIND_RULES.headwindPush,p.y)
+      let contact:number|null=null
+      for(const h of room.hazards){const t=blockingObstacleContact({...p,jumpUntil:0,crouching:false},from,target,h,now,dt);if(t!==null&&(contact===null||t<contact))contact=t}
+      const t=contact===null?1:Math.max(0,contact-.001)
+      const to=roadPosition(from.x+(target.x-from.x)*t,from.y)
+      Object.assign(p,windFallState(p,now),{knockFromX:p.x,knockFromY:p.y,knockToX:to.x,knockToY:to.y,knockStart:now,knockUntil:now+WIND_RULES.fallMs,jumpQueued:false})
+      log(room,p,'Nhảy ngược gió: bị đẩy lùi, rơi xuống và choáng 0,3 giây.','collision',now)
+      continue
+    }
+    const next = motor.advance({...p,reserve:p.rollRemaining,airborne},{x:input?p.inputX:0,y:input?p.inputY:0},dt)
+    if(effect.dx){const drift=roadPosition(next.x+effect.dx,next.y);Object.assign(next,drift)}
     p.x=next.x;p.y=next.y;p.progress=next.progress;p.lateral=next.offset;p.speed=next.speed;p.rolling=next.boosting;p.rollRemaining=next.reserve
     p.target = Math.min(100, p.progress + p.rollRemaining / STEP_PX)
-    if((p.recoveryUntil||0)<=now)for(const h of room.hazards){
+    for(const h of room.hazards){
       if(['rain','tailwind','headwind'].includes(h.kind))continue
+      if((p.recoveryUntil||0)>now&&h.category==='environment')continue
       if(h.caughtRacerId)continue
       const hp=obstaclePoint(h,now)
       if(h.kind==='catcher'&&Math.abs(hp.x-p.x)<260&&Math.abs(hp.y-p.y)<(h.spanY??40)/2+25&&!h.alertedAt)h.alertedAt=now
-      const contact=obstacleCollision(from,p,h,now,dt)
-      const avoids=clearsObstacle(p,h,now-dt*1000+(contact??1)*dt*1000)
+      const contact=blockingObstacleContact(p,from,p,h,now,dt)
+      const avoids=contact===null
+      const stopAtContact=()=>{
+        const t=Math.max(0,(contact??0)-.001),position=roadPosition(from.x+(p.x-from.x)*t,from.y+(p.y-from.y)*t)
+        p.x=position.x;p.y=position.y;p.progress=position.progress;p.lateral=position.offset
+        p.target=Math.min(100,p.progress+p.rollRemaining/STEP_PX);p.speed=0;p.rolling=false
+      }
+      // Recovery prevents repeated damage; it never makes a solid barrier passable.
+      if(contact!==null&&!avoids&&(p.recoveryUntil||0)>now){stopAtContact();break}
       if(contact!==null&&!avoids&&h.kind==='catcher'&&!p.shield){
         p.capturedAt=now;p.capturedBy=h.id;h.caughtRacerId=p.id;h.caughtAt=now
         p.x=hp.x;p.y=hp.y;p.progress=p.x/STEP_PX;p.target=p.progress;p.speed=0;p.rolling=false;p.rollRemaining=0
@@ -249,7 +275,7 @@ export function tickRace(room: RaceRoom, now = Date.now()) {
         log(room,p,'Bị người bắt vịt tóm trong lưới. Chốt '+p.points+' điểm; kết thúc lượt của bạn.','collision',now)
         break
       }
-      if(contact!==null&&!avoids){if(p.shield){p.shield--;p.recoveryUntil=now+500}else{const back=p.facingX<0?1:-1;knock(p,hp.x+back*260,p.y,now,true);log(room,p,'Va chạm: ngất rồi lùi lại trước vật cản.','collision',now)}break}
+      if(contact!==null&&!avoids){if(p.shield){p.shield--;p.recoveryUntil=now+500;stopAtContact()}else{const back=p.facingX<0?1:-1;knock(p,hp.x+back*((h.thicknessX??32)/2+62),p.y,now,true);log(room,p,'Va chạm: ngất rồi lùi lại trước vật cản.','collision',now)}break}
     }
     if (p.progress >= RULES.track) p.finishedAt = now
   }
@@ -259,12 +285,13 @@ export function snapshot(room: RaceRoom, playerId?: string, now = Date.now()): R
   const players = ranking(room).map((p, i) => ({ id: p.id, name: p.name, color: p.color, model: p.model, points: p.points,
     progress: p.progress, target: p.target, rank: i + 1, connected: p.connected, correct: p.correct, answered: p.answered,
     stunnedUntil: p.stunnedUntil, shield: p.shield, discount: p.discount, tailwind: p.tailwind, finishedAt: p.finishedAt, capturedAt:p.capturedAt,capturedBy:p.capturedBy,
+    windFallStartedAt:p.windFallStartedAt,windFallUntil:p.windFallUntil,windFallFrom:p.windFallFrom,
     x: p.x, y: p.y, lateral: p.lateral, facingX: p.facingX, facingY: p.facingY, speed: p.speed, rolling: p.rolling, rollReadyAt: p.rollReadyAt,
     gearHead:p.gearHead,gearBody:p.gearBody,mode:p.mode,jumpCount:p.jumpCount,jumpStartedAt:p.jumpStartedAt,jumpDuration:p.jumpDuration,jumpFrom:p.jumpFrom,airSpeed:p.airSpeed,guardHeld:p.guardHeld,guardUntil:p.guardUntil,parryUntil:p.parryUntil,attackStyle:p.attackStyle,recoveryUntil:p.recoveryUntil,knockUntil:p.knockUntil,
     jumpUntil: p.jumpUntil, crouching: p.crouching, attackingUntil: p.attackingUntil, invulnerableUntil: p.invulnerableUntil }))
   const p = room.players.find(p => p.id === playerId), q = p && question(p)
   return { code: room.code, phase: room.phase, serverTime: now, revision: room.revision || 0, startedAt: room.startedAt, endsAt: room.endsAt, duration: room.duration,
-    players, hazards: room.hazards, me: players.find(x => x.id === playerId),
+    players, hazards: room.hazards, wind:room.phase==='racing'?room.wind:undefined, me: players.find(x => x.id === playerId),
     question: p && !p.capturedAt && q && room.phase === 'racing' ? { id: q.id, prompt: q.prompt, options: q.options, deadline: p.questionAt + RULES.questionMs, number: p.answered + (p.answer ? 0 : 1) } : undefined,
     answer: p?.answer, starArmed: p?.starArmed, starUsed: p?.starUsed, stake: p?.stake,
     logs: (p ? p.logs : room.logs).slice(0, 50), cards: p?.cards, questionCount: bank.length, winnerId: room.winnerId, finishReason: room.finishReason, storage: room.storage }

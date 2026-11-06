@@ -1,0 +1,167 @@
+{
+  "idle/0": {
+    "head": [
+      31.29,
+      32
+    ],
+    "neck": [
+      28.29,
+      41.94
+    ],
+    "backFacing": false
+  },
+  "idle/1": {
+    "head": [
+      31.29,
+      31
+    ],
+    "neck": [
+      28.29,
+      40.94
+    ],
+    "backFacing": false
+  },
+  "idle/2": {
+    "head": [
+      31.29,
+      32
+    ],
+    "neck": [
+      28.29,
+      41.94
+    ],
+    "backFacing": false
+  },
+  "idle/3": {
+    "head": [
+      31.29,
+      33
+    ],
+    "neck": [
+      28.29,
+      42.94
+    ],
+    "backFacing": false
+  },
+  "walk_run/0": {
+    "head": [
+      30.45,
+      33
+    ],
+    "neck": [
+      27.45,
+      43.27
+    ],
+    "backFacing": false
+  },
+  "walk_run/1": {
+    "head": [
+      29.88,
+      32
+    ],
+    "neck": [
+      26.88,
+      41.93
+    ],
+    "backFacing": false
+  },
+  "walk_run/2": {
+    "head": [
+      30.94,
+      33
+    ],
+    "neck": [
+      27.94,
+      43.46
+    ],
+    "backFacing": false
+  },
+  "walk_run/3": {
+    "head": [
+      29.88,
+      32
+    ],
+    "neck": [
+      26.88,
+      41.93
+    ],
+    "backFacing": false
+  },
+  "take_damage/0": {
+    "head": [
+      32.07,
+      29
+    ],
+    "neck": [
+      29.07,
+      40.32
+    ],
+    "backFacing": false
+  },
+  "take_damage/1": {
+    "head": [
+      36.93,
+      29
+    ],
+    "neck": [
+      33.93,
+      40.91
+    ],
+    "backFacing": false
+  },
+  "fall/0": {
+    "head": [
+      34.0,
+      21
+    ],
+    "neck": [
+      31.0,
+      31.92
+    ],
+    "backFacing": false
+  },
+  "knockout/0": {
+    "head": [
+      33.07,
+      35
+    ],
+    "neck": [
+      30.07,
+      44.5
+    ],
+    "backFacing": true
+  },
+  "knockout/1": {
+    "head": [
+      36.93,
+      29
+    ],
+    "neck": [
+      33.93,
+      40.91
+    ],
+    "backFacing": false
+  },
+  "land/0": {
+    "head": [
+      28.79,
+      43
+    ],
+    "neck": [
+      25.79,
+      47.8
+    ],
+    "backFacing": false
+  },
+  "land/1": {
+    "head": [
+      30.54,
+      33
+    ],
+    "neck": [
+      27.54,
+      41.95
+    ],
+    "backFacing": false
+  }
+}

@@ -86,9 +86,11 @@ describe('Quiz Duck Race authoritative economy', () => {
     p.cards = ['shield', 'shield', 'shield']; p.nextCard = 1; correct(r, p, at + 1000); expect(p.cards).toHaveLength(3); expect(p.points).toBe(895)
   })
   it('keeps the course permanent and only spawns temporary weather every 30 seconds', () => {
-    const { r, at } = fixture(); const permanent=r.hazards.filter(h=>h.category==='obstacle').length;expect(permanent).toBeGreaterThan(50); tickRace(r, at + 30_000); expect(r.hazards).toHaveLength(permanent+6)
+    const { r, at } = fixture(); const permanent=r.hazards.filter(h=>h.category==='obstacle').length;expect(permanent).toBeGreaterThan(50); tickRace(r, at + 30_000); expect(r.hazards).toHaveLength(permanent+4)
+    // The previous two conflicting local winds are now one shared directional gust.
+    expect(r.wind?.endsAt).toBe(at+40_000);expect([-1,1]).toContain(r.wind?.direction)
     expect(r.hazards.filter(h=>h.category==='environment').every(h => h.expiresAt === at + 40_000)).toBe(true)
-    tickRace(r, at + 40_000); expect(r.hazards).toHaveLength(permanent)
+    tickRace(r, at + 40_000); expect(r.hazards).toHaveLength(permanent);expect(r.wind).toBeUndefined()
   })
   it('only moves with directional input and stops on release or stale controls', () => {
     const { r, p, at } = fixture(); const start = { x: p.x, y: p.y }
@@ -115,7 +117,7 @@ describe('Quiz Duck Race authoritative economy', () => {
       if(mode==='jump'){p.x=point.x-80;jumpRace(r,p,at)}
       if(mode==='shield')p.shield=1
       steerRace(r,p,1,0,at,mode==='crouch');tickRace(r,at+(mode==='jump'?250:100))
-      if(mode==='hit'){expect(p.stunnedUntil).toBe(at+1600);expect(p.knockToX).toBeLessThan(point.x-200)}
+      if(mode==='hit'){expect(p.stunnedUntil).toBe(at+1600);expect(p.knockToX).toBeLessThan(point.x-60);expect(p.knockToX).toBeGreaterThan(point.x-150)}
       else expect(p.stunnedUntil).toBe(0)
       if(mode==='shield')expect(p.shield).toBe(0)
     }
@@ -164,7 +166,7 @@ describe('Quiz Duck Race authoritative economy', () => {
     const {r,p,at}=fixture();const point=trackPoint(2);p.x=point.x-1;p.y=point.y
     r.hazards=[{id:'log',position:2,offset:0,kind:'hurdle',expiresAt:1e14}]
     steerRace(r,p,1,0,at);tickRace(r,at+100);tickRace(r,at+500)
-    expect(p.x).toBeLessThan(point.x-200);expect(p.recoveryUntil).toBeGreaterThan(p.stunnedUntil)
+    expect(p.x).toBeLessThan(point.x-60);expect(p.x).toBeGreaterThan(point.x-150);expect(p.recoveryUntil).toBeGreaterThan(p.stunnedUntil)
     expect(p.target-p.progress).toBeCloseTo(p.rollRemaining/STEP_PX)
     const other=fixture();steerRace(other.r,other.p,0,0,at,false,true);tickRace(other.r,at+500);expect(other.p.guardHeld).toBe(false)
   })

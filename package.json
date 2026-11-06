@@ -7,6 +7,7 @@
     "frontend"
   ],
   "scripts": {
+    "dev:phaser": "npm run dev -w frontend -- --host 127.0.0.1 --port 4538",
     "dev:duck": "concurrently -n duck-api,duck-web -c cyan,yellow \"npm run dev:duck -w backend\" \"npm run dev -w frontend -- --port 4525 --mode duck\"",
     "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
     "test": "npm run test -w backend",

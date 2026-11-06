@@ -1,4 +1,5 @@
 import { useHostAuth } from '../../shared/auth/useHostAuth'
+import { useGameSurfaceInput } from './useGameSurfaceInput'
 import { duckApiBase, duckSocketBase } from './endpoints'
 import { GoogleHostLogin } from '../../shared/auth/GoogleHostLogin'
 import { GameWebBar } from '../../shared/ui/GameWebBar'
@@ -20,6 +21,7 @@ import './duck-race.css'
 import './gameplay-v8.css'
 
 import './frames-v14.css'
+import './game-surface-input.css'
 
 type Session = { token: string; role: 'host' | 'player' }
 const sessionKey = (code: string) => `quiz-duck-race:v1:${code}`
@@ -36,6 +38,7 @@ const DEMO: RacerView[] = DUCK_COLORS.slice(0, 5).map((color, i) => ({ id: Strin
 
 export function DuckRace() { const { code = '' } = useParams(); return <DuckRaceScreen key={code} /> }
 function DuckRaceScreen() {
+  const surfaceInput = useGameSurfaceInput()
   const { code: raw = '' } = useParams(), code = raw.toUpperCase(), navigate = useNavigate()
   const [session, setSession] = useState<Session | null>(() => readSession(code)), [snap, setSnap] = useState<RaceSnapshot | null>(null)
   const [roomCode, setRoomCode] = useState(code), [name, setName] = useState(''), [color] = useState<DuckColor>('yellow'), [model] = useState<'duckee' | 'ducky'>('duckee')
@@ -140,7 +143,7 @@ function DuckRaceScreen() {
   async function copy() { try { await navigator.clipboard.writeText(`${location.origin}/duck-race/play/${code}`); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { setError('Không sao chép tự động được. Bạn có thể dùng mã phòng phía trên.') } }
   const host = session?.role === 'host', me = snap?.me, racing = snap?.phase === 'racing', finished = snap?.phase === 'finished' || !!snap?.me?.capturedAt, question = snap?.question, answer = snap?.answer
   const canAct = racing && connected && !me?.capturedAt, stepPrice = Math.ceil((me?.discount ? 40 : 50)*gearStats(me||{}).price), boostPrice = Math.ceil((me?.discount ? 120 : 150)*gearStats(me||{}).price)
-  return <main translate="no" className={`dq-shell ${racing || finished ? 'dq-playing' : ''} ${host ? 'dq-host' : 'dq-player'}`}>
+  return <main translate="no" {...surfaceInput} className={`dq-shell ${racing || finished ? 'dq-playing' : ''} ${host ? 'dq-host' : 'dq-player'}`}>
     {!code ? <GameWebBar theme="forest" logo="/assets/duck-race/lettering-ai-v5/brand-title.svg" home="/duck-race" title="Quiz Duck Race" signedIn={!!hostSession} busy={busy}
       links={[{label:'Chọn game',to:'/'},{label:'Cách chơi',onClick:()=>setRules(true)}]}
       onCreate={()=>void create()} onAccount={()=>{if(hostSession){void logout().catch(e=>setError(e.message))}else{setLoginIntent('login');setLoginOpen(true)}}}/> : <header className="dq-nav">
@@ -172,7 +175,7 @@ function DuckRaceScreen() {
       </div>}
       {snap.phase === 'countdown' && <section className="dq-countdown"><RaceTrack players={snap.players} hazards={[]} now={now} /><div><span><S text="Chuẩn bị xuất phát"/></span><strong>{Math.max(1, Math.ceil((snap.startedAt - now) / 1000))}</strong><p><S text="Giữ hướng để di chuyển. Kiếm điểm để bứt tốc."/></p></div></section>}
       {(racing || finished) && <div className={`dq-race-layout ${finished ? 'is-finished' : ''}`}>
-        <section className="dq-race-stage"><div className="dq-stage-title"><h1>{me?.capturedAt ? <S text="Lượt của bạn đã kết thúc" bold/> : finished ? <S text="Cuộc đua đã khép lại" bold/> : host ? <S text="Đường đua trực tiếp" bold/> : <><S text="Vịt của" bold/> {me?.name}</>}</h1><span>{finished ? snap.finishReason === 'finish' ? <S text="Đã có vịt cán đích"/> : <S text="Xếp hạng theo quỹ dự trữ"/> : <>{snap.players.length} <S text="vịt · Đua về đích"/></>}</span></div><RaceTrack players={snap.players} hazards={snap.hazards} now={now} serverTime={snap.serverTime} running={racing} cameraMode={cameraMode} me={host ? undefined : me?.id} intent={host ? undefined : motionIntent} compact={!host} />
+        <section className="dq-race-stage"><div className="dq-stage-title"><h1>{me?.capturedAt ? <S text="Lượt của bạn đã kết thúc" bold/> : finished ? <S text="Cuộc đua đã khép lại" bold/> : host ? <S text="Đường đua trực tiếp" bold/> : <><S text="Vịt của" bold/> {me?.name}</>}</h1><span>{finished ? snap.finishReason === 'finish' ? <S text="Đã có vịt cán đích"/> : <S text="Xếp hạng theo quỹ dự trữ"/> : <>{snap.players.length} <S text="vịt · Đua về đích"/></>}</span></div><RaceTrack players={snap.players} hazards={snap.hazards} wind={racing ? snap.wind : undefined} now={now} serverTime={snap.serverTime} running={racing} cameraMode={cameraMode} me={host ? undefined : me?.id} intent={host ? undefined : motionIntent} compact={!host} />
           {racing&&!host&&!me?.capturedAt&&<section className="dq-driving" aria-label="Điều khiển vịt"><div className="dq-dpad"><button aria-label="Đi lên W" {...controlButton('KeyW')}><S text="W" bold/></button><button aria-label="Đi trái A" {...controlButton('KeyA')}><S text="A" bold/></button><button aria-label="Đi xuống S" {...controlButton('KeyS')}><S text="S" bold/></button><button aria-label="Đi phải D" {...controlButton('KeyD')}><S text="D" bold/></button></div><div className="dq-arcade-actions"><button disabled={!canAct} onClick={() => action('jump')}><S text="Nhảy" bold/><kbd><S text="Space" bold/></kbd></button><button disabled={!racing || !connected} {...controlButton('ShiftLeft')}><S text="Giữ cúi" bold/><kbd><S text="Shift" bold/></kbd></button><button disabled={!canAct} onClick={() => action('attack')}><S text="Đánh" bold/><kbd><S text="Chuột trái" bold/></kbd></button><button disabled={!canAct} {...controlButton('MouseRight')}><S text="Đỡ đòn" bold/><kbd><S text="Chuột phải" bold/></kbd></button><button className="dq-roll-control" disabled={!canAct || (me?.points || 0) < boostPrice} onClick={() => action('buy', { kind: 'boost' })}><S text="Chạy nhanh ·" bold/> {boostPrice}<kbd><S text="E" bold/></kbd></button></div><p><S text="Vật cản ngẫu nhiên · Không có làn · Thả phím để đứng yên"/></p></section>}
           {racing&&!host&&!me?.capturedAt&&guide&&<aside className="dq-stage-guide"><p><S text="W A S D: di chuyển · Thả phím: dừng · Space: nhảy đôi · Shift: cúi"/></p><p><S text="Chuột trái: đánh · Giữ chuột phải: đỡ · E: chạy nhanh"/></p><p><S text="Bấm nút tương ứng trên màn hình khi chơi điện thoại."/></p><button onClick={()=>setGuide(false)}><S text="Đã hiểu" bold/></button></aside>}
           <div className="dq-stage-bottom">{host && <div className="dq-camera-switch" aria-label="Chế độ camera"><button className={cameraMode === 'leader' ? 'is-active' : ''} onClick={() => setCameraMode('leader')}><S text="Bám dẫn đầu" bold/></button><button className={cameraMode === 'wealth' ? 'is-active' : ''} onClick={() => setCameraMode('wealth')}><S text="Spotlight quỹ cao nhất" bold/></button></div>}<span><i className="dq-track-key" />{snap.hazards.filter(h => h.category === 'environment').length ? <S text="Chướng ngại: tránh va chạm hoặc dùng khiên."/> : <S text="Chướng ngại cố định phía trước · Môi trường thay đổi mỗi 30 giây"/>}</span>{host && racing && <button className="dq-link" onClick={() => { if (window.confirm('Kết thúc và chốt kết quả ngay?')) void action('end') }}><S text="Kết thúc sớm" bold/></button>}</div>

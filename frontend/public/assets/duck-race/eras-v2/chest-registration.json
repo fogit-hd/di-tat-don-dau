@@ -1,0 +1,74 @@
+{
+  "frameWidth": 384,
+  "frameHeight": 384,
+  "groundAnchor": [
+    192,
+    364
+  ],
+  "reference": "safe master for ALL skins",
+  "frames": [
+    {
+      "center": 261.5,
+      "base": 484,
+      "width": 353
+    },
+    {
+      "center": 252.5,
+      "base": 484,
+      "width": 355
+    },
+    {
+      "center": 247.5,
+      "base": 484,
+      "width": 355
+    },
+    {
+      "center": 264.0,
+      "base": 450,
+      "width": 352
+    },
+    {
+      "center": 251.5,
+      "base": 449,
+      "width": 347
+    },
+    {
+      "center": 240.0,
+      "base": 450,
+      "width": 346
+    }
+  ],
+  "scale": 0.6968838526912181,
+  "skins": {
+    "safe": {
+      "source": "exec-1c3cae52-05f4-4b20-be5a-e88572e3294d.png",
+      "frames": 6,
+      "closedCrop": [
+        55,
+        168,
+        331,
+        379
+      ]
+    },
+    "single": {
+      "source": "exec-45769999-2c69-46c0-a409-ff6bc40a082a.png",
+      "frames": 6,
+      "closedCrop": [
+        55,
+        168,
+        331,
+        379
+      ]
+    },
+    "explosive": {
+      "source": "exec-d23ccc8b-3721-4925-bdc6-c0b77030e8e7.png",
+      "frames": 6,
+      "closedCrop": [
+        55,
+        168,
+        331,
+        379
+      ]
+    }
+  }
+}

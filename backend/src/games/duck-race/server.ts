@@ -9,7 +9,8 @@ import Redis from 'ioredis'
 import { z } from 'zod'
 import { loadEnv } from '../../shared/load-env'
 import { allowedOrigins } from '../../shared/server-config'
-import { customizeRace, armStar, answerRace, attackRace, buyMove, createRace, finishRace, joinRace, jumpRace, playCard, RaceError, RULES, snapshot, startRace, steerRace, tickRace, type RaceRoom } from './engine'
+import { customizeRace, armStar, answerRace, attackRace, buyMove, finishRace, joinRace, jumpRace, playCard, RaceError, RULES, snapshot, startRace, steerRace, tickRace, type RaceRoom } from './engine'
+import * as experience from './experience/engine'
 
 loadEnv()
 /** Own state and simulation; can be mounted beside another game on one HTTP port. */
@@ -59,31 +60,57 @@ async function serial<T>(code: string, fn: () => Promise<T> | T): Promise<T> {
   try { return await task } finally { if (locks.get(code) === task) locks.delete(code) }
 }
 function publish(room: RaceRoom) {
-  for (const socket of ns.sockets.values()) if (socket.data.code === room.code) socket.emit('race:snapshot', snapshot(room, socket.data.playerId))
+  for (const socket of ns.sockets.values()) if (socket.data.code === room.code) socket.emit('race:snapshot', roomSnapshot(room, socket.data.playerId))
 }
+const tickRoom=(room:RaceRoom,now=Date.now())=>experience.isExperience(room)?experience.tickExperience(room,now):tickRace(room,now)
+const roomSnapshot=(room:RaceRoom,id?:string)=>experience.isExperience(room)?experience.snapshotExperience(room,id):snapshot(room,id)
 const route = (fn: (req: express.Request, res: express.Response) => Promise<unknown> | unknown): express.RequestHandler => (req, res, next) => { Promise.resolve().then(() => fn(req, res)).catch(next) }
 app.get('/api/duck-race/health', (_req, res) => res.json({ ok: true, game: 'duck-race', storage: redis ? 'redis' : 'memory' }))
 app.post('/api/duck-race/rooms', route(async (req, res) => {
   await requireHostUser(req.header('x-host-session') || '')
   if (rooms.size >= 500) throw new RaceError('Máy chủ đã đủ phòng. Vui lòng thử lại sau.', 503)
-  let room = createRace(); while (rooms.has(room.code) || redis && await redis.exists(key(room.code))) room = createRace()
+  let room:RaceRoom = experience.createExperience(); while (rooms.has(room.code) || redis && await redis.exists(key(room.code))) room = experience.createExperience()
   room.storage = redis ? 'redis' : 'memory'; await save(room); rooms.set(room.code, room)
   res.json({ code: room.code, token: room.hostToken })
 }))
 app.post('/api/duck-race/rooms/:code/join', route(async (req, res) => {
   const body = z.object({ name: z.string(), color: z.string().max(16), model: z.enum(['duckee', 'ducky']) }).parse(req.body)
   const code = String(req.params.code).toUpperCase()
-  await serial(code, async () => { const room = await find(code); const p = joinRace(room, body.name, body.color, body.model); await save(room); publish(room); res.json({ code, token: p.token, id: p.id }) })
+  await serial(code, async () => { const room = await find(code); const p = experience.isExperience(room)?experience.joinExperience(room,body.name,body.color):joinRace(room, body.name, body.color, body.model); await save(room); publish(room); res.json({ code, token: p.token, id: p.id }) })
+}))
+app.get('/api/duck-race/rooms/:code/entry',route(async(req,res)=>{
+ const room=await find(String(req.params.code));res.json(experience.roomEntry(room))
 }))
 app.get('/api/duck-race/rooms/:code', route(async (req, res) => {
-  const room = await find(String(req.params.code)); const p = viewer(room, req.header('x-duck-token') || ''); room.revision = (room.revision || 0) + 1; tickRace(room)
-  res.json(snapshot(room, p?.id))
+  const code=String(req.params.code).toUpperCase()
+  await serial(code,async()=>{const room=await find(code),p=viewer(room,req.header('x-duck-token')||'');tickRoom(room);res.json(roomSnapshot(room,p?.id))})
 }))
 app.post('/api/duck-race/rooms/:code/action', route(async (req, res) => {
-  const body = z.object({ type: z.enum(['start', 'end', 'answer', 'buy', 'star', 'card', 'jump', 'attack', 'customize']), color:z.string().optional(),model:z.string().optional(),gearHead:z.string().optional(),gearBody:z.string().optional(), questionId: z.string().max(80).optional(), choice: z.string().max(16).optional(), kind: z.string().max(16).optional(), index: z.number().int().min(0).max(2).optional() }).parse(req.body)
+  const body = z.object({ type: z.enum(['start', 'end', 'pause','resume','question','chest','target','answer', 'buy', 'star', 'card', 'jump', 'attack', 'customize']), color:z.string().max(16).optional(),model:z.string().max(16).optional(),glasses:z.string().max(16).optional(),scarf:z.string().max(16).optional(),targetId:z.string().max(80).optional(),gearHead:z.string().max(16).optional(),gearBody:z.string().max(16).optional(), questionId: z.string().max(80).optional(), choice: z.string().max(16).optional(), kind: z.string().max(16).optional(), index: z.number().int().min(0).max(2).optional() }).parse(req.body)
   const code = String(req.params.code).toUpperCase()
   await serial(code, async () => {
     const room = await find(code), p = viewer(room, req.header('x-duck-token') || '')
+    if(experience.isExperience(room)){
+      tickRoom(room)
+      if(['start','end','pause','resume'].includes(body.type)){
+        if(p)throw new RaceError('Chỉ chủ phòng được điều khiển trận.',403)
+        if(body.type==='start')experience.startExperience(room)
+        if(body.type==='end')experience.endExperience(room,'host')
+        if(body.type==='pause'||body.type==='resume')experience.pauseExperience(room,body.type==='pause')
+      }else{
+        if(!p)throw new RaceError('Chủ phòng không tham gia trả lời.',403)
+        switch(body.type){
+          case 'question':experience.openQuestion(room,p);break
+          case 'answer':experience.submitAnswer(room,p,body.questionId||'',body.choice||'');break
+          case 'star':experience.armHope(room,p);break
+          case 'chest':experience.chooseChest(room,p,body.kind||'');break
+          case 'target':experience.chooseTarget(room,p,body.targetId||'');break
+          case 'customize':experience.customizeExperience(room,p,body);break
+          default:throw new RaceError('Phòng này dùng điểm để xếp vị trí, không còn điều khiển hoặc mua quãng đường.')
+        }
+      }
+      await save(room);publish(room);res.json(roomSnapshot(room,p?.id));return
+    }
     if (body.type === 'start' || body.type === 'end') {
       if (p) throw new RaceError('Chỉ chủ phòng được điều khiển ván đua.', 403)
       if (body.type === 'start') startRace(room); else finishRace(room, 'host')
@@ -97,7 +124,7 @@ app.post('/api/duck-race/rooms/:code/action', route(async (req, res) => {
       if (body.type === 'jump') jumpRace(room, p)
       if (body.type === 'attack') attackRace(room, p)
     }
-    await save(room); publish(room); res.json(snapshot(room, p?.id))
+    await save(room); publish(room); res.json(roomSnapshot(room, p?.id))
   })
 }))
 ns.use(async (socket, next) => {
@@ -112,7 +139,7 @@ ns.on('connection', socket => {
   if (p) p.connected = true; publish(room)
   let lastInput = 0, lastDirections = ''
   socket.on('race:input', (input: unknown) => {
-    const now = Date.now(); if (!p) return
+    const now = Date.now(); if (!p||experience.isExperience(room)) return
     const parsed = z.object({ x: z.number().int().min(-1).max(1), y: z.number().int().min(-1).max(1), crouch: z.boolean().optional(),guard:z.boolean().optional() }).safeParse(input)
     if (parsed.success) {
       const directions = `${parsed.data.x}:${parsed.data.y}:${!!parsed.data.crouch}:${!!parsed.data.guard}`
@@ -142,11 +169,13 @@ async function start() {
     const now = Date.now(); count++
     for (const [code, room] of rooms) {
       if (now - room.createdAt > 7200_000) { rooms.delete(code); continue }
-      void serial(code, async () => { tickRace(room, now); if (count % 2 === 0) publish(room); if (count % 20 === 0) await save(room) }).catch(e => console.error('[duck-race tick]', e))
+      void serial(code, async () => { tickRoom(room, now); if (count % 2 === 0) publish(room); if (count % 20 === 0) await save(room) }).catch(e => console.error('[duck-race tick]', e))
     }
   }, RULES.tickMs)
 }
 function stop() { if (timer) clearInterval(timer); timer = undefined; redis?.disconnect() }
-return { app, io, start, stop }
+// In-process lifecycle/state handles also support isolated integration fixtures.
+// They are never exposed as HTTP routes or socket messages.
+return { app, io, start, stop, rooms }
 }
 

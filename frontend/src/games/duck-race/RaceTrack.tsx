@@ -1,8 +1,9 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { AnimatedSprite, Application, Assets, ColorMatrixFilter, Container, Sprite, Text, type Texture, type Spritesheet } from 'pixi.js'
 import { gsap } from 'gsap'
-import type { HazardView, RacerView } from './contracts'
+import type { HazardView, RacerView, WindGust } from './contracts'
 import { flightHeight } from './contracts'
+import { windStrength } from './wind'
 
 import { WORLD, ROAD_Y, ROAD_HALF_WIDTH, trackPoint, terrainAt, obstaclePoint, beamHeight } from './track'
 import { FollowCamera } from './camera'
@@ -11,9 +12,9 @@ import { GearRig } from './GearRig'
 import { TerrainEffects } from './TerrainEffects'
 import { ObstacleArt } from './ObstacleArt'
 type DuckNode = { node: Container; sprite: AnimatedSprite; label: Text; ripple: Sprite; x: number; y: number; state: string; key: string; motion: MotionBuffer; poseAt: number; plate: Sprite; marker?: Sprite; wasAirborne: boolean; landingUntil: number; facing: number; flash: ColorMatrixFilter; gear: GearRig }
-export function RaceTrack({ players, hazards, now, me, intent, compact = false, running = false, serverTime = now, cameraMode = 'leader' }: { players: RacerView[]; hazards: HazardView[]; now: number; me?: string; intent?: RefObject<LocalIntent>; compact?: boolean; running?: boolean; serverTime?: number; cameraMode?: 'leader' | 'wealth' }) {
-  const mount = useRef<HTMLDivElement>(null), state = useRef({ players, hazards, now, me, running, serverTime, cameraMode, intent })
-  useEffect(() => { state.current = { players, hazards, now, me, running, serverTime, cameraMode, intent } }, [players, hazards, now, me, running, serverTime, cameraMode, intent])
+export function RaceTrack({ players, hazards, now, me, intent, wind, compact = false, running = false, serverTime = now, cameraMode = 'leader' }: { players: RacerView[]; hazards: HazardView[]; now: number; wind?:WindGust; me?: string; intent?: RefObject<LocalIntent>; compact?: boolean; running?: boolean; serverTime?: number; cameraMode?: 'leader' | 'wealth' }) {
+  const mount = useRef<HTMLDivElement>(null), state = useRef({ players, hazards, now, me, running, serverTime, cameraMode, intent,wind })
+  useEffect(() => { state.current = { players, hazards, now, me, running, serverTime, cameraMode, intent,wind } }, [players, hazards, now, me, running, serverTime, cameraMode, intent,wind])
   useEffect(() => {
     let disposed = false, ready = false, resizeObserver:ResizeObserver|undefined
     const app = new Application(), nodes = new Map<string, DuckNode>(), world = new Container({ interactiveChildren: false, sortableChildren:true })
@@ -80,18 +81,18 @@ export function RaceTrack({ players, hazards, now, me, intent, compact = false, 
           const local=p.id===current.me?current.intent?.current:undefined
           const weather=current.hazards.find(h=>h.category==='environment'&&Math.abs(h.position-p.progress)<2)
           const wind=weather?.kind==='tailwind'?1.15:weather?.kind==='headwind'?.85:1
-          const position=current.running&&local?reconcileLocal(duck,predictLocal(p,current.serverTime,frameClock,local,wind),local,dt,p.stunnedUntil>frameClock):duck.motion.sample(current.running?frameClock-110:current.serverTime)
+          const position=current.running&&local?reconcileLocal(duck,predictLocal(p,current.serverTime,frameClock,local,wind,current.wind),local,dt,p.stunnedUntil>frameClock):duck.motion.sample(current.running?frameClock-110:current.serverTime)
           duck.x=position.x;duck.y=position.y;duck.node.visible=true
           duck.node.zIndex=duck.y
           if(p.capturedAt){duck.node.visible=false;duck.node.position.set(p.x,p.y);continue}
           duck.label.visible=duck.plate.visible=!current.me
           if(duck.key!==key){duck.key=key;duck.state='';duck.poseAt=frameClock}
-          const end=p.jumpUntil,airborne=end>frameClock,elapsedJump=Math.max(0,frameClock-(p.jumpStartedAt||end-(p.jumpDuration||1100))),mode=terrainAt(duck.x,duck.y)
+          const end=p.jumpUntil,windFalling=(p.windFallUntil||0)>frameClock,airborne=end>frameClock||windFalling,elapsedJump=Math.max(0,frameClock-(p.jumpStartedAt||end-(p.jumpDuration||1100))),mode=terrainAt(duck.x,duck.y)
           if(duck.wasAirborne&&!airborne)duck.landingUntil=frameClock+140
           duck.wasAirborne=airborne
           const moving=current.running&&p.speed>.1&&p.stunnedUntil<=frameClock
           const crouch=!airborne&&(local?local.crouch:p.crouching)
-          const action=p.stunnedUntil>frameClock?'knockout':p.attackingUntil>frameClock?`attack_${p.attackStyle||'idle'}`:p.guardHeld?'guard':airborne?(p.jumpCount||1)>1?'double_jump':jumpPose(elapsedJump):mode==='water'?moving?'swim':'swim_idle':crouch?moving?'crawl':'crouch':duck.landingUntil>frameClock?'land':moving?p.rolling?'roll':mode==='mud'?'mud_walk':'walk_run':'idle'
+          const action=windFalling?'fall':p.stunnedUntil>frameClock?'knockout':p.attackingUntil>frameClock?`attack_${p.attackStyle||'idle'}`:p.guardHeld?'guard':airborne?(p.jumpCount||1)>1?'double_jump':jumpPose(elapsedJump):mode==='water'?moving?'swim':'swim_idle':crouch?moving?'crawl':'crouch':duck.landingUntil>frameClock?'land':moving?p.rolling?'roll':mode==='mud'?'mud_walk':'walk_run':'idle'
           if(duck.state!==action){duck.state=action;duck.poseAt=frameClock;const frames=clips.get(`${key}/${action}`)||clips.get(`${key}/idle`)!;duck.sprite.textures=action==='crouch'?[frames[frames.length-1]]:frames}
           const count=duck.sprite.textures.length,elapsed=(frameClock-duck.poseAt)/1000
           const frame=reduced?0:action.startsWith('attack_')?Math.max(0,Math.min(count-1,Math.floor((400-Math.max(0,p.attackingUntil-frameClock))/400*count))):action==='knockout'?Math.min(count-1,Math.floor(elapsed*10)):action==='jump'?Math.min(count-1,Math.floor(elapsedJump/160*count)):action==='land'?Math.min(count-1,Math.floor(elapsed/.14*count)):Math.floor(elapsed*(action==='roll'?14:action==='air'?7:action==='idle'?6:action==='mud_walk'||action==='swim_idle'?5:10))%count
@@ -125,7 +126,11 @@ export function RaceTrack({ players, hazards, now, me, intent, compact = false, 
         const visible=new Set<string>(),left=-world.x/scale-250,right=(viewWidth-world.x)/scale+250
         obstacleArt?.begin()
         const obstaclePositions:{id:string;worldX:number;worldY:number;screenX:number;screenY:number;lane?:number;rowId?:string;freeLane?:number}[]=[]
-        for(const h of current.hazards){
+        const gust=current.running?current.wind:undefined
+        const gustPower=windStrength(gust,frameClock)
+        const renderedHazards:HazardView[]=gust&&gustPower>0?[...current.hazards,{id:gust.id,category:'environment',kind:gust.direction===1?'tailwind':'headwind',
+          worldX:position.x,worldY:ROAD_Y,position:position.x/600,offset:0,expiresAt:gust.endsAt}]:current.hazards
+        for(const h of renderedHazards){
           const p=obstaclePoint(h,frameClock)
           if(['rain','headwind','tailwind'].includes(h.kind))p.y=ROAD_Y
           if(p.x<left||p.x>right)continue
@@ -157,6 +162,7 @@ export function RaceTrack({ players, hazards, now, me, intent, compact = false, 
           const image=node.children[1];if(image instanceof AnimatedSprite)image.gotoAndStop(reduced||h.kind==='rock'?0:Math.floor(frameClock/110)%image.totalFrames)
           if(h.kind==='headwind')image.scale.x=-Math.abs(image.scale.x)
           node.alpha=h.category==='environment'?Math.max(0,Math.min(1,(h.expiresAt-current.now)/500)):1
+          if(h.id===gust?.id)node.alpha=gustPower
         }
         for(const [id,node] of hazardNodes)if(!visible.has(id)){node.destroy({children:true});hazardNodes.delete(id)}
         obstacleArt?.end()

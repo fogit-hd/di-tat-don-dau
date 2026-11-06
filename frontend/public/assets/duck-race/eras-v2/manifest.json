@@ -1,0 +1,189 @@
+{
+  "status": "Review only. Not activated in live rooms.",
+  "style": "Semi-realistic hand-painted 2D. Original duckee sprites retained.",
+  "secondsPerEra": 120,
+  "matchSeconds": 720,
+  "capacity": 7,
+  "eras": [
+    {
+      "id": 1,
+      "name": "Hơi nước & cơ khí",
+      "road": "Đất nện",
+      "roadPixels": [
+        480,
+        660
+      ],
+      "terrain": "exec-605b753d-92eb-4dae-b37b-e7044c313276.png",
+      "architecture": "exec-0b7fb28a-e4a5-4c30-8bc6-cf991a1f5d72.png"
+    },
+    {
+      "id": 2,
+      "name": "Điện & sản xuất hàng loạt",
+      "road": "Nhựa đường",
+      "roadPixels": [
+        483,
+        659
+      ],
+      "terrain": "exec-c3ff8e31-d6fa-4f58-aca7-c7d95830bca6.png",
+      "architecture": "exec-14b1aed5-56b6-4022-90e1-b44ed12e8024.png"
+    },
+    {
+      "id": 3,
+      "name": "Điện tử & tự động hóa",
+      "road": "Bê tông công nghiệp",
+      "roadPixels": [
+        469,
+        645
+      ],
+      "terrain": "exec-cce13e56-534c-4e19-b382-1a9215fd625e.png",
+      "architecture": "exec-8ab70581-fee2-4311-a2b0-19e324d7ef4b.png"
+    },
+    {
+      "id": 4,
+      "name": "Nhà máy thông minh",
+      "road": "Vật liệu công nghiệp xanh đậm",
+      "roadPixels": [
+        470,
+        647
+      ],
+      "terrain": "exec-48f58706-490a-402a-8344-b490b84084d9.png",
+      "architecture": "exec-0dd871af-cfd6-48ac-aac8-ce9bed5d9bc1.png"
+    },
+    {
+      "id": 5,
+      "name": "Cộng tác & phát triển bền vững",
+      "road": "Vật liệu tái chế màu sáng",
+      "roadPixels": [
+        456,
+        637
+      ],
+      "terrain": "exec-ca966a46-37ea-4435-a5da-60a8ffc9be63.png",
+      "architecture": "exec-e2b4bc97-4df6-47b7-b0f3-b513fe0a4ff8.png",
+      "speculative": true
+    },
+    {
+      "id": 6,
+      "name": "Sản xuất thích ứng & tuần hoàn",
+      "road": "Gạch tái chế & nền thép",
+      "roadPixels": [
+        511,
+        651
+      ],
+      "terrain": "exec-04b68046-3322-4521-8547-cff8195edb47.png",
+      "architecture": "exec-75c0d20d-26c8-4e4d-84e2-e3389c40f134.png",
+      "speculative": true
+    }
+  ],
+  "dust": "exec-454ea6a5-1f4c-428f-b776-66e80014dc1c.png",
+  "chests": {
+    "safe": "exec-1c3cae52-05f4-4b20-be5a-e88572e3294d.png",
+    "single": "exec-45769999-2c69-46c0-a409-ff6bc40a082a.png",
+    "explosive": "exec-d23ccc8b-3721-4925-bdc6-c0b77030e8e7.png"
+  },
+  "chestFx": "exec-8b80efd3-1569-44fc-8e5d-9f5cfd7f2fed.png",
+  "geometryPolicy": "Same six-frame master chest shape for all three skins. Ordinary oak, chains, human skull. Earlier tall/short/different-form variants discarded.",
+  "prompts": {
+    "terrain": [
+      [
+        "terrain-1",
+        "ERA1 STEAM AGE environment: rural nineteenth-century countryside, hazy blue sky, gold/olive fields and deciduous trees at far edges, warm ochre foundation terrace. Running strip is packed rough BROWN DIRT with tiny embedded stones and subtle cart wear, no holes, mossy grass fringe; foreground clearly exposed brown dirt and stone. Rustic and warm, no modern technology."
+      ],
+      [
+        "terrain-2",
+        "ERA2 ELECTRIC MASS-PRODUCTION environment: amber/cream sky over distant urban haze, tidy clipped shrubs and simple brick perimeter edging, empty terracotta factory-yard foundation terrace. Running strip is DARK GREY ASPHALT with aggregate texture, stone curb edges, no road markings, no rails; foreground compact gravel and brick retaining material. Distinct grey asphalt versus previous dirt, disciplined early twentieth century."
+      ],
+      [
+        "terrain-3",
+        "ERA3 ELECTRONIC AUTOMATION environment: cool blue daylight, distant pine-covered hills and landscaped geometric shrubs, empty grey industrial foundation terrace. Running strip is LIGHT GREY CONCRETE slabs with expansion seams, yellow safety trim only at the outer back/front edges, no lane lines; foreground concrete retaining wall over brown rock. Crisp 1970s/1980s technological atmosphere, no futuristic neon."
+      ],
+      [
+        "terrain-4",
+        "ERA4 CONNECTED SMART-INDUSTRY environment: deep blue/cyan dusk sky with soft pale clouds, clean green landscaping, unobstructed dark campus foundation terrace. Running strip is smooth NAVY BLUE industrial composite surface with subtle blue light strips along its top/bottom OUTER borders, no lane markings; foreground dark engineered foundation with small conduit details. Modern smart-campus ambiance, clearly distinct from daylight concrete."
+      ],
+      [
+        "terrain-5",
+        "ERA5 HUMAN-ROBOT REGENERATIVE FUTURE environment, explicitly speculative game world: warm peach morning sky, rolling planted terraces, lush gentle moss and flowering green embankments; empty foundation terrace for separate biophilic buildings. Running strip is PEARL WHITE / warm ivory recycled composite paving with faint organic hexagonal texture, green living edge trims at top/bottom; foreground layered planted retaining earth and pale ceramic support. Optimistic soft natural green/ivory, not neon cyberpunk, not water."
+      ],
+      [
+        "terrain-6",
+        "ERA6 FAR-FUTURE GAME FANTASY environment: violet-indigo twilight sky with a subtle aurora and small distant moon, abstract crystalline mountain horizon, empty sleek foundation terrace for separate futuristic architecture. Running strip is DARK PURPLE OBSIDIAN-like engineered paving with delicate GOLD and VIOLET luminous circuit filaments embedded in the material, outer edges edged in amethyst, no obstacles or road lane lines. Foreground crystalline purple geological layers with gold mineral seams. Ground remains solid and horizontal, no floating roads/platforms."
+      ]
+    ],
+    "architecture": [
+      [
+        "architecture-1",
+        "ERA1 STEAM AND MECHANIZATION, rustic nineteenth century, RED BRICK / OAK / COPPER, charming irregular rooflines. TOP LEFT: tall multi-storey brick textile mill with two smoking brick chimneys. TOP RIGHT: oak-and-brick waterwheel engine house with big visible wheel. BOTTOM LEFT: copper steam-engine pavilion with large flywheel and chimney. BOTTOM RIGHT: compact clock-tower brick workshop with arched windows. Material details must evoke coal steam engineering, no wires, robots, glass towers or modern machinery."
+      ],
+      [
+        "architecture-2",
+        "ERA2 ELECTRIC MASS PRODUCTION, early twentieth century. BROWN BRICK / GREY STEEL / CREAM STONE, monumental angular industrial silhouettes. TOP LEFT: enormous wide saw-tooth-roof steel assembly hall with smokestacks. TOP RIGHT: Art Deco electricity power station with exposed transformer towers and thick insulators. BOTTOM LEFT: assembly-line factory wing with repeated large windows, steel gantry and production line visible, no readable signage. BOTTOM RIGHT: tall monumental Art Deco brick-and-stone clock administration tower. Must look much more geometric, large-scale and electrified than rustic steam mills."
+      ],
+      [
+        "architecture-3",
+        "ERA3 ELECTRONICS AND COMPUTER AUTOMATION, 1970s-1990s. PALE GREY CONCRETE / TEAL GLASS / ORANGE MECHANICAL DETAILS, rectilinear mid-rise architecture. TOP LEFT: flat-roof concrete electronics control centre with large CRT consoles visible through glazing and roof satellite dish. TOP RIGHT: squat robot assembly workshop showing two orange industrial robotic arms through square windows. BOTTOM LEFT: computer server/control tower with antenna mast and rooftop communications dishes. BOTTOM RIGHT: semiconductor/electronics cleanroom building with ventilation ducts and square blue windows. No brick steam chimneys, no organic futuristic towers."
+      ],
+      [
+        "architecture-4",
+        "ERA4 INDUSTRY4.0 CONNECTED SMART FACTORIES, contemporary sleek buildings. NAVY METAL / CYAN GLASS / BLUE LIGHT, strong clear modern geometric silhouettes. TOP LEFT: large angular glass smart-factory pavilion with robotic arms and conveyor visible, solar-panel roof, cyan luminous connection nodes. TOP RIGHT: tall dark data-centre tower with server lights and rooftop 5G antenna. BOTTOM LEFT: automated logistics hub with clean loading dock and tiny stationary robotic cargo units inside. BOTTOM RIGHT: sleek digital research/operations tower with panoramic glazing and sensor arrays. Modern sophisticated tech, no floating pieces, no text."
+      ],
+      [
+        "architecture-5",
+        "ERA5 HUMAN-ROBOT REGENERATIVE FUTURE, speculative optimistic world. PEARL WHITE / SAGE GREEN / WARM GOLD, ORGANIC CURVED SILHOUETTES and living architecture. TOP LEFT: large flowing white arch-roof human-robot co-creation pavilion, planted roof and warm windows. TOP RIGHT: tiered rounded vertical-garden tower covered in vines and flowers with golden support ribs. BOTTOM LEFT: transparent biodome with greenery and elegant white structural ribs. BOTTOM RIGHT: curved ceramic circular renewable-energy research building with leaf-shaped roof and small solar surfaces. Must be radically more organic, greener and softer than square blue smart factories. No people or robots outside."
+      ],
+      [
+        "architecture-6",
+        "ERA6 FAR-FUTURE SCIENCE-FI GAME WORLD, speculative not historical. AMETHYST / IRIDESCENT SILVER / GOLD / LAVENDER LIGHT, striking sculptural crystalline and ring-shaped silhouettes. TOP LEFT: tall crystalline computational spire with faceted silver-violet surfaces and gold structural ribs. TOP RIGHT: solid-ground-supported enormous circular ring research facility on two curved supports with luminous inner lavender detailing; keep building whole. BOTTOM LEFT: low faceted quantum-energy pavilion with purple core visible through translucent walls. BOTTOM RIGHT: biomorphic silver-gold multilobed future observatory with crystalline roof crowns. Extraordinary distant-future architecture, clearly not just another present-day factory. No spaceships, floating buildings or roads, all structures grounded."
+      ]
+    ],
+    "groundedRevisions": [
+      [
+        "architecture-2b",
+        true,
+        "Transparent sprite atlas, FOUR separate historically plausible EARLY20TH CENTURY ELECTRIFIED INDUSTRIAL buildings in 2x2 grid with wide transparent gutters. Restrained near-realistic hand-painted 2D strategy-game architecture, front view with a little side/roof, upper-left daylight, matte weathered materials, not toy-like or glossy, no text/numbers, no scenery, each building on narrow foundation/contact shadow, true transparent alpha. Top-left large sawtooth-roof steel-and-brick assembly factory, top-right Art Deco electricity substation with ceramic insulators and transformers, bottom-left long riveted-steel production hall showing BELT DRIVES AND MECHANICAL ASSEMBLY WORKBENCHES (NO robotic arms, no computers, no modern machinery), bottom-right brick/cream-stone clock administration tower. RED/BROWN BRICK, grey steel and cream stone. All four sprites fully within individual cells."
+      ],
+      [
+        "architecture-5b",
+        true,
+        "Transparent production architectural sprite atlas, FOUR different buildings in a 2x2 grid with wide transparent gutters. Restrained near-realistic HAND-PAINTED 2D industrial game art, credible architectural proportions and construction, matte unglamorous materials, no fantasy, no excessive ornaments, no neon, no glow, NO TEXT, no people, no scenery. Identical front/very shallow side-view camera, upper-left warm daylight, grounded foundations/contact shadows, each sprite fully separate on transparent alpha. ERA5 HUMAN-CENTERED SUSTAINABLE MANUFACTURING, a plausible near-future scenario: top-left broad timber-and-steel co-creation factory with large ordinary glass windows and greenery on roof; top-right rectangular terraced mid-rise office/laboratory with planted balconies and exposed timber sun shades; bottom-left practical metal-and-glass agricultural research greenhouse with brick base and plants; bottom-right compact low energy workshop with timber facade, solar roof and plain white walls. Distinct visual identity: honest wood, warm white, green vegetation. NO flowing fantasy arches, golden vines, crystalline spires, portals or magic."
+      ],
+      [
+        "architecture-6b",
+        true,
+        "Transparent production architectural sprite atlas, FOUR separate large buildings arranged in 2x2 grid, generous transparent gutters, each sprite fully inside cell, true transparent alpha. Near-realistic restrained HAND-PAINTED 2D industry game art, matte weathered steel, practical concrete and clear windows, correct engineering structure, no sci-fi fantasy, no exaggerated glow, NO TEXT, no people, no background. Same near-front shallow side camera with a little roof/side visible, daylight upper-left, solid narrow foundations and contact shadow. ERA6 ADAPTIVE CIRCULAR MANUFACTURING, a speculative but engineering-grounded industrial future: top-left tall dense modular WHITE/steel vertical manufacturing tower with visible external service modules and solar roof; top-right substantial industrial thermal-storage/recycling plant with cylindrical SILVER TANKS, pipework and concrete platform; bottom-left large cream-coloured repair/remanufacturing hangar with visible material-recovery equipment inside through ordinary windows; bottom-right rectilinear layered vertical-farm/research building with green growing racks behind glazing and external steel bracing. Palette cool off-white concrete, silver steel, muted rust-red and dark green accents. Silhouettes tall, modular and infrastructure-heavy, clearly different from timber eco-buildings and blue glass campuses. Absolutely no crystals, portals, floating shapes, rainbow energy or mystical architecture."
+      ],
+      [
+        "terrain-6b",
+        false,
+        "One production 16:9 1600x900 background ENVIRONMENT PLATE for a horizontal 2D running game. Restrained near-realistic HAND-PAINTED industrial environment, grounded plausible engineering, matte materials, NOT photorealistic, not toy-like or fantasy. NO prominent buildings (separate sprites will be added), no characters, ducks, text, HUD, vehicles or obstacles. Composition: cool pale OVERCAST sky above distant muted coastal/hill landscape and industrial greenery; open empty grey maintenance/foundation terrace up to y48%; a perfectly STRAIGHT HORIZONTAL running strip at y48%-68% made from RED-BROWN recycled brick / paver material with fine aggregate, dark metal edge trim only at back/front, no lane lines; foreground cross-section y68%-100% shows practical modular steel-and-concrete retaining foundation with utilitarian conduits and muted rust-red panels. Side-view camera slightly looking down at road, NOT top-down, not isometric, no path receding into depth. ERA6 CIRCULAR ADAPTIVE INDUSTRY, speculative but credible: no purple crystals, aurora, neon circuits, fantasy glow or floating platforms. Spacious clear racing surface across fullwidth."
+      ]
+    ],
+    "commonChestEdits": [
+      [
+        "chest-chain-common-v5",
+        "EDIT THE SUPPLIED SIX-FRAME CHEST SPRITE SHEET. Treat this sheet as the LOCKED GEOMETRY MASTER. Preserve exact 3x2 cell layout, chest height/width/proportions, rounded wooden lid curvature, body shape, feet/ground baseline, frame placement, camera, perspective, lighting and the six lid-opening poses. DO NOT make it taller, shorter, wider, narrower, flatter or more angular. This is the SAME wooden chest with a different exterior skin, not a new model. Keep true transparent alpha background. All six chest bodies must stay same-size and same-form as the supplied ordinary wooden chest. No text/numbers/scene. Add only thick IRON CHAINS and a dark iron clasp to the exterior of the exact master chest. Keep original oak wood shape and curved lid, slightly weathered dark straps. In frames1-2 the chains cross the front and wrap around the lid; frame3 clasp releases and chain slackens; frames4-6 chains hang naturally down the two sides and pool just beside base while lid opens exactly as reference. Chain ornament must not hide the fact this is the SAME normal-height rounded wooden chest, not a tall flat cube."
+      ],
+      [
+        "chest-skull-common-v5",
+        "EDIT THE SUPPLIED SIX-FRAME CHEST SPRITE SHEET. Treat this sheet as the LOCKED GEOMETRY MASTER. Preserve exact 3x2 cell layout, chest height/width/proportions, rounded wooden lid curvature, body shape, feet/ground baseline, frame placement, camera, perspective, lighting and the six lid-opening poses. DO NOT make it taller, shorter, wider, narrower, flatter or more angular. This is the SAME wooden chest with a different exterior skin, not a new model. Keep true transparent alpha background. All six chest bodies must stay same-size and same-form as the supplied ordinary wooden chest. No text/numbers/scene. Add a large clearly HUMAN SKULL ornament to the front panel, centered BELOW the latch and entirely within the front panel boundaries so overall chest dimensions remain exact. Skull: off-white carved human cranium, eye sockets, nose and teeth, non-gory with no blood. Make the wood/iron finish slightly soot-dark and reddish but preserve the SAME rounded wooden chest's geometry and all six lid angles exactly. The skull stays fixed to the body in all frames, not on the moving lid. No chains, no spikes extending beyond silhouette, no magical glow."
+      ]
+    ],
+    "safeAndFx": [
+      [
+        "chest-safe-v4",
+        "A production animation sprite sheet for a restrained SEMI-REALISTIC HAND-PAINTED 2D game, realistic matte materials and coherent physical construction, not photorealistic, not overly glossy. True transparent alpha background. EXACTLY SIX FRAMES in a THREE-column by TWO-row grid, equal cells and large empty transparent gutters. SAME chest in all six frames, exact identical body proportions, size, colour, perspective, light and bottom-centre registration in every cell. Fixed near-front camera showing a little top/right side, light upper-left. Body remains still; only latch/hinged lid/accessories move. Frame1 closed; frame2 unlocking; frame3 lid opens15deg; frame4 lid opens45deg; frame5 lid opens85deg; frame6 lid settled open90deg. Lid always attached to back hinge. Enough headroom and side padding so NOTHING touches cell edges. No text/numbers/borders/scene/people/ducks, no emitted FX. SAFE CHEST: a SIMPLE ORDINARY low warm OAK wooden treasure chest, gently rounded wooden lid, thin worn dark iron corner straps and one small plain brass latch. Plain wood front with NO emblem, no chains, no skull, NO lavish gold decoration, no jewels. Practical modest proportions, natural unpolished wood grain. Open interior contains a few gold coins and a folded plain paper reward."
+      ],
+      [
+        "chest-single-v4",
+        "A production animation sprite sheet for a restrained SEMI-REALISTIC HAND-PAINTED 2D game, realistic matte materials and coherent physical construction, not photorealistic, not overly glossy. True transparent alpha background. EXACTLY SIX FRAMES in a THREE-column by TWO-row grid, equal cells and large empty transparent gutters. SAME chest in all six frames, exact identical body proportions, size, colour, perspective, light and bottom-centre registration in every cell. Fixed near-front camera showing a little top/right side, light upper-left. Body remains still; only latch/hinged lid/accessories move. Frame1 closed; frame2 unlocking; frame3 lid opens15deg; frame4 lid opens45deg; frame5 lid opens85deg; frame6 lid settled open90deg. Lid always attached to back hinge. Enough headroom and side padding so NOTHING touches cell edges. No text/numbers/borders/scene/people/ducks, no emitted FX. SINGLE-TARGET RISK CHEST: a TALLER, nearly square heavy dark GREEN-GREY reinforced wooden chest, flat hinged lid, VERY CLEAR THICK IRON CHAINS wrapped diagonally around the closed body and lid, large iron clasp on front. Chain shape must be readable at icon scale. No skull, no gold ornament. Frame1 chains secured; frame2 clasp unlocks; frame3 chains become slack and fall to sides; frames4-6 open lid with the SAME chains now hanging down sides and on base, do NOT vanish. Chest front has visible metal corner plates. Interior dark, a rolled parchment event visible. Different silhouette/material from a low plain oak chest."
+      ],
+      [
+        "chest-explosive-v4",
+        "A production animation sprite sheet for a restrained SEMI-REALISTIC HAND-PAINTED 2D game, realistic matte materials and coherent physical construction, not photorealistic, not overly glossy. True transparent alpha background. EXACTLY SIX FRAMES in a THREE-column by TWO-row grid, equal cells and large empty transparent gutters. SAME chest in all six frames, exact identical body proportions, size, colour, perspective, light and bottom-centre registration in every cell. Fixed near-front camera showing a little top/right side, light upper-left. Body remains still; only latch/hinged lid/accessories move. Frame1 closed; frame2 unlocking; frame3 lid opens15deg; frame4 lid opens45deg; frame5 lid opens85deg; frame6 lid settled open90deg. Lid always attached to back hinge. Enough headroom and side padding so NOTHING touches cell edges. No text/numbers/borders/scene/people/ducks, no emitted FX. EXPLOSIVE MULTI-TARGET RISK CHEST: a WIDE weathered CHARCOAL-BLACK WOODEN chest with a more angular domed lid, dark reddish wood edges, thick iron fittings and a LARGE unmistakeable HUMAN SKULL ornament fixed to FRONT CENTRE. Skull is off-white carved bone, anatomically human rounded cranium/eye sockets/nasal opening/teeth, non-gory, no blood, no human figure. Skull remains fixed to body in every frame and MUST be visually prominent. No chains. Subtle dull red fabric inside; no flame or magical glow. Distinct black/red silhouette and skull unlike the other two chests."
+      ],
+      [
+        "chest-risk-fx-v4",
+        "Transparent 2D semi-realistic hand-painted game VFX PROP ATLAS, exactly EIGHT separate small sprites in a 4 columns x 2 rows equal grid, large transparent gutters, clean alpha, no text, background or borders. Natural matte material and consistent upper-left light, not photorealistic, no exaggerated neon/glow, no people or blood. Row1: small gold coin face; pair of tilted gold coins; single thick dark iron chain link; three dark iron chain links falling apart. Row2: low grey-brown dust puff; small unrolled cream parchment scroll with NO WRITING; small cluster of dull amber latch friction sparks; small off-white HUMAN SKULL ornament shard/emblem (non-gory carved bone object). All wholly contained in cells. These props animate out from opening chests, alongside clear event UI."
+      ]
+    ]
+  }
+}

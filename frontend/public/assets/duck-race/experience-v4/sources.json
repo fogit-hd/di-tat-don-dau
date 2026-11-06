@@ -1,0 +1,492 @@
+{
+  "sources": {
+    "landing": "exec-c0127fb5-32f7-4401-8a76-3a4990847954.png",
+    "hero-title": "exec-d1a30904-f96d-4a44-a39b-877905a796a2.png",
+    "invite": "exec-90abbb5b-b34a-4d1b-9306-861ff2f4e4ff.png",
+    "plates": "exec-f88f8e78-2583-4b44-8b80-0805b661e244.png",
+    "cosmetics": "exec-929f6d6a-2434-4ffa-a6a3-8b74e71a8a38.png"
+  },
+  "native": [
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\idle\\0.png",
+      "sha256": "fd5ab59bb81e84020f19088c192fe0013bc22c98006ca5effd133f1efc63a199"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\idle\\1.png",
+      "sha256": "26e5aece1dfde78e39f46f59b2d6399cb7cf6126901c0568b9e66cdd96787651"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\idle\\2.png",
+      "sha256": "fd5ab59bb81e84020f19088c192fe0013bc22c98006ca5effd133f1efc63a199"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\idle\\3.png",
+      "sha256": "ae4f52ac7e719be4665415e668d50c53c1337363c1fccb29a8d2ad3475438ad7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\walk_run\\0.png",
+      "sha256": "6aab8619501fec917421b4ea31dc1e398275b13f24225b616218464c15ee7569"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\walk_run\\1.png",
+      "sha256": "b31ae8b1930ebae10775af99d073c06fd0b9aed89c6d2ed86dedfa1a24339911"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\walk_run\\2.png",
+      "sha256": "1891b2b15c2f2bd2b3e10ff5c74742c519e95fd00c322138bb9fe3c2cfbd8c8f"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\walk_run\\3.png",
+      "sha256": "b31ae8b1930ebae10775af99d073c06fd0b9aed89c6d2ed86dedfa1a24339911"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\take_damage\\0.png",
+      "sha256": "ecd5335c321db208e86e24f957748fa329e51467d944e755467e5a0a8cf2c645"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\take_damage\\1.png",
+      "sha256": "d41f228fe2a40da8c78b2f6285ae126c8ddaf977b80306f3393d3976140d16d9"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\fall\\0.png",
+      "sha256": "18e6070c55e46f6083c4b45be96a42ba3b7f0121ef2d276fb96f4ee378eabaab"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\knockout\\0.png",
+      "sha256": "6169ae40212c8cd375fa037e7705f200e148e12377452d13a3e9adb5e27a4bac"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\knockout\\1.png",
+      "sha256": "feb3266591184696b4eaa5038bbac90afc97dadeda98a530c59161086bb46d5a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\land\\0.png",
+      "sha256": "ab4c9f768d83b64bfc5d872cd814e4c58ea31ac2d55dd6e421863b81b1f5a3aa"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\yellow\\land\\1.png",
+      "sha256": "67e9bee885948625e67ea076b6de9a77cd23338080cd52cc30e3df24ff95465d"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\idle\\0.png",
+      "sha256": "5b85a4fb2f241ee91eaf4188d3d4d94bc9ce2e6b9d6a023d37b779c3e0634841"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\idle\\1.png",
+      "sha256": "82f8d48242f88c0549ab72d93ed42dcec62a001d2736bb6fc8e67939a69ad3e6"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\idle\\2.png",
+      "sha256": "5b85a4fb2f241ee91eaf4188d3d4d94bc9ce2e6b9d6a023d37b779c3e0634841"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\idle\\3.png",
+      "sha256": "15b940b83f3e1add58866c17c5047d164bfff9501186fe2503892ac5ede385a1"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\walk_run\\0.png",
+      "sha256": "5c21707797f50b5985a4314ac1f195281fae0a7d28c0499e4701171200da36e1"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\walk_run\\1.png",
+      "sha256": "e3cc948581d6e7b4856903dff893dfa88299d3c611151f8a11cb79a8f425f27e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\walk_run\\2.png",
+      "sha256": "c36756802396e4a208ad2782248be2319989e10d8d9f0941ac683d864763ccc2"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\walk_run\\3.png",
+      "sha256": "e3cc948581d6e7b4856903dff893dfa88299d3c611151f8a11cb79a8f425f27e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\take_damage\\0.png",
+      "sha256": "36aadc7d9624d995d0e030bcfc892367af7938622898245438f2f38e0d0313c6"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\take_damage\\1.png",
+      "sha256": "568554782203e7c15b8986616aca2c26ae3171ecfb50ce3309f576b32f3c2f62"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\fall\\0.png",
+      "sha256": "aca57ea3180c7a0130f9f1618d34f89b75a4f3054f6a2e99b9aa34984e4bfa5e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\knockout\\0.png",
+      "sha256": "8fdce066ff556f8d5378233f476de9a4faa41a1d277af0dcf0e108cb31523e43"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\knockout\\1.png",
+      "sha256": "568554782203e7c15b8986616aca2c26ae3171ecfb50ce3309f576b32f3c2f62"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\land\\0.png",
+      "sha256": "84b0069ed805939a6eb3625671f60732cd10b1be9f19ae154c4c6053a28ecabb"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\aqua\\land\\1.png",
+      "sha256": "c160b25c12a75d3bc67e4297366b42e2eac4f16c8eb7157ed55e404ef6744341"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\idle\\0.png",
+      "sha256": "a48a5809c5edd87f478d259c0c3eb811e7bd9da50049ec160af59fd2662f30f7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\idle\\1.png",
+      "sha256": "f9fe210910f7bcd31c305da92d2cb4813568dbd5933950f126dd5de939272a4f"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\idle\\2.png",
+      "sha256": "a48a5809c5edd87f478d259c0c3eb811e7bd9da50049ec160af59fd2662f30f7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\idle\\3.png",
+      "sha256": "747b7679b8fba8a0d6ed4c8b87571612aede973d74edf2cd55bb2703844f2d9a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\walk_run\\0.png",
+      "sha256": "430aa84433fa73128cc6c7d95c1ea7ffdef3b4e4b00af09aba9312180b6ed944"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\walk_run\\1.png",
+      "sha256": "95896dd37d25ae8eb6991d88427fb8d96656a25642822082c7acdedbed586e87"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\walk_run\\2.png",
+      "sha256": "d14d33228edf015bcdeaf1b2b21f2205abda35735c26fb34a53dbabba2301700"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\walk_run\\3.png",
+      "sha256": "95896dd37d25ae8eb6991d88427fb8d96656a25642822082c7acdedbed586e87"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\take_damage\\0.png",
+      "sha256": "ad52bf4683e56c888c48c400bcd1135c8c25de4f136bc55fc4fd35cfdc765a85"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\take_damage\\1.png",
+      "sha256": "72e67aed7e5d4583a03d490e39714e62a4837c79778a55704d0a71e05f0c20c8"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\fall\\0.png",
+      "sha256": "1ea14e5b5d2c26f963f91d04d9ba407621ace0f0acdb93440639c45e93394216"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\knockout\\0.png",
+      "sha256": "69f6c19bd852fd4d10f366b938662ccc37199434b1633f9222ca22a54fe3aecc"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\knockout\\1.png",
+      "sha256": "d80226ee92f9567ee353c1174136403136697f6e28e064cf9f452e2cd23cd27e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\land\\0.png",
+      "sha256": "5526e927c50e5b991aa265369a995723d3ab247cf413ffea6fd9f2277d79bfc7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\blue\\land\\1.png",
+      "sha256": "956a8507d6847821a6e558256ac6fb58e805050f5110e4e0c8df0a192116d026"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\idle\\0.png",
+      "sha256": "e572807420b8e3e8e94adc30388b17f0fc383627c42865df2b447543e5fd9b1b"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\idle\\1.png",
+      "sha256": "fe8c571e39ccf79127414d17e2ebc96f6e737e1bf60a0588667e777dcb9c730b"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\idle\\2.png",
+      "sha256": "e572807420b8e3e8e94adc30388b17f0fc383627c42865df2b447543e5fd9b1b"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\idle\\3.png",
+      "sha256": "546b42ad5c6f2e0a7c001eddf31085780cf12fa609dbc588ddd5e8be0944380b"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\walk_run\\0.png",
+      "sha256": "973f9ed77ec4466896fa526b8603fd39cb2b936f1e680dc34adefa83d6347d11"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\walk_run\\1.png",
+      "sha256": "2fd95701592ae211d03cadcb383693c450f5c7869279479f77bd624ed95d7578"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\walk_run\\2.png",
+      "sha256": "cb5490001d51e61c5a7c79c6e96b1a0541a6984f5e502cec550162e9c6cbb143"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\walk_run\\3.png",
+      "sha256": "2fd95701592ae211d03cadcb383693c450f5c7869279479f77bd624ed95d7578"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\take_damage\\0.png",
+      "sha256": "29a4950ba07fed13aba036caffad739ee461aced4ff22b691c5c89283aaebf00"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\take_damage\\1.png",
+      "sha256": "9528318d055f8c92b4940858984d117f97a82e0b726e4425732bb00878ce7279"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\fall\\0.png",
+      "sha256": "d57d2331ff5af92c8c7d171262c707a612a07f6c38583eec2dacb67040bc7082"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\knockout\\0.png",
+      "sha256": "2ae1d8d16706616cbfecf80279c1b7466b9e37b6d6facc82f5e6e31aa79fb2b6"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\knockout\\1.png",
+      "sha256": "846a1b3f40fb0db8e23c5b343200267d9d5234166acaad4d50d5c76c62883a25"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\land\\0.png",
+      "sha256": "9f831ca70243ce5b6bd7136788dbfc329310b180d6685215f3c92d8b8ab01599"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\green\\land\\1.png",
+      "sha256": "e02ed743451fce4bc334a375950fc68c956047b5da1ef02c32d1c24987418b81"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\idle\\0.png",
+      "sha256": "d6445df01b3bb8dd3ea126208821c0bac5edd0e8378db766cf2667a4e064d749"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\idle\\1.png",
+      "sha256": "93fd7b254616ae67462e1a889640e67f3ff21e4fdab3a48045d1418d4b628971"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\idle\\2.png",
+      "sha256": "d6445df01b3bb8dd3ea126208821c0bac5edd0e8378db766cf2667a4e064d749"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\idle\\3.png",
+      "sha256": "a4a3361ae61b02d4d305ea03e974b53bef69c3b640111256858daa67cf113f6a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\walk_run\\0.png",
+      "sha256": "4e0fb973b97daf1e849804ed2203f4e16c4b31419770c3b02a508acddde30a12"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\walk_run\\1.png",
+      "sha256": "72a7a554d68951c844a163d0812d6c7c109a191df231e08023fa14f58e0d79b4"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\walk_run\\2.png",
+      "sha256": "c769a106aef46a1d05fbc29c0e46e4541009f59f6e38d9dc31cafc8f4446cea0"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\walk_run\\3.png",
+      "sha256": "72a7a554d68951c844a163d0812d6c7c109a191df231e08023fa14f58e0d79b4"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\take_damage\\0.png",
+      "sha256": "dd16a7cb0bfb19112bc9959be8ae77efc730201b0fccafa2091d7df6422b36fe"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\take_damage\\1.png",
+      "sha256": "4f574506a7254388f03d0d5cc6ece92f6bbff0592219b6bd88027927f88391a5"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\fall\\0.png",
+      "sha256": "3ab704ba5bf61b00db568d213466541d9dfe4d1772b16c2017033a901b50e486"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\knockout\\0.png",
+      "sha256": "ddb4e7d0112184d37cbd821fe0dfca06355a5a6d5261924606a7b8fd574c7faf"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\knockout\\1.png",
+      "sha256": "93460263883eb1dc386c1cf001847ca030eea347b002dc9c92990900d77d07b2"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\land\\0.png",
+      "sha256": "603a4c4cf87dc723d3a0986e9b419b55154296edc4fcceeee42e20e605b70cfa"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\orange\\land\\1.png",
+      "sha256": "581c2e47e4997f7c2f936e03687451525d299b9585e806510a6de37ac7d3f3ab"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\idle\\0.png",
+      "sha256": "046b0b5d6f1cc5fbab56ae772fb95775fd17e01f02a4ff37a72b01f95ffb3d3a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\idle\\1.png",
+      "sha256": "5b49a803db0e2466234094398fafa1c956c2aa1380aa2d376c0efb9f6ed7a351"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\idle\\2.png",
+      "sha256": "046b0b5d6f1cc5fbab56ae772fb95775fd17e01f02a4ff37a72b01f95ffb3d3a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\idle\\3.png",
+      "sha256": "4ff70d4520aea1e6c06138f8cf985e5f22749256a3ecf709a60b6a771cd23806"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\walk_run\\0.png",
+      "sha256": "e0224f339b1c1f612a7db1d689b87ab4e3ff8655a2b9f5d2fc3fdcffdcb39ac4"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\walk_run\\1.png",
+      "sha256": "5ba660c7ad5cb60c723bab77c544aededb5f0f2f824bfaabdd6fd5724172ab43"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\walk_run\\2.png",
+      "sha256": "b66df1a247fd8a9c41f56816ee89990f51b1bfae8a3556ff497782154e8e6b60"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\walk_run\\3.png",
+      "sha256": "5ba660c7ad5cb60c723bab77c544aededb5f0f2f824bfaabdd6fd5724172ab43"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\take_damage\\0.png",
+      "sha256": "5e40eee4897602f6b59f291bfff288c1ff3ae17bc6e80d257a9988852cd767d0"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\take_damage\\1.png",
+      "sha256": "7022df943e3b87b7cbd06cd7961463b74f184f59f1b411d2640cd29fca18001d"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\fall\\0.png",
+      "sha256": "a0005ac7dbc2763d63475333c26169945b42f848ddb83e6d71d0675f36655aeb"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\knockout\\0.png",
+      "sha256": "544bdaeb8c4be395e7dec7090dbf8ae8becc8257f46c25a638f5a736c6266c7a"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\knockout\\1.png",
+      "sha256": "4736f7b8825dbef84beaf050eadc02e732e6a312d52720e0ac1eb6ede620b48f"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\land\\0.png",
+      "sha256": "6dc705bf7f5f25d704709ea6c5380f3e07f8b5dc1cf9840a2bf97c11c24596ca"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\purple\\land\\1.png",
+      "sha256": "a122bd2f2287bd5af32e732a3722e2e1644cb539ba8c76c1ad2767f54de3c2c8"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\idle\\0.png",
+      "sha256": "7edb7d2bfadfef17fb5eeed8d5748b9d92ffe6a06e02eb8d850c24b58eab68b9"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\idle\\1.png",
+      "sha256": "f706910fdf26144741d71ee89e85ead04a87dfc8964dfbfa843792d624597eb7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\idle\\2.png",
+      "sha256": "7edb7d2bfadfef17fb5eeed8d5748b9d92ffe6a06e02eb8d850c24b58eab68b9"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\idle\\3.png",
+      "sha256": "1b84b71ce1f09c7c2cd8a976e8d98210adbf20687b0197638df9791995702a19"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\walk_run\\0.png",
+      "sha256": "92f7504d12541c654b706f9bc89cad980698eb1a03b99bf958a80ea778c07580"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\walk_run\\1.png",
+      "sha256": "9bafc8d1e3e20093dc1d71c2d144196f3d3128476b8d8e826c16d102cec8f842"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\walk_run\\2.png",
+      "sha256": "6f32896dc0b9a3bfa2d57c1a2af8f04935e2f1a5a7a5ac82718230d4c60e85f5"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\walk_run\\3.png",
+      "sha256": "9bafc8d1e3e20093dc1d71c2d144196f3d3128476b8d8e826c16d102cec8f842"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\take_damage\\0.png",
+      "sha256": "c98f6dad6d279d86abde253a90a44f9812718539d850d651201ae1c0f53b38a2"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\take_damage\\1.png",
+      "sha256": "d676427d7f957069060a3e63125b30862e5eecd07390eab6d9ffd31d92ae2056"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\fall\\0.png",
+      "sha256": "35772428e09e1e8c1c0a3d92b02b956ceb62ee4c1cf002a52952e9b1b7ed1f17"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\knockout\\0.png",
+      "sha256": "5305c71f2493a7c45b5eb2c6eaef6a6949fcc2fef5668726ae4befc005681a21"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\knockout\\1.png",
+      "sha256": "5da8273142deee43af277d51805b95657b99847645b3834efb6c26b83628e97d"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\land\\0.png",
+      "sha256": "ede0de01ae3af775d3944154837eb78545ba7913de95a48d871c2ccd2c949491"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\red\\land\\1.png",
+      "sha256": "2d2d35ff9c2caf554530f8e8ed5a50b33e2e5b763948cfe79819b8c8f332fa05"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\idle\\0.png",
+      "sha256": "33f370f1408e5e0b9d1b46d5728a22e14465144d08792521d7ab45774243200f"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\idle\\1.png",
+      "sha256": "4758cfa4bc27fa69fe99a739298807318ffc17ad89ea0b12f1ccd9383f1ebb6e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\idle\\2.png",
+      "sha256": "33f370f1408e5e0b9d1b46d5728a22e14465144d08792521d7ab45774243200f"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\idle\\3.png",
+      "sha256": "4a401363aa9104977c32e0c94df2216f0cc2bf0fd099a3a4042d9c6ad034f0e7"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\walk_run\\0.png",
+      "sha256": "81c734f736aeb9f42e0198d2d716d3d17f63ddccce2a1baf77d42b439dbf2c43"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\walk_run\\1.png",
+      "sha256": "22129a32524977bb073a360feddd9a161be77b468e7e91d5ed1b7d3b41f2a750"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\walk_run\\2.png",
+      "sha256": "d26f164175f35bdcb4af19dd9e4f3ecab8527888fefb7e0d4313c852332f8f88"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\walk_run\\3.png",
+      "sha256": "22129a32524977bb073a360feddd9a161be77b468e7e91d5ed1b7d3b41f2a750"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\take_damage\\0.png",
+      "sha256": "37b24da6cc6b9b5eba43a18c8e3c837279ce0c8a153c63f28b9acd385f77457e"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\take_damage\\1.png",
+      "sha256": "64bb9f397f25ee7e278f957f92ee2e971c68bb29291e7aa15b1f6c27152cc7fc"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\fall\\0.png",
+      "sha256": "09bb3b6bb5b0036c4e7522af0fcbcfb9cb4b31ca90d73e6c8cdb686bfa4200a0"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\knockout\\0.png",
+      "sha256": "877da114b05902d492cd9aafbde78c34600771b9f7201f2364b3dda51da2b181"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\knockout\\1.png",
+      "sha256": "357c4de9f4104847542590253d5aa24e924478c7811895b502874c3f2f3d76e4"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\land\\0.png",
+      "sha256": "45a45de213b902414f040e4d9cf3904b2fa35e1f42a561fdbace00dbd8f6401b"
+    },
+    {
+      "file": "frontend\\public\\assets\\duck-race\\duckee\\tan\\land\\1.png",
+      "sha256": "c6b3397a1a2bd58dec54b2d9cf0192e795a9852bf584a6a65108506063c86644"
+    }
+  ],
+  "note": "Native body pixels copied without repainting; fresh AI accessory art registered separately per frame. No equipment stat effects."
+}

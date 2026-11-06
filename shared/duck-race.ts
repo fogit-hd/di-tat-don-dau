@@ -20,7 +20,8 @@ export const EQUIPMENT: Record<GearId,{slot:'head'|'body';title:string;benefit:s
 export function gearStats(p:{gearHead?:GearId;gearBody?:GearId}) {
  const g=new Set([p.gearHead,p.gearBody]);return {walk:96*(g.has('goggles')?1.1:1)*(g.has('helmet')?.92:1)*(g.has('fins')?.9:1),roll:390*(g.has('leaf')?.9:1)*(g.has('scarf')?1.12:1),swim:125*(g.has('goggles')?.9:1)*(g.has('fins')?1.25:1)*(g.has('boots')?.85:1),mud:96*(1-.4*(g.has('leaf')?.7:1)*(g.has('boots')?.5:1)),reward:(g.has('crown')?1.1:1)*(g.has('feather')?.9:1),price:g.has('crown')?1.2:1,jump:(g.has('scarf')?.9:1),double:g.has('feather')?1.15:1,obstacleStun:g.has('helmet')?1125:1500}
 }
-export function flightHeight(p:{jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;jumpUntil:number},now:number) {
+export function flightHeight(p:{jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;jumpUntil:number;windFallStartedAt?:number;windFallUntil?:number;windFallFrom?:number},now:number) {
+ if((p.windFallUntil||0)>now){const t=Math.max(0,Math.min(1,(now-(p.windFallStartedAt||0))/Math.max(1,(p.windFallUntil||0)-(p.windFallStartedAt||0))));return (p.windFallFrom||0)*(1-t*t)}
  if(p.jumpUntil<=now)return 0;const duration=p.jumpDuration||1100,t=Math.max(0,Math.min(1,(now-(p.jumpStartedAt||p.jumpUntil-duration))/duration));return (p.jumpFrom||0)*(1-t)+Math.sin(t*Math.PI)*52
 }
 export type RaceLog = { id: string; at: number; text: string; kind: 'answer' | 'move' | 'card' | 'collision' | 'system' }
@@ -28,25 +29,31 @@ export const OBSTACLE_RULES = {
   hop: { title: 'Rào thấp', hint: 'Nhảy qua · không cúi/lăn xuyên rào', height: 26 },
   roots: { title: 'Rễ gai', hint: 'Nhảy qua hoặc đi vòng', height: 32 },
   double: { title: 'Ụ rơm cao', hint: 'Nhảy đôi hoặc đi vòng · nhảy đơn chưa đủ cao', height: 63 },
-  underpass: { title: 'Thanh treo', hint: 'Cúi/lăn dưới khoảng hở · không nhảy xuyên thanh', height: 120 },
+  underpass: { title: 'Thanh chắn bò thấp', hint: 'Chỉ giữ Shift để bò qua · đứng, chạy, lăn và nhảy đều bị chặn', height: 120 },
   wall: { title: 'Tường chắn', hint: 'Đi vòng qua khoảng trống · không thể nhảy hay lăn xuyên', height: 180 },
   cart: { title: 'Xe hàng', hint: 'Đi vòng qua khoảng trống', height: 180 },
   catcher: { title: 'Người bắt vịt', hint: 'Né tầm lưới · bị bắt sẽ chốt điểm và kết thúc lượt', height: 180 },
 } as const
 export type RacerView = {
+  cosmetics?: Cosmetics; scoreEvents?: ScoreEvent[];
   id: string; name: string; color: DuckColor; model: 'duckee' | 'ducky'; points: number;
   progress: number; target: number; x: number; y: number; lateral: number; facingX: number; facingY: number; rank: number; connected: boolean; correct: number; answered: number;
   gearHead?:GearId;gearBody?:GearId;mode?:'ground'|'water'|'mud';jumpCount?:number;jumpStartedAt?:number;jumpDuration?:number;jumpFrom?:number;airSpeed?:number;guardHeld?:boolean;guardUntil?:number;parryUntil?:number;attackStyle?:'idle'|'run'|'air';recoveryUntil?:number;knockUntil?:number;
   speed: number; rolling: boolean; rollReadyAt: number;
   jumpUntil: number; crouching: boolean; attackingUntil: number; invulnerableUntil: number;
   stunnedUntil: number; shield: number; discount: number; tailwind: number; finishedAt?: number; capturedAt?: number; capturedBy?: string
+  windFallStartedAt?: number; windFallUntil?: number; windFallFrom?: number
 }
+export type WindGust = { id: string; direction: -1 | 1; startedAt: number; endsAt: number; strength: number }
 export type HazardView = { id: string; position: number; offset: number; worldX?:number;worldY?:number;rowId?:string;lane?:0|1|2;freeLane?:0|1|2;category?: 'obstacle' | 'environment'; kind: keyof typeof OBSTACLE_RULES | 'rock' | 'whirlwind' | 'gate' | 'hurdle' | 'beam' | 'boulder' | 'rain' | 'tailwind' | 'headwind'; spanY?:number; thicknessX?:number; heightZ?:number; alertedAt?:number; caughtAt?:number; caughtRacerId?:string; width?:number; moving?:boolean; phase?:number; expiresAt: number }
 export type QuestionView = { id: string; prompt: string; options: { id: string; text: string }[]; deadline: number; number: number }
 export type AnswerView = { selected: string | null; correct: string; explanation: string; reward: number; stake: number; nextAt: number }
 export type RaceSnapshot = {
+  mode?: 'quiz-v4'; experience?: ExperienceView;
   code: string; phase: RacePhase; serverTime: number; revision?: number; startedAt: number; endsAt: number; duration: number;
   players: RacerView[]; hazards: HazardView[]; me?: RacerView; question?: QuestionView; answer?: AnswerView;
+  wind?: WindGust;
   starArmed?: boolean; starUsed?: boolean; stake?: number; logs: RaceLog[]; cards?: CardKind[];
   questionCount: number; winnerId?: string; finishReason?: 'finish' | 'time' | 'host'; storage: 'memory' | 'redis'
 }
+import type { Cosmetics, ExperienceView, ScoreEvent } from './experience-contracts'

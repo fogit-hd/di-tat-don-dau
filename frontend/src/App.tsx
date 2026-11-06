@@ -4,7 +4,8 @@ import { GameHub } from './shared/GameHub.tsx'
 const HostScreen = lazy(() => import('./games/di-tat-don-dau/components/HostScreen.tsx').then(m=>({default:m.HostScreen})))
 const PlayScreen = lazy(() => import('./games/di-tat-don-dau/components/PlayScreen.tsx').then(m=>({default:m.PlayScreen})))
 const StartScreen = lazy(() => import('./games/di-tat-don-dau/components/StartScreen.tsx').then(m=>({default:m.StartScreen})))
-const DuckRace = lazy(() => import('./games/duck-race/DuckRace.tsx').then(m => ({ default: m.DuckRace })))
+const DuckRace = lazy(() => import('./games/duck-race/experience/DuckExperience.tsx').then(m => ({ default: m.DuckExperience })))
+const PhaserPreview = lazy(() => import('./games/duck-race/phaser/PhaserPreview.tsx').then(m => ({ default: m.PhaserPreview })))
 
 function RoutePresentation() {
   const { pathname } = useLocation()
@@ -23,6 +24,8 @@ export default function App() {
       <Routes>
         <Route path="/games" element={<Suspense fallback={<p>Đang tải danh sách game…</p>}><GameHub /></Suspense>} />
         <Route path="/duck-race" element={<Suspense fallback={<p>Đang tải đường đua…</p>}><DuckRace /></Suspense>} />
+        <Route path="/duck-race/join/:code" element={<DuckRace />} />
+        <Route path="/duck-race/preview/phaser" element={<PhaserPreview />} />
         <Route path="/duck-race/host/:code" element={<Suspense fallback={<p>Đang tải đường đua…</p>}><DuckRace /></Suspense>} />
         <Route path="/duck-race/play/:code" element={<Suspense fallback={<p>Đang tải đường đua…</p>}><DuckRace /></Suspense>} />
         <Route path="/" element={<GameHub />} />

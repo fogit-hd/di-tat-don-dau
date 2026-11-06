@@ -1,0 +1,7 @@
+/* Pointer clicks do not draw a rectangular focus ring over the painted frame.
+   Tab navigation keeps a visible keyboard-only focus indicator. */
+:is(.dq-shell,.ph-preview),:is(.dq-shell,.ph-preview) *{user-select:none;-webkit-user-select:none}
+:is(.dq-shell,.ph-preview) :is(input,textarea,[contenteditable=true]){user-select:text;-webkit-user-select:text}
+:is(.dq-shell,.ph-preview) :is(img,svg,canvas){-webkit-user-drag:none}
+:is(.dq-shell,.ph-preview)[data-navigation=pointer] :is(button,a):focus{outline:none!important}
+:is(.dq-shell,.ph-preview)[data-navigation=keyboard] :is(button,a):focus-visible{outline:3px solid #ffe298;outline-offset:2px}

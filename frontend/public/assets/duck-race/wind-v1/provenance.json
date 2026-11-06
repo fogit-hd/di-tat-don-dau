@@ -1,0 +1,14 @@
+{
+  "tool": "built-in imagegen",
+  "source": "C:\\Users\\PHONG\\.codex\\generated_images\\01a169ec-1f26-72e3-bfbb-5f24c3989bbc\\exec-8117072f-9250-4fdc-a9e2-58e668639dc0.png",
+  "processing": "six equal cell crops, lossless WebP, source alpha preserved",
+  "animation": "Phaser world-space pooled sprite particles, curved trajectories/rotation/alpha; rooted grass sway; skill bursts",
+  "names": [
+    "leaf-green",
+    "leaf-amber",
+    "dust",
+    "ribbon",
+    "grass",
+    "slash"
+  ]
+}
