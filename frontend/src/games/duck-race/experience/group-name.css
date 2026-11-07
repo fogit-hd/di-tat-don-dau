@@ -1,0 +1,59 @@
+.q4-shell .q4-group-name {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  font: inherit;
+  color: inherit;
+}
+.q4-shell .q4-group-name__text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: inherit;
+  color: inherit;
+  unicode-bidi: plaintext;
+}
+.q4-shell .q4-group-name__reveal {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-image: none;
+  border-radius: 2px;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.q4-shell .q4-group-name__reveal:hover { border-bottom: 1px dotted currentColor; }
+.q4-shell .q4-group-name .q4-group-name__reveal:focus-visible { outline: 2px solid #efc96d; outline-offset: -2px; }
+.q4-shell .q4-group-name__reveal:active { transform: none; }
+.q4-group-name-popup {
+  position: fixed;
+  z-index: 10000;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 24px));
+  max-height: 40svh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid #d0b06a;
+  border-radius: 8px;
+  background: #103925;
+  color: #fff1c7;
+  box-shadow: 0 6px 18px #071c2066;
+  font: 600 16px/1.5 Q4UI, sans-serif;
+  text-align: start;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}

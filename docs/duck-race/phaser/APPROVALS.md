@@ -48,3 +48,48 @@ User explicitly requested fixing duplicate joins from repeated Chrome submission
 User: “áp dụng vào dự án này”, referring to `design-preview/duck-race-results-v1/?rev=8` after the grounded silver-box and compact-wing gold corrections. This authorizes the current results ceremony in Quiz Duck Race: host-only top 3, distinct bronze climb / silver gift unfolding / gold parachute entrances in 3 → 2 → 1 order, native crown retrieval / two-wing lift / fitted wearing cels, and lower ranks 4–7. Player results remain personal. This is approval of this results surface, not the separate host realtime layout or other migration milestones.
 
 Implemented in `frontend/src/games/duck-race/experience/results/` with an independently owned Phaser instance. Eight native palette variants preserve the approved model geometry. Server-supplied final ranks and points are read-only; no client animation changes outcomes. See `RESULTS-CEREMONY.md` for verification and local fixture.
+
+## 2026-11-07 — eight-minute correction and approved art integration
+
+User explicitly requested eight minutes, four distinct eras 1.0–4.0, correcting deployed era rendering, applying the previously approved lightning/wind/weather and three-second background-free event notices, and retaining wardrobe items at results. This authorizes those corrections to current quiz-v4 rooms. New rules are 480 seconds with era boundaries at 120, 240 and 360 seconds. Historical durations above describe earlier versions.
+
+The four approved industrial paintings and six-cel effects from the notices-v8 canvas are packaged in `public/assets/duck-race/experience-v6/`. The renderer scrolls a whole aspect-preserved painting instead of stretching separate scenery/road strips. No deployment was performed.
+
+## 2026-11-07 — replacement bronze and silver ceremony
+
+User requested replacing all second- and third-place animation. In the V2 review
+response they selected “Cần sửa top 2”, followed by “Thay toàn bộ ý tưởng của top 2”.
+The revised silver motion in V3 was explicitly approved with “Duyệt top 2 mới”.
+The applied pair is the V2 bronze spring/landing/wave and V3 silver rope swing,
+two-foot contact, grip release, medal retrieval and two-wing presentation.
+
+The final PNG cels, their body scale, selected wardrobe and prop occlusion are
+exported into production assets. A rope socket above the handhold drives Phaser
+geometry during the silver entry. The first-place sequence uses its previously
+approved parachute/crown cels. This approval authorizes integration into the
+current result surface. Deployment remains a separate action.
+
+## 2026-11-07 — bronze skateboard and number card V5
+
+User rejected the V4 entrance and requested replacing the entire arrival. They
+then explicitly approved V5 with “Duyệt top 3 V5” at
+`design-preview/duck-race-results-v5/?view=bronze`. This approves its wooden
+runway, skateboard arrival, native-foot dismount, kick-away, card retrieval,
+upright copper number 3 and two-wing chest-height presentation in the current
+host results ceremony. The production export retains eight original duckee
+palettes and the selected registered scarf/glasses. The reviewed bronze turn
+is 4.4 seconds, followed by silver then gold. This approval covers integration.
+
+## 2026-11-07 — fitted crown and eye-aligned glasses
+
+User approved the crown in the wardrobe review with “duyệt vương miệng”, and
+explicitly requested placing glasses over the eyes and treating glasses as
+the on-head selection, mutually exclusive with normal hats. They separately
+confirmed “Vương miện được đeo cùng kính”. This authorizes the fitted winner
+crown and the requested correction to existing glasses throughout the game.
+
+The knit cap, safety helmet, leaf pin and bow models remain review proposals.
+The live wardrobe's existing glasses choices are grouped as “Trang sức trên
+đầu”. The review combines glasses and hats into one selection rather than
+allowing a glasses/hats stack. The award crown is the explicitly approved
+exception and remains compatible with both glasses styles and scarves.

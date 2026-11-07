@@ -42,7 +42,7 @@ export function joinExperience(room:RaceRoom,name:string,color:string,now=Date.n
 export function startExperience(room:RaceRoom,now=Date.now()){
  if(room.phase!=='lobby')throw new RaceError('Phòng không còn ở sảnh chờ.')
  if(!room.players.length)throw new RaceError('Cần ít nhất một nhóm.')
- room.phase='countdown';room.startedAt=now+3000;room.endsAt=room.startedAt+R.durationMs;room.lastTick=now
+ room.duration=R.durationMs;room.phase='countdown';room.startedAt=now+3000;room.endsAt=room.startedAt+R.durationMs;room.lastTick=now
 }
 function active(room:RaceRoom,now:number){tickExperience(room,now);if(room.phase!=='racing')throw new RaceError('Trận chưa bắt đầu hoặc đã kết thúc.');if(state(room).pauseAt!==undefined)throw new RaceError('Chủ phòng đang tạm dừng trận.')}
 export function rankExperience(room:RaceRoom){return [...room.players].sort((a,b)=>b.points-a.points||b.correct-a.correct||a.id.localeCompare(b.id))}
@@ -168,7 +168,7 @@ export function endExperience(room:RaceRoom,reason:'time'|'host',now=Date.now())
  const s=state(room)
  for(const p of room.players){const t=turn(room,p);if(t.chest&&!t.chest.applied)applyChest(room,p,s.elapsed,t.chest.event.scope==='one-chosen'?candidates(room,p,t.chest.event).find(q=>q.id===p.id)?.id||candidates(room,p,t.chest.event)[0]?.id:undefined)}
  room.phase='finished';room.finishReason=reason;room.winnerId=rankExperience(room)[0]?.id
- log(room,null,reason==='time'?'Hết 12 phút. Đã chốt điểm và phần thưởng còn chờ.':'Chủ phòng đã kết thúc trận. Đã chốt điểm.',now)
+ log(room,null,reason==='time'?'Hết 8 phút. Đã chốt điểm và phần thưởng còn chờ.':'Chủ phòng đã kết thúc trận. Đã chốt điểm.',now)
 }
 export function tickExperience(room:RaceRoom,now=Date.now()){
  if(!isExperience(room))return
@@ -204,9 +204,9 @@ export function snapshotExperience(room:RaceRoom,playerId?:string,now=Date.now()
  const s=state(room),p=room.players.find(p=>p.id===playerId),t=p&&turn(room,p),q=p&&currentQuestion(p)
  const players=rankExperience(room).map((p,i)=>{const t=turn(room,p);return {id:p.id,name:p.name,color:p.color,model:'duckee' as const,points:p.points,progress:p.points,target:p.points,x:p.points*R.pixelsPerPoint,y:room.players.indexOf(p),lateral:0,facingX:1,facingY:0,rank:i+1,connected:p.connected,correct:p.correct,answered:p.answered,stunnedUntil:0,shield:p.shield,discount:0,tailwind:0,speed:room.phase==='racing'&&s.pauseAt===undefined?R.cruiseSpeed:0,rolling:false,rollReadyAt:0,jumpUntil:0,crouching:false,attackingUntil:0,invulnerableUntil:0,cosmetics:t.cosmetics,scoreEvents:t.events.slice(-12)}})
  const chest=t?.chest
- return {mode:'quiz-v4',code:room.code,phase:room.phase,serverTime:now,revision:room.revision||0,startedAt:room.startedAt,endsAt:room.endsAt,duration:room.duration,players,hazards:[],me:players.find(p=>p.id===playerId),
+ return {mode:'quiz-v4',code:room.code,phase:room.phase,serverTime:now,revision:room.revision||0,startedAt:room.startedAt,endsAt:room.phase==='racing'||room.phase==='countdown'?room.startedAt+R.durationMs+s.pausedMs:room.endsAt,duration:R.durationMs,players,hazards:[],me:players.find(p=>p.id===playerId),
   question:p&&t?.phase==='question'&&q&&room.phase==='racing'?{id:`${q.id}:${t.cycle}`,prompt:q.prompt,options:q.options,deadline:now+Math.max(0,t.until-s.elapsed),number:p.answered+1}:undefined,
   answer:p?.answer,starArmed:p?.starArmed,starUsed:p?.starUsed,logs:(p?p.logs:room.logs).slice(0,room.phase==='finished'?300:12),questionCount:bank.length,winnerId:room.winnerId,finishReason:room.finishReason,storage:room.storage,
-  experience:{elapsed:s.elapsed,paused:s.pauseAt!==undefined,era:Math.min(5,Math.floor(s.elapsed/R.eraMs)),capacity:R.capacity,grant:s.grant,quiz:t?{phase:t.phase,until:t.until,reward:t.phase==='question'||t.phase==='chests'||t.phase==='opening'||t.phase==='target'?t.reward:0,number:p!.answered+(t.phase==='question'?1:0)}:undefined,
+  experience:{elapsed:s.elapsed,paused:s.pauseAt!==undefined,era:Math.min(R.eraCount-1,Math.floor(s.elapsed/R.eraMs)),capacity:R.capacity,grant:s.grant,quiz:t?{phase:t.phase,until:t.until,reward:t.phase==='question'||t.phase==='chests'||t.phase==='opening'||t.phase==='target'?t.reward:0,number:p!.answered+(t.phase==='question'?1:0)}:undefined,
    chest:chest?{kind:chest.kind,chosenAt:chest.chosenAt,revealAt:chest.revealAt,doneAt:chest.doneAt,result:chest.applied?chest.result:undefined,targetIds:t?.phase==='target'&&p?candidates(room,p,chest.event).map(q=>q.id):undefined}:undefined,nextBonus:t?.nextBonus,notices:t?.notices?.slice(-32)}}
 }

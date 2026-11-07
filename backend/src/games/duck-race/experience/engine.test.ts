@@ -6,12 +6,40 @@ import { CHEST_EVENTS } from './events'
 function fixture(count=1){const room=createExperience(1000);for(let i=0;i<count;i++)joinExperience(room,'Nhóm '+i,'green',1000);startExperience(room,1000);tickExperience(room,4000);return {room,p:room.players[0],at:4000}}
 function answer(f:ReturnType<typeof fixture>,correct=true,at=f.at){const s=snapshotExperience(f.room,f.p.id,at);const q=QUESTIONS.find(q=>s.question?.id.startsWith(q.id+':'))!;submitAnswer(f.room,f.p,s.question!.id,correct?q.correctOptionId:q.options.find(o=>o.id!==q.correctOptionId)!.id,at)}
 describe('V4 points-only rooms',()=>{
- it('creates an isolated 12-minute room without obstacles and caps entry at seven',()=>{
-  const r=createExperience(1000);expect(r.duration).toBe(720000);expect(r.hazards).toEqual([])
+ it('keeps the saved wardrobe in both host and recipient terminal snapshots',()=>{
+  const room=createExperience(1000)
+  for(let index=0;index<3;index++)joinExperience(room,'Nhóm '+index,'green',1000)
+  const f={room,at:4000}
+  for(const [index,p] of f.room.players.entries())customizeExperience(f.room,p,{color:p.color,glasses:index%2?'dark':'brass',scarf:index%2?'teal':'red'})
+  startExperience(room,1000);tickExperience(room,4000)
+  endExperience(f.room,'host',f.at+100)
+  const host=snapshotExperience(f.room,undefined,f.at+100)
+  for(const [index,p] of f.room.players.entries()){
+   const expected={glasses:index%2?'dark':'brass',scarf:index%2?'teal':'red'}
+   expect(host.players.find(item=>item.id===p.id)!.cosmetics).toEqual(expected)
+   expect(snapshotExperience(f.room,p.id,f.at+100).me!.cosmetics).toEqual(expected)
+  }
+ })
+ it('advances through exactly four two-minute eras and finishes at 8:00',()=>{
+  const f=fixture()
+  for(const [ms,era] of [[0,0],[119999,0],[120000,1],[239999,1],[240000,2],[359999,2],[360000,3],[479999,3]]){
+   tickExperience(f.room,f.at+ms)
+   const s=snapshotExperience(f.room,f.p.id,f.at+ms)
+   expect(s.experience!.era).toBe(era);expect(s.duration).toBe(480000);expect(s.phase).toBe('racing')
+  }
+  tickExperience(f.room,f.at+480000)
+  const s=snapshotExperience(f.room,f.p.id,f.at+480000)
+  expect(s.phase).toBe('finished');expect(s.experience!.era).toBe(3);expect(s.experience!.elapsed).toBe(480000)
+ })
+ it('creates an isolated 8-minute room without obstacles and caps entry at seven',()=>{
+  const r=createExperience(1000);expect(r.duration).toBe(480000);expect(r.hazards).toEqual([])
   for(let i=0;i<7;i++)joinExperience(r,'Nhóm '+i,'green',1000)
   expect(roomEntry(r).available).toBe(false);expect(()=>joinExperience(r,'Nhóm 8','green')).toThrow('7')
   const other=createExperience();expect(()=>joinExperience(other,'Trùng tên','green')).not.toThrow()
   expect(()=>joinExperience(createExperience(),'a'.repeat(33),'green')).toThrow('32')
+  // A persisted lobby from the previous release must start with the new rule.
+  r.duration=720000;startExperience(r,1000)
+  expect(r.duration).toBe(480000);expect(snapshotExperience(r).endsAt-r.startedAt).toBe(480000)
  })
  it('does not open or time out a question before the player presses the question button',()=>{
   const f=fixture();tickExperience(f.room,f.at+19000);expect(snapshotExperience(f.room,f.p.id).experience?.quiz?.phase).toBe('ready');expect(f.p.answered).toBe(0)
@@ -52,9 +80,9 @@ describe('V4 points-only rooms',()=>{
   tickExperience(f.room,f.at+R.chestDoneMs+4999);expect(snapshotExperience(f.room,f.p.id).question).toBeUndefined()
   tickExperience(f.room,f.at+R.chestDoneMs+5000);expect(snapshotExperience(f.room,f.p.id).question).toBeDefined()
  })
- it('uses the same periodic integer reward for all, replays due boundaries once and ends at twelve minutes',()=>{
+ it('uses the same periodic integer reward for all, replays due boundaries once and ends at eight minutes',()=>{
   const f=fixture(7);tickExperience(f.room,f.at+60000);const points=f.p.points;expect(points).toBeGreaterThanOrEqual(20);expect(points).toBeLessThanOrEqual(100);expect(new Set(f.room.players.map(p=>p.points)).size).toBe(1)
-  tickExperience(f.room,f.at+60000);expect(f.p.points).toBe(points);tickExperience(f.room,f.room.endsAt);expect(f.room.phase).toBe('finished');expect(f.room.experienceState.grantCount).toBe(24)
+  tickExperience(f.room,f.at+60000);expect(f.p.points).toBe(points);tickExperience(f.room,f.room.endsAt);expect(f.room.phase).toBe('finished');expect(f.room.experienceState.grantCount).toBe(16)
  })
  it('pauses question and periodic timers together without giving repeated pause rewards',()=>{
   const f=fixture();openQuestion(f.room,f.p,f.at);pauseExperience(f.room,true,f.at+1000);tickExperience(f.room,f.at+61000);expect(snapshotExperience(f.room,f.p.id).experience?.elapsed).toBe(1000)
@@ -88,7 +116,7 @@ describe('V4 points-only rooms',()=>{
   const f=fixture();changePoints(f.room,f.p,500,'fixture',0);armHope(f.room,f.p,f.at);openQuestion(f.room,f.p,f.at)
   tickExperience(f.room,f.room.endsAt);expect(f.room.phase).toBe('finished');expect(f.p.answered).toBeGreaterThan(1)
   expect(snapshotExperience(f.room,f.p.id).me!.scoreEvents?.some(e=>e.reason.includes('chưa đúng')&&e.delta<0)).toBe(false) // bounded public history contains only the latest events
-  expect(f.p.logs.some(e=>e.text.includes('Ngôi sao hi vọng · chưa đúng'))).toBe(true);expect(f.room.experienceState.grantCount).toBe(24)
+  expect(f.p.logs.some(e=>e.text.includes('Ngôi sao hi vọng · chưa đúng'))).toBe(true);expect(f.room.experienceState.grantCount).toBe(16)
  })
 })
 

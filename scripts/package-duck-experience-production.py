@@ -2,6 +2,7 @@
 from pathlib import Path
 from PIL import Image, ImageDraw
 import json, math, hashlib
+from duck_wardrobe_art import EYES, fitted_glasses
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'frontend/public/assets/duck-race/experience-v4'
@@ -55,6 +56,7 @@ for pose,count in poses.items():
   beak=[(x,y)for y in range(64)for x in range(64)if px[x,y][3] and px[x,y][:3] in beak_colors and x>=cx and y<cy+6]
   by=sum(y for x,y in beak)/len(beak) if beak else cy+1
   registrations[f'{pose}/{frame}']={'head':[round(cx+2,2),top+2],'neck':[round(cx-1,2),round(by+3,2)],'backFacing':pose=='knockout' and len(beak)<8}
+  registrations[f'{pose}/{frame}']['eyes']=EYES[pose][frame]
   for key,source in gear.items():
    glass=key in ['brass','dark'];width=round(min(21 if glass else 24,bw*(.78 if glass else .96)))
    height=max(5,round(source.height/source.width*width));item=source.resize((width,height),Image.Resampling.NEAREST)
@@ -67,6 +69,7 @@ for pose,count in poses.items():
      if px[xx,yy][3] and px[xx,yy][:3] in beak_colors:op[xx,yy]=(0,0,0,0)
      # Back-facing knockout frames show strap/tails outside the body, not front lenses.
      if pose=='knockout' and len(beak)<8 and glass and px[xx,yy][3]:op[xx,yy]=(0,0,0,0)
+   if glass:overlay=fitted_glasses(key,pose,frame,base)
    overlays.append((f'{key}/{pose}/{frame}',overlay))
 for color in colors:
  for pose,count in poses.items():

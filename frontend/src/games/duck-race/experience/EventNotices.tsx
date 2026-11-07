@@ -1,42 +1,61 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import type { ChestNotice } from '../experience-contracts'
 import type { RaceSnapshot } from '../contracts'
 import { elapsedTime } from './motion'
-import { Glyph } from './ui'
 import './event-notices.css'
 
-/** A non-modal FIFO: a chest receipt never steals focus or blocks an answer. */
-export function EventNotices({snapshot,now,reduced}:{snapshot:RaceSnapshot;now:number;reduced:boolean}){
- const seen=useRef(new Set<string>()),owner=useRef(''),pending=useRef<ChestNotice[]>([])
- const [current,setCurrent]=useState<ChestNotice|null>(null),card=useRef<HTMLElement>(null)
- const id=snapshot.me?.id||'',notices=snapshot.experience?.notices
+type VisibleNotice = ChestNotice & { appearedAt: number }
+const NOTICE_MS = 3000
+
+function NoticeLine({notice,index,reduced}:{notice:VisibleNotice;index:number;reduced:boolean}) {
+ const element=useRef<HTMLDivElement>(null)
+ const previousTop=useRef<number|null>(null)
+ useLayoutEffect(()=>{
+  const row=element.current
+  if(!row)return
+  const top=row.getBoundingClientRect().top,wasVisible=previousTop.current!==null
+  const offset=wasVisible?previousTop.current!-top:-16
+  previousTop.current=top
+  if(reduced)return
+  const motion=row.animate([{opacity:wasVisible?1:.2,transform:`translateY(${offset}px)`},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'cubic-bezier(.16,1,.3,1)'})
+  return()=>motion?.cancel()
+ },[index,reduced])
  useEffect(()=>{
-  if(owner.current!==id){owner.current=id;seen.current.clear();pending.current=[];setCurrent(null)}
-  const elapsed=elapsedTime(snapshot,now)
-  for(const item of notices||[]){
-   if(seen.current.has(item.id))continue
-   seen.current.add(item.id)
-   // Reconnect recovers recent receipts, without replaying old match history.
-   if(elapsed-item.at<=20000)pending.current.push(item)
-  }
-  if(!current&&pending.current.length)setCurrent(pending.current.shift()!)
- },[notices,id,current,snapshot,now])
- useEffect(()=>{
-  if(!current)return
-  const el=card.current
-  const enter=!reduced?el?.animate([{opacity:.3,transform:'translateY(14px) scale(.97)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:280,easing:'cubic-bezier(.16,1,.3,1)'}):undefined
   const timer=setTimeout(()=>{
-   if(reduced||!el){setCurrent(null);return}
-   const exit=el.animate([{opacity:1},{opacity:0,transform:'translateY(-8px)'}],{duration:160})
-   void exit.finished.then(()=>setCurrent(null)).catch(()=>{})
-  },Math.min(7500,4000+current.text.length*12))
-  return()=>{clearTimeout(timer);enter?.cancel();el?.getAnimations().forEach(a=>a.cancel())}
- },[current,reduced])
- if(!current)return null
- return createPortal(<div className="q5-notice-layer"><section ref={card} className={`q5-notice ${current.delta<0?'is-loss':current.delta>0?'is-gain':''}`} role="status" aria-live="polite" aria-atomic="true">
-  <button onClick={()=>setCurrent(null)} aria-label="Đóng sự kiện"><Glyph kind="close"/></button>
-  <h2>{current.title}</h2><p className="q5-notice-source" title={current.actorName}>Rương của {current.actorName}</p>
-  <p>{current.text}</p><strong>{current.delta>0?'+':''}{current.delta.toLocaleString('vi-VN')} điểm</strong>
- </section></div>,document.body)
+   element.current?.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:reduced?'translateX(0)':'translateX(24px)'}],{duration:200,fill:'forwards'})
+  },Math.max(0,notice.appearedAt+NOTICE_MS-200-performance.now()))
+  return()=>clearTimeout(timer)
+ },[notice.appearedAt,reduced])
+ const kind=notice.fx|| (notice.delta<0?'loss':notice.delta>0?'gain':'shield')
+ return <div ref={element} className="q6-notice-line" role="status">
+  <img src={`/assets/duck-race/experience-v6/icons/${kind}.svg`} alt=""/>
+  <div><p>{notice.text}</p><small>{notice.title} · {notice.actorName}</small></div>
+  {notice.delta!==0&&<strong><img src={`/assets/duck-race/experience-v6/icons/${notice.delta<0?'loss':'gain'}.svg`} alt={notice.delta<0?'Mất':'Nhận'}/>{Math.abs(notice.delta).toLocaleString('vi-VN')}</strong>}
+ </div>
+}
+
+/** Each recipient receipt has its own three-second lifetime; newer rows push older rows down. */
+export function EventNotices({snapshot,now,reduced}:{snapshot:RaceSnapshot;now:number;reduced:boolean}){
+ const seen=useRef(new Set<string>()),owner=useRef('')
+ const [items,setItems]=useState<VisibleNotice[]>([])
+ const notices=snapshot.experience?.notices,id=snapshot.me?.id||''
+ useEffect(()=>{
+  if(owner.current!==id){owner.current=id;seen.current.clear();setItems([])}
+  const elapsed=elapsedTime(snapshot,now),appearedAt=performance.now()
+  const fresh=(notices||[]).filter(notice=>{
+   if(seen.current.has(notice.id))return false
+   seen.current.add(notice.id)
+   return elapsed-notice.at<=5000
+  }).map(notice=>({...notice,appearedAt})).reverse()
+  if(fresh.length)setItems(previous=>[...fresh,...previous])
+  if(seen.current.size>256)seen.current=new Set([...seen.current].slice(-128))
+ },[notices,id,snapshot,now])
+ useEffect(()=>{
+  if(!items.length)return
+  const timer=setTimeout(()=>setItems(previous=>previous.filter(item=>performance.now()-item.appearedAt<NOTICE_MS)),Math.max(1,Math.min(...items.map(item=>item.appearedAt+NOTICE_MS))-performance.now()))
+  return()=>clearTimeout(timer)
+ },[items])
+ if(!items.length)return null
+ return createPortal(<div className="q6-notice-layer" aria-live="polite">{items.map((notice,index)=><NoticeLine key={notice.id} notice={notice} index={index} reduced={reduced}/>)}</div>,document.body)
 }

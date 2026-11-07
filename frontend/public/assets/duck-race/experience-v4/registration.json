@@ -8,7 +8,17 @@
       28.29,
       41.94
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        35.5
+      ],
+      [
+        35.5,
+        35.5
+      ]
+    ]
   },
   "idle/1": {
     "head": [
@@ -19,7 +29,17 @@
       28.29,
       40.94
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        34.5
+      ],
+      [
+        35.5,
+        34.5
+      ]
+    ]
   },
   "idle/2": {
     "head": [
@@ -30,7 +50,17 @@
       28.29,
       41.94
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        35.5
+      ],
+      [
+        35.5,
+        35.5
+      ]
+    ]
   },
   "idle/3": {
     "head": [
@@ -41,7 +71,17 @@
       28.29,
       42.94
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        36.5
+      ],
+      [
+        35.5,
+        36.5
+      ]
+    ]
   },
   "walk_run/0": {
     "head": [
@@ -52,7 +92,17 @@
       27.45,
       43.27
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        36.5
+      ],
+      [
+        35.5,
+        36.5
+      ]
+    ]
   },
   "walk_run/1": {
     "head": [
@@ -63,7 +113,17 @@
       26.88,
       41.93
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        29.5,
+        35.5
+      ],
+      [
+        37,
+        35.5
+      ]
+    ]
   },
   "walk_run/2": {
     "head": [
@@ -74,7 +134,17 @@
       27.94,
       43.46
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        27.5,
+        38
+      ],
+      [
+        33.5,
+        36.5
+      ]
+    ]
   },
   "walk_run/3": {
     "head": [
@@ -85,7 +155,17 @@
       26.88,
       41.93
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        29.5,
+        35.5
+      ],
+      [
+        37,
+        35.5
+      ]
+    ]
   },
   "take_damage/0": {
     "head": [
@@ -96,7 +176,17 @@
       29.07,
       40.32
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        26,
+        33.5
+      ],
+      [
+        34,
+        33.5
+      ]
+    ]
   },
   "take_damage/1": {
     "head": [
@@ -107,7 +197,17 @@
       33.93,
       40.91
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        30,
+        33.5
+      ],
+      [
+        38,
+        33.5
+      ]
+    ]
   },
   "fall/0": {
     "head": [
@@ -118,7 +218,17 @@
       31.0,
       31.92
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        32,
+        25
+      ],
+      [
+        41,
+        25
+      ]
+    ]
   },
   "knockout/0": {
     "head": [
@@ -129,7 +239,8 @@
       30.07,
       44.5
     ],
-    "backFacing": true
+    "backFacing": true,
+    "eyes": null
   },
   "knockout/1": {
     "head": [
@@ -140,7 +251,17 @@
       33.93,
       40.91
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        30,
+        33.5
+      ],
+      [
+        38,
+        33.5
+      ]
+    ]
   },
   "land/0": {
     "head": [
@@ -151,7 +272,17 @@
       25.79,
       47.8
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        23.5,
+        42
+      ],
+      [
+        42.5,
+        42
+      ]
+    ]
   },
   "land/1": {
     "head": [
@@ -162,6 +293,16 @@
       27.54,
       41.95
     ],
-    "backFacing": false
+    "backFacing": false,
+    "eyes": [
+      [
+        25.5,
+        35.5
+      ],
+      [
+        36.5,
+        35.5
+      ]
+    ]
   }
 }

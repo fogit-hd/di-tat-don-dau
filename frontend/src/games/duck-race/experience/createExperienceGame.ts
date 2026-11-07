@@ -4,22 +4,25 @@ import type { RacerView } from '../contracts'
 import type { ChestKind } from '../experience-contracts'
 import { ScoreMotion, elapsedTime } from './motion'
 import { PaintedFX } from './PaintedFX'
-import type { EventFX } from '../experience-contracts'
+import { RaceEffects } from './RaceEffects'
+import { EXPERIENCE_RULES } from '../experience-contracts'
+import { periodicPainting, panoramaTiles, type EraPainting } from './panorama'
 
 const ROOT='/assets/duck-race/',ART=ROOT+'experience-v4/'
 type Hooks={ready:()=>void;error:(message:string)=>void;chest:(kind:ChestKind)=>void}
 type Mode='race'|'chests'|'portrait'|'landing'|'field'
-type Panorama={files:string[];roadCuts:[number,number][];name:string}
-type Actor={body:Phaser.GameObjects.Image;shadow:Phaser.GameObjects.Image;head:Phaser.GameObjects.Image;scarf:Phaser.GameObjects.Image;marker:Phaser.GameObjects.Image;name:Phaser.GameObjects.Text;gain:Phaser.GameObjects.Text;beat:number;fx?:PaintedFX;fxSeq?:number;fxAt?:number;fxKind?:EventFX}
+type Panorama=EraPainting
+type Actor={body:Phaser.GameObjects.Image;shadow:Phaser.GameObjects.Image;head:Phaser.GameObjects.Image;scarf:Phaser.GameObjects.Image;marker:Phaser.GameObjects.Image;name:Phaser.GameObjects.Text;gain:Phaser.GameObjects.Text;beat:number;fxSeq?:number}
 type Puff={image:Phaser.GameObjects.Image;at:number;life:number;x:number;y:number;size:number;screen:boolean}
 
 class ExperienceScene extends Phaser.Scene{
  private read:()=>SceneInput;private hooks:Hooks;private mode:Mode;private failed=false
  private motion=new ScoreMotion();private actors=new Map<string,Actor>();private background:Phaser.GameObjects.Image[]=[];private dust:Puff[]=[]
- private eras:Panorama[]=[];private era=0;private transition?:{from:number;to:number;at:number};private tileKeys=new Set<string>();private cleanTiles=false
+ private eras:Panorama[]=[];private era=0;private transition?:{from:number;to:number;at:number};private tileKeys=new Set<string>()
  private chestSprites:Phaser.GameObjects.Image[]=[];private chestVisibleAt=0;private chestActive=false;private chestExitAt=-Infinity;private chestKey='';private chestFXAt=0
  private ambientTime=0
  private chestPaint?:PaintedFX
+ private raceEffects?:RaceEffects
  private focusArt:Phaser.GameObjects.Image[]=[]
  constructor(mode:Mode,read:()=>SceneInput,hooks:Hooks){super('DuckExperience');this.mode=mode;this.read=read;this.hooks=hooks}
  preload(){
@@ -32,12 +35,12 @@ class ExperienceScene extends Phaser.Scene{
   }else{
    this.load.atlas('native',ART+'native.png',ART+'native.json');this.load.atlas('cosmetics',ART+'cosmetics.png',ART+'cosmetics.json')
    this.load.svg('shadow',ROOT+'svg/shadow.svg');this.load.svg('marker',ROOT+'ui-v6/you-marker.svg')
-   this.load.image('painted-fx',ROOT+'scroll-v4/smoke-atlas.webp')
+   for(let i=0;i<6;i++)this.load.image(`painted-dust-${i}`,`${ROOT}experience-v6/fx/dust-air/${i}.webp`)
    if(this.mode==='landing')this.load.image('landing',ART+'landing.webp')
    if(this.mode==='race'){
-    PaintedFX.preload(this,['lightning','wind'])
-    this.load.json('eras',ROOT+'scroll-v4/manifest.json')
-    for(let era=0;era<6;era++)for(let i=0;i<4;i++)this.load.image(`scene-${era}-${i}`,`${ROOT}scroll-v4/${era+1}/scene-${i+1}.webp`)
+    RaceEffects.preload(this)
+    this.load.json('eras',ROOT+'experience-v6/eras/manifest.json')
+    for(let era=0;era<EXPERIENCE_RULES.eraCount;era++)this.load.image(`scene-${era}`,`${ROOT}experience-v6/eras/era-${era+1}.webp`)
    }
   }
  }
@@ -49,36 +52,54 @@ class ExperienceScene extends Phaser.Scene{
   }
   if(this.textures.exists('native'))this.textures.get('native').setFilter(Phaser.Textures.FilterMode.NEAREST)
   if(this.textures.exists('cosmetics'))this.textures.get('cosmetics').setFilter(Phaser.Textures.FilterMode.NEAREST)
-  const fx=this.textures.get('painted-fx'),source=fx.getSourceImage() as HTMLImageElement
-  for(let i=0;i<8;i++)fx.add(String(i),0,Math.floor(i%4*source.width/4),Math.floor(Math.floor(i/4)*source.height/2),Math.floor(source.width/4),Math.floor(source.height/2))
-  for(let i=0;i<48;i++)this.dust.push({image:this.add.image(0,0,'painted-fx','0').setVisible(false).setDepth(9000),at:0,life:0,x:0,y:0,size:0,screen:false})
-  if(this.mode==='race'){this.eras=this.cache.json.get('eras').eras;for(let i=0;i<16;i++)this.background.push(this.add.image(0,0,'scene-0-0').setOrigin(0).setScrollFactor(0).setDepth(-100))}
+  if(this.mode==='chests'){
+   const fx=this.textures.get('painted-fx'),source=fx.getSourceImage() as HTMLImageElement
+   for(let i=0;i<8;i++)fx.add(String(i),0,Math.floor(i%4*source.width/4),Math.floor(Math.floor(i/4)*source.height/2),Math.floor(source.width/4),Math.floor(source.height/2))
+  }
+  for(let i=0;i<48;i++)this.dust.push({image:this.add.image(0,0,this.mode==='chests'?'painted-fx':'painted-dust-0',this.mode==='chests'?'0':undefined).setVisible(false).setDepth(9000),at:0,life:0,x:0,y:0,size:0,screen:false})
+  if(this.mode==='race')this.raceEffects=new RaceEffects(this)
+  if(this.mode==='race'){this.eras=this.cache.json.get('eras').eras;for(let i=0;i<16;i++)this.background.push(this.add.image(0,0,'scene-0').setOrigin(0).setScrollFactor(0).setDepth(-100))}
   if(this.mode==='landing')this.background.push(this.add.image(0,0,'landing').setOrigin(0).setDepth(-100))
   if(this.mode==='chests')for(const kind of ['safe','single','explosive'] as const){const sprite=this.add.image(0,0,`chest-${kind}-0`).setOrigin(.5,364/384).setVisible(false);this.chestSprites.push(sprite)}
   if(this.mode==='chests')this.chestPaint=new PaintedFX(this)
   this.game.canvas.setAttribute('aria-hidden','true');this.game.canvas.dataset.engine='phaser-4.2.1';this.hooks.ready()
-  this.events.once('shutdown',()=>{this.actors.clear();this.tileKeys.clear();this.dust=[]})
+  this.events.once('shutdown',()=>{this.raceEffects?.destroy();this.actors.clear();this.tileKeys.clear();this.dust=[]})
  }
- private tile(era:number,index:number){
-  const key=`painted-${era}-${index}`;if(this.textures.exists(key))return key
-  const source=this.textures.get(`scene-${era}-${index}`).getSourceImage() as HTMLImageElement,cut=this.eras[era].roadCuts[index]
-  const texture=this.textures.createCanvas(key,1152,512)!;const ctx=texture.context,top=512*.52,bottom=512*.77,a=Math.round(source.height*cut[0]),b=Math.round(source.height*cut[1])
-  ctx.drawImage(source,0,0,source.width,a,0,0,1152,top);ctx.drawImage(source,0,a,source.width,b-a,0,top,1152,bottom-top);ctx.drawImage(source,0,b,source.width,source.height-b,0,bottom,1152,512-bottom)
-  ctx.globalCompositeOperation='destination-in';const blend=ctx.createLinearGradient(0,0,128,0);blend.addColorStop(0,'rgba(0,0,0,0)');blend.addColorStop(1,'#000');ctx.fillStyle=blend;ctx.fillRect(0,0,1152,512);texture.refresh();this.tileKeys.add(key);return key
+ private tile(era:number){
+  const key=`panorama-${era}`
+  if(this.textures.exists(key))return key
+  const source=this.textures.get(`scene-${era}`).getSourceImage() as HTMLImageElement
+  const texture=this.textures.createCanvas(key,source.width-Math.max(2,Math.round(source.width*.018)),source.height)!
+  periodicPainting(source,texture.canvas)
+  texture.refresh()
+  this.tileKeys.add(key)
+  return key
  }
- private scenery(era:number,camera:number,zoom:number,now:number,reduced:boolean){
-  if(this.cleanTiles){for(const sprite of this.background)sprite.setTexture(`scene-${this.era}-0`).setVisible(false);for(const key of this.tileKeys)if(!key.startsWith(`painted-${this.era}-`)){this.textures.remove(key);this.tileKeys.delete(key)}this.cleanTiles=false}
-  if(era!==this.era&&!this.transition){if(reduced)this.era=era;else{this.transition={from:this.era,to:era,at:now};for(let i=0;i<5;i++)this.puff(-170-i*110,this.scale.height*(.35+i*.045),260,1600,now+i*45,true)}}
-  const transition=this.transition,progress=transition?Math.min(1,(now-transition.at)/1250):0
-  const views=transition?[{era:transition.from,alpha:1},{era:transition.to,alpha:progress*progress*(3-2*progress)}]:[{era:this.era,alpha:1}]
-  const first=Math.floor(camera/1024)-1,count=Math.ceil(this.scale.width/(1024*zoom))+2;let slot=0
-  for(const view of views)for(let j=0;j<count;j++){
-   const tile=first+j,index=((tile%4)+4)%4,sprite=this.background[slot++];if(!sprite)continue
-   sprite.setTexture(this.tile(view.era,index)).setPosition((tile*1024-camera)*zoom,0).setDisplaySize(1152*zoom,this.scale.height).setAlpha(view.alpha).setVisible(true)
+ private scenery(era:number,camera:number,zoom:number,now:number,reduced:boolean):[number,number]{
+  if(era!==this.era&&!this.transition){
+   if(reduced)this.era=era
+   else this.transition={from:this.era,to:era,at:now}
+  }
+  const transition=this.transition
+  const progress=transition?Math.max(0,Math.min(1,(now-transition.at)/1250)):0
+  const mix=progress*progress*(3-2*progress)
+  const views=transition?[{era:transition.from,alpha:1},{era:transition.to,alpha:mix}]:[{era:this.era,alpha:1}]
+  let slot=0
+  for(const view of views){
+   const key=this.tile(view.era)
+   const source=this.textures.get(key).getSourceImage() as HTMLCanvasElement
+   for(const part of panoramaTiles(camera,this.scale.width,this.scale.height,zoom,source.width,source.height)){
+    let sprite=this.background[slot++]
+    if(!sprite){sprite=this.add.image(0,0,key).setOrigin(0).setScrollFactor(0).setDepth(-100);this.background.push(sprite)}
+    sprite.setTexture(key).setPosition(part.x,0).setDisplaySize(part.width,part.height).setAlpha(view.alpha).setVisible(true)
+   }
   }
   for(;slot<this.background.length;slot++)this.background[slot].setVisible(false)
-  if(transition&&progress>=1){this.era=transition.to;this.transition=undefined;this.cleanTiles=true}
-  this.game.canvas.dataset.scene=String(((Math.floor((camera+this.scale.width*.38/zoom)/1024)%4)+4)%4+1)
+  const from=this.eras[transition?.from??this.era].road,to=this.eras[transition?.to??this.era].road
+  const road:[number,number]=[from[0]+(to[0]-from[0])*mix,from[1]+(to[1]-from[1])*mix]
+  if(transition&&progress>=1){this.era=transition.to;this.transition=undefined}
+  this.game.canvas.dataset.era=String(era+1)
+  return road
  }
  private actor(p:RacerView){
   let a=this.actors.get(p.id);if(a)return a
@@ -98,7 +119,7 @@ class ExperienceScene extends Phaser.Scene{
   return a
  }
  private puff(x:number,y:number,size:number,life:number,at:number,screen=false){const p=this.dust.find(p=>p.life===0);if(p)Object.assign(p,{x,y,size,life,at,screen})}
- private particles(now:number,delta:number){for(const p of this.dust){if(!p.life)continue;const t=(now-p.at)/p.life;if(t<0)continue;if(t>=1){p.life=0;p.image.setVisible(false);continue}p.image.setVisible(true).setFrame(String(Math.min(7,Math.floor(t*8)))).setPosition(p.x+(p.screen?t*1800:-t*14),p.y).setDisplaySize(p.size,p.size*.56).setAlpha(Math.sin(t*Math.PI)*(p.screen?.23:.28));if(p.screen)p.image.setDepth(6000);else p.image.setDepth(p.y+.2)}void delta}
+ private particles(now:number,delta:number){for(const p of this.dust){if(!p.life)continue;const t=(now-p.at)/p.life;if(t<0)continue;if(t>=1){p.life=0;p.image.setVisible(false);continue}p.image.setVisible(true);if(this.mode==='chests')p.image.setFrame(String(Math.min(7,Math.floor(t*8))));else p.image.setTexture(`painted-dust-${Math.min(5,Math.floor(t*6))}`);p.image.setPosition(p.x+(p.screen?t*1800:-t*14),p.y).setDisplaySize(p.size,p.size*.56).setAlpha(Math.sin(t*Math.PI)*(p.screen?.23:.28));if(p.screen)p.image.setDepth(6000);else p.image.setDepth(p.y+.2)}void delta}
  update(clock:number,delta:number){
   if(this.failed)return
   const input=this.read(),w=this.scale.width,h=this.scale.height,reduced=input.reduced
@@ -122,25 +143,23 @@ class ExperienceScene extends Phaser.Scene{
   const s=input.snapshot;if(!s?.experience)return
   const elapsed=elapsedTime(s,input.now),active=s.phase==='racing'&&!s.experience.paused,zoom=w<600?.66:w<900?.85:1
   this.motion.update(s.players,elapsed,input.host?s.players[0]?.id:s.me?.id,w,zoom,reduced)
-  this.scenery(Math.min(5,Math.floor(elapsed/120000)),this.motion.camera,zoom,clock,reduced)
+  const road=this.scenery(Math.min(EXPERIENCE_RULES.eraCount-1,Math.floor(elapsed/EXPERIENCE_RULES.eraMs)),this.motion.camera,zoom,clock,reduced)
+  this.raceEffects?.begin(elapsed,w,h,reduced,road)
   const keep=new Set<string>()
-  for(const p of s.players){const runner=this.motion.actors.get(p.id)!;const x=(runner.worldX-this.motion.camera)*zoom,y=h*.52+h*.25*(.12+p.y/6*.76),size=w<600?2.15:2.7
+  for(const p of s.players){const runner=this.motion.actors.get(p.id)!;const x=(runner.worldX-this.motion.camera)*zoom,y=h*(road[0]+(road[1]-road[0])*(.12+p.y/6*.76)),size=w<600?2.15:2.7
    const pose=active?runner.pose:'idle',frame=active?runner.frame:0,z=active?runner.z:0
    const a=this.drawActor(p,x,y,pose,frame,z*zoom,size,input.host,p.id===s.me?.id&&!input.host,elapsed,runner.delta,runner.changedAt);keep.add(p.id)
-   // Only new authoritative mutations trigger FX. Initial/reconnected history
-   // does not replay a whole match, and FX never writes points or movement.
+   this.raceEffects?.follow(p.id,x,y)
    const events=p.scoreEvents||[],latest=events.at(-1)?.seq||0
-   if(a.fxSeq!==undefined){const event=events.filter(e=>e.seq>a.fxSeq!&&e.delta&&e.fx).at(-1);if(event){a.fxKind=event.fx;a.fxAt=elapsed}}
+   const fresh=a.fxSeq===undefined?events.filter(event=>elapsed-event.at<=1500):events.filter(event=>event.seq>a.fxSeq!)
+   for(const event of fresh)if(event.fx){this.raceEffects?.trigger(`${p.id}:${event.seq}`,event.fx,elapsed,x,y,event.delta,p.id)}
    a.fxSeq=latest
-   if(a.fxKind&&a.fxAt!==undefined){
-    a.fx??=new PaintedFX(this)
-    a.fx.draw(a.fxKind,(elapsed-a.fxAt)/1000,x,y,Math.min(w<600?185:300,h*.8),y+.3,reduced)
-    if(elapsed-a.fxAt>=1000){a.fx.hide();a.fxKind=undefined}
-   }
+   if(p.shield>0)this.raceEffects?.shield(x,y,size,elapsed,reduced)
    if(!reduced&&active){const beat=Math.floor(runner.gait/2);if(beat!==a.beat&&!runner.damage){a.beat=beat;this.puff(x-18,y,28,580,clock)}}
    if(p.id===s.me?.id)Object.assign(this.game.canvas.dataset,{pose,frame:String(frame),score:String(p.points),bodyScale:String(size),worldX:String(runner.worldX),offset:String(runner.offset),jumpHeight:String(z),damage:String(!!runner.damage)})
   }
   for(const [id,a]of this.actors)if(!keep.has(id)){Object.values(a).forEach(object=>{if(object&&typeof object==='object'&&'destroy'in object)(object as Phaser.GameObjects.GameObject).destroy()});this.actors.delete(id)}
+  this.raceEffects?.end()
   this.particles(clock,delta)
  }
  private updateChests(input:SceneInput,clock:number){

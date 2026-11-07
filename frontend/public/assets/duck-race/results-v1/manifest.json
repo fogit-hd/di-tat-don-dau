@@ -404,514 +404,4542 @@
       ]
     },
     {
-      "name": "winner-coronation",
-      "frames": 40,
-      "cell": 96,
-      "anchor": [
-        48,
-        88
-      ],
-      "entry": "reach-raise-wear",
-      "cels": [
-        {
-          "frame": 0,
-          "phase": "retrieve",
-          "crownVisible": false,
-          "crownBase": [
-            19.0,
-            41.0
-          ],
-          "width": 3,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 1,
-          "phase": "retrieve",
-          "crownVisible": false,
-          "crownBase": [
-            19.55,
-            40.55
-          ],
-          "width": 3,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 2,
-          "phase": "retrieve",
-          "crownVisible": false,
-          "crownBase": [
-            20.09,
-            40.09
-          ],
-          "width": 3,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 3,
-          "phase": "retrieve",
-          "crownVisible": false,
-          "crownBase": [
-            20.64,
-            39.64
-          ],
-          "width": 3,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 4,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            21.18,
-            39.18
-          ],
-          "width": 4.0,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 5,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            21.73,
-            38.73
-          ],
-          "width": 5.43,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 6,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            22.27,
-            38.27
-          ],
-          "width": 6.86,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 7,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            22.82,
-            37.82
-          ],
-          "width": 8.29,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 8,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            23.36,
-            37.36
-          ],
-          "width": 9.71,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 9,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            23.91,
-            36.91
-          ],
-          "width": 11.14,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 10,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            24.45,
-            36.45
-          ],
-          "width": 12.57,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 11,
-          "phase": "retrieve",
-          "crownVisible": true,
-          "crownBase": [
-            25.0,
-            36.0
-          ],
-          "width": 14.0,
-          "lookUp": 0,
-          "compactWings": false
-        },
-        {
-          "frame": 12,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            25.0,
-            36.0
-          ],
-          "width": 14.0,
-          "lookUp": 0.0,
-          "compactWings": true
-        },
-        {
-          "frame": 13,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            25.64,
-            35.18
-          ],
-          "width": 14.18,
-          "lookUp": 0.09,
-          "compactWings": true
-        },
-        {
-          "frame": 14,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            26.27,
-            34.36
-          ],
-          "width": 14.36,
-          "lookUp": 0.18,
-          "compactWings": true
-        },
-        {
-          "frame": 15,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            26.91,
-            33.55
-          ],
-          "width": 14.55,
-          "lookUp": 0.27,
-          "compactWings": true
-        },
-        {
-          "frame": 16,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            27.55,
-            32.73
-          ],
-          "width": 14.73,
-          "lookUp": 0.36,
-          "compactWings": true
-        },
-        {
-          "frame": 17,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            28.18,
-            31.91
-          ],
-          "width": 14.91,
-          "lookUp": 0.45,
-          "compactWings": true
-        },
-        {
-          "frame": 18,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            28.82,
-            31.09
-          ],
-          "width": 15.09,
-          "lookUp": 0.55,
-          "compactWings": true
-        },
-        {
-          "frame": 19,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            29.45,
-            30.27
-          ],
-          "width": 15.27,
-          "lookUp": 0.64,
-          "compactWings": true
-        },
-        {
-          "frame": 20,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            30.09,
-            29.45
-          ],
-          "width": 15.45,
-          "lookUp": 0.73,
-          "compactWings": true
-        },
-        {
-          "frame": 21,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            30.73,
-            28.64
-          ],
-          "width": 15.64,
-          "lookUp": 0.82,
-          "compactWings": true
-        },
-        {
-          "frame": 22,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            31.36,
-            27.82
-          ],
-          "width": 15.82,
-          "lookUp": 0.91,
-          "compactWings": true
-        },
-        {
-          "frame": 23,
-          "phase": "raise",
-          "crownVisible": true,
-          "crownBase": [
-            32.0,
-            27.0
-          ],
-          "width": 16.0,
-          "lookUp": 1.0,
-          "compactWings": true
-        },
-        {
-          "frame": 24,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            32.0,
-            27.0
-          ],
-          "width": 16,
-          "lookUp": 1.0,
-          "compactWings": true
-        },
-        {
-          "frame": 25,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.97,
-            27.27
-          ],
-          "width": 16,
-          "lookUp": 0.93,
-          "compactWings": true
-        },
-        {
-          "frame": 26,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.93,
-            27.53
-          ],
-          "width": 16,
-          "lookUp": 0.87,
-          "compactWings": true
-        },
-        {
-          "frame": 27,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.9,
-            27.8
-          ],
-          "width": 16,
-          "lookUp": 0.8,
-          "compactWings": true
-        },
-        {
-          "frame": 28,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.87,
-            28.07
-          ],
-          "width": 16,
-          "lookUp": 0.73,
-          "compactWings": true
-        },
-        {
-          "frame": 29,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.83,
-            28.33
-          ],
-          "width": 16,
-          "lookUp": 0.67,
-          "compactWings": true
-        },
-        {
-          "frame": 30,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.8,
-            28.6
-          ],
-          "width": 16,
-          "lookUp": 0.6,
-          "compactWings": true
-        },
-        {
-          "frame": 31,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.77,
-            28.87
-          ],
-          "width": 16,
-          "lookUp": 0.53,
-          "compactWings": true
-        },
-        {
-          "frame": 32,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.73,
-            29.13
-          ],
-          "width": 16,
-          "lookUp": 0.47,
-          "compactWings": true
-        },
-        {
-          "frame": 33,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.7,
-            29.4
-          ],
-          "width": 16,
-          "lookUp": 0.4,
-          "compactWings": true
-        },
-        {
-          "frame": 34,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.67,
-            29.67
-          ],
-          "width": 16,
-          "lookUp": 0.33,
-          "compactWings": true
-        },
-        {
-          "frame": 35,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.63,
-            29.93
-          ],
-          "width": 16,
-          "lookUp": 0.27,
-          "compactWings": true
-        },
-        {
-          "frame": 36,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.6,
-            30.2
-          ],
-          "width": 16,
-          "lookUp": 0.2,
-          "compactWings": true
-        },
-        {
-          "frame": 37,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.57,
-            30.47
-          ],
-          "width": 16,
-          "lookUp": 0.13,
-          "compactWings": true
-        },
-        {
-          "frame": 38,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.53,
-            30.73
-          ],
-          "width": 16,
-          "lookUp": 0.07,
-          "compactWings": true
-        },
-        {
-          "frame": 39,
-          "phase": "wear",
-          "crownVisible": true,
-          "crownBase": [
-            31.5,
-            31.0
-          ],
-          "width": 16,
-          "lookUp": 0.0,
-          "compactWings": true
-        }
-      ]
-    },
-    {
-      "name": "winner-crowned-idle",
-      "frames": 4,
-      "cell": 96,
-      "anchor": [
-        48,
-        88
-      ],
-      "entry": "integrated-crown-idle"
-    },
-    {
       "name": "silver-cheer",
       "frames": 6,
       "cell": 64,
       "anchor": [
         32,
         48
+      ]
+    },
+    {
+      "name": "bronze-skate",
+      "frames": 96,
+      "cell": 128,
+      "columns": 8,
+      "anchor": [
+        64,
+        118
+      ],
+      "fps": 24,
+      "cels": [
+        {
+          "frame": 0,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 1,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 2,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 3,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 4,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 5,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 6,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 7,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 8,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 9,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 10,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 11,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 12,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 13,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 14,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 15,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 16,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 17,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 18,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 19,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 20,
+          "state": "ride-in",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": true,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 21,
+          "state": "step-off",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 22,
+          "state": "step-off",
+          "foot": [
+            76,
+            112
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            89,
+            107
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 23,
+          "state": "step-off",
+          "foot": [
+            75,
+            113
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            88,
+            108
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 24,
+          "state": "step-off",
+          "foot": [
+            74,
+            113
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            87,
+            108
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 25,
+          "state": "step-off",
+          "foot": [
+            72,
+            114
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            85,
+            109
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 26,
+          "state": "step-off",
+          "foot": [
+            71,
+            115
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            84,
+            110
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 27,
+          "state": "step-off",
+          "foot": [
+            69,
+            115
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            82,
+            110
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 28,
+          "state": "step-off",
+          "foot": [
+            68,
+            116
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            81,
+            111
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 29,
+          "state": "step-off",
+          "foot": [
+            66,
+            117
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            79,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 30,
+          "state": "step-off",
+          "foot": [
+            65,
+            117
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            78,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 31,
+          "state": "step-off",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 32,
+          "state": "step-off",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 33,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 34,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 35,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 36,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 37,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 38,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 39,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 40,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 41,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 42,
+          "state": "push-board",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 43,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 44,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 45,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 46,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 47,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 48,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 49,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 50,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 51,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 52,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 53,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 54,
+          "state": "retrieve-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 55,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 56,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            77,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 57,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            76,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 58,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            75,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 59,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            73,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 60,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            71,
+            113
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 61,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": false,
+          "cardCentre": [
+            70,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 62,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            68,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 63,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            66,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 64,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            65,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 65,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 66,
+          "state": "turn-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 67,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 68,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 69,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 70,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 71,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 72,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 73,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 74,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 75,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 76,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 77,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 78,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 79,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 80,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 81,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 82,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 83,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 84,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 85,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 86,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 87,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 88,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 89,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 90,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 91,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 92,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 93,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 94,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        },
+        {
+          "frame": 95,
+          "state": "present-card",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "onBoard": false,
+          "cardFace": true,
+          "cardCentre": [
+            64,
+            112
+          ],
+          "numeral": "3",
+          "numeralMirrored": false
+        }
+      ]
+    },
+    {
+      "name": "silver-swing",
+      "frames": 96,
+      "cell": 128,
+      "columns": 8,
+      "anchor": [
+        64,
+        118
+      ],
+      "fps": 24,
+      "cels": [
+        {
+          "frame": 0,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 1,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 2,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 3,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 4,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 5,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 6,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 7,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 8,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 9,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 10,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 11,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 12,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 13,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 14,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 15,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 16,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 17,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 18,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 19,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 20,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 21,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 22,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 23,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 24,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 25,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 26,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 27,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 28,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 29,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 30,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 31,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 32,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 33,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 34,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 35,
+          "state": "swing",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 36,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 37,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": true,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 38,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 39,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 40,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 41,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 42,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 43,
+          "state": "release",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 44,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 45,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 46,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 47,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 48,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 49,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 50,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 51,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 52,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 53,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 54,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 55,
+          "state": "retrieve-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 56,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 57,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 58,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 59,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 60,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 61,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 62,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 63,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 64,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 65,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 66,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 67,
+          "state": "turn-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 68,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 69,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 70,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 71,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 72,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 73,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 74,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 75,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 76,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 77,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 78,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 79,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 80,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 81,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 82,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 83,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 84,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 85,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 86,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 87,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 88,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 89,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 90,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 91,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 92,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 93,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 94,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        },
+        {
+          "frame": 95,
+          "state": "present-medal",
+          "foot": [
+            64,
+            118
+          ],
+          "ground": [
+            64,
+            118
+          ],
+          "bodyScale": 1,
+          "ropeAttached": false,
+          "ropeSocket": [
+            64,
+            94
+          ]
+        }
+      ]
+    },
+    {
+      "name": "winner-coronation",
+      "frames": 40,
+      "columns": 8,
+      "cell": 96,
+      "anchor": [
+        48,
+        88
+      ],
+      "cels": [
+        {
+          "phase": "retrieve",
+          "width": 3,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            19.0,
+            41.0
+          ],
+          "compactWings": false,
+          "crownVisible": false,
+          "frame": 0
+        },
+        {
+          "phase": "retrieve",
+          "width": 3,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            19.55,
+            40.55
+          ],
+          "compactWings": false,
+          "crownVisible": false,
+          "frame": 1
+        },
+        {
+          "phase": "retrieve",
+          "width": 3,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            20.09,
+            40.09
+          ],
+          "compactWings": false,
+          "crownVisible": false,
+          "frame": 2
+        },
+        {
+          "phase": "retrieve",
+          "width": 3,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            20.64,
+            39.64
+          ],
+          "compactWings": false,
+          "crownVisible": false,
+          "frame": 3
+        },
+        {
+          "phase": "retrieve",
+          "width": 3.82,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            21.18,
+            39.18
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 4
+        },
+        {
+          "phase": "retrieve",
+          "width": 4.99,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            21.73,
+            38.73
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 5
+        },
+        {
+          "phase": "retrieve",
+          "width": 6.16,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            22.27,
+            38.27
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 6
+        },
+        {
+          "phase": "retrieve",
+          "width": 7.32,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            22.82,
+            37.82
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 7
+        },
+        {
+          "phase": "retrieve",
+          "width": 8.49,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            23.36,
+            37.36
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 8
+        },
+        {
+          "phase": "retrieve",
+          "width": 9.66,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            23.91,
+            36.91
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 9
+        },
+        {
+          "phase": "retrieve",
+          "width": 10.83,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            24.45,
+            36.45
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 10
+        },
+        {
+          "phase": "retrieve",
+          "width": 12.0,
+          "height": 6,
+          "lookUp": 0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            25.0,
+            36.0
+          ],
+          "compactWings": false,
+          "crownVisible": true,
+          "frame": 11
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            25.0,
+            36.0
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 12
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.09090909090909091,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            25.55,
+            35.18
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 13
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.18181818181818182,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            26.09,
+            34.36
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 14
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.2727272727272727,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            26.64,
+            33.55
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 15
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.36363636363636365,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            27.18,
+            32.73
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 16
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.45454545454545453,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            27.73,
+            31.91
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 17
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.5454545454545454,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            28.27,
+            31.09
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 18
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.6363636363636364,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            28.82,
+            30.27
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 19
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.7272727272727273,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            29.36,
+            29.45
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 20
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.8181818181818182,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            29.91,
+            28.64
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 21
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.9090909090909091,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            30.45,
+            27.82
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 22
+        },
+        {
+          "phase": "raise",
+          "width": 12,
+          "height": 6,
+          "lookUp": 1.0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31.0,
+            27.0
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 23
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 1.0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            27.0
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 24
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.9333333333333333,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            27.27
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 25
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.8666666666666667,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            27.53
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 26
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.8,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            27.8
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 27
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.7333333333333334,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            28.07
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 28
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.6666666666666667,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            28.33
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 29
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.6,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            28.6
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 30
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.5333333333333333,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            28.87
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 31
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.4666666666666667,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            29.13
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 32
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.4,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            29.4
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 33
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.33333333333333337,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            29.67
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 34
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.2666666666666667,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            29.93
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 35
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.19999999999999996,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            30.2
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 36
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.1333333333333333,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            30.47
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 37
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.06666666666666665,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            30.73
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 38
+        },
+        {
+          "phase": "wear",
+          "width": 12,
+          "height": 6,
+          "lookUp": 0.0,
+          "foot": [
+            48,
+            88
+          ],
+          "crownBase": [
+            31,
+            31.0
+          ],
+          "compactWings": true,
+          "crownVisible": true,
+          "frame": 39
+        }
+      ]
+    },
+    {
+      "name": "winner-crowned-idle",
+      "frames": 4,
+      "columns": 4,
+      "cell": 96,
+      "anchor": [
+        48,
+        88
+      ],
+      "cels": [
+        {
+          "frame": 0,
+          "crownBase": [
+            31,
+            31
+          ],
+          "width": 12,
+          "height": 6,
+          "foot": [
+            48,
+            88
+          ],
+          "nativeFrame": 0
+        },
+        {
+          "frame": 1,
+          "crownBase": [
+            31,
+            30
+          ],
+          "width": 12,
+          "height": 6,
+          "foot": [
+            48,
+            88
+          ],
+          "nativeFrame": 1
+        },
+        {
+          "frame": 2,
+          "crownBase": [
+            31,
+            31
+          ],
+          "width": 12,
+          "height": 6,
+          "foot": [
+            48,
+            88
+          ],
+          "nativeFrame": 2
+        },
+        {
+          "frame": 3,
+          "crownBase": [
+            31,
+            32
+          ],
+          "width": 12,
+          "height": 6,
+          "foot": [
+            48,
+            88
+          ],
+          "nativeFrame": 3
+        }
       ]
     }
   ]

@@ -1,0 +1,42 @@
+{
+  "matchSeconds": 480,
+  "secondsPerEra": 120,
+  "eras": [
+    {
+      "id": 1,
+      "name": "Cơ khí hóa · Hơi nước",
+      "file": "era-1.webp",
+      "road": [
+        0.68,
+        0.96
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Điện khí hóa · Sản xuất hàng loạt",
+      "file": "era-2.webp",
+      "road": [
+        0.69,
+        0.96
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Điện tử · Tự động hóa",
+      "file": "era-3.webp",
+      "road": [
+        0.78,
+        0.97
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Kết nối số · Nhà máy thông minh",
+      "file": "era-4.webp",
+      "road": [
+        0.73,
+        0.97
+      ]
+    }
+  ]
+}

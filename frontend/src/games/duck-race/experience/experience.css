@@ -1,3 +1,4 @@
+@import './group-name.css';
 @font-face{font-family:Q4UI;src:url('/assets/fonts/public-ui/DejaVuSans.ttf') format('truetype');font-weight:400;font-display:swap}
 body.q4-body{margin:0;overflow:hidden;background:#143b2d}
 .q4-shell{--q4-ink:#193e31;--q4-cream:#fff0ce;--q4-gold:#eac478;--q4-dark:#103c2c;box-sizing:border-box;width:100%;height:100svh;overflow:hidden;background:#123d2e;color:var(--q4-ink);font:15px/1.5 Q4UI,'DejaVu Sans',sans-serif;font-variant-numeric:lining-nums tabular-nums;isolation:isolate;user-select:none;-webkit-user-select:none}
@@ -91,5 +92,24 @@ body.q4-body{margin:0;overflow:hidden;background:#143b2d}
 .q4-field-feedback .q4-phaser{inset:0}
 /* Link and button SVG lettering share an identical alignment box. */
 .q4-shell .game-web-bar nav :is(a,button){display:flex;align-items:center;justify-content:center;height:44px;line-height:1}
+
+/* Names may shrink independently; scores, rank and portraits keep their space. */
+.q4-shell .q4-lobby-intro h1.q4-lobby-name {
+  width: 100%;
+  min-width: 0;
+  max-height: none;
+  overflow: visible;
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+.q4-result-me { width: min(560px, 100%); min-width: 0; }
+.q4-result-me>strong { width: 100%; min-width: 0; overflow-wrap: normal; }
+.q4-roster li>b { white-space: nowrap; }
+.q4-race-top>div:first-child { flex: 1; }
+.q4-race-top>.q4-my-score { flex: 0 1 46%; margin-left: 12px; }
+.q4-mini-board>div { min-width: 0; }
+.q4-mini-board b { min-width: 0; }
+.q4-targets .q4-action { min-width: 0; }
+.q4-targets .q4-action>img { flex: none; }
 .q4-shell .game-web-bar nav .art-text{display:inline-flex;align-items:center;line-height:1;height:1.34375em;vertical-align:initial}
 @media(min-width:768px){.q4-shell .game-web-bar nav{grid-column:2;grid-row:1}.q4-shell .game-web-account{grid-column:3;grid-row:1}}
