@@ -3,12 +3,14 @@ import type { SceneInput } from './PhaserView'
 import type { RacerView } from '../contracts'
 import type { ChestKind } from '../experience-contracts'
 import { ScoreMotion, elapsedTime } from './motion'
+import { PaintedFX } from './PaintedFX'
+import type { EventFX } from '../experience-contracts'
 
 const ROOT='/assets/duck-race/',ART=ROOT+'experience-v4/'
 type Hooks={ready:()=>void;error:(message:string)=>void;chest:(kind:ChestKind)=>void}
 type Mode='race'|'chests'|'portrait'|'landing'|'field'
 type Panorama={files:string[];roadCuts:[number,number][];name:string}
-type Actor={body:Phaser.GameObjects.Image;shadow:Phaser.GameObjects.Image;head:Phaser.GameObjects.Image;scarf:Phaser.GameObjects.Image;marker:Phaser.GameObjects.Image;name:Phaser.GameObjects.Text;gain:Phaser.GameObjects.Text;beat:number}
+type Actor={body:Phaser.GameObjects.Image;shadow:Phaser.GameObjects.Image;head:Phaser.GameObjects.Image;scarf:Phaser.GameObjects.Image;marker:Phaser.GameObjects.Image;name:Phaser.GameObjects.Text;gain:Phaser.GameObjects.Text;beat:number;fx?:PaintedFX;fxSeq?:number;fxAt?:number;fxKind?:EventFX}
 type Puff={image:Phaser.GameObjects.Image;at:number;life:number;x:number;y:number;size:number;screen:boolean}
 
 class ExperienceScene extends Phaser.Scene{
@@ -17,12 +19,14 @@ class ExperienceScene extends Phaser.Scene{
  private eras:Panorama[]=[];private era=0;private transition?:{from:number;to:number;at:number};private tileKeys=new Set<string>();private cleanTiles=false
  private chestSprites:Phaser.GameObjects.Image[]=[];private chestVisibleAt=0;private chestActive=false;private chestExitAt=-Infinity;private chestKey='';private chestFXAt=0
  private ambientTime=0
+ private chestPaint?:PaintedFX
  private focusArt:Phaser.GameObjects.Image[]=[]
  constructor(mode:Mode,read:()=>SceneInput,hooks:Hooks){super('DuckExperience');this.mode=mode;this.read=read;this.hooks=hooks}
  preload(){
   this.load.on('loaderror',(file:Phaser.Loader.File)=>{this.failed=true;this.hooks.error(`Không tải được hình ${file.key}. Hãy thử lại.`)})
   if(this.mode==='field'){this.load.svg('feather',ROOT+'ui-v6/focus-feather.svg');this.load.svg('spark',ROOT+'ui-v6/focus-spark.svg');return}
   if(this.mode==='chests'){
+   PaintedFX.preload(this,['safe','chain','skull','wind'])
    for(const kind of ['safe','single','explosive'])for(let f=0;f<6;f++)this.load.image(`chest-${kind}-${f}`,`${ROOT}eras-v2/chests/${kind}/${f}.webp`)
    this.load.image('painted-fx',ROOT+'eras-v2/chest-fx.webp')
   }else{
@@ -31,6 +35,7 @@ class ExperienceScene extends Phaser.Scene{
    this.load.image('painted-fx',ROOT+'scroll-v4/smoke-atlas.webp')
    if(this.mode==='landing')this.load.image('landing',ART+'landing.webp')
    if(this.mode==='race'){
+    PaintedFX.preload(this,['lightning','wind'])
     this.load.json('eras',ROOT+'scroll-v4/manifest.json')
     for(let era=0;era<6;era++)for(let i=0;i<4;i++)this.load.image(`scene-${era}-${i}`,`${ROOT}scroll-v4/${era+1}/scene-${i+1}.webp`)
    }
@@ -50,6 +55,7 @@ class ExperienceScene extends Phaser.Scene{
   if(this.mode==='race'){this.eras=this.cache.json.get('eras').eras;for(let i=0;i<16;i++)this.background.push(this.add.image(0,0,'scene-0-0').setOrigin(0).setScrollFactor(0).setDepth(-100))}
   if(this.mode==='landing')this.background.push(this.add.image(0,0,'landing').setOrigin(0).setDepth(-100))
   if(this.mode==='chests')for(const kind of ['safe','single','explosive'] as const){const sprite=this.add.image(0,0,`chest-${kind}-0`).setOrigin(.5,364/384).setVisible(false);this.chestSprites.push(sprite)}
+  if(this.mode==='chests')this.chestPaint=new PaintedFX(this)
   this.game.canvas.setAttribute('aria-hidden','true');this.game.canvas.dataset.engine='phaser-4.2.1';this.hooks.ready()
   this.events.once('shutdown',()=>{this.actors.clear();this.tileKeys.clear();this.dust=[]})
  }
@@ -121,6 +127,16 @@ class ExperienceScene extends Phaser.Scene{
   for(const p of s.players){const runner=this.motion.actors.get(p.id)!;const x=(runner.worldX-this.motion.camera)*zoom,y=h*.52+h*.25*(.12+p.y/6*.76),size=w<600?2.15:2.7
    const pose=active?runner.pose:'idle',frame=active?runner.frame:0,z=active?runner.z:0
    const a=this.drawActor(p,x,y,pose,frame,z*zoom,size,input.host,p.id===s.me?.id&&!input.host,elapsed,runner.delta,runner.changedAt);keep.add(p.id)
+   // Only new authoritative mutations trigger FX. Initial/reconnected history
+   // does not replay a whole match, and FX never writes points or movement.
+   const events=p.scoreEvents||[],latest=events.at(-1)?.seq||0
+   if(a.fxSeq!==undefined){const event=events.filter(e=>e.seq>a.fxSeq!&&e.delta&&e.fx).at(-1);if(event){a.fxKind=event.fx;a.fxAt=elapsed}}
+   a.fxSeq=latest
+   if(a.fxKind&&a.fxAt!==undefined){
+    a.fx??=new PaintedFX(this)
+    a.fx.draw(a.fxKind,(elapsed-a.fxAt)/1000,x,y,Math.min(w<600?185:300,h*.8),y+.3,reduced)
+    if(elapsed-a.fxAt>=1000){a.fx.hide();a.fxKind=undefined}
+   }
    if(!reduced&&active){const beat=Math.floor(runner.gait/2);if(beat!==a.beat&&!runner.damage){a.beat=beat;this.puff(x-18,y,28,580,clock)}}
    if(p.id===s.me?.id)Object.assign(this.game.canvas.dataset,{pose,frame:String(frame),score:String(p.points),bodyScale:String(size),worldX:String(runner.worldX),offset:String(runner.offset),jumpHeight:String(z),damage:String(!!runner.damage)})
   }
@@ -134,6 +150,7 @@ class ExperienceScene extends Phaser.Scene{
   if(!visible&&this.chestActive)this.chestExitAt=clock
   this.chestActive=visible
   const display=visible||!input.reduced&&clock-this.chestExitAt<240
+  this.chestPaint?.hide()
   const key=chest?chest.kind+':'+chest.chosenAt:'';if(this.chestKey!==key){this.chestKey=key;this.chestFXAt=0}
   const enter=input.reduced?1:Math.min(1,(clock-this.chestVisibleAt)/350),exit=visible?1:Math.max(0,1-(clock-this.chestExitAt)/240),size=Math.min(350,w/3*1.4,h*.94),scale=size/384
   for(const [i,kind]of (['safe','single','explosive'] as const).entries()){
@@ -142,6 +159,7 @@ class ExperienceScene extends Phaser.Scene{
    const shake=selected&&age>=0&&age<.7&&!input.reduced?Math.sin(age*62)*Math.sin(age/.7*Math.PI):0
    sprite.setTexture(`chest-${kind}-${frame}`).setPosition(w*(i+.5)/3+shake*2,h-18+(1-enter)**3*18).setScale(scale).setAngle(shake*1.4).setAlpha(enter*exit*(chest&&!selected?.34:1))
    if(selected&&age>1&&age<2.8&&!input.reduced&&clock-this.chestFXAt>90){this.chestFXAt=clock;this.puff(w*(i+.5)/3+Math.sin(age*17)*size*.25,h-size*.52,26,650,clock)}
+   if(selected&&age>=.65&&age<2.65)this.chestPaint?.draw(({safe:'safe',single:'chain',explosive:'skull'} as const)[kind],(age-.65)/2,w*(i+.5)/3,h-18-size*.32,Math.min(size*1.55,h*1.12),9200,input.reduced)
   }
   this.particles(clock,16)
  }

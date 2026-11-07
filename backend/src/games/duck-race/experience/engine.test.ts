@@ -8,7 +8,7 @@ function answer(f:ReturnType<typeof fixture>,correct=true,at=f.at){const s=snaps
 describe('V4 points-only rooms',()=>{
  it('creates an isolated 12-minute room without obstacles and caps entry at seven',()=>{
   const r=createExperience(1000);expect(r.duration).toBe(720000);expect(r.hazards).toEqual([])
-  for(let i=0;i<7;i++)joinExperience(r,'Trùng tên','green',1000)
+  for(let i=0;i<7;i++)joinExperience(r,'Nhóm '+i,'green',1000)
   expect(roomEntry(r).available).toBe(false);expect(()=>joinExperience(r,'Nhóm 8','green')).toThrow('7')
   const other=createExperience();expect(()=>joinExperience(other,'Trùng tên','green')).not.toThrow()
   expect(()=>joinExperience(createExperience(),'a'.repeat(33),'green')).toThrow('32')
@@ -103,8 +103,8 @@ describe('chest catalogue and conserved transfers',()=>{
   return f
  }
  function settle(f:ReturnType<typeof fixture>){tickExperience(f.room,f.at+R.chestDoneMs);const s=snapshotExperience(f.room,f.p.id);if(s.experience?.quiz?.phase==='target')chooseTarget(f.room,f.p,s.experience.chest!.targetIds![0],f.at+R.chestDoneMs)}
- it('has 72 valid equally selectable events; safe effects never subtract or transfer',()=>{
-  expect(Object.values(CHEST_EVENTS).flat()).toHaveLength(72)
+ it('has 120 valid equally selectable events; safe effects never subtract or transfer',()=>{
+  expect(Object.values(CHEST_EVENTS).flat()).toHaveLength(120)
   for(const list of Object.values(CHEST_EVENTS)){expect(new Set(list.map(e=>e.id)).size).toBe(list.length);for(const e of list){expect(e.amount.every(Number.isInteger)).toBe(true);expect(e.amount[0]).toBeLessThanOrEqual(e.amount[1])}}
   expect(CHEST_EVENTS.safe.every(e=>e.scope==='self'&&e.amount[0]>0&&e.effect!=='transfer'&&e.effect!=='gamble')).toBe(true)
  })

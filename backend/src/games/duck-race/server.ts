@@ -74,9 +74,9 @@ app.post('/api/duck-race/rooms', route(async (req, res) => {
   res.json({ code: room.code, token: room.hostToken })
 }))
 app.post('/api/duck-race/rooms/:code/join', route(async (req, res) => {
-  const body = z.object({ name: z.string(), color: z.string().max(16), model: z.enum(['duckee', 'ducky']) }).parse(req.body)
+  const body = z.object({ name: z.string(), color: z.string().max(16), model: z.enum(['duckee', 'ducky']), joinId:z.string().uuid().optional() }).parse(req.body)
   const code = String(req.params.code).toUpperCase()
-  await serial(code, async () => { const room = await find(code); const p = experience.isExperience(room)?experience.joinExperience(room,body.name,body.color):joinRace(room, body.name, body.color, body.model); await save(room); publish(room); res.json({ code, token: p.token, id: p.id }) })
+  await serial(code, async () => { const room = await find(code); const p = experience.isExperience(room)?experience.joinExperience(room,body.name,body.color,Date.now(),body.joinId):joinRace(room, body.name, body.color, body.model); await save(room); publish(room); res.json({ code, token: p.token, id: p.id }) })
 }))
 app.get('/api/duck-race/rooms/:code/entry',route(async(req,res)=>{
  const room=await find(String(req.params.code));res.json(experience.roomEntry(room))

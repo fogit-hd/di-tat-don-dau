@@ -1,0 +1,16 @@
+{
+  "source": "design-preview/duck-race-host-fx-v5/sources.json",
+  "art": "Existing AI-painted V5 review frames; no new native duck artwork",
+  "frames": 6,
+  "kinds": [
+    "safe",
+    "chain",
+    "skull",
+    "lightning",
+    "wind"
+  ],
+  "size": [
+    512,
+    512
+  ]
+}

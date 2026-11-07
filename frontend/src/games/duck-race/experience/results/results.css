@@ -1,0 +1,52 @@
+.q4-host-results{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 94px 58px;color:#fff0c7;background:#123b2b}
+.q4-awards-stage{min-height:0;position:relative;overflow:hidden;isolation:isolate;background:url('/assets/duck-race/results-v1/backdrop.webp') center 55%/cover}
+.q4-awards-stage::before{content:'';position:absolute;inset:0;background:#092e20c7;z-index:-1}
+.q4-awards-mount{position:absolute;inset:0;pointer-events:none}
+.q4-awards-mount canvas{display:block;max-width:100%}
+.q4-awards-heading{position:absolute;top:18px;left:20px;right:20px;text-align:center;pointer-events:none}
+.q4-shell .q4-awards-heading p{font-size:13px;color:#edd39a;margin-bottom:6px}
+.q4-shell .q4-awards-heading h1{font-size:clamp(21px,2.2vw,36px);line-height:1.25;color:#fff1c7;text-shadow:0 2px 3px #092619;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q4-awards-stage[data-award-phase=first] .q4-awards-heading{left:4%;right:auto;width:32%;text-align:left}
+.q4-awards-label{position:absolute;max-width:310px;text-align:center;opacity:0;transform:translate(-50%,6px);transition:opacity .18s,transform .18s;pointer-events:none}
+.q4-awards-label.is-visible{opacity:1;transform:translate(-50%,0)}
+.q4-awards-label b{display:block;color:#dfc68c;font-size:12px}
+.q4-awards-label strong{display:block;color:#fff2c8;font-size:clamp(17px,1.7vw,26px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.q4-awards-label span{font-size:16px;font-variant-numeric:tabular-nums}
+.q4-awards-remaining{display:flex;align-items:center;gap:22px;padding:9px 6%;border-top:1px solid #b39a56;background:#103925;min-width:0}
+.q4-shell .q4-awards-remaining h2{font-size:15px;max-width:95px;font-weight:500;flex:none;color:#d7dcb9}
+.q4-awards-remaining ol{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;padding:0;gap:14px;min-width:0}
+.q4-awards-remaining li{display:flex;align-items:center;gap:12px;min-width:0}
+.q4-awards-remaining li>b{color:#dec780;font-size:19px}
+.q4-awards-remaining img{width:50px;height:48px;object-fit:contain;image-rendering:pixelated}
+.q4-awards-remaining li>div{min-width:0}
+.q4-awards-remaining strong{display:block;font-size:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.q4-awards-remaining span{font-size:14px;color:#e0d3ad;font-variant-numeric:tabular-nums}
+.q4-awards-actions{display:flex;align-items:center;justify-content:center;gap:16px;padding:5px 24px;background:#102c20}
+.q4-shell .q4-awards-actions :is(button,a){font-size:12px;min-height:44px;padding:6px 16px;white-space:nowrap;color:#ffedb2}
+.q4-shell .q4-awards-actions a{margin-left:auto}
+.q4-awards-loading,.q4-awards-error{position:absolute;top:45%;left:5%;right:5%;text-align:center}
+.q4-awards-error{background:#143b2bf5;padding:20px;max-height:70%;overflow:auto;z-index:3}
+.q4-awards-error ol{list-style:none;padding:10px 0}
+.q4-awards-history{width:min(900px,100%);max-height:90svh;display:flex;flex-direction:column;gap:14px}
+.q4-awards-history header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.q4-awards-history ul{list-style:none;padding:0;min-height:0;overflow:auto;flex:1}
+.q4-awards-history li{padding:10px 0;overflow-wrap:anywhere;border-bottom:1px solid #b29b5740}
+.q4-shell .q4-room-header.is-results>div:nth-child(2)>strong{font-size:28px;color:#fff1c7}
+@media(min-width:769px) and (max-height:780px){.q4-host-results{grid-template-rows:minmax(0,1fr) 76px 50px}.q4-awards-heading{top:10px}.q4-shell .q4-awards-heading h1{font-size:24px}.q4-awards-label strong{font-size:18px}.q4-awards-label span{font-size:13px}}
+@media(max-width:768px){
+ .q4-host-results{grid-template-rows:minmax(0,1fr) 132px 94px}
+ .q4-shell .q4-room-header.is-results>div:nth-child(2)>strong{font-size:18px}
+ .q4-awards-heading{top:16px;left:12px;right:12px}
+ .q4-shell .q4-awards-heading p{font-size:11px}.q4-shell .q4-awards-heading h1{font-size:21px}
+ .q4-awards-stage[data-award-phase=first] .q4-awards-heading{left:12px;width:25%}
+ .q4-shell .q4-awards-stage[data-award-phase=first] .q4-awards-heading h1{font-size:16px;white-space:normal;overflow-wrap:anywhere}
+ .q4-awards-label strong{font-size:15px}.q4-awards-label span{font-size:12px}
+ .q4-awards-remaining{padding:8px 12px;gap:8px;align-items:start;flex-direction:column}
+ .q4-shell .q4-awards-remaining h2{font-size:12px;max-width:none}
+ .q4-awards-remaining ol{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 12px}
+ .q4-awards-remaining li{gap:7px}.q4-awards-remaining img{width:35px;height:30px}
+ .q4-awards-remaining li>b{font-size:14px}.q4-awards-remaining strong{font-size:12px}.q4-awards-remaining span{font-size:11px}
+ .q4-awards-actions{display:grid;grid-template-columns:1fr 1fr;padding:3px 8px;gap:1px 8px}
+ .q4-shell .q4-awards-actions :is(button,a){width:100%;padding:3px 8px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.q4-awards-label{transition:none;transform:translateX(-50%)}}

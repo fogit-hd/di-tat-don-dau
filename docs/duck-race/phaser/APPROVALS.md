@@ -38,3 +38,13 @@ The original transparent painting now renders as one uniformly scaled image in P
 User: “canvas này ổn, bắt đầu thiết kế”, replying to the complete V4 package and explicit statement that it had not yet been applied to live rooms. This approves implementing the submitted landing, code → check → name → lobby flow, 12-minute/seven-group points-only experience, responsive question/chest states, cosmetic-only scarf/goggles and native damage/fall/recovery sequence. References: `design-preview/duck-race-experience-v4/README.md`, seven comps and native motion preview; `V3-SCROLL-REVISION.md` supplies the preceding four-scenes-per-era motion proposal.
 
 New rooms use the V4 rules and a dedicated Phaser view. Existing persisted rooms keep their previous engine until they finish; no reset or reinterpretation of their funds/state. The earlier manual-motor/no-passive-movement contract remains applicable only to those legacy rooms and the older isolated migration previews. In V4 the common cruising animation never changes points/ranks; gains and losses change the relative point coordinate, at 3.2 world px/point. This approval does not authorize deployment or a rewrite of the factory game.
+
+## 2026-11-06 — recipient receipts, painted chest/weather FX and event expansion
+
+User explicitly requested fixing duplicate joins from repeated Chrome submissions, central recipient-specific chest notices (including percentages and multi-target events), applying the already-created lightning/wind canvas, and adding more interactions. This authorizes that subset of the V5 review package and the requested notices; it does **not** authorize replacing the host layout with the separate 50/25/25 canvas. This change keeps the existing host composition and original native duck model.
+
+## 2026-11-07 — approved host results ceremony applied
+
+User: “áp dụng vào dự án này”, referring to `design-preview/duck-race-results-v1/?rev=8` after the grounded silver-box and compact-wing gold corrections. This authorizes the current results ceremony in Quiz Duck Race: host-only top 3, distinct bronze climb / silver gift unfolding / gold parachute entrances in 3 → 2 → 1 order, native crown retrieval / two-wing lift / fitted wearing cels, and lower ranks 4–7. Player results remain personal. This is approval of this results surface, not the separate host realtime layout or other migration milestones.
+
+Implemented in `frontend/src/games/duck-race/experience/results/` with an independently owned Phaser instance. Eight native palette variants preserve the approved model geometry. Server-supplied final ranks and points are read-only; no client animation changes outcomes. See `RESULTS-CEREMONY.md` for verification and local fixture.
