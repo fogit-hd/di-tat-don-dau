@@ -27,7 +27,7 @@ function NoticeLine({notice,index,reduced}:{notice:VisibleNotice;index:number;re
   },Math.max(0,notice.appearedAt+NOTICE_MS-200-performance.now()))
   return()=>clearTimeout(timer)
  },[notice.appearedAt,reduced])
- const kind=notice.fx|| (notice.delta<0?'loss':notice.delta>0?'gain':'shield')
+ const kind=notice.eventId==='knowledge-challenge'?'challenge':notice.fx|| (notice.delta<0?'loss':notice.delta>0?'gain':'shield')
  return <div ref={element} className="q6-notice-line" role="status">
   <img src={`/assets/duck-race/experience-v6/icons/${kind}.svg`} alt=""/>
   <div><p>{notice.text}</p><small>{notice.title} · {notice.actorName}</small></div>

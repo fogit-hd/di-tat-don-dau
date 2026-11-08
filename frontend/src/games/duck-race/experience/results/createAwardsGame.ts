@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { actorPose, awardLayout, awardPad, awardSchedule, phaseAt, SHEETS, type AwardPhase, type ResultPlayer, type Sheet } from './motion';
 import { silverMotion } from './silver-motion';
 import { bronzeMotion } from './bronze-motion';
+import { cosmeticItems } from '../../experience-contracts';
+import { awardApparelUrl } from '../wardrobe-art';
 const ROOT = '/assets/duck-race/', ART = ROOT + 'results-v1/';
 export type AwardsInput = {
     players: readonly ResultPlayer[];
@@ -67,12 +69,12 @@ class AwardsScene extends Phaser.Scene {
                 keys.add(id);
                 this.load.spritesheet(id, ART + id + '.png', { frameWidth: SHEETS[key].cell, frameHeight: SHEETS[key].cell });
             }
-            for (const item of [p.cosmetics?.scarf, p.cosmetics?.glasses].filter(Boolean)) {
+            for (const item of cosmeticItems(p.cosmetics)) {
                 for (const pose of posesFor(p.rank)) {
                     const id = `wardrobe/${item}/${pose.name}`;
                     if (keys.has(id)) continue;
                     keys.add(id);
-                    this.load.spritesheet(id, ART + `cosmetics/${item}/${pose.name}.png`, { frameWidth: pose.cell, frameHeight: pose.cell });
+                    this.load.spritesheet(id, awardApparelUrl(item,pose.name), { frameWidth: pose.cell, frameHeight: pose.cell });
                 }
             }
         }
@@ -100,7 +102,7 @@ class AwardsScene extends Phaser.Scene {
     }
     private dress(player: ResultPlayer) {
         const keys = new Map<string, string>();
-        const items = [player.cosmetics?.scarf, player.cosmetics?.glasses].filter(Boolean);
+        const items = cosmeticItems(player.cosmetics);
         if (!items.length) return keys;
         for (const pose of posesFor(player.rank)) {
             const key = `dressed/${player.id}/${pose.name}`;

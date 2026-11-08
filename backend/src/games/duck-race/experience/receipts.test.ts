@@ -66,11 +66,13 @@ describe('recipient-specific chest receipts and semantic FX',()=>{
   expect(notice(f,1)).toEqual([])
   tickExperience(f.room,4000+R.chestRevealMs)
   for(let i=1;i<7;i++){
-   const [n]=notice(f,i);expect(n).toMatchObject({actorId:f.p.id,actorName:'Nhóm 1',eventId:event.id,delta:-25})
-   expect(n.text).toContain('Nhóm 1 đã lấy 25 điểm của bạn');expect(n.text).toContain('5%');expect(n.text).not.toContain('Nhóm 3:')
-   expect(f.room.players[i].points).toBe(before[i]-25)
+   const [n]=notice(f,i);expect(n).toMatchObject({actorId:f.p.id,actorName:'Nhóm 1',eventId:event.id})
+   expect(n.delta).toBeLessThanOrEqual(-5);expect(n.delta).toBeGreaterThanOrEqual(-25)
+   expect(n.text).toContain(`Nhóm 1 đã lấy ${-n.delta} điểm của bạn`);expect(n.text).toMatch(/[1-5]%/);expect(n.text).not.toContain('Nhóm 3:')
+   expect(f.room.players[i].points).toBe(before[i]+n.delta)
   }
-  expect(notice(f,0)[0].delta).toBe(150);expect(f.p.points).toBe(before[0]+150)
+  const received=-f.room.players.slice(1).reduce((sum,p,i)=>sum+p.points-before[i+1],0)
+  expect(notice(f,0)[0].delta).toBe(received);expect(f.p.points).toBe(before[0]+received)
   expect(f.room.players.reduce((n,p)=>n+p.points,0)).toBe(before.reduce((a,b)=>a+b,0))
   expect(snapshotExperience(f.room).experience?.notices).toBeUndefined()
   tickExperience(f.room,4000+R.chestDoneMs);expect(notice(f,1)).toHaveLength(1)

@@ -86,7 +86,7 @@ app.get('/api/duck-race/rooms/:code', route(async (req, res) => {
   await serial(code,async()=>{const room=await find(code),p=viewer(room,req.header('x-duck-token')||'');tickRoom(room);res.json(roomSnapshot(room,p?.id))})
 }))
 app.post('/api/duck-race/rooms/:code/action', route(async (req, res) => {
-  const body = z.object({ type: z.enum(['start', 'end', 'pause','resume','question','chest','target','answer', 'buy', 'star', 'card', 'jump', 'attack', 'customize']), color:z.string().max(16).optional(),model:z.string().max(16).optional(),glasses:z.string().max(16).optional(),scarf:z.string().max(16).optional(),targetId:z.string().max(80).optional(),gearHead:z.string().max(16).optional(),gearBody:z.string().max(16).optional(), questionId: z.string().max(80).optional(), choice: z.string().max(16).optional(), kind: z.string().max(16).optional(), index: z.number().int().min(0).max(2).optional() }).parse(req.body)
+  const body = z.object({ type: z.enum(['start', 'end', 'pause','resume','question','chest','target','answer', 'buy', 'star', 'card', 'jump', 'attack', 'customize']), color:z.string().max(16).optional(),model:z.string().max(16).optional(),glasses:z.string().max(16).optional(),scarf:z.string().max(16).optional(),outfit:z.string().max(16).optional(),targetId:z.string().max(80).optional(),gearHead:z.string().max(16).optional(),gearBody:z.string().max(16).optional(), questionId: z.string().max(80).optional(), choice: z.string().max(16).optional(), kind: z.string().max(16).optional(), index: z.number().int().min(0).max(2).optional() }).parse(req.body)
   const code = String(req.params.code).toUpperCase()
   await serial(code, async () => {
     const room = await find(code), p = viewer(room, req.header('x-duck-token') || '')

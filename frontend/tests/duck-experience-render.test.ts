@@ -64,3 +64,20 @@ test('wardrobe sheets cover every ceremony cel, gaze and native bow at the match
     assert.equal(file.readUInt32BE(20), Math.ceil(spec.frames / columns) * spec.cell)
   }
 })
+
+test('approved new apparel covers the full race atlas and every finalist choreography',()=>{
+ const items=['beanie','helmet','leaf','bow','tie','satchel','suit','worker']
+ const data=JSON.parse(readFileSync(new URL('wardrobe-v2/cosmetics.json',assets),'utf8'))
+ const native=JSON.parse(readFileSync(new URL('experience-v4/native.json',assets),'utf8'))
+ for(const item of items){
+  for(const key of Object.keys(native.frames).filter(key=>key.startsWith('green/'))){
+   assert.ok(data.frames[item+'/'+key.split('/').slice(1).join('/')],item+': '+key)
+  }
+  for(const [name,spec] of Object.entries({...SHEETS,idle:{frames:4,cell:64,columns:4}})){
+   const file=readFileSync(new URL(`wardrobe-v2/awards/${item}/${name}.png`,assets))
+   const columns='columns' in spec?spec.columns:spec.frames
+   assert.equal(file.readUInt32BE(16),columns*spec.cell)
+   assert.equal(file.readUInt32BE(20),Math.ceil(spec.frames/columns)*spec.cell)
+  }
+ }
+})

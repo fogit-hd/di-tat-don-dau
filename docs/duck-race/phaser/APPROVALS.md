@@ -102,3 +102,15 @@ scores and moving their original dressed ducks with gold/cyan portals over
 900ms. Reference `design-preview/duck-race-swap-v1/storyboard.png`. The event
 belongs to the explosive chest and lets the opener choose one other group.
 Both recipients receive a receipt and the host log records the exchange.
+
+## 2026-11-09 — wardrobe V2 integration
+
+User explicitly selected “Duyệt để áp dụng” for the interactive V2 review at
+`design-preview/duck-race-wardrobe-v2/`. Approved additions: knit cap, safety
+helmet, leaf pin, bow tie, necktie, satchel, business suit/trousers and worker
+overalls. The head slot replaces hats with glasses; body accessories share one
+slot with scarves. Full outfits are exclusive: selecting a set clears separate
+items; selecting a separate item removes the set. This approval covers lobby,
+race, portraits and all three already-approved awards choreographies. No body
+redesign or motion timing changes. Crown remains compatible with glasses;
+it replaces a hat for the coronation rather than stacking on the hat.

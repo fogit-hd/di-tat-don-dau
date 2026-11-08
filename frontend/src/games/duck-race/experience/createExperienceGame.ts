@@ -5,7 +5,8 @@ import type { ChestKind } from '../experience-contracts'
 import { ScoreMotion, elapsedTime } from './motion'
 import { PaintedFX } from './PaintedFX'
 import { RaceEffects } from './RaceEffects'
-import { EXPERIENCE_RULES } from '../experience-contracts'
+import { EXPERIENCE_RULES, cosmeticItems } from '../experience-contracts'
+import { APPAREL_ROOT, newApparel } from './wardrobe-art'
 import { periodicPainting, panoramaTiles, type EraPainting } from './panorama'
 
 const ROOT='/assets/duck-race/',ART=ROOT+'experience-v4/'
@@ -34,6 +35,7 @@ class ExperienceScene extends Phaser.Scene{
    this.load.image('painted-fx',ROOT+'eras-v2/chest-fx.webp')
   }else{
    this.load.atlas('native',ART+'native.png',ART+'native.json');this.load.atlas('cosmetics',ART+'cosmetics.png',ART+'cosmetics.json')
+   this.load.atlas('apparel',APPAREL_ROOT+'cosmetics.png',APPAREL_ROOT+'cosmetics.json')
    this.load.svg('shadow',ROOT+'svg/shadow.svg');this.load.svg('marker',ROOT+'ui-v6/you-marker.svg')
    for(let i=0;i<6;i++)this.load.image(`painted-dust-${i}`,`${ROOT}experience-v6/fx/dust-air/${i}.webp`)
    if(this.mode==='landing')this.load.image('landing',ART+'landing.webp')
@@ -52,6 +54,7 @@ class ExperienceScene extends Phaser.Scene{
   }
   if(this.textures.exists('native'))this.textures.get('native').setFilter(Phaser.Textures.FilterMode.NEAREST)
   if(this.textures.exists('cosmetics'))this.textures.get('cosmetics').setFilter(Phaser.Textures.FilterMode.NEAREST)
+  if(this.textures.exists('apparel'))this.textures.get('apparel').setFilter(Phaser.Textures.FilterMode.NEAREST)
   if(this.mode==='chests'){
    const fx=this.textures.get('painted-fx'),source=fx.getSourceImage() as HTMLImageElement
    for(let i=0;i<8;i++)fx.add(String(i),0,Math.floor(i%4*source.width/4),Math.floor(Math.floor(i/4)*source.height/2),Math.floor(source.width/4),Math.floor(source.height/2))
@@ -111,8 +114,8 @@ class ExperienceScene extends Phaser.Scene{
   const a=this.actor(p),key=`${p.color}/${pose}/${frame}`
   a.body.setFrame(key,false,false).setPosition(x,y-z).setScale(size).setDepth(y)
   a.shadow.setPosition(x,y+2).setDepth(y-.4).setAlpha(z? .5: .9).setDisplaySize(23*size,4.5*size)
-  const cosmetics=p.cosmetics
-  for(const [sprite,item]of [[a.head,cosmetics?.glasses],[a.scarf,cosmetics?.scarf]] as const){sprite.setVisible(!!item);if(item)sprite.setFrame(`${item}/${pose}/${frame}`,false,false).setPosition(x,y-z).setScale(size).setDepth(y+.1)}
+  const items=cosmeticItems(p.cosmetics)
+  for(const [index,sprite]of [a.scarf,a.head].entries()){const item=items[index];sprite.setVisible(!!item);if(item)sprite.setTexture(newApparel(item)?'apparel':'cosmetics',`${item}/${pose}/${frame}`).setPosition(x,y-z).setScale(size).setDepth(y+.1+index*.01)}
   a.marker.setVisible(me).setPosition(x,y-z-30*size-8).setDepth(8000)
   a.name.setVisible(host).setText(p.name.length>20?p.name.slice(0,19)+'…':p.name).setPosition(x,y-z-31*size-8).setDepth(8001)
   const age=now-changedAt;a.gain.setVisible(age>=0&&age<1650&&delta!==0).setText((delta>0?'+':'')+delta).setColor(delta>0?'#ffe191':'#ffd8c8').setPosition(x,y-z-36*size-Math.min(24,age*.015)).setDepth(8100)

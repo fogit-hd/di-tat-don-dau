@@ -1,5 +1,21 @@
 import type { ChestKind, EventFX } from '../experience-contracts'
 export type ChestEvent = { id: string; title: string; scope: 'self' | 'one-random' | 'few-random' | 'one-chosen' | 'all' | 'leader' | 'last'; effect: 'points' | 'shield' | 'next-bonus' | 'gamble' | 'transfer' | 'bonus-question' | 'swap'; amount: [number, number]; unit?: 'percent'; fx?: EventFX }
+
+/** Public selection instructions, never the server's pending random outcome. */
+export function targetPrompt(event: ChestEvent): string {
+ const low=Math.min(Math.abs(event.amount[0]),Math.abs(event.amount[1])),high=Math.max(Math.abs(event.amount[0]),Math.abs(event.amount[1]))
+ const range=low===high?`${low}`:`${low}–${high}`
+ const loss='Điểm mất thực tế có giới hạn theo số điểm và bảo hộ của nhóm đó.'
+ if(event.effect==='swap')return 'Chọn một con vịt để hoán đổi cả vị trí và số điểm với bạn. Màu và trang sức của mỗi nhóm được giữ nguyên.'
+ if(event.fx==='wind'&&event.effect==='gamble')return `Chọn một con vịt để thổi gió. Hướng gió được bốc ngẫu nhiên: gió xuôi cộng ${range} điểm, gió ngược trừ ${range} điểm. ${loss}`
+ if(event.fx==='lightning')return `Chọn một con vịt để giật điện, làm mất ngẫu nhiên ${range} điểm. ${loss}`
+ if(event.effect==='shield')return 'Chọn một con vịt để tặng một lần bảo hộ, chặn một tác động bất lợi. Mỗi nhóm giữ tối đa 3 lần.'
+ if(event.effect==='next-bonus')return `Chọn một con vịt để thưởng thêm ${range} điểm cho câu trả lời đúng kế tiếp (tổng thưởng thêm tối đa 150 điểm).`
+ if(event.effect==='transfer')return event.amount[1]<0?`Chọn một con vịt để tặng ngẫu nhiên ${range}${event.unit==='percent'?'% số điểm của bạn':' điểm của bạn'}. Khoản chuyển có giới hạn và không vượt số điểm hiện có.`:`Chọn một con vịt để lấy ngẫu nhiên ${range}${event.unit==='percent'?'% số điểm của nhóm đó':' điểm'}. Điểm lấy thực tế có giới hạn và có thể bị bảo hộ chặn.`
+ if(event.effect==='gamble')return `Chọn một con vịt để thử vận may: ngẫu nhiên được cộng hoặc bị trừ ${range} điểm. ${loss}`
+ if(event.fx==='wind')return `Chọn một con vịt để thổi gió ${event.amount[1]<0?'ngược':'xuôi'}, ${event.amount[1]<0?'trừ':'cộng'} ngẫu nhiên ${range} điểm. ${event.amount[1]<0?loss:''}`
+ return `Chọn một con vịt để ${event.amount[1]<0?'trừ':'cộng'} ngẫu nhiên ${range} điểm. ${event.amount[1]<0?loss:''}`
+}
 export const CHEST_EVENTS: Record<ChestKind, ChestEvent[]> = {
  safe: [
   {id:'knowledge-challenge',title:'Thử thách kiến thức',scope:'self',effect:'bonus-question',amount:[1,1]},
@@ -96,7 +112,7 @@ export const CHEST_EVENTS: Record<ChestKind, ChestEvent[]> = {
   {id:'last-shield',title:'Lá chắn bám đuổi',scope:'last',effect:'shield',amount:[1,1]},
   {id:'chosen-shield',title:'Bảo hộ chỉ định',scope:'one-chosen',effect:'shield',amount:[1,1]},
   {id:'chosen-risk',title:'Canh bạc chỉ định',scope:'one-chosen',effect:'gamble',amount:[35,65]},
-  {id:'all-percent-tax',title:'Thu quỹ 5% toàn phòng',scope:'all',effect:'transfer',unit:'percent',amount:[5,5]},
+  {id:'all-percent-tax',title:'Thu quỹ may rủi toàn phòng',scope:'all',effect:'transfer',unit:'percent',amount:[1,5]},
   {id:'few-percent-tax',title:'Thu phí nhóm đối thủ',scope:'few-random',effect:'transfer',unit:'percent',amount:[4,9]},
   {id:'chosen-percent-tax',title:'Truy thu điểm chỉ định',scope:'one-chosen',effect:'transfer',unit:'percent',amount:[5,12]},
   {id:'leader-percent-tax',title:'Chia lợi thế dẫn đầu',scope:'leader',effect:'transfer',unit:'percent',amount:[5,10]},
@@ -118,11 +134,11 @@ export const CHEST_EVENTS: Record<ChestKind, ChestEvent[]> = {
   {id:'storm-leader',title:'Sét chặn người dẫn đầu',scope:'leader',effect:'points',amount:[-50,-25],fx:'lightning'},
   {id:'gust-all',title:'Gió ngược toàn đường đua',scope:'all',effect:'points',amount:[-40,-20],fx:'wind'},
   {id:'gust-few',title:'Lốc cuốn nhóm đối thủ',scope:'few-random',effect:'points',amount:[-60,-25],fx:'wind'},
-  {id:'gust-chosen',title:'Gió ngược chỉ định',scope:'one-chosen',effect:'points',amount:[-55,-30],fx:'wind'},
+  {id:'gust-chosen',title:'Gió đổi chiều chỉ định',scope:'one-chosen',effect:'gamble',amount:[30,55],fx:'wind'},
   {id:'gust-leader',title:'Lốc chặn vịt dẫn đầu',scope:'leader',effect:'points',amount:[-50,-25],fx:'wind'},
   {id:'tailwind-all',title:'Gió xuôi tiếp sức cả lớp',scope:'all',effect:'points',amount:[25,45],fx:'wind'},
   {id:'tailwind-few',title:'Luồng gió của liên minh',scope:'few-random',effect:'points',amount:[30,55],fx:'wind'},
-  {id:'tailwind-chosen',title:'Gió tiếp sức chỉ định',scope:'one-chosen',effect:'points',amount:[35,60],fx:'wind'},
+  {id:'tailwind-chosen',title:'Gió may rủi chỉ định',scope:'one-chosen',effect:'gamble',amount:[35,60],fx:'wind'},
   {id:'tailwind-last',title:'Gió nâng nhóm bám đuổi',scope:'last',effect:'points',amount:[40,65],fx:'wind'},
   {id:'all-rescue-shield',title:'Lá chắn cho cả lớp',scope:'all',effect:'shield',amount:[1,1]},
   {id:'few-rescue-shield',title:'Bảo vệ bạn đồng hành',scope:'few-random',effect:'shield',amount:[1,1]},
