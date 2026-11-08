@@ -1,7 +1,8 @@
 import type { ChestKind, EventFX } from '../experience-contracts'
-export type ChestEvent = { id: string; title: string; scope: 'self' | 'one-random' | 'few-random' | 'one-chosen' | 'all' | 'leader' | 'last'; effect: 'points' | 'shield' | 'next-bonus' | 'gamble' | 'transfer'; amount: [number, number]; unit?: 'percent'; fx?: EventFX }
+export type ChestEvent = { id: string; title: string; scope: 'self' | 'one-random' | 'few-random' | 'one-chosen' | 'all' | 'leader' | 'last'; effect: 'points' | 'shield' | 'next-bonus' | 'gamble' | 'transfer' | 'bonus-question' | 'swap'; amount: [number, number]; unit?: 'percent'; fx?: EventFX }
 export const CHEST_EVENTS: Record<ChestKind, ChestEvent[]> = {
  safe: [
+  {id:'knowledge-challenge',title:'Thử thách kiến thức',scope:'self',effect:'bonus-question',amount:[1,1]},
   {id:'supplies',title:'Lương thực dự trữ',scope:'self',effect:'points',amount:[20,35]},
   {id:'scholarship',title:'Học bổng',scope:'self',effect:'points',amount:[15,30]},
   {id:'sponsor',title:'Nhà tài trợ',scope:'self',effect:'points',amount:[35,50]},
@@ -62,6 +63,7 @@ export const CHEST_EVENTS: Record<ChestKind, ChestEvent[]> = {
   {id:'lucky-exchange',title:'Đổi quà may mắn',scope:'one-random',effect:'transfer',amount:[20,60]},
  ],
  explosive: [
+  {id:'position-swap',title:'Hoán đổi vị trí',scope:'one-chosen',effect:'swap',amount:[0,0],fx:'swap'},
   {id:'public-grant',title:'Tiếp sức toàn phòng',scope:'all',effect:'points',amount:[20,35]},
   {id:'public-fee',title:'Phí toàn phòng',scope:'all',effect:'points',amount:[-30,-15]},
   {id:'alliance',title:'Quà liên minh',scope:'few-random',effect:'points',amount:[35,55]},

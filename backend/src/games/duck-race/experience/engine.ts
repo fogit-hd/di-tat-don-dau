@@ -1,14 +1,15 @@
 import { randomBytes, randomInt, randomUUID } from 'node:crypto'
-import { QUESTIONS } from '../../../shared/questions/bank'
+import { MAIN_QUESTIONS, BONUS_QUESTIONS } from './questions'
 import { DUCK_COLORS, type DuckColor, type RaceSnapshot, type RaceLog } from '../contracts'
 import { RaceError, joinRace as legacyJoin, type RaceRoom, type Racer } from '../engine'
 import { EXPERIENCE_RULES as R, type QuizPhase, type ChestKind, type Cosmetics, type ScoreEvent, type ChestResult, type RoomEntry, type ChestNotice, type EventFX } from '../experience-contracts'
 import { CHEST_EVENTS, type ChestEvent } from './events'
 
-type Turn = { phase: QuizPhase; until: number; reward: number; cycle: number; cosmetics: Cosmetics; nextBonus: number; seq: number; events: ScoreEvent[]; notices?: ChestNotice[]; chest?: {kind:ChestKind;chosenAt:number;revealAt:number;doneAt:number;event:ChestEvent;applied:boolean;result?:ChestResult} }
+type Turn = { phase: QuizPhase; until: number; reward: number; cycle: number; cosmetics: Cosmetics; nextBonus: number; seq: number; raceDepth?: number; events: ScoreEvent[]; bonusPending?: boolean; bonusIndex?: number; notices?: ChestNotice[]; chest?: {kind:ChestKind;chosenAt:number;revealAt:number;doneAt:number;event:ChestEvent;applied:boolean;result?:ChestResult} }
 type State = { turns:Record<string,Turn>; joins?:Record<string,string>; pauseAt?:number; pausedMs:number; elapsed:number; grantCount:number; grant?:{at:number;value:number} }
 export type ExperienceRoom = RaceRoom & { mode:'quiz-v4'; experienceState:State }
-const bank=QUESTIONS.filter(q=>q.options.length===4)
+const bank=MAIN_QUESTIONS
+function questionDeck(){const deck=bank.map((_,i)=>i);for(let i=deck.length-1;i>0;i--){const j=randomInt(i+1);[deck[i],deck[j]]=[deck[j],deck[i]]}return deck}
 export function isExperience(room:RaceRoom):room is ExperienceRoom{return (room as ExperienceRoom).mode==='quiz-v4'}
 const state=(room:RaceRoom)=>{if(!isExperience(room))throw new RaceError('Phòng không dùng luật hiện tại.');return room.experienceState}
 const turn=(room:RaceRoom,p:Racer)=>state(room).turns[p.id]
@@ -35,7 +36,8 @@ export function joinExperience(room:RaceRoom,name:string,color:string,now=Date.n
  if(room.players.some(p=>p.name.normalize('NFC').trim().replace(/\s+/gu,' ').toLocaleLowerCase('vi-VN')===name.toLocaleLowerCase('vi-VN')))throw new RaceError('Tên nhóm đã có trong phòng. Hãy chọn tên khác.',409)
  const p=legacyJoin(room,name,color,'duckee',now)
  p.x=p.y=p.progress=p.target=0;p.gearHead=p.gearBody=undefined
- state(room).turns[p.id]={phase:'ready',until:0,reward:0,cycle:0,cosmetics:{glasses:'',scarf:''},nextBonus:0,seq:0,events:[]}
+ p.deck=questionDeck()
+ state(room).turns[p.id]={phase:'ready',until:0,reward:0,cycle:0,raceDepth:room.players.indexOf(p),cosmetics:{glasses:'',scarf:''},nextBonus:0,seq:0,events:[]}
  if(joinId)(state(room).joins??={})[joinId]=p.id
  return p
 }
@@ -56,8 +58,8 @@ export function changePoints(room:RaceRoom,p:Racer,delta:number,reason:string,at
  log(room,p,`${reason}: ${actual>0?'+':''}${actual} điểm.`,room.startedAt+state(room).pausedMs+at,'card')
  return actual
 }
-function currentQuestion(p:Racer){return bank[p.deck[p.cursor%p.deck.length]]}
-function open(room:RaceRoom,p:Racer,at:number){const s=turn(room,p);s.phase='question';s.until=at+R.questionMs;s.reward=randomInt(50,151);s.cycle++;s.chest=undefined;p.questionAt=at;p.answer=undefined}
+function currentQuestion(room:RaceRoom,p:Racer){if(p.deck.length!==30||new Set(p.deck).size!==30||p.deck.some(i=>!Number.isInteger(i)||i<0||i>=30))p.deck=questionDeck();const t=turn(room,p);return t.bonusIndex===undefined?bank[(p.deck[p.cursor%p.deck.length]??0)%bank.length]:BONUS_QUESTIONS[t.bonusIndex]}
+function open(room:RaceRoom,p:Racer,at:number){const s=turn(room,p);if(s.bonusPending){s.bonusPending=false;s.bonusIndex=randomInt(BONUS_QUESTIONS.length)}else if(p.cursor>=bank.length){s.phase='complete';s.until=0;return}s.phase='question';s.until=at+R.questionMs;s.reward=randomInt(50,151);s.cycle++;s.chest=undefined;p.questionAt=at;p.answer=undefined}
 export function openQuestion(room:RaceRoom,p:Racer,now=Date.now()){
  active(room,now);if(turn(room,p).phase!=='ready')throw new RaceError('Câu hỏi chưa sẵn sàng.');open(room,p,state(room).elapsed)
 }
@@ -66,16 +68,16 @@ export function armHope(room:RaceRoom,p:Racer,now=Date.now()){
  p.starArmed=p.starUsed=true;log(room,p,'Đã dùng Ngôi sao hi vọng cho câu kế tiếp.',now)
 }
 function resolveAnswer(room:RaceRoom,p:Racer,choice:string|null,at:number){
- const s=turn(room,p),q=currentQuestion(p),correct=choice===q.correctOptionId&&at<s.until,star=p.starArmed
+ const s=turn(room,p),q=currentQuestion(room,p),correct=choice===q.correctOptionId&&at<s.until,star=p.starArmed
  let reward=0
- if(correct){reward=changePoints(room,p,s.reward*(star?2:1),'Trả lời đúng'+(star?' · Ngôi sao hi vọng':''),at);if(s.nextBonus){changePoints(room,p,s.nextBonus,'Thưởng khuyến học',at);s.nextBonus=0}p.correct++;s.phase='chests';s.until=0}
+ if(correct){reward=changePoints(room,p,s.reward*(star?2:1),'Trả lời đúng'+(star?' · Ngôi sao hi vọng':''),at);if(s.nextBonus){changePoints(room,p,s.nextBonus,'Thưởng khuyến học',at);s.nextBonus=0}p.correct++;s.phase=s.bonusIndex===undefined?'chests':'wait';s.until=s.bonusIndex===undefined?0:at+R.waitMs}
  else{if(star)reward=changePoints(room,p,-s.reward,'Ngôi sao hi vọng · chưa đúng',at);s.phase='wrong';s.until=at+R.wrongMs}
  p.starArmed=false;p.answered++
  p.answer={selected:choice,correct:q.correctOptionId,explanation:q.explanation,reward,stake:star?s.reward:0,nextAt:s.until}
  log(room,p,correct?`Trả lời đúng, nhận ${reward} điểm.`:choice===null?'Hết thời gian trả lời.':'Câu trả lời chưa đúng.',room.startedAt+state(room).pausedMs+at,'answer')
 }
 export function submitAnswer(room:RaceRoom,p:Racer,questionId:string,choice:string,now=Date.now()){
- active(room,now);const s=turn(room,p),q=currentQuestion(p)
+ active(room,now);const s=turn(room,p),q=currentQuestion(room,p)
  if(s.phase!=='question')throw new RaceError('Câu hỏi đã được chốt hoặc chưa mở.')
  if(questionId!==`${q.id}:${s.cycle}`)throw new RaceError('Câu hỏi đã đổi. Hãy xem câu hiện tại.')
  if(!q.options.some(o=>o.id===choice))throw new RaceError('Đáp án không hợp lệ.')
@@ -88,7 +90,7 @@ export function chooseChest(room:RaceRoom,p:Racer,kind:string,now=Date.now()){
  const list=CHEST_EVENTS[kind as ChestKind],at=state(room).elapsed
  s.chest={kind:kind as ChestKind,chosenAt:at,revealAt:at+R.chestRevealMs,doneAt:at+R.chestDoneMs,event:list[randomInt(list.length)],applied:false};s.phase='opening'
 }
-function candidates(room:RaceRoom,p:Racer,e:ChestEvent){return e.effect==='transfer'?room.players.filter(q=>q.id!==p.id):room.players}
+function candidates(room:RaceRoom,p:Racer,e:ChestEvent){return e.effect==='transfer'||e.effect==='swap'?room.players.filter(q=>q.id!==p.id):room.players}
 function needsTarget(room:RaceRoom,p:Racer,e:ChestEvent){return e.scope==='one-chosen'&&candidates(room,p,e).length>0}
 function targets(room:RaceRoom,p:Racer,e:ChestEvent,targetId?:string){
  const all=candidates(room,p,e)
@@ -106,9 +108,34 @@ function applyChest(room:RaceRoom,p:Racer,at:number,targetId?:string){
  const event=chest.event,affected=targets(room,p,event,targetId),draw=randomInt(event.amount[0],event.amount[1]+1)
  const amount=event.effect==='gamble'?(randomInt(2)?draw:-draw):draw
  const result:ChestResult={id:randomUUID(),title:event.title,at,lines:[]}
- const notify=(q:Racer,delta:number,text:string)=>{
-  const t=turn(room,q);(t.notices??=[]).push({id:result.id,at,eventId:event.id,title:event.title,actorId:p.id,actorName:p.name,delta,text,...(delta&&event.fx?{fx:event.fx}:{})});t.notices=t.notices.slice(-64)
+ const notify=(q:Racer,delta:number,text:string,fx:EventFX|undefined=delta?event.fx:undefined)=>{
+  const t=turn(room,q);(t.notices??=[]).push({id:result.id,at,eventId:event.id,title:event.title,actorId:p.id,actorName:p.name,delta,text,...(fx?{fx}:{})});t.notices=t.notices.slice(-64)
   log(room,q,`${event.title} (${p.name}) · ${text}`,room.startedAt+state(room).pausedMs+at,'card')
+ }
+ if(event.effect==='swap'){
+  const other=affected[0]
+  if(!other){notify(p,0,'Chưa có nhóm khác để hoán đổi');chest.result=result;chest.applied=true;return}
+  const ownPoints=p.points,otherPoints=other.points
+  const ownDepth=turn(room,p).raceDepth??room.players.indexOf(p)
+  const otherDepth=turn(room,other).raceDepth??room.players.indexOf(other)
+  const losing=ownPoints>otherPoints?p:otherPoints>ownPoints?other:undefined
+  if(losing?.shield){
+   losing.shield--
+   for(const q of [p,other]){
+    const text=`Bảo hộ của ${losing.name} đã chặn hoán đổi vị trí`
+    result.lines.push({playerId:q.id,name:q.name,delta:0,text});notify(q,0,text)
+   }
+  }else{
+   for(const [q,peer,target,fromY,toY] of [[p,other,otherPoints,ownDepth,otherDepth],[other,p,ownPoints,otherDepth,ownDepth]] as const){
+    const delta=changePoints(room,q,target-q.points,`${event.title} với ${peer.name}`,at,false,'swap')
+    turn(room,q).raceDepth=toY
+    Object.assign(turn(room,q).events.at(-1)!,{fx:'swap',peerId:peer.id,swapId:result.id,fromY,toY})
+    const text=`${peer.name} hoán đổi vị trí với bạn · Điểm của bạn hiện là ${target}`
+    result.lines.push({playerId:q.id,name:q.name,delta,text});notify(q,delta,text,'swap')
+   }
+  }
+  chest.result=result;chest.applied=true
+  return
  }
  if(event.effect==='transfer'){
   // A transfer is an atomic debit + the exact actual credit. Never mint points
@@ -137,7 +164,8 @@ function applyChest(room:RaceRoom,p:Racer,at:number,targetId?:string){
   return
  }
  for(const q of affected){let delta=0,text=''
-  if(event.effect==='shield'){const before=q.shield;q.shield=Math.min(3,q.shield+1);text=q.shield>before?'Bảo hộ thêm 1 lần':'Đã có tối đa 3 lần bảo hộ'}
+  if(event.effect==='bonus-question'){const t=turn(room,q);t.bonusPending=true;text='Nhận thử thách câu hỏi khó, trả lời đúng nhận 50–150 điểm';if(t.phase==='complete')open(room,q,at)}
+  else if(event.effect==='shield'){const before=q.shield;q.shield=Math.min(3,q.shield+1);text=q.shield>before?'Bảo hộ thêm 1 lần':'Đã có tối đa 3 lần bảo hộ'}
   else if(event.effect==='next-bonus'){const t=turn(room,q),before=t.nextBonus;t.nextBonus=Math.min(150,t.nextBonus+amount);text=t.nextBonus>before?`Câu đúng kế tiếp thêm ${t.nextBonus-before} điểm`:'Thưởng câu kế tiếp đã đạt tối đa 150 điểm'}
   else{const bounded=amount<0?-Math.min(80,Math.abs(amount),Math.floor(q.points*.2)):amount,beforeShield=q.shield;delta=changePoints(room,q,bounded,event.title,at,true,event.fx);text=q.shield<beforeShield?'Bảo hộ đã chặn':`${delta>0?'+':''}${delta} điểm`}
   result.lines.push({playerId:q.id,name:q.name,delta,text})
@@ -190,7 +218,7 @@ export function tickExperience(room:RaceRoom,now=Date.now()){
   if((s.grantCount+1)*R.grantMs===due){const value=randomInt(10,51);s.grantCount++;for(const p of room.players)changePoints(room,p,value,'Tiếp sức định kỳ',due);s.grant={at:due,value}}
   for(const p of room.players){const t=turn(room,p)
    if(t.phase==='question'&&due>=t.until)resolveAnswer(room,p,null,t.until)
-   else if((t.phase==='wait'||t.phase==='wrong')&&due>=t.until){p.cursor++;open(room,p,due)}
+   else if((t.phase==='wait'||t.phase==='wrong')&&due>=t.until){if(t.bonusIndex===undefined)p.cursor++;else t.bonusIndex=undefined;open(room,p,due)}
    else if(t.phase==='opening'&&t.chest){
     if(due>=t.chest.revealAt&&!t.chest.applied&&!needsTarget(room,p,t.chest.event))applyChest(room,p,due)
     if(due>=t.chest.doneAt){if(needsTarget(room,p,t.chest.event)&&!t.chest.applied)t.phase='target';else{t.phase='wait';t.until=due+R.waitMs}}
@@ -201,12 +229,12 @@ export function tickExperience(room:RaceRoom,now=Date.now()){
  if(at>=R.durationMs)endExperience(room,'time',now)
 }
 export function snapshotExperience(room:RaceRoom,playerId?:string,now=Date.now()):RaceSnapshot{
- const s=state(room),p=room.players.find(p=>p.id===playerId),t=p&&turn(room,p),q=p&&currentQuestion(p)
- const players=rankExperience(room).map((p,i)=>{const t=turn(room,p);return {id:p.id,name:p.name,color:p.color,model:'duckee' as const,points:p.points,progress:p.points,target:p.points,x:p.points*R.pixelsPerPoint,y:room.players.indexOf(p),lateral:0,facingX:1,facingY:0,rank:i+1,connected:p.connected,correct:p.correct,answered:p.answered,stunnedUntil:0,shield:p.shield,discount:0,tailwind:0,speed:room.phase==='racing'&&s.pauseAt===undefined?R.cruiseSpeed:0,rolling:false,rollReadyAt:0,jumpUntil:0,crouching:false,attackingUntil:0,invulnerableUntil:0,cosmetics:t.cosmetics,scoreEvents:t.events.slice(-12)}})
+ const s=state(room),p=room.players.find(p=>p.id===playerId),t=p&&turn(room,p),q=p&&currentQuestion(room,p)
+ const players=rankExperience(room).map((p,i)=>{const t=turn(room,p);return {id:p.id,name:p.name,color:p.color,model:'duckee' as const,points:p.points,progress:p.points,target:p.points,x:p.points*R.pixelsPerPoint,y:t.raceDepth??room.players.indexOf(p),lateral:0,facingX:1,facingY:0,rank:i+1,connected:p.connected,correct:p.correct,answered:p.answered,stunnedUntil:0,shield:p.shield,discount:0,tailwind:0,speed:room.phase==='racing'&&s.pauseAt===undefined?R.cruiseSpeed:0,rolling:false,rollReadyAt:0,jumpUntil:0,crouching:false,attackingUntil:0,invulnerableUntil:0,cosmetics:t.cosmetics,scoreEvents:t.events.slice(-12)}})
  const chest=t?.chest
  return {mode:'quiz-v4',code:room.code,phase:room.phase,serverTime:now,revision:room.revision||0,startedAt:room.startedAt,endsAt:room.phase==='racing'||room.phase==='countdown'?room.startedAt+R.durationMs+s.pausedMs:room.endsAt,duration:R.durationMs,players,hazards:[],me:players.find(p=>p.id===playerId),
-  question:p&&t?.phase==='question'&&q&&room.phase==='racing'?{id:`${q.id}:${t.cycle}`,prompt:q.prompt,options:q.options,deadline:now+Math.max(0,t.until-s.elapsed),number:p.answered+1}:undefined,
+  question:p&&t?.phase==='question'&&q&&room.phase==='racing'?{id:`${q.id}:${t.cycle}`,prompt:q.prompt,options:q.options,deadline:now+Math.max(0,t.until-s.elapsed),number:t.bonusIndex===undefined?p.cursor+1:31+t.bonusIndex}:undefined,
   answer:p?.answer,starArmed:p?.starArmed,starUsed:p?.starUsed,logs:(p?p.logs:room.logs).slice(0,room.phase==='finished'?300:12),questionCount:bank.length,winnerId:room.winnerId,finishReason:room.finishReason,storage:room.storage,
-  experience:{elapsed:s.elapsed,paused:s.pauseAt!==undefined,era:Math.min(R.eraCount-1,Math.floor(s.elapsed/R.eraMs)),capacity:R.capacity,grant:s.grant,quiz:t?{phase:t.phase,until:t.until,reward:t.phase==='question'||t.phase==='chests'||t.phase==='opening'||t.phase==='target'?t.reward:0,number:p!.answered+(t.phase==='question'?1:0)}:undefined,
+  experience:{elapsed:s.elapsed,paused:s.pauseAt!==undefined,era:Math.min(R.eraCount-1,Math.floor(s.elapsed/R.eraMs)),capacity:R.capacity,grant:s.grant,quiz:t?{phase:t.phase,until:t.until,reward:t.phase==='question'||t.phase==='chests'||t.phase==='opening'||t.phase==='target'?t.reward:0,number:t.bonusIndex===undefined?Math.min(30,p!.cursor+1):31+t.bonusIndex,bonus:t.bonusIndex!==undefined}:undefined,
    chest:chest?{kind:chest.kind,chosenAt:chest.chosenAt,revealAt:chest.revealAt,doneAt:chest.doneAt,result:chest.applied?chest.result:undefined,targetIds:t?.phase==='target'&&p?candidates(room,p,chest.event).map(q=>q.id):undefined}:undefined,nextBonus:t?.nextBonus,notices:t?.notices?.slice(-32)}}
 }

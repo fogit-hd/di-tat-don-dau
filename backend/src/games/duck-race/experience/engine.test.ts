@@ -1,11 +1,31 @@
 import { describe, expect, it } from 'vitest'
-import { QUESTIONS } from '../../../shared/questions/bank'
+import { DUCK_QUESTIONS as QUESTIONS } from './questions'
 import { createExperience, joinExperience, startExperience, tickExperience, snapshotExperience, openQuestion, armHope, submitAnswer, chooseChest, chooseTarget, customizeExperience, pauseExperience, endExperience, roomEntry, changePoints } from './engine'
 import { EXPERIENCE_RULES as R } from '../experience-contracts'
 import { CHEST_EVENTS } from './events'
 function fixture(count=1){const room=createExperience(1000);for(let i=0;i<count;i++)joinExperience(room,'Nhóm '+i,'green',1000);startExperience(room,1000);tickExperience(room,4000);return {room,p:room.players[0],at:4000}}
 function answer(f:ReturnType<typeof fixture>,correct=true,at=f.at){const s=snapshotExperience(f.room,f.p.id,at);const q=QUESTIONS.find(q=>s.question?.id.startsWith(q.id+':'))!;submitAnswer(f.room,f.p,s.question!.id,correct?q.correctOptionId:q.options.find(o=>o.id!==q.correctOptionId)!.id,at)}
 describe('V4 points-only rooms',()=>{
+ it('uses exactly 30 unique main questions then stops instead of cycling into bonus questions',()=>{
+  const f=fixture(),seen=new Set<string>();openQuestion(f.room,f.p,f.at)
+  for(let i=0;i<30;i++){
+   const at=f.at+i*R.wrongMs,view=snapshotExperience(f.room,f.p.id,at),id=view.question!.id.split(':')[0]
+   expect(Number(id.split('-').at(-1))).toBeLessThanOrEqual(30);expect(seen.has(id)).toBe(false);seen.add(id)
+   answer(f,false,at);tickExperience(f.room,at+R.wrongMs)
+  }
+  const view=snapshotExperience(f.room,f.p.id,f.at+30*R.wrongMs)
+  expect(view.questionCount).toBe(30);expect(view.question).toBeUndefined();expect(view.experience!.quiz!.phase).toBe('complete')
+ })
+ it('opens a reserved question only through the chest challenge and resumes the main deck afterwards',()=>{
+  const f=fixture();openQuestion(f.room,f.p,f.at);answer(f);chooseChest(f.room,f.p,'safe',f.at)
+  f.room.experienceState.turns[f.p.id].chest!.event=CHEST_EVENTS.safe.find(e=>e.id==='knowledge-challenge')!
+  const bonusAt=f.at+R.chestDoneMs+R.waitMs;tickExperience(f.room,bonusAt)
+  const view=snapshotExperience(f.room,f.p.id,bonusAt)
+  expect(view.experience!.quiz!.bonus).toBe(true);expect(view.question!.number).toBeGreaterThanOrEqual(31);expect(view.question!.number).toBeLessThanOrEqual(35)
+  answer(f,true,bonusAt);expect(snapshotExperience(f.room,f.p.id,bonusAt).experience!.quiz!.phase).toBe('wait')
+  tickExperience(f.room,bonusAt+R.waitMs)
+  expect(snapshotExperience(f.room,f.p.id,bonusAt+R.waitMs).question!.number).toBe(2)
+ })
  it('keeps the saved wardrobe in both host and recipient terminal snapshots',()=>{
   const room=createExperience(1000)
   for(let index=0;index<3;index++)joinExperience(room,'Nhóm '+index,'green',1000)
@@ -131,8 +151,8 @@ describe('chest catalogue and conserved transfers',()=>{
   return f
  }
  function settle(f:ReturnType<typeof fixture>){tickExperience(f.room,f.at+R.chestDoneMs);const s=snapshotExperience(f.room,f.p.id);if(s.experience?.quiz?.phase==='target')chooseTarget(f.room,f.p,s.experience.chest!.targetIds![0],f.at+R.chestDoneMs)}
- it('has 120 valid equally selectable events; safe effects never subtract or transfer',()=>{
-  expect(Object.values(CHEST_EVENTS).flat()).toHaveLength(120)
+ it('has 122 valid equally selectable events; safe effects never subtract or transfer',()=>{
+  expect(Object.values(CHEST_EVENTS).flat()).toHaveLength(122)
   for(const list of Object.values(CHEST_EVENTS)){expect(new Set(list.map(e=>e.id)).size).toBe(list.length);for(const e of list){expect(e.amount.every(Number.isInteger)).toBe(true);expect(e.amount[0]).toBeLessThanOrEqual(e.amount[1])}}
   expect(CHEST_EVENTS.safe.every(e=>e.scope==='self'&&e.amount[0]>0&&e.effect!=='transfer'&&e.effect!=='gamble')).toBe(true)
  })

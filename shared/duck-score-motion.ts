@@ -1,10 +1,11 @@
 import type { RacerView, RaceSnapshot } from './contracts'
 import { EXPERIENCE_RULES as R } from './experience-contracts'
 export const WIND_IMPACT_MS = 800
+export const SWAP_MS = 900
 
 export const elapsedTime=(s:RaceSnapshot,now:number)=>Math.min(s.duration,Math.max(0,(s.experience?.elapsed||0)+(s.phase==='racing'&&!s.experience?.paused?Math.max(0,now-s.serverTime):0)))
 type Segment={from:number;to:number;at:number;ms:number;velocity:number}
-export type Runner={id:string;score:number;offset:number;velocity:number;worldX:number;cruise:number;gait:number;seq:number;segment?:Segment;damage?:{at:number;from:number;to:number;ms:number};pose:string;frame:number;z:number;delta:number;changedAt:number}
+export type Runner={id:string;score:number;offset:number;velocity:number;worldX:number;groundY:number;depthMove?:{from:number;to:number;at:number;ms:number};cruise:number;gait:number;seq:number;segment?:Segment;damage?:{at:number;from:number;to:number;ms:number};pose:string;frame:number;z:number;delta:number;changedAt:number}
 const clamp=(n:number,a:number,b:number)=>Math.min(b,Math.max(a,n))
 export function damagePose(ms:number,slideMs=600){
  const p=clamp(ms/slideMs,0,1),progress=1-(1-p)**3
@@ -29,11 +30,27 @@ export class ScoreMotion {
   const ids=new Set(players.map(p=>p.id));for(const id of this.actors.keys())if(!ids.has(id))this.actors.delete(id)
   for(const p of players){
    let a=this.actors.get(p.id)
-   if(!a){a={id:p.id,score:p.points,offset:p.points*R.pixelsPerPoint,velocity:0,worldX:0,cruise:now/1000*R.cruiseSpeed,gait:0,seq:p.scoreEvents?.at(-1)?.seq||0,pose:'walk_run',frame:0,z:0,delta:0,changedAt:-Infinity};this.actors.set(p.id,a)}
+   if(!a){a={id:p.id,score:p.points,offset:p.points*R.pixelsPerPoint,velocity:0,worldX:0,groundY:p.y??0,cruise:now/1000*R.cruiseSpeed,gait:0,seq:p.scoreEvents?.at(-1)?.seq||0,pose:'walk_run',frame:0,z:0,delta:0,changedAt:-Infinity};this.actors.set(p.id,a)}
    this.sample(a,now)
+   if(a.depthMove){
+    const move=a.depthMove
+    const progress=clamp((now-move.at)/move.ms,0,1)
+    a.groundY=move.from+(move.to-move.from)*progress*progress*(3-2*progress)
+    if(progress===1)a.depthMove=undefined
+   }
    // Sample an interrupted slide before extending its remaining distance.
    if(a.damage&&now>=a.damage.at){const pose=damagePose(now-a.damage.at,a.damage.ms);a.offset=a.damage.from+(a.damage.to-a.damage.from)*pose.progress}
-   const fresh=(p.scoreEvents||[]).filter(e=>e.seq>a!.seq),negative=fresh.reduce((sum,e)=>sum+Math.min(0,e.delta),0)
+   const fresh=(p.scoreEvents||[]).filter(e=>e.seq>a!.seq)
+   const swapIndex=fresh.map(event=>event.fx).lastIndexOf('swap')
+   if(swapIndex>=0){
+    a.damage=undefined
+    a.segment={from:a.offset,to:fresh[swapIndex].after*R.pixelsPerPoint,at:now,ms:SWAP_MS,velocity:0}
+    a.depthMove={from:a.groundY,to:fresh[swapIndex].toY??p.y??0,at:now,ms:SWAP_MS}
+    a.velocity=0
+   }
+   if(reduced){a.depthMove=undefined;a.groundY=p.y??0}
+   else if(!a.depthMove)a.groundY=p.y??0
+   const negative=fresh.slice(swapIndex+1).reduce((sum,event)=>sum+Math.min(0,event.delta),0)
    if(fresh.length)a.seq=fresh.at(-1)!.seq
    if(negative<0&&!reduced){
     const to=(a.damage?.to??a.offset)+negative*R.pixelsPerPoint

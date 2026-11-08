@@ -93,3 +93,12 @@ The live wardrobe's existing glasses choices are grouped as “Trang sức trên
 đầu”. The review combines glasses and hats into one selection rather than
 allowing a glasses/hats stack. The award crown is the explicitly approved
 exception and remains compatible with both glasses styles and scarves.
+
+## 2026-11-08 — score and position swap
+
+User approved with “ok, tôi duyệt” after reviewing the swap canvas and the
+example exchanging 1,200 and 800 points. This covers swapping the two server
+scores and moving their original dressed ducks with gold/cyan portals over
+900ms. Reference `design-preview/duck-race-swap-v1/storyboard.png`. The event
+belongs to the explosive chest and lets the opener choose one other group.
+Both recipients receive a receipt and the host log records the exchange.

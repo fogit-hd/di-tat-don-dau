@@ -3,6 +3,33 @@ import { ScoreMotion,damagePose,WIND_IMPACT_MS } from '../score-motion'
 import type { RacerView } from '../contracts'
 const player=(points=500,seq=0,delta=0)=>({id:'one',points,scoreEvents:seq?[{seq,at:0,before:points-delta,after:points,delta,reason:'test'}]:[]}) as RacerView
 describe('native score-coordinate movement',()=>{
+ it('exchanges X and Y smoothly together and reconnects at the saved destination',()=>{
+  const m=new ScoreMotion(),a={...player(1200),y:0},b={...player(800),id:'two',y:6}
+  m.update([a,b],0,'one',960,1)
+  const nextA={...player(800,1,-400),y:6},nextB={...player(1200,1,400),id:'two',y:0}
+  Object.assign(nextA.scoreEvents![0],{fx:'swap',fromY:0,toY:6})
+  Object.assign(nextB.scoreEvents![0],{fx:'swap',fromY:6,toY:0})
+  m.update([nextA,nextB],16,'one',960,1)
+  expect(m.actors.get('one')!.groundY).toBe(0);expect(m.actors.get('two')!.groundY).toBe(6)
+  m.update([nextA,nextB],466,'one',960,1)
+  expect(m.actors.get('one')!.groundY).toBeCloseTo(3);expect(m.actors.get('two')!.groundY).toBeCloseTo(3)
+  m.update([nextA,nextB],916,'one',960,1)
+  expect(m.actors.get('one')!.groundY).toBe(6);expect(m.actors.get('two')!.groundY).toBe(0)
+  expect(m.actors.get('one')!.offset).toBe(800*3.2);expect(m.actors.get('two')!.offset).toBe(1200*3.2)
+  const resumed=new ScoreMotion();resumed.update([nextA,nextB],1000,'one',960,1)
+  expect(resumed.actors.get('one')!.groundY).toBe(6)
+  expect(resumed.actors.get('one')!.depthMove).toBeUndefined()
+ })
+ it('moves both swap directions to their exact score positions in 900ms without knockout',()=>{
+  for(const [before,after] of [[1200,800],[800,1200],[800,800]]){
+   const m=new ScoreMotion();m.update([player(before)],0,'one',960,1)
+   const next=player(after,1,after-before);next.scoreEvents![0].fx='swap'
+   m.update([next],16,'one',960,1)
+   expect(m.actors.get('one')!.offset).toBe(before*3.2)
+   for(let t=32;t<916;t+=16){m.update([next],t,'one',960,1);expect(m.actors.get('one')!.damage).toBeUndefined()}
+   m.update([next],916,'one',960,1);expect(m.actors.get('one')!.offset).toBeCloseTo(after*3.2)
+  }
+ })
  it('waits for an incoming wind to touch the duck before starting its exact-distance recoil',()=>{
   const m=new ScoreMotion();m.update([player()],0,'one',960,1)
   const hurt=player(450,1,-50);hurt.scoreEvents![0].fx='wind'

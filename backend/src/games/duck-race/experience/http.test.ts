@@ -7,7 +7,7 @@ import { createDuckGame } from '../server'
 import { createExperience,joinExperience,changePoints,startExperience,tickExperience,openQuestion,submitAnswer,chooseChest,chooseTarget } from './engine'
 import { CHEST_EVENTS } from './events'
 import { createRace } from '../engine'
-import { QUESTIONS } from '../../../shared/questions/bank'
+import { DUCK_QUESTIONS as QUESTIONS } from './questions'
 
 const app=express(),server=createServer(app),game=createDuckGame(server);app.use(game.app)
 let base=''

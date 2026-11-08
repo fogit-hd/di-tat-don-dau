@@ -144,9 +144,9 @@ class ExperienceScene extends Phaser.Scene{
   const elapsed=elapsedTime(s,input.now),active=s.phase==='racing'&&!s.experience.paused,zoom=w<600?.66:w<900?.85:1
   this.motion.update(s.players,elapsed,input.host?s.players[0]?.id:s.me?.id,w,zoom,reduced)
   const road=this.scenery(Math.min(EXPERIENCE_RULES.eraCount-1,Math.floor(elapsed/EXPERIENCE_RULES.eraMs)),this.motion.camera,zoom,clock,reduced)
-  this.raceEffects?.begin(elapsed,w,h,reduced,road)
+  this.raceEffects?.begin(elapsed,w,h,reduced,road,this.motion.camera*zoom)
   const keep=new Set<string>()
-  for(const p of s.players){const runner=this.motion.actors.get(p.id)!;const x=(runner.worldX-this.motion.camera)*zoom,y=h*(road[0]+(road[1]-road[0])*(.12+p.y/6*.76)),size=w<600?2.15:2.7
+  for(const p of s.players){const runner=this.motion.actors.get(p.id)!;const x=(runner.worldX-this.motion.camera)*zoom,y=h*(road[0]+(road[1]-road[0])*(.12+runner.groundY/6*.76)),size=w<600?2.15:2.7
    const pose=active?runner.pose:'idle',frame=active?runner.frame:0,z=active?runner.z:0
    const a=this.drawActor(p,x,y,pose,frame,z*zoom,size,input.host,p.id===s.me?.id&&!input.host,elapsed,runner.delta,runner.changedAt);keep.add(p.id)
    this.raceEffects?.follow(p.id,x,y)

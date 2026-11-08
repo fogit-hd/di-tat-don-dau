@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import type { EventFX } from '../experience-contracts';
-import { WIND_IMPACT_MS } from '../score-motion';
+import { WIND_IMPACT_MS, SWAP_MS } from '../score-motion';
 import { LIGHTNING_MS, boltGeometry } from './race-fx-layout';
 type Effect = {
     key: string;
@@ -10,6 +10,7 @@ type Effect = {
     x: number;
     y: number;
     direction: number;
+    camera: number;
 };
 const ROOT = '/assets/duck-race/experience-v6/';
 const clamp = (value: number, min = 0, max = 1) => Math.max(min, Math.min(max, value));
@@ -20,12 +21,13 @@ export class RaceEffects {
     private cursor = 0;
     private active: Effect[] = [];
     private used = new Set<string>();
+    private camera = 0;
     private anchors = new Map<string, {
         x: number;
         y: number;
     }>();
     static preload(scene: Phaser.Scene) {
-        for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust-air'])
+        for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust-air', 'swap'])
             for (let frame = 0; frame < 6; frame++) {
                 scene.load.image(`racefx-${kind}-${frame}`, `${ROOT}fx/${kind}/${frame}.webp`);
             }
@@ -46,7 +48,7 @@ export class RaceEffects {
         this.used.add(identity);
         if (this.used.size > 256)
             this.used = new Set([...this.used].slice(-128));
-        this.active.push({ key: identity, target, kind, at, x, y, direction: delta > 0 ? 1 : -1 });
+        this.active.push({ key: identity, target, kind, at, x, y, direction: delta > 0 ? 1 : -1, camera: this.camera });
         // Ambient cels accompany existing events without adding score penalties.
         if (kind === 'lightning')
             this.trigger(`rain:${at}`, 'rain', at, x, y, delta);
@@ -56,13 +58,23 @@ export class RaceEffects {
     begin(now: number, width: number, height: number, reduced: boolean, road: [
         number,
         number
-    ]) {
+    ], camera = 0) {
         this.cursor = 0;
-        this.active = this.active.filter(effect => now - effect.at < (effect.kind === 'lightning' ? 700 : 3900));
+        this.camera = camera;
+        this.active = this.active.filter(effect => now - effect.at < (effect.kind === 'swap' ? SWAP_MS : effect.kind === 'lightning' ? 700 : 3900));
         for (const effect of this.active) {
             const age = Math.max(0, now - effect.at);
             const target = this.anchors.get(effect.target) || effect;
-            if (effect.kind === 'lightning') {
+            if (effect.kind === 'swap') {
+                const phase = reduced ? .5 : age / SWAP_MS;
+                const tint = effect.direction > 0 ? 0xffce60 : 0x68ecff;
+                const origin = effect.x + effect.camera - camera;
+                const alpha = reduced ? .45 : Math.min(1, age / 100, (SWAP_MS - age) / 160);
+                const size = width < 600 ? 210 : 270;
+                this.frames('swap', phase, origin, effect.y, size, size, alpha, .5, .72, undefined, false, tint);
+                this.frames('swap', phase, target.x, target.y, size, size, alpha * .65, .5, .72, undefined, false, tint);
+            }
+            else if (effect.kind === 'lightning') {
                 const visibleMs = reduced ? 700 : LIGHTNING_MS;
                 if (age >= visibleMs)
                     continue;
@@ -101,7 +113,7 @@ export class RaceEffects {
     }
     end() { for (let i = this.cursor; i < this.pool.length; i++)
         this.pool[i].setVisible(false); }
-    private frames(kind: string, phase: number, x: number, y: number, width: number, height: number, alpha: number, originX = .5, originY = .72, frameName?: string, flipX = false) {
+    private frames(kind: string, phase: number, x: number, y: number, width: number, height: number, alpha: number, originX = .5, originY = .72, frameName?: string, flipX = false, tint = 0xffffff) {
         const progress = clamp(phase, 0, .9999) * 5, first = Math.floor(progress), mix = progress - first;
         for (const [frame, weight] of [[first, 1 - mix], [Math.min(5, first + 1), mix]]) {
             let image = this.pool[this.cursor++];
@@ -109,7 +121,7 @@ export class RaceEffects {
                 image = this.scene.add.image(0, 0, `racefx-${kind}-${frame}`);
                 this.pool.push(image);
             }
-            image.setTexture(`racefx-${kind}-${frame}`, frameName).setFlipX(flipX).setOrigin(originX, originY).setPosition(x, y).setDisplaySize(width, height).setDepth(9500).setAlpha(clamp(alpha) * weight).setVisible(true);
+            image.setTexture(`racefx-${kind}-${frame}`, frameName).setTint(tint).setFlipX(flipX).setOrigin(originX, originY).setPosition(x, y).setDisplaySize(width, height).setDepth(9500).setAlpha(clamp(alpha) * weight).setVisible(true);
         }
     }
     destroy() { for (const image of this.pool)

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { QUESTIONS } from '../../../shared/questions/bank'
+import { DUCK_QUESTIONS as QUESTIONS } from './questions'
 import { createExperience,joinExperience,startExperience,tickExperience,changePoints,openQuestion,submitAnswer,chooseChest,chooseTarget,snapshotExperience } from './engine'
 import { CHEST_EVENTS, type ChestEvent } from './events'
 import { EXPERIENCE_RULES as R } from '../experience-contracts'
@@ -17,6 +17,50 @@ function fixture(event:ChestEvent,count=7){
 const notice=(f:ReturnType<typeof fixture>,i:number)=>snapshotExperience(f.room,f.room.players[i].id).experience!.notices||[]
 
 describe('recipient-specific chest receipts and semantic FX',()=>{
+ it('swaps exact scores atomically, reports both recipients and settles once after persistence',()=>{
+  const f=fixture(CHEST_EVENTS.explosive.find(e=>e.id==='position-swap')!),other=f.room.players[1]
+  changePoints(f.room,f.p,1200-f.p.points,'setup',0);changePoints(f.room,other,800-other.points,'setup',0)
+  tickExperience(f.room,4000+R.chestDoneMs)
+  expect(()=>chooseTarget(f.room,f.p,f.p.id,4000+R.chestDoneMs)).toThrow()
+  chooseTarget(f.room,f.p,other.id,4000+R.chestDoneMs)
+  expect([f.p.points,other.points]).toEqual([800,1200])
+  const view=snapshotExperience(f.room)
+  expect(view.players.find(p=>p.id===f.p.id)).toMatchObject({x:800*R.pixelsPerPoint,y:1})
+  expect(view.players.find(p=>p.id===other.id)).toMatchObject({x:1200*R.pixelsPerPoint,y:0})
+  expect(notice(f,0)[0]).toMatchObject({delta:-400,fx:'swap'});expect(notice(f,1)[0].text).toContain('Nhóm 1')
+  expect(notice(f,2)).toEqual([])
+  const events=[f.p,other].map(p=>snapshotExperience(f.room,p.id).me!.scoreEvents!.at(-1)!)
+  expect(events[0].swapId).toBe(events[1].swapId);expect(events[0].peerId).toBe(other.id)
+  const room:typeof f.room=JSON.parse(JSON.stringify(f.room));tickExperience(room,4000+R.chestDoneMs+10)
+  expect(room.players.slice(0,2).map(p=>p.points)).toEqual([800,1200])
+  expect(snapshotExperience(room,f.p.id).me!.y).toBe(1)
+  expect(snapshotExperience(room,other.id).me!.y).toBe(0)
+  expect(snapshotExperience(room).logs.some(log=>log.text.includes('Hoán đổi vị trí'))).toBe(true)
+ })
+ it('exchanges ground positions even for equal scores and rooms saved before depth was stored',()=>{
+  const f=fixture(CHEST_EVENTS.explosive.find(e=>e.id==='position-swap')!),other=f.room.players[1]
+  changePoints(f.room,f.p,500-f.p.points,'setup',0)
+  delete f.room.experienceState.turns[f.p.id].raceDepth
+  delete f.room.experienceState.turns[other.id].raceDepth
+  tickExperience(f.room,4000+R.chestDoneMs);chooseTarget(f.room,f.p,other.id,4000+R.chestDoneMs)
+  expect(snapshotExperience(f.room,f.p.id).me).toMatchObject({points:500,y:1})
+  expect(snapshotExperience(f.room,other.id).me).toMatchObject({points:500,y:0})
+ })
+ it('cancels both halves of a swap when the losing group has protection',()=>{
+  const f=fixture(CHEST_EVENTS.explosive.find(e=>e.id==='position-swap')!),other=f.room.players[1]
+  changePoints(f.room,other,1000-other.points,'setup',0);other.shield=1
+  const before=[f.p.points,other.points];tickExperience(f.room,4000+R.chestDoneMs)
+  chooseTarget(f.room,f.p,other.id,4000+R.chestDoneMs)
+  expect([f.p.points,other.points]).toEqual(before);expect(other.shield).toBe(0)
+  expect(snapshotExperience(f.room,f.p.id).me!.y).toBe(0)
+  expect(snapshotExperience(f.room,other.id).me!.y).toBe(1)
+  expect(notice(f,0)[0].fx).toBeUndefined();expect(notice(f,1)[0].text).toContain('Bảo hộ')
+ })
+ it('handles a swap in a solo room without changing points',()=>{
+  const f=fixture(CHEST_EVENTS.explosive.find(e=>e.id==='position-swap')!,1),before=f.p.points
+  tickExperience(f.room,4000+R.chestDoneMs)
+  expect(f.p.points).toBe(before);expect(notice(f,0)[0].text).toContain('Chưa có nhóm khác')
+ })
  it('notifies each actual victim with actor, percentage and exact conserved amount only at reveal',()=>{
   const event=CHEST_EVENTS.explosive.find(e=>e.id==='all-percent-tax')!,f=fixture(event),before=f.room.players.map(p=>p.points)
   expect(notice(f,1)).toEqual([])

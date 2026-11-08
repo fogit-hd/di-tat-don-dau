@@ -49,10 +49,10 @@ test('lightning reaches from above the viewport to the original impact pixel in 
 })
 
 test('all painted weather cels and notification SVGs are packaged for production', () => {
-  for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust-air']) {
+  for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust-air', 'swap']) {
     for (let frame = 0; frame < 6; frame++) assert.ok(existsSync(new URL(`experience-v6/fx/${kind}/${frame}.webp`, assets)))
   }
-  for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust', 'gain', 'loss']) assert.ok(existsSync(new URL(`experience-v6/icons/${kind}.svg`, assets)))
+  for (const kind of ['lightning', 'wind', 'shield', 'rain', 'dust', 'gain', 'loss', 'swap']) assert.ok(existsSync(new URL(`experience-v6/icons/${kind}.svg`, assets)))
 })
 
 test('wardrobe sheets cover every ceremony cel, gaze and native bow at the matching cell size', () => {
