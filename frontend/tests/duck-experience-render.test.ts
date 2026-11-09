@@ -58,7 +58,7 @@ test('all painted weather cels and notification SVGs are packaged for production
 test('wardrobe sheets cover every ceremony cel, gaze and native bow at the matching cell size', () => {
   const sheets = { ...SHEETS, idle: { frames: 4, cell: 64 }, land: { frames: 2, cell: 64 }, crouch: { frames: 2, cell: 64 } }
   for (const item of ['brass', 'dark', 'red', 'teal']) for (const [name, spec] of Object.entries(sheets)) {
-    const file = readFileSync(new URL(`results-v1/cosmetics/${item}/${name}.png`, assets))
+    const file = readFileSync(new URL(`${["winner-hat","winner-shuffle","winner-heel-toe","winner-wing-pop"].includes(name)?"winner-party-v1/apparel":"results-v1/cosmetics"}/${item}/${name}.png`, assets))
     const columns = 'columns' in spec ? spec.columns : spec.frames
     assert.equal(file.readUInt32BE(16), columns * spec.cell)
     assert.equal(file.readUInt32BE(20), Math.ceil(spec.frames / columns) * spec.cell)
@@ -74,7 +74,7 @@ test('approved new apparel covers the full race atlas and every finalist choreog
    assert.ok(data.frames[item+'/'+key.split('/').slice(1).join('/')],item+': '+key)
   }
   for(const [name,spec] of Object.entries({...SHEETS,idle:{frames:4,cell:64,columns:4}})){
-   const file=readFileSync(new URL(`wardrobe-v2/awards/${item}/${name}.png`,assets))
+   const file=readFileSync(new URL(`${["winner-hat","winner-shuffle","winner-heel-toe","winner-wing-pop"].includes(name)?"winner-party-v1/apparel":"wardrobe-v2/awards"}/${item}/${name}.png`,assets))
    const columns='columns' in spec?spec.columns:spec.frames
    assert.equal(file.readUInt32BE(16),columns*spec.cell)
    assert.equal(file.readUInt32BE(20),Math.ceil(spec.frames/columns)*spec.cell)

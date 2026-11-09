@@ -8,18 +8,6 @@ import './results.css'
 import { WardrobePortrait } from '../WardrobePortrait'
 import { GroupName } from '../GroupName'
 
-const captions = {
-  intro: 'Chuẩn bị trao giải',
-  third: 'Hạng 3 trượt ván đến cúp và nâng thẻ đồng số 3',
-  second: 'Hạng 2 đu dây xuống cúp và nâng huy chương bạc',
-  first: 'Nhà vô địch đáp dù xuống cúp',
-  stow: 'Đã tiếp đất · gấp và cất dù',
-  retrieve: 'Lấy vương miện từ phía sau',
-  raise: 'Giơ cao vương miện',
-  hold: 'Khoảnh khắc chiến thắng',
-  wear: 'Đội vương miện lên đầu',
-  final: 'Chúc mừng các nhóm dẫn đầu',
-}
 const points = (value: number) => value.toLocaleString('vi-VN') + ' điểm'
 
 function Portrait({ player }: { player: ResultPlayer }) {
@@ -139,7 +127,7 @@ export function HostResults({ snapshot, reduced }: { snapshot: RaceSnapshot; red
       <div className="q4-awards-stage" data-award-phase={phase}>
         <div ref={mount} className="q4-awards-mount" />
         <div className="q4-awards-heading" role="status">
-          <p>{players.length ? captions[phase] : 'Cuộc đua đã khép lại'}</p>
+
           {showFocus ? <>
             <h1><GroupName name={focus.name} /></h1>
             <div className="q4-awards-heading-score">{points(focus.points)}</div>

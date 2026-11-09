@@ -4,6 +4,10 @@ import { SILVER_SWING_MS } from './silver-motion';
 export type AwardPhase = 'intro' | 'third' | 'second' | 'first' | 'stow' | 'retrieve' | 'raise' | 'hold' | 'wear' | 'final';
 export type ResultPlayer = Pick<RacerView, 'id' | 'name' | 'color' | 'points' | 'rank' | 'cosmetics'>;
 export const SHEETS = {
+    'winner-hat': { frames: 36, cell: 96, columns: 12, anchorY: 88 },
+    'winner-shuffle': { frames: 96, cell: 96, columns: 12, anchorY: 88 },
+    'winner-heel-toe': { frames: 96, cell: 96, columns: 12, anchorY: 88 },
+    'winner-wing-pop': { frames: 96, cell: 96, columns: 12, anchorY: 88 },
     'bronze-skate': { frames: 96, cell: 128, columns: 8, anchorY: 118 },
     'silver-swing': { frames: 96, cell: 128, columns: 8, anchorY: 118 },
     'winner-parachute': { frames: 12, cell: 96, columns: 12, anchorY: 88 },
@@ -27,7 +31,7 @@ export function awardSchedule(players: readonly ResultPlayer[]) {
             cursor += rank === 3 ? 4400 : rank === 2 ? 4100 : 11000;
         }
     const first = starts[1] ?? cursor, stow = first + 2800;
-    return { starts, stow, stowEnd: stow + 1100, retrieve: stow + 1300, raise: stow + 2500, hold: stow + 3700, wear: stow + 4300, crowned: stow + 6100, total: players.length ? first + 11000 : 0 };
+    return { starts, stow, stowEnd: stow + 1100, retrieve: stow + 2800, raise: stow + 4000, hold: stow + 5200, wear: stow + 5800, crowned: stow + 7600, total: players.length ? first + 12500 : 0 };
 }
 export type Schedule = ReturnType<typeof awardSchedule>;
 export function phaseAt(time: number, s: Schedule): AwardPhase {
@@ -79,7 +83,8 @@ export function actorPose(rank: number, time: number, s: Schedule) {
         key = 'winner-stow';
         frame = Math.min(9, Math.floor((time - s.stow) / 1100 * 10));
     } else if (time < s.retrieve) {
-        key = 'idle';
+        key = 'winner-hat';
+        frame = Math.min(35, Math.floor((time - s.stowEnd) / 1700 * 36));
     } else if (time < s.raise) {
         key = 'winner-coronation';
         frame = Math.min(11, Math.floor((time - s.retrieve) / 1200 * 12));
@@ -93,10 +98,12 @@ export function actorPose(rank: number, time: number, s: Schedule) {
         key = 'winner-coronation';
         frame = 24 + Math.min(15, Math.floor((time - s.wear) / 1800 * 16));
     } else {
-        key = 'winner-crowned-idle';
-        frame = Math.floor(time / 220) % 4;
+        const dances: Sheet[] = ['winner-shuffle', 'winner-heel-toe', 'winner-wing-pop'];
+        const danceTime = time - s.crowned;
+        key = dances[Math.floor(danceTime / 4000) % 3];
+        frame = Math.floor(danceTime % 4000 / 1000 * 24);
     }
     return { visible, landed, p, key, frame, alpha: 1, offset: 0,
-        cell: key === 'idle' ? 64 : SHEETS[key].cell,
-        anchorY: key === 'idle' ? 48 : SHEETS[key].anchorY };
+        cell: SHEETS[key].cell,
+        anchorY: SHEETS[key].anchorY };
 }

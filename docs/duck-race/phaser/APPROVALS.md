@@ -114,3 +114,7 @@ items; selecting a separate item removes the set. This approval covers lobby,
 race, portraits and all three already-approved awards choreographies. No body
 redesign or motion timing changes. Crown remains compatible with glasses;
 it replaces a hat for the coronation rather than stacking on the hat.
+
+## 2026-11-09 — winner party V1
+
+User approved “Duyệt để áp dụng” for hat stowing and three native-frame winner dances. Integrate after coronation, retain glasses and outfits, keep bronze/silver choreography and remove visible motion-description captions as requested.

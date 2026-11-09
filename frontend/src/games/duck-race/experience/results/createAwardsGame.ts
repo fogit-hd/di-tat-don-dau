@@ -29,7 +29,7 @@ type Actor = {
     dressed: Map<string, string>;
 };
 const finalistSheets = (rank: number): Sheet[] => rank === 1
-    ? ['winner-parachute', 'winner-stow', 'winner-coronation', 'winner-crowned-idle']
+    ? ['winner-parachute', 'winner-stow', 'winner-coronation', 'winner-crowned-idle', 'winner-hat', 'winner-shuffle', 'winner-heel-toe', 'winner-wing-pop']
     : rank === 2 ? ['silver-swing'] : ['bronze-skate'];
 const posesFor = (rank: number) => [
     ...finalistSheets(rank).map(name => ({ name, ...SHEETS[name] })),
@@ -67,14 +67,14 @@ class AwardsScene extends Phaser.Scene {
                 if (keys.has(id))
                     continue;
                 keys.add(id);
-                this.load.spritesheet(id, ART + id + '.png', { frameWidth: SHEETS[key].cell, frameHeight: SHEETS[key].cell });
+                this.load.spritesheet(id, (key === 'winner-hat' || key === 'winner-shuffle' || key === 'winner-heel-toe' || key === 'winner-wing-pop' ? ROOT + 'winner-party-v1/' : ART) + id + '.png', { frameWidth: SHEETS[key].cell, frameHeight: SHEETS[key].cell });
             }
             for (const item of cosmeticItems(p.cosmetics)) {
                 for (const pose of posesFor(p.rank)) {
                     const id = `wardrobe/${item}/${pose.name}`;
                     if (keys.has(id)) continue;
                     keys.add(id);
-                    this.load.spritesheet(id, awardApparelUrl(item,pose.name), { frameWidth: pose.cell, frameHeight: pose.cell });
+                    this.load.spritesheet(id, pose.name === 'winner-hat' || pose.name === 'winner-shuffle' || pose.name === 'winner-heel-toe' || pose.name === 'winner-wing-pop' ? ROOT + `winner-party-v1/apparel/${item}/${pose.name}.png` : awardApparelUrl(item,pose.name), { frameWidth: pose.cell, frameHeight: pose.cell });
                 }
             }
         }
@@ -168,7 +168,7 @@ class AwardsScene extends Phaser.Scene {
         if (input.reduced)
             this.elapsed = schedule.total;
         else if (!input.paused && !document.hidden)
-            this.elapsed = Math.min(schedule.total, this.elapsed + Math.min(80, delta));
+            this.elapsed = this.elapsed + Math.min(80, delta);
         this.paint();
     }
     private paint() {
