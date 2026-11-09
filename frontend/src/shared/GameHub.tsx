@@ -18,6 +18,6 @@ export function GameHub() {
         <div className="portal-description"><h2><S text="Quiz Duck Race" bold/></h2><p><S text="Trả lời kiếm vốn, lăn bứt tốc, né chướng ngại và tranh tài cùng những chú vịt."/></p><span className="portal-tags"><S text="10 phút · Đua vịt chiến thuật"/></span><span className="portal-enter"><S text="Vào Quiz Duck Race"/></span></div>
       </Link>
     </div>
-    <footer><S text="Chọn một game để tạo phòng hoặc tham gia bằng mã phòng."/></footer>
+    <footer><S text="Game phát triển bởi fon và nhóm 1 MLN122 - Kinh tế chính trị MacLenin."/></footer>
   </main>
 }
